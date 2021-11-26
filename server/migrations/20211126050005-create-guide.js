@@ -27,7 +27,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       num_people: {
-        type: Sequelize.NUMBER
+        type: Sequelize.INTEGER
       },
       state: {
         type: Sequelize.STRING
@@ -36,16 +36,13 @@ module.exports = {
         type: Sequelize.STRING
       },
       latitude: {
-        type: Sequelize.STRING
+        type: Sequelize.FLOAT(16, 16)
       },
       longitude: {
-        type: Sequelize.STRING
+        type: Sequelize.FLOAT(16, 16)
       },
       open_date: {
         type: Sequelize.DATE
-      },
-      user_id: {
-        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

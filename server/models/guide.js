@@ -20,13 +20,12 @@ module.exports = (sequelize, DataTypes) => {
     guide_date: DataTypes.DATE,
     start_time: DataTypes.STRING,
     end_time: DataTypes.STRING,
-    num_people: DataTypes.NUMBER,
+    num_people: DataTypes.INTEGER,
     state: DataTypes.STRING,
     address: DataTypes.STRING,
-    latitude: DataTypes.STRING,
-    longitude: DataTypes.STRING,
-    open_date: DataTypes.DATE,
-    user_id: DataTypes.STRING
+    latitude: DataTypes.FLOAT(16,16),
+    longitude: DataTypes.FLOAT(16,16),
+    open_date: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'Guide',
