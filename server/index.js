@@ -38,7 +38,7 @@ app.use('/login', loginPage);
 app.use('/main', mainPage);
 app.use('/management', managementPage);
 app.use('/map', mapPage);
-app.use('/mypage', myPage);
+app.use('/my', myPage);
 app.use('/signup', signupPage);
 
 app.get("/hello-triplus", (req, res) => {
