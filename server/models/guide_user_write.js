@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Guide_user_write extends Model {
+  class guide_user_write extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,12 +13,13 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  Guide_user_write.init({
+  guide_user_write.init({
     guide_id: DataTypes.STRING,
     user_id: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'Guide_user_write',
+    modelName: 'guide_user_write',
+    freezeTableName: true
   });
-  return Guide_user_write;
+  return guide_user_write;
 };
