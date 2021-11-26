@@ -8,6 +8,10 @@ phases:
   build:
     commands:
       - npm run build
+  post_build:
+    commands:
+      - aws s3 cp index.html s3://practice-triplus
+      - aws cloudfront create-invalidation --distribution-id ELDLIEI2EXKSO -- paths '/*'
 
 artifacts:
   files:
