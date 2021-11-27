@@ -32,6 +32,8 @@ export default function LoginSection(props) {
     dispatch(loginUser(body)).then((response) => {
       if (response.payload.isLogin) {
         props.history.push('/');
+      } else {
+        alert('Error');
       }
     });
   };

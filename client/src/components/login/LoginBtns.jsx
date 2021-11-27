@@ -35,7 +35,7 @@ export default function LoginBtns(props) {
   return (
     <BtnsBlock>
       <GuestLogin onClick={handleGuestClick}>게스트로&nbsp;로그인하기</GuestLogin>
-      <LoginBtn onSubmit={handleLoginClick}>로그인</LoginBtn>
+      <LoginBtn onClick={handleLoginClick}>로그인</LoginBtn>
       <SignupBtn onClick={handleSignupClick}>회원가입</SignupBtn>
     </BtnsBlock>
   );
