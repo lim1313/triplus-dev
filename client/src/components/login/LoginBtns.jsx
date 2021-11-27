@@ -30,12 +30,13 @@ const SignupBtn = styled(BorderBtn)`
   }
 `;
 
-export default function LoginBtns() {
+export default function LoginBtns(props) {
+  const { handleLoginClick, handleGuestClick, handleSignupClick } = props;
   return (
     <BtnsBlock>
-      <GuestLogin>게스트로&nbsp;로그인하기</GuestLogin>
-      <LoginBtn>로그인</LoginBtn>
-      <SignupBtn>회원가입</SignupBtn>
+      <GuestLogin onClick={handleGuestClick}>게스트로&nbsp;로그인하기</GuestLogin>
+      <LoginBtn onSubmit={handleLoginClick}>로그인</LoginBtn>
+      <SignupBtn onClick={handleSignupClick}>회원가입</SignupBtn>
     </BtnsBlock>
   );
 }
