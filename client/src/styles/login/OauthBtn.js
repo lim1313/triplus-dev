@@ -14,6 +14,7 @@ export const OauthBtn = styled.button`
   border: none;
   font-size: 3rem;
   cursor: pointer;
+  color: ${({ theme }) => theme.color.gray};
   & .oauth-btn {
     border-radius: 50%;
   }
