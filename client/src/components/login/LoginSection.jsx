@@ -3,17 +3,25 @@ import styled from 'styled-components';
 import LoginBtns from './LoginBtns';
 import LoginId from './LoginId';
 import LoginPw from './LoginPw';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/login/action';
+import { useNavigate } from 'react-router-dom';
 
 const SectionBlock = styled.div`
   max-width: 100%;
 `;
 
 export default function LoginSection(props) {
+  const state = useSelector((state) => state.loginReducer);
+  const { isLogin } = state;
   const [userId, setUserId] = useState('');
   const [userPw, setUserPw] = useState('');
   const dispatch = useDispatch();
+  let navigate = useNavigate();
+
+  if (isLogin) {
+    navigate('/');
+  }
 
   const handleIdChange = (e) => {
     setUserId(e.target.value);
@@ -23,19 +31,11 @@ export default function LoginSection(props) {
   };
   const handleLoginClick = (e) => {
     e.preventDefault();
-    console.log('loginClick');
     let body = {
       userId: userId,
       password: userPw,
     };
-
-    dispatch(loginUser(body)).then((response) => {
-      if (response.payload.isLogin) {
-        props.history.push('/');
-      } else {
-        alert('Error');
-      }
-    });
+    dispatch(loginUser(body));
   };
   const handleGuestClick = () => {
     console.log('guestClick');

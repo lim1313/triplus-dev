@@ -1,11 +1,22 @@
 import axios from 'axios';
 import { LOGIN_USER } from './type';
 
-export function loginUser(dataToSubmit) {
-  const request = axios.post('/login', dataToSubmit).then((response) => response.success);
+// axios.defaults.withCredentials = true;
+// axios.defaults.headers.common['Content-Type'] = 'application/json';
 
-  return {
-    type: LOGIN_USER,
-    payload: request,
-  };
-}
+// const http = process.env.REACT_APP_HTTPURL;
+
+export const loginUser = (dataToSubmit) => (dispatch) => {
+  axios
+    .post(`http://localhost/login`, dataToSubmit)
+    .then((response) => response.data)
+    .then((res) => {
+      dispatch({
+        type: LOGIN_USER,
+        payload: { success: res.success, message: res.message },
+      });
+    });
+  return new Promise((resolve, reject) => {
+    resolve();
+  });
+};
