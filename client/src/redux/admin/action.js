@@ -8,7 +8,7 @@ export const adminUser = (dataTosubmit) => (dispatch) => {
     .then((res) => {
       dispatch({
         type: ADMIN_USER,
-        payload: { success: res.success },
+        payload: { success: res.success, message: res.message },
       });
     });
 };

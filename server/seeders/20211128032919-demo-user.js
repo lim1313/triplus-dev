@@ -26,6 +26,20 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        user_id: 'cindy12',
+        passWord: '123412',
+        email: 'example1@example.com',
+        nick_name: 'cindy12',
+        region: '서울',
+        image: '',
+        o_auth: '',
+        state: '',
+        role: 'admin',
+        expired_datetime: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
   },
 

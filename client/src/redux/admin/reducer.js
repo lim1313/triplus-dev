@@ -6,6 +6,7 @@ export function adminReducer(state = {}, action) {
       return {
         ...state,
         isAdmin: action.payload.success,
+        message: action.payload.message,
       };
     default:
       return state;

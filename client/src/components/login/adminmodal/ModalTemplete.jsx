@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { adminOpen } from '../../../redux/admin/action';
+import { adminOpen, adminUser } from '../../../redux/admin/action';
 import AdminBtns from './AdminBtns';
 import AdminId from './AdminId';
 import AdminPw from './AdminPw';
@@ -45,6 +45,15 @@ export default function ModalTemplete() {
   const handleCancelClick = () => {
     dispatch(adminOpen());
   };
+  const handleLoginClick = (e) => {
+    e.preventDefault();
+    let body = {
+      userId: adminId,
+      password: adminPw,
+      isAdmin: 'admin',
+    };
+    dispatch(adminUser(body));
+  };
 
   return (
     <Background>
@@ -52,7 +61,7 @@ export default function ModalTemplete() {
         <ModalTitle>관리자로그인</ModalTitle>
         <AdminId handleIdChange={handleIdChange} adminId={adminId} />
         <AdminPw handlePwChange={handlePwChange} adminPw={adminPw} />
-        <AdminBtns handleCancelClick={handleCancelClick} />
+        <AdminBtns handleCancelClick={handleCancelClick} handleLoginClick={handleLoginClick} />
       </ModalWrapper>
     </Background>
   );
