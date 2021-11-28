@@ -6,6 +6,7 @@ import LoginPw from './LoginPw';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/login/action';
 import { useNavigate } from 'react-router-dom';
+import { adminOpen } from '../../redux/admin/action';
 
 const SectionBlock = styled.div`
   max-width: 100%;
@@ -13,6 +14,7 @@ const SectionBlock = styled.div`
 
 export default function LoginSection(props) {
   const state = useSelector((state) => state.loginReducer);
+  const adminState = useSelector((state) => state.adminOpenReducer);
   const { isLogin } = state;
   const [userId, setUserId] = useState('');
   const [userPw, setUserPw] = useState('');
@@ -37,11 +39,12 @@ export default function LoginSection(props) {
     };
     dispatch(loginUser(body));
   };
-  const handleGuestClick = () => {
-    console.log('guestClick');
+  const handleAdminClick = () => {
+    console.log(adminState);
+    dispatch(adminOpen());
   };
   const handleSignupClick = () => {
-    console.log('signupClick');
+    navigate('/signup');
   };
 
   return (
@@ -50,8 +53,8 @@ export default function LoginSection(props) {
       <LoginPw userPw={userPw} handlePwChange={handlePwChange} />
       <LoginBtns
         handleLoginClick={handleLoginClick}
-        handleGuestClick={handleGuestClick}
         handleSignupClick={handleSignupClick}
+        handleAdminClick={handleAdminClick}
       />
     </SectionBlock>
   );

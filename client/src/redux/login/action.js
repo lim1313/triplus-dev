@@ -17,5 +17,3 @@ export const loginUser = (dataToSubmit) => (dispatch) => {
       });
     });
 };
-
-export const adminUser = (dataTosubmit) => (dispatch) => {};

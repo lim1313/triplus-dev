@@ -44,12 +44,12 @@ const SignupBtn = styled(BorderBtn)`
 
 export default function LoginBtns(props) {
   const state = useSelector((state) => state.loginReducer);
-  const { handleLoginClick, handleGuestClick, handleSignupClick } = props;
+  const { handleLoginClick, handleAdminClick, handleSignupClick } = props;
   return (
     <BtnsBlock>
       <div>
         <span>{state.message}</span>
-        <GuestLogin onClick={handleGuestClick}>관리자로&nbsp;로그인하기</GuestLogin>
+        <GuestLogin onClick={handleAdminClick}>관리자로&nbsp;로그인하기</GuestLogin>
       </div>
       <LoginBtn onClick={handleLoginClick}>로그인</LoginBtn>
       <SignupBtn onClick={handleSignupClick}>회원가입</SignupBtn>

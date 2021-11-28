@@ -12,7 +12,7 @@ const TempleteBlock = styled.div`
   padding: 1.8em;
 `;
 
-export default function LoginTemplete() {
+export default function LoginTemplete(props) {
   return (
     <TempleteBlock>
       <LoginHeader />
