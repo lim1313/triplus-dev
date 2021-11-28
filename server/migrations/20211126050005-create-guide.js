@@ -1,15 +1,12 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('guide', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
+    await queryInterface.createTable('guide_card', {
       guide_id: {
-        type: Sequelize.STRING
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+        type: Sequelize.INTEGER,
       },
       title: {
         type: Sequelize.STRING
@@ -36,13 +33,16 @@ module.exports = {
         type: Sequelize.STRING
       },
       latitude: {
-        type: Sequelize.FLOAT(16, 16)
+        type: Sequelize.DECIMAL
       },
       longitude: {
-        type: Sequelize.FLOAT(16, 16)
+        type: Sequelize.DECIMAL
       },
       open_date: {
         type: Sequelize.DATE
+      },
+      user_id: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -55,6 +55,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('guide');
+    await queryInterface.dropTable('guide_card');
   }
 };
