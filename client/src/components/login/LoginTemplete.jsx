@@ -9,7 +9,7 @@ const TempleteBlock = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 1.8em;
+  padding: 6rem 1rem 2rem 1rem;
 `;
 
 export default function LoginTemplete(props) {

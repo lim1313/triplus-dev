@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BorderBtn, NoBorderBtn } from '../../styles/common';
+import { BorderBtn } from '../../styles/common';
 import { useSelector } from 'react-redux';
 
 const BtnsBlock = styled.div`
@@ -8,7 +8,7 @@ const BtnsBlock = styled.div`
   flex-direction: column;
   & div {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     margin-top: 1rem;
     justify-content: space-between;
   }
@@ -19,12 +19,12 @@ const BtnsBlock = styled.div`
   }
 `;
 
-const GuestLogin = styled(NoBorderBtn)`
-  text-align: right;
-  white-space: nowrap;
-  padding: 0;
-  padding-left: 5rem;
-`;
+// const GuestLogin = styled(NoBorderBtn)`
+//   text-align: right;
+//   white-space: nowrap;
+//   padding: 0;
+//   padding-left: 5rem;
+// `;
 const LoginBtn = styled(BorderBtn)`
   height: 7vh;
   margin-top: 20px;
@@ -44,12 +44,11 @@ const SignupBtn = styled(BorderBtn)`
 
 export default function LoginBtns(props) {
   const state = useSelector((state) => state.loginReducer);
-  const { handleLoginClick, handleAdminClick, handleSignupClick } = props;
+  const { handleLoginClick, handleSignupClick } = props;
   return (
     <BtnsBlock>
       <div>
         <span>{state.message}</span>
-        <GuestLogin onClick={handleAdminClick}>관리자로&nbsp;로그인하기</GuestLogin>
       </div>
       <LoginBtn onClick={handleLoginClick}>로그인</LoginBtn>
       <SignupBtn onClick={handleSignupClick}>회원가입</SignupBtn>
