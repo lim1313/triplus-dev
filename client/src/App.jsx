@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import NavBar from './components/common/NavBar';
+import Footer from './components/common/Footer';
 
 import MainPage from './pages/MainPage';
 import LoginPage from './pages/LoginPage';
@@ -14,6 +15,8 @@ import AdminPage from './pages/AdminPage';
 
 function App() {
   const [isAdmin] = useState(false);
+  const { pathname } = useLocation();
+  console.log(pathname);
   return (
     <>
       {isAdmin || <NavBar />}
@@ -32,6 +35,9 @@ function App() {
           </>
         )}
       </Routes>
+      {pathname === '/map' || pathname === '/admin' || pathname === '/mypage' ? null : (
+        <Footer main={pathname === '/' ? 'main' : null} />
+      )}
     </>
   );
 }

@@ -46,6 +46,7 @@ export const NoBorderBtn = styled.button`
   width: ${({ width }) => width || 'auto'};
   font-weight: 600;
   font-size: ${({ fontSize }) => fontSize || '.9rem'};
+  text-align: center;
   padding: 0.3em 1.1em;
   color: ${({ palette, theme }) => theme.color[palette]};
   margin-left: ${({ marginLeft }) => marginLeft || '0'};

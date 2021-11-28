@@ -7,12 +7,13 @@ const Section = styled.div`
   justify-content: center;
   align-items: center;
   width: 100vw;
-  height: 90vh;
+  margin-top: ${({ marginTop }) => marginTop || 'none'};
+  height: ${({ last }) => (last ? '60vh' : '95vh')};
 `;
 
 const Content = styled.div`
   display: flex;
-  background-color: #eee;
+  background-color: #fff;
 `;
 
 const Description = styled.div`
@@ -47,7 +48,7 @@ const Img = styled.img`
 export default function MainPage() {
   return (
     <>
-      <Section>
+      <Section marginTop='2rem'>
         <Content>
           <Description marginRight='10rem'>
             <Title>
@@ -61,12 +62,12 @@ export default function MainPage() {
               탐색하기
             </BorderBtn>
           </Description>
-          <Img src='./logoMiddle.png' alt='대체 이미지' />
+          <Img src='./asset/main/trip1@3x.png' alt='대체 이미지' />
         </Content>
       </Section>
       <Section>
         <Content>
-          <Img src='./logoMiddle.png' alt='대체 이미지' />
+          <Img src='./asset/main/trip2@3x.png' alt='대체 이미지' />
           <Description marginLeft='10rem' right>
             <Title>여행해보세요!</Title>
             <SubText>
@@ -95,12 +96,12 @@ export default function MainPage() {
               </ColorBtn>
             </div>
           </Description>
-          <Img src='./logoMiddle.png' alt='대체 이미지' />
+          <Img src='./asset/main/trip3@3x.png' alt='대체 이미지' />
         </Content>
       </Section>
       <Section>
         <Content>
-          <Img src='./logoMiddle.png' alt='대체 이미지' />
+          <Img src='./asset/main/trip4@3x.png' alt='대체 이미지' />
           <Description marginLeft='10rem' right>
             <Title>채팅해보세요!</Title>
             <SubText>
@@ -128,10 +129,10 @@ export default function MainPage() {
               </ColorBtn>
             </div>
           </Description>
-          <Img src='./logoMiddle.png' alt='대체 이미지' />
+          <Img src='./asset/main/trip5@3x.png' alt='대체 이미지' />
         </Content>
       </Section>
-      <Section>
+      <Section last>
         <Description center>
           <Title>이제 시작해볼까요?</Title>
           <SubText></SubText>
