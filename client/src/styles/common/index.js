@@ -6,13 +6,14 @@ export const H2 = styled.h2`
 `;
 
 export const BorderBtn = styled.button`
-  width: auto;
+  width: ${({ width }) => width || 'auto'};
   font-weight: 600;
   font-size: ${({ fontSize }) => fontSize || '.9rem'};
   padding: 0.3em 1.1em;
   color: ${({ palette, theme }) => theme.color[palette]};
   border: 1px solid
     ${({ palette, theme }) => (palette ? theme.color[palette] : theme.color['black'])};
+  margin-left: ${({ marginLeft }) => marginLeft || '0'};
   border-radius: 2px;
   background: none;
   transition: all 0.2s;
@@ -42,11 +43,13 @@ export const BorderBtn = styled.button`
 `;
 
 export const NoBorderBtn = styled.button`
-  width: auto;
+  width: ${({ width }) => width || 'auto'};
   font-weight: 600;
   font-size: ${({ fontSize }) => fontSize || '.9rem'};
+  text-align: center;
   padding: 0.3em 1.1em;
   color: ${({ palette, theme }) => theme.color[palette]};
+  margin-left: ${({ marginLeft }) => marginLeft || '0'};
   border: none;
   border-radius: 2px;
   background: none;
@@ -63,14 +66,21 @@ export const NoBorderBtn = styled.button`
       css`
         color: ${theme.color['lightRed']};
       `}
+    ${({ palette, theme }) =>
+      palette === 'gray' &&
+      css`
+        color: ${theme.color['black']};
+      `}
+    
     cursor: pointer;
   }
 `;
 
 export const ColorBtn = styled.button`
-  width: auto;
+  width: ${({ width }) => width || 'auto'};
   font-weight: 600;
   font-size: ${({ fontSize }) => fontSize || '.9rem'};
+  margin-left: ${({ marginLeft }) => marginLeft || '0'};
   padding: 0.3em 1.1em;
   color: #fff;
   border: none;
