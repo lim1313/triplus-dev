@@ -5,8 +5,12 @@ import styled from 'styled-components';
 
 const MapContainer = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 3.8rem);
   display: flex;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    flex-direction: column-reverse;
+  }
 `;
 
 export default function MapPage() {

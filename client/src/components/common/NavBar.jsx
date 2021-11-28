@@ -4,7 +4,9 @@ import { Link, useLocation } from 'react-router-dom';
 import { NoBorderBtn, BorderBtn } from '../../styles/common';
 
 const NavContainer = styled.div`
-  position: fixed;
+  /* position: fixed; */
+  position: sticky;
+  position: -webkit-sticky;
   top: 0;
   width: 100vw;
   z-index: 999;

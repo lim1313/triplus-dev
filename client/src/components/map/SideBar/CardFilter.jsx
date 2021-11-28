@@ -6,15 +6,18 @@ const FilterWrapper = styled.div`
   height: auto;
   margin-bottom: 1.5rem;
 
-  background-color: powderblue;
+  @media ${({ theme }) => theme.device.mobile} {
+    height: 20%;
+    margin-bottom: 0;
+  }
 `;
 
 export default function CardFilter() {
   return (
     <FilterWrapper>
-      <div>Date</div>
-      <div>gender</div>
-      <div>search box??</div>
+      <h3>가이드 찾기</h3>
+      <div>날짜</div>
+      <div>성별</div>
     </FilterWrapper>
   );
 }

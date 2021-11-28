@@ -5,11 +5,17 @@ import styled from 'styled-components';
 import CardModal from './CardModal';
 import CardBar from './SideBar/CardBar';
 
-const SideWrapper = styled.div`
+const SideWrapper = styled.aside`
   position: relative;
-  width: 350px;
+  width: 360px;
   height: 100%;
   flex: 0 0 auto;
+  background-color: ${({ theme }) => theme.color.lightGray};
+
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    height: 28vh;
+  }
 `;
 
 export default function SideBar() {
@@ -18,7 +24,6 @@ export default function SideBar() {
 
   const modalClick = (cardId) => {
     // TODO GET /map/guide-card?guide-id=2
-    console.log(cardId);
 
     setIsModal(true);
     setModalInfo({ title: `지하벙크 체험 ${cardId}` });

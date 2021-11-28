@@ -14,7 +14,16 @@ const ModalWrapper = styled.div`
   padding: 1.5rem;
 
   overflow: auto;
-  background-color: rgba(100, 150, 150, 0.5);
+  background-color: rgba(100, 150, 150, 1);
+
+  @media ${({ theme }) => theme.device.mobile} {
+    top: unset;
+    bottom: 0;
+    width: 100vw;
+    height: calc(100vh - 3.8rem);
+    transform: translateX(0);
+    z-index: 999;
+  }
 `;
 
 export default function CardModal({ modalInof, closeModal }) {
