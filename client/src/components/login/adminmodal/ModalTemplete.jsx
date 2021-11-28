@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { adminOpen, adminUser } from '../../../redux/admin/action';
 import AdminBtns from './AdminBtns';
 import AdminId from './AdminId';
 import AdminPw from './AdminPw';
+import { useNavigate } from 'react-router-dom';
 
 const Background = styled.div`
   position: fixed;
@@ -35,6 +36,12 @@ export default function ModalTemplete() {
   const [adminId, setAdminId] = useState('');
   const [adminPw, setAdminPw] = useState('');
   const dispatch = useDispatch();
+  const adminState = useSelector((state) => state.adminReducer);
+  const navigate = useNavigate();
+  const { isAdmin } = adminState;
+  if (isAdmin) {
+    navigate('/admin');
+  }
 
   const handleIdChange = (e) => {
     setAdminId(e.target.value);
