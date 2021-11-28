@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class guide extends Model {
+  class guide_card extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,8 +13,13 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  guide.init({
-    guide_id: DataTypes.STRING,
+  guide_card.init({
+    guide_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
+    },
     title: DataTypes.STRING,
     content: DataTypes.STRING,
     guide_date: DataTypes.DATE,
@@ -23,13 +28,13 @@ module.exports = (sequelize, DataTypes) => {
     num_people: DataTypes.INTEGER,
     state: DataTypes.STRING,
     address: DataTypes.STRING,
-    latitude: DataTypes.FLOAT(16,16),
-    longitude: DataTypes.FLOAT(16,16),
+    latitude: DataTypes.DECIMAL,
+    longitude: DataTypes.DECIMAL,
     open_date: DataTypes.DATE
   }, {
     sequelize,
-    modelName: 'guide',
+    modelName: 'guide_card',
     freezeTableName: true
   });
-  return guide;
+  return guide_card;
 };
