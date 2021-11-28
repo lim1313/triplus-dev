@@ -17,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
     guide_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     title: DataTypes.STRING,
     content: DataTypes.STRING,
@@ -27,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
     num_people: DataTypes.INTEGER,
     state: DataTypes.STRING,
     address: DataTypes.STRING,
-    latitude: DataTypes.FLOAT(16,16),
-    longitude: DataTypes.FLOAT(16,16),
+    latitude: DataTypes.DECIMAL,
+    longitude: DataTypes.DECIMAL,
     open_date: DataTypes.DATE
   }, {
     sequelize,

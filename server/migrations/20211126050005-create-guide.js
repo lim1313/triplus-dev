@@ -5,7 +5,8 @@ module.exports = {
       guide_id: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.STRING
+        autoIncrement: true,
+        type: Sequelize.INTEGER,
       },
       title: {
         type: Sequelize.STRING
@@ -32,10 +33,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       latitude: {
-        type: Sequelize.FLOAT(16, 16)
+        type: Sequelize.DECIMAL
       },
       longitude: {
-        type: Sequelize.FLOAT(16, 16)
+        type: Sequelize.DECIMAL
       },
       open_date: {
         type: Sequelize.DATE
