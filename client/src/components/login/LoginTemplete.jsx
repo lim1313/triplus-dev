@@ -5,7 +5,7 @@ import LoginSection from './LoginSection';
 import OauthLogin from './OauthLogin';
 
 const TempleteBlock = styled.div`
-  width: 35em;
+  min-width: 30vw;
   display: flex;
   flex-direction: column;
   justify-content: center;

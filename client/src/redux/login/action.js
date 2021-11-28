@@ -16,7 +16,6 @@ export const loginUser = (dataToSubmit) => (dispatch) => {
         payload: { success: res.success, message: res.message },
       });
     });
-  return new Promise((resolve, reject) => {
-    resolve();
-  });
 };
+
+export const adminUser = (dataTosubmit) => (dispatch) => {};
