@@ -11,17 +11,14 @@ import ManagementPage from './pages/ManagementPage';
 import ChattingPage from './pages/ChattingPage';
 import MyPage from './pages/MyPage';
 import AdminPage from './pages/AdminPage';
-import { useSelector } from 'react-redux';
 
 function App() {
-  const state = useSelector((state) => state.loginReducer);
-  const { isLogin } = state;
   return (
     <>
       <NavBar />
       <Routes>
         <Route path='/' element={<MainPage />} />
-        <Route path='/login' isLogin={isLogin} element={<LoginPage />} />
+        <Route path='/login' element={<LoginPage />} />
         <Route path='/signup' element={<SignupPage />} />
         <Route path='/map' element={<MapPage />} />
         <Route path='/management' element={<ManagementPage />} />

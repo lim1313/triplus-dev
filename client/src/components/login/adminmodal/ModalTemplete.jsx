@@ -25,7 +25,7 @@ const ModalWrapper = styled.div`
   background: white;
   min-height: 50vh;
   border-radius: 1rem;
-  padding: 1rem;
+  padding: 1.5rem;
 `;
 
 const ModalTitle = styled.div`
