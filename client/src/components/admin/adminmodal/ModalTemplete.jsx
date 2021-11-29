@@ -33,18 +33,22 @@ const ModalTitle = styled.div`
 `;
 
 export default function ModalTemplete() {
+  // ---- 상태정의 ----
   const [adminId, setAdminId] = useState('');
   const [adminPw, setAdminPw] = useState('');
   const dispatch = useDispatch();
   const adminState = useSelector((state) => state.adminReducer);
   const navigate = useNavigate();
   const { isAdmin } = adminState;
+
+  // ---- navigate ----
   if (isAdmin) {
     return () => {
       navigate('/admin');
     };
   }
 
+  // ---- 이벤트 핸들러 ----
   const handleIdChange = (e) => {
     setAdminId(e.target.value);
   };
