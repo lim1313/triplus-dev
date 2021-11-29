@@ -8,8 +8,7 @@ module.exports = {
 
   selectGuideCard: async (req, res) => {
     const params = req.query;
-    const guideCardList = selectGuideCard(params);
-    console.log(guideCardList);
+    const guideCardList = await selectGuideCard(params);
 
     res.status(200).json({
       code: 200,

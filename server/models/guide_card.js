@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     address: DataTypes.STRING,
     latitude: DataTypes.DOUBLE,
     longitude: DataTypes.DOUBLE,
-    open_date: DataTypes.DATE
+    open_date: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'guide_card',
