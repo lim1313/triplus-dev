@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { adminOpen, adminUser } from '../../../redux/admin/action';
+import { adminUser } from '../../../redux/admin/action';
 import AdminBtns from './AdminBtns';
 import AdminId from './AdminId';
 import AdminPw from './AdminPw';
@@ -40,17 +40,19 @@ export default function ModalTemplete() {
   const navigate = useNavigate();
   const { isAdmin } = adminState;
   if (isAdmin) {
-    navigate('/admin');
+    return () => {
+      navigate('/admin');
+    };
   }
 
   const handleIdChange = (e) => {
     setAdminId(e.target.value);
   };
   const handlePwChange = (e) => {
-    setAdminPw(e.target.value);
+    setAdminPw(e.currentTarget.value);
   };
   const handleCancelClick = () => {
-    dispatch(adminOpen());
+    navigate('/');
   };
   const handleLoginClick = (e) => {
     e.preventDefault();

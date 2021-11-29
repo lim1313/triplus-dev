@@ -6,25 +6,26 @@ import LoginPw from './LoginPw';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/login/action';
 import { useNavigate } from 'react-router-dom';
-// import { adminOpen } from '../../redux/admin/action';
 
 const SectionBlock = styled.div`
   max-width: 100%;
 `;
 
 export default function LoginSection(props) {
+  // ---- 상태정의 ----
   const state = useSelector((state) => state.loginReducer);
-  // const adminState = useSelector((state) => state.adminOpenReducer);
   const { isLogin } = state;
   const [userId, setUserId] = useState('');
   const [userPw, setUserPw] = useState('');
   const dispatch = useDispatch();
   let navigate = useNavigate();
 
+  // ---- navigate ----
   if (isLogin) {
     navigate('/');
   }
 
+  // ---- 이벤트 핸들러 ----
   const handleIdChange = (e) => {
     setUserId(e.target.value);
   };
@@ -39,10 +40,6 @@ export default function LoginSection(props) {
     };
     dispatch(loginUser(body));
   };
-  // const handleAdminClick = () => {
-  //   console.log(adminState);
-  //   dispatch(adminOpen());
-  // };
   const handleSignupClick = () => {
     navigate('/signup');
   };
