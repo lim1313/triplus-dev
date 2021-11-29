@@ -6,6 +6,7 @@ import SignupEmail from './SignupEmail';
 import styled from 'styled-components';
 import { idValidation, emailValidation, pwValidaton } from '../../utils/validation';
 import { checkId, signUp } from '../../network/signup/http';
+import { useNavigate } from 'react-router-dom';
 
 const SectionBlock = styled.div`
   max-width: 100%;
@@ -15,6 +16,7 @@ const SectionBlock = styled.div`
 `;
 
 export default function SignupSection() {
+  const navigate = useNavigate();
   const [message, setMessage] = useState({
     userId: '',
     password: '',
@@ -90,7 +92,12 @@ export default function SignupSection() {
         password: inputs.password,
         email: inputs.email,
       };
-      signUp(body);
+      signUp(body).then((res) => {
+        if (res.data.success) {
+          alert('회원가입이 완료되었습니다.');
+          navigate('/login');
+        }
+      });
     } else {
       setErr('정확한 정보를 기입해주세요');
     }
