@@ -1,9 +1,8 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import CardFilter from './CardFilter';
 import GuideCard from './GuideCard';
-
-import { db } from '../../../db/guideCard';
 
 const SideCardWrapper = styled.div`
   flex: 0 0 auto;
@@ -38,11 +37,13 @@ const GuideCardsWrapper = styled.ul`
 `;
 
 export default function CardBar({ modalClick }) {
+  const cards = useSelector((state) => state.guideCardsReducer);
+
   return (
     <SideCardWrapper>
       <CardFilter />
       <GuideCardsWrapper>
-        {db.map((cardInfo, index) => (
+        {cards.map((cardInfo, index) => (
           <GuideCard key={index} cardInfo={cardInfo} modalClick={modalClick} />
         ))}
       </GuideCardsWrapper>

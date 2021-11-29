@@ -14,7 +14,7 @@ const SideWrapper = styled.aside`
 
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
-    height: 28vh;
+    height: 30vh;
   }
 `;
 

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import React from 'react';
-import styled, { ThemeContext } from 'styled-components';
+import styled from 'styled-components';
 import ImgFrame from '../../../styles/map/imgFram';
 
 const CardLi = styled.li`
