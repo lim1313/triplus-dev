@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Container } from '../styles/common/index';
 import styled from 'styled-components';
 import SignupTemplete from '../components/signup/SignupTemplete';
 import SignupModal from '../components/signup/SignupModal';
-import NavBar from '../components/common/NavBar';
+import { useSelector } from 'react-redux';
 
 const PageContainer = styled(Container)`
   max-width: ${({ theme }) => theme.size.maxWidth};
@@ -15,21 +15,16 @@ const PageContainer = styled(Container)`
 `;
 
 export default function SignupPage() {
-  const [isModalOpen, setModalOpen] = useState(false);
+  const isModalOpen = useSelector((state) => state.openModalReducer);
 
   const handleModalClick = () => {
-    setModalOpen(!isModalOpen);
-  };
-  const handleCancelClick = () => {
-    console.log('눌림');
-    setModalOpen(!isModalOpen);
+    // setModalOpen(!isModalOpen);
   };
   return (
     <>
+      {isModalOpen ? <SignupModal handleModalClick={handleModalClick} /> : null}
       <PageContainer>
-        {isModalOpen ? <SignupModal handleModalClick={handleModalClick} /> : null}
-        <NavBar />
-        <SignupTemplete handleCancelClick={handleCancelClick} />
+        <SignupTemplete />
       </PageContainer>
     </>
   );

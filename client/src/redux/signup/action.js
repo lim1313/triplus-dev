@@ -1,5 +1,6 @@
-import { checkId } from '../../network/signup/http';
-
-export const idCheck = (dataToSubmit) => (dispatch) => {
-  checkId.then(() => {});
+import { OPEN_MODAL } from './type';
+export const openModal = () => {
+  return {
+    type: OPEN_MODAL,
+  };
 };

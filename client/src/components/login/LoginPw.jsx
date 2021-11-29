@@ -5,7 +5,7 @@ export default function LoginPw(props) {
   const { userPw, handlePwChange } = props;
   return (
     <InputBlock>
-      <LoginLabel for='pwInput'>PASSWORD</LoginLabel>
+      <LoginLabel htmlFor='pwInput'>PASSWORD</LoginLabel>
       <LoginInput
         id='pwInput'
         placeholder='비밀번호'

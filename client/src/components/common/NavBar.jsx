@@ -70,32 +70,32 @@ export default function NavBar() {
         </Link>
       </FlexBox>
       <FlexBox marginRight='3rem'>
-        <Link to='map' active={routed.map}>
+        <Link to='/map' active={routed.map}>
           <NoBorderBtn fontSize='1rem' palette={pathname === '/map' ? 'black' : 'gray'}>
             지도 Map
           </NoBorderBtn>
         </Link>
-        <Link to='management' active={routed.management}>
+        <Link to='/management' active={routed.management}>
           <NoBorderBtn fontSize='1rem' palette={pathname === '/management' ? 'black' : 'gray'}>
             여행 관리
           </NoBorderBtn>
         </Link>
-        <Link to='chat' active={routed.chat}>
+        <Link to='/chat' active={routed.chat}>
           <NoBorderBtn fontSize='1rem' palette={pathname === '/chat' ? 'black' : 'gray'}>
             채팅
           </NoBorderBtn>
         </Link>
-        <Link to='mypage' active={routed.mypage}>
+        <Link to='/mypage' active={routed.mypage}>
           <NoBorderBtn fontSize='1rem' palette={pathname === '/mypage' ? 'black' : 'gray'}>
             마이 페이지
           </NoBorderBtn>
         </Link>
-        <Link to='login' active={routed.login}>
+        <Link to='/login' active={routed.login}>
           <NoBorderBtn fontSize='1rem' palette={pathname === '/login' ? 'black' : 'gray'}>
             로그인
           </NoBorderBtn>
         </Link>
-        <Link to='signup'>
+        <Link to='/signup'>
           <BorderBtn fontSize='1rem' palette='blue' marginLeft='1.2rem'>
             회원가입
           </BorderBtn>

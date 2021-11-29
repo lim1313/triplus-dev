@@ -11,7 +11,7 @@ export default function SignupId(props) {
   const { handleInputChange, value, handleIdBlur, message } = props;
   return (
     <InputBlock>
-      <LoginLabel for='idInput'>ID</LoginLabel>
+      <LoginLabel htmlFor='idInput'>ID</LoginLabel>
       <LoginInput
         id='idInput'
         placeholder='아이디'
