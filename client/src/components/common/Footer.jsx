@@ -5,9 +5,9 @@ import { AiFillGithub } from 'react-icons/ai';
 const Container = styled.div`
   display: flex;
   align-items: flex-start;
-  padding: 6rem 5rem 5rem;
+  padding: ${({ main }) => (main === 'main' ? '6rem 5rem 5rem' : '3rem 2rem')};
   width: 100vw;
-  height: 35vh;
+  height: ${({ main }) => (main === 'main' ? '40vh' : '30vh')};
   background-color: ${({ main, theme }) => (main === 'main' ? '#fff' : `${theme.color.darkGray}`)};
 `;
 
