@@ -80,4 +80,10 @@ module.exports = {
       return resObject;
     }
   },
+
+  selectGuideCard: (params) => {
+    console.log(params);
+
+    return params;
+  },
 }
