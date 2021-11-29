@@ -5,8 +5,8 @@ export default function AdminId(props) {
   const { adminId, handleIdChange } = props;
   return (
     <InputBlock>
-      <LoginLabel for='idInput'>ID</LoginLabel>
-      <LoginInput id='idInput' placeholder='아이디' onChange={handleIdChange} value={adminId} />
+      <LoginLabel for='adminId'>ID</LoginLabel>
+      <LoginInput id='adminId' placeholder='아이디' onChange={handleIdChange} value={adminId} />
     </InputBlock>
   );
 }

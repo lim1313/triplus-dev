@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import LoginHeader from './LoginHeader';
-import LoginSection from './LoginSection';
-import OauthLogin from './OauthLogin';
+import SignupHeader from './SignupHeader';
+import SignupSection from './SignupSection';
 
 const TempleteBlock = styled.div`
   min-width: 30vw;
@@ -10,15 +9,14 @@ const TempleteBlock = styled.div`
   flex-direction: column;
   justify-content: center;
   padding: 6rem 1rem 2rem 1rem;
-  margin: 2rem 0rem;
+  margin: 2rem 0rem 3rem 0rem;
 `;
 
-export default function LoginTemplete(props) {
+export default function SignupTemplete(props) {
   return (
     <TempleteBlock>
-      <LoginHeader />
-      <LoginSection />
-      <OauthLogin />
+      <SignupHeader />
+      <SignupSection props={props} />
     </TempleteBlock>
   );
 }

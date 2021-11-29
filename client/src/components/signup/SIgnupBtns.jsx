@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { BorderBtn } from '../../styles/common';
-import { useSelector } from 'react-redux';
 
 const BtnsBlock = styled.div`
   display: flex;
@@ -19,13 +18,7 @@ const BtnsBlock = styled.div`
   }
 `;
 
-// const GuestLogin = styled(NoBorderBtn)`
-//   text-align: right;
-//   white-space: nowrap;
-//   padding: 0;
-//   padding-left: 5rem;
-// `;
-const LoginBtn = styled(BorderBtn)`
+const CancelBtn = styled(BorderBtn)`
   height: 7vh;
   margin-top: 20px;
   &:hover {
@@ -42,16 +35,11 @@ const SignupBtn = styled(BorderBtn)`
   }
 `;
 
-export default function LoginBtns(props) {
-  const state = useSelector((state) => state.loginReducer);
-  const { handleLoginClick, handleSignupClick } = props;
+export default function SIgnupBtns() {
   return (
     <BtnsBlock>
-      <div>
-        <span>{state.message}</span>
-      </div>
-      <LoginBtn onClick={handleLoginClick}>로그인</LoginBtn>
-      <SignupBtn onClick={handleSignupClick}>회원가입</SignupBtn>
+      <SignupBtn>회원가입</SignupBtn>
+      <CancelBtn>취소</CancelBtn>
     </BtnsBlock>
   );
 }
