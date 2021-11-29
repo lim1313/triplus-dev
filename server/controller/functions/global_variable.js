@@ -1,0 +1,13 @@
+const REQUESTED = 'REQUESTED';
+const APPROVED = 'APPROVED';
+const REJECTED = 'REJECTED';
+const COMPLETED = 'COMPLETED';
+const CANCELED = 'CANCELED';
+
+module.exports = {
+  REQUESTED,
+  APPROVED,
+  REJECTED,
+  COMPLETED,
+  CANCELED,
+}

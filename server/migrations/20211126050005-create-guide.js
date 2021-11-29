@@ -33,10 +33,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       latitude: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.DOUBLE
       },
       longitude: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.DOUBLE
       },
       open_date: {
         type: Sequelize.DATE

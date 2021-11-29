@@ -1,15 +1,15 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
 import { NoBorderBtn, BorderBtn } from '../../styles/common';
 
 const NavContainer = styled.div`
-  /* position: fixed; */
   position: sticky;
   position: -webkit-sticky;
   top: 0;
   width: 100vw;
-  z-index: 999;
+  z-index: 99;
   display: flex;
   justify-content: space-between;
   background-color: #fff;
@@ -25,14 +25,12 @@ const FlexBox = styled.div`
   justify-content: center;
   align-items: center;
   > a {
+    height: 100%;
     display: flex;
     align-items: center;
     text-decoration: none;
     margin-left: 1rem;
-    &:hover {
-      /* box-shadow: 0 1px 1px ${({ theme }) => theme.color.blue}; */
-      border-bottom: 1px solid ${({ theme }) => theme.color.lightBlue};
-    }
+    border-bottom: ${({ active }) => (active === 'true' ? '3px solid #000' : '3px solid #fff')};
   }
 `;
 
@@ -41,7 +39,28 @@ const LogoImg = styled.img`
 `;
 
 export default function NavBar() {
+  const [routed, setRouted] = useState({
+    map: 'false',
+    management: 'false',
+    chat: 'false',
+    mypage: 'false',
+    login: 'false',
+  });
+
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    const path = pathname.slice(1);
+    console.log(path);
+    setRouted({
+      map: 'false',
+      management: 'false',
+      chat: 'false',
+      mypage: 'false',
+      login: 'false',
+      [path]: 'true',
+    });
+  }, [pathname]);
 
   return (
     <NavContainer>
@@ -51,27 +70,27 @@ export default function NavBar() {
         </Link>
       </FlexBox>
       <FlexBox marginRight='3rem'>
-        <Link to='map'>
+        <Link to='map' active={routed.map}>
           <NoBorderBtn fontSize='1rem' palette={pathname === '/map' ? 'black' : 'gray'}>
             지도 Map
           </NoBorderBtn>
         </Link>
-        <Link to='management'>
+        <Link to='management' active={routed.management}>
           <NoBorderBtn fontSize='1rem' palette={pathname === '/management' ? 'black' : 'gray'}>
             여행 관리
           </NoBorderBtn>
         </Link>
-        <Link to='chat'>
+        <Link to='chat' active={routed.chat}>
           <NoBorderBtn fontSize='1rem' palette={pathname === '/chat' ? 'black' : 'gray'}>
             채팅
           </NoBorderBtn>
         </Link>
-        <Link to='mypage'>
+        <Link to='mypage' active={routed.mypage}>
           <NoBorderBtn fontSize='1rem' palette={pathname === '/mypage' ? 'black' : 'gray'}>
             마이 페이지
           </NoBorderBtn>
         </Link>
-        <Link to='login'>
+        <Link to='login' active={routed.login}>
           <NoBorderBtn fontSize='1rem' palette={pathname === '/login' ? 'black' : 'gray'}>
             로그인
           </NoBorderBtn>

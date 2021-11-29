@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { adminOpen, adminUser } from '../../../redux/admin/action';
+import { adminUser } from '../../../redux/admin/action';
 import AdminBtns from './AdminBtns';
 import AdminId from './AdminId';
 import AdminPw from './AdminPw';
@@ -33,24 +33,30 @@ const ModalTitle = styled.div`
 `;
 
 export default function ModalTemplete() {
+  // ---- 상태정의 ----
   const [adminId, setAdminId] = useState('');
   const [adminPw, setAdminPw] = useState('');
   const dispatch = useDispatch();
   const adminState = useSelector((state) => state.adminReducer);
   const navigate = useNavigate();
   const { isAdmin } = adminState;
+
+  // ---- navigate ----
   if (isAdmin) {
-    navigate('/admin');
+    return () => {
+      navigate('/admin');
+    };
   }
 
+  // ---- 이벤트 핸들러 ----
   const handleIdChange = (e) => {
     setAdminId(e.target.value);
   };
   const handlePwChange = (e) => {
-    setAdminPw(e.target.value);
+    setAdminPw(e.currentTarget.value);
   };
   const handleCancelClick = () => {
-    dispatch(adminOpen());
+    navigate('/');
   };
   const handleLoginClick = (e) => {
     e.preventDefault();
