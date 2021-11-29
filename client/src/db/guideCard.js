@@ -41,7 +41,7 @@ export const db = [
     userImage: '/asset/main/stamp@3x.png',
     guide_date: '20201230',
     guide_id: 4,
-    state: 'APPROVED',
+    state: 'COMPLETED',
   },
   {
     title: '지하벙커 체험',
@@ -52,7 +52,7 @@ export const db = [
     userImage: '/asset/main/stamp@3x.png',
     guide_date: '20201230',
     guide_id: 4,
-    state: 'APPROVED',
+    state: 'COMPLETED',
   },
   {
     title: '지하벙커 체험',
