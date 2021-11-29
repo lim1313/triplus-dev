@@ -28,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
     num_people: DataTypes.INTEGER,
     state: DataTypes.STRING,
     address: DataTypes.STRING,
-    latitude: DataTypes.DECIMAL,
-    longitude: DataTypes.DECIMAL,
+    latitude: DataTypes.DOUBLE,
+    longitude: DataTypes.DOUBLE,
     open_date: DataTypes.DATE
   }, {
     sequelize,
