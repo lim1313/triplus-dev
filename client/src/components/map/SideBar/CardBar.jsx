@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import CardFilter from './CardFilter';
 import GuideCard from './GuideCard';
 
-const db = [{ title: 'aa' }, { title: 'aa' }, { title: 'aa' }, { title: 'aa' }];
+import { db } from '../../../db/guideCard';
 
 const SideCardWrapper = styled.div`
   flex: 0 0 auto;
