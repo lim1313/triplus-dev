@@ -1,14 +1,36 @@
-import React from 'react';
-import styled from 'styled-components';
+/* eslint-disable no-unused-vars  */
+/* eslint-disable no-undef  */
+import React, { useEffect } from 'react';
+import styled, { keyframes, css } from 'styled-components';
 import { BorderBtn, ColorBtn } from '../styles/common';
+import { useSelector, useDispatch } from 'react-redux';
+import { scrollListener } from '../redux/scroll/action';
+
+const scaleUp = keyframes`
+  from {
+    opacity: 0;
+  } to {
+    opacity: 1;
+    transform: scale(1.4);
+  }
+`;
+
+const slideDown = keyframes`
+  from {
+    opacity: 0;
+  } to {
+    opacity: 1;
+    transform: translateY(3rem);
+  }
+`;
+
 const Section = styled.div`
   background-color: ${({ color }) => color || '#fff'};
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
-  margin-top: ${({ marginTop }) => marginTop || 'none'};
-  height: ${({ last }) => (last ? '60vh' : '95vh')};
+  height: ${({ last }) => (last ? '60vh' : '85vh')};
 `;
 
 const Content = styled.div`
@@ -21,12 +43,21 @@ const Description = styled.div`
   flex-direction: column;
   align-items: ${({ center }) => (center ? 'center' : 'none')};
   text-align: ${({ right }) => (right ? 'right' : 'none')};
+  margin-top: ${({ last }) => (last ? '-10rem' : 'none')};
   margin-left: ${({ marginLeft }) => marginLeft || 'none'};
   margin-right: ${({ marginRight }) => marginRight || 'none'};
+  opacity: ${({ currentY }) => (currentY ? '0' : '1')};
+  ${({ currentY, positionedY }) =>
+    currentY >= Number(positionedY) &&
+    css`
+      animation: ${slideDown} 1s;
+      animation-fill-mode: forwards;
+      transition: all 0s linear;
+    `}
 `;
 
 const Title = styled.h1`
-  font-size: 3.5rem;
+  font-size: 3rem;
   font-weight: 600;
   margin-bottom: 2rem;
   color: ${({ theme }) => theme.color.black};
@@ -41,14 +72,37 @@ const SubText = styled.p`
 `;
 
 const Img = styled.img`
-  width: 40vw;
+  opacity: ${({ positionedY }) => (positionedY === '0' ? '1' : '0')};
+  width: 25vw;
   object-fit: contain;
+  ${({ currentY, positionedY = 0 }) =>
+    currentY >= Number(positionedY) &&
+    css`
+      animation: ${scaleUp} 1.5s;
+      animation-fill-mode: forwards;
+      transition: all 0s linear;
+    `};
 `;
 
 export default function MainPage() {
+  const dispatch = useDispatch();
+  const currentY = useSelector((state) => state.scrollListener.scrollY);
+
+  const scrollEventListener = () => {
+    dispatch(scrollListener(window.pageYOffset));
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', scrollEventListener);
+    console.log();
+    return () => {
+      window.removeEventListener('scroll', scrollEventListener);
+    };
+  }, []);
+
   return (
     <>
-      <Section marginTop='2rem'>
+      <Section>
         <Content>
           <Description marginRight='10rem'>
             <Title>
@@ -62,12 +116,17 @@ export default function MainPage() {
               탐색하기
             </BorderBtn>
           </Description>
-          <Img src='./asset/main/trip1@3x.png' alt='대체 이미지' />
+          <Img src='./asset/main/trip1@3x.png' alt='대체 이미지' currentY={currentY} />
         </Content>
       </Section>
       <Section>
         <Content>
-          <Img src='./asset/main/trip2@3x.png' alt='대체 이미지' />
+          <Img
+            src='./asset/main/trip2@3x.png'
+            alt='대체 이미지'
+            currentY={currentY}
+            positionedY='200'
+          />
           <Description marginLeft='10rem' right>
             <Title>여행해보세요!</Title>
             <SubText>
@@ -96,12 +155,22 @@ export default function MainPage() {
               </ColorBtn>
             </div>
           </Description>
-          <Img src='./asset/main/trip3@3x.png' alt='대체 이미지' />
+          <Img
+            src='./asset/main/trip3@3x.png'
+            alt='대체 이미지'
+            currentY={currentY}
+            positionedY='830'
+          />
         </Content>
       </Section>
       <Section>
         <Content>
-          <Img src='./asset/main/trip4@3x.png' alt='대체 이미지' />
+          <Img
+            src='./asset/main/trip4@3x.png'
+            alt='대체 이미지'
+            currentY={currentY}
+            positionedY='1530'
+          />
           <Description marginLeft='10rem' right>
             <Title>채팅해보세요!</Title>
             <SubText>
@@ -129,11 +198,16 @@ export default function MainPage() {
               </ColorBtn>
             </div>
           </Description>
-          <Img src='./asset/main/trip5@3x.png' alt='대체 이미지' />
+          <Img
+            src='./asset/main/trip5@3x.png'
+            alt='대체 이미지'
+            currentY={currentY}
+            positionedY='2200'
+          />
         </Content>
       </Section>
       <Section last>
-        <Description center>
+        <Description last center currentY={currentY} positionedY='3000'>
           <Title>이제 시작해볼까요?</Title>
           <SubText></SubText>
           <div>
