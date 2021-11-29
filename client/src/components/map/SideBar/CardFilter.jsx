@@ -7,16 +7,19 @@ import { BorderBtn, ColorBtn } from '../../../styles/common';
 import DateCheck from './DateCheck';
 
 const FilterWrapper = styled.div`
-  width: 100%;
-  & h3 {
-    margin-top: 0;
-  }
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-black;
+  width: 360px;
+  padding: 1.5rem;
+  background-color: ${({ theme }) => theme.color.lightGray};
 
-  margin-bottom: 2rem;
+  //! 조정 필요
+  z-index: 999;
 
   @media ${({ theme }) => theme.device.mobile} {
-    height: 20%;
-    margin-bottom: 0;
+    width: 100vw;
   }
 `;
 

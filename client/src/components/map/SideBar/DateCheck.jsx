@@ -21,7 +21,7 @@ export default function DateCheck() {
   return (
     <DateBtn>
       <BorderBtn palette='black' className='date' onClick={isOpenCal}>
-        <span>날짜</span>
+        <span>날짜선택</span>
         <FaCaretDown />
       </BorderBtn>
       {openCal && <Calendar>날짜체크</Calendar>}
