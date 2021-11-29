@@ -4,7 +4,7 @@ import SideBar from '../components/map/SideBar';
 import styled from 'styled-components';
 import CardFilter from '../components/map/SideBar/CardFilter';
 
-const MapContainer = styled.div`
+const MapContainer = styled.section`
   position: relative;
   width: 100vw;
   height: calc(100vh - 3.8rem);

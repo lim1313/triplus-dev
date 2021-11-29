@@ -3,8 +3,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FilterFrame } from '../../../styles/map/filterFrame';
-import DatePicker from './DatePicker';
+import DateFilter from './DateFilter';
 import { FaSearchLocation } from 'react-icons/fa';
+import GenderFilter from './GenderFilter';
 
 const FilterWrapper = styled.div`
   display: inline-black;
@@ -40,11 +41,19 @@ const Filter = styled.div`
   }
 `;
 
-const SearchBtn = styled(FilterFrame)`
+const SearchBtn = styled(FilterFrame).attrs({
+  as: 'button',
+})`
+  border: none;
+  padding: 0;
+
   &:hover {
-    cursor: pointer;
     background-color: ${({ theme }) => theme.color.lightRed};
     color: ${({ theme }) => theme.color.darkGray};
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    border: 3px solid ${({ theme }) => theme.color.lightGray};
   }
 `;
 
@@ -57,9 +66,9 @@ export default function CardFilter() {
     <FilterWrapper>
       <h3>가이드 찾기</h3>
       <Filter>
-        <DatePicker />
+        <DateFilter />
         <div className='genderWrapper'>
-          <FilterFrame width='100px'>성별</FilterFrame>
+          <GenderFilter />
           <SearchBtn width='40px' color='red' onClick={filterClick}>
             <FaSearchLocation />
           </SearchBtn>
