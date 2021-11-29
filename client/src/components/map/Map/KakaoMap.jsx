@@ -27,6 +27,7 @@ export default function KakaoMap() {
     let map = new kakao.maps.Map(container, options);
 
     const kakaoEvent = () => {
+      let latLngparams = getInfo(map);
       // TODO GET 요청
       // getGuideCards(latLngparams).then((data) => {
 

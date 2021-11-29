@@ -25,7 +25,7 @@ export default function SideBar() {
     // TODO GET /map/guide-card?guide-id=cardId
 
     setIsModal(true);
-    setModalInfo();
+    setModalInfo({ title: '카페 카페 카페' });
   };
 
   const closeModal = () => {

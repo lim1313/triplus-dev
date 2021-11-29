@@ -2,85 +2,68 @@
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FaFemale, FaMale, FaCaretDown } from 'react-icons/fa';
-import { BorderBtn, ColorBtn } from '../../../styles/common';
-import DateCheck from './DateCheck';
+import { FilterFrame } from '../../../styles/map/filterFrame';
+import DatePicker from './DatePicker';
+import { FaSearchLocation } from 'react-icons/fa';
 
 const FilterWrapper = styled.div`
+  display: inline-black;
   position: absolute;
   top: 0;
   left: 0;
-  display: inline-black;
   width: 360px;
   padding: 1.5rem;
   background-color: ${({ theme }) => theme.color.lightGray};
-
+  & h3 {
+    margin-top: 0;
+  }
   //! 조정 필요
   z-index: 999;
 
   @media ${({ theme }) => theme.device.mobile} {
+    padding: 0.1rem;
     width: 100vw;
+    background-color: unset;
+    & h3 {
+      display: none;
+    }
   }
 `;
 
 const Filter = styled.div`
   display: flex;
+  flex-direction: column;
 
-  & .date {
-    margin-right: 1rem;
+  & .genderWrapper {
+    display: flex;
+    justify-content: space-between;
   }
 `;
 
-const GenderWrapper = styled.span`
-  & input[type='checkbox'] {
-    display: none;
-  }
-
-  & input[type='checkbox'] + label {
-    padding: 0.2rem 0.4rem;
-    display: inline-block;
+const SearchBtn = styled(FilterFrame)`
+  &:hover {
     cursor: pointer;
-    transition: all 0.1s ease;
-    border-radius: 1rem;
-    background-color: ${({ gender, theme }) => (gender ? theme.color.red : theme.color.blue)};
-    opacity: 0.5;
-  }
-
-  & input[type='checkbox']:checked + label {
-    background-color: ${({ gender, theme }) => (gender ? theme.color.red : theme.color.blue)};
-    opacity: 1;
-  }
-
-  & input[type='checkbox'] + label:hover {
-    background-color: ${({ gender, theme }) => (gender ? theme.color.red : theme.color.blue)};
-    opacity: 1;
+    background-color: ${({ theme }) => theme.color.lightRed};
+    color: ${({ theme }) => theme.color.darkGray};
   }
 `;
 
 export default function CardFilter() {
-  const [gender, setGender] = useState();
-  const [guideDate, setGuideDate] = useState();
+  const filterClick = (e) => {
+    console.log(e);
+  };
 
   return (
     <FilterWrapper>
       <h3>가이드 찾기</h3>
       <Filter>
-        <DateCheck />
-        {/* 0 : male / 1 :female */}
-        <div>
-          {[0, 1].map((value) => (
-            <GenderWrapper key={value} gender={value}>
-              <input type='checkbox' id={value} name='gender' value={value} />
-              <label htmlFor={value}>
-                {value ? <FaFemale className='female' /> : <FaMale className='male' />}
-              </label>
-            </GenderWrapper>
-          ))}
+        <DatePicker />
+        <div className='genderWrapper'>
+          <FilterFrame width='100px'>성별</FilterFrame>
+          <SearchBtn width='40px' color='red' onClick={filterClick}>
+            <FaSearchLocation />
+          </SearchBtn>
         </div>
-        {/* 적용하면 현재 card state에서 state를 필터링(서버 통신 X) */}
-        <ColorBtn palette='blue' marginLeft='4.5rem'>
-          적용하기
-        </ColorBtn>
       </Filter>
     </FilterWrapper>
   );

@@ -11,7 +11,7 @@ const SideCardWrapper = styled.div`
   height: 100%;
   padding: 1.5rem;
   overflow: auto;
-  padding-top: 11rem;
+  padding-top: 12.5rem;
 
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
