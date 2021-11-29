@@ -7,7 +7,7 @@ const NavContainer = styled.div`
   position: fixed;
   top: 0;
   width: 100vw;
-  z-index: 999;
+  z-index: 99;
   display: flex;
   justify-content: space-between;
   background-color: #fff;

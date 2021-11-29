@@ -19,7 +19,7 @@ function App() {
   console.log(pathname);
   return (
     <>
-      {pathname === '/admin' ? null : <NavBar />}
+      {pathname === '/admin' || pathname === '/signup' ? null : <NavBar />}
       <Routes>
         <Route path='/admin' element={<AdminPage />} />
         <Route path='/' element={<MainPage />} />
