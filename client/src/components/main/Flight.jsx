@@ -11,7 +11,7 @@ const SVG = styled.svg.attrs({
   width: 5rem;
   height: 50vh;
 
-  @media screen and (max-width: 1080px) {
+  @media screen and (max-width: 992px) {
     width: 3rem;
     height: 40vh;
   }

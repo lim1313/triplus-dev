@@ -54,8 +54,19 @@ const MaxBtn = styled(NoBorderBtn)`
   height: 100%;
   /* box-shadow: ${({ active, theme }) =>
     active ? `0 2px 2px ${theme.color.blue}` : '0 2px 1px rgba(255, 255, 255, 0)'}; */
+  font-size: 1rem;
   border-bottom: 3px solid
     ${({ active, theme }) => (active ? `${theme.color.blue}` : 'rgba(255, 255, 255, 0)')};
+  @media screen and (max-width: 992px) {
+    font-size: 0.85rem;
+  }
+`;
+
+const NavBorderBtn = styled(BorderBtn)`
+  font-size: 1rem;
+  @media screen and (max-width: 992px) {
+    font-size: 0.85rem;
+  }
 `;
 
 export default function NavBar() {
@@ -88,54 +99,37 @@ export default function NavBar() {
       </LogoWrapper>
       <FlexBox marginRight='3rem'>
         <Link to='map'>
-          <MaxBtn
-            active={routed.map}
-            fontSize='1rem'
-            palette={pathname === '/map' ? 'black' : 'gray'}
-          >
+          <MaxBtn active={routed.map} palette={pathname === '/map' ? 'black' : 'gray'}>
             지도 Map
           </MaxBtn>
         </Link>
         <Link to='management'>
           <MaxBtn
             active={routed.management}
-            fontSize='1rem'
             palette={pathname === '/management' ? 'black' : 'gray'}
           >
             여행 관리
           </MaxBtn>
         </Link>
         <Link to='chat'>
-          <MaxBtn
-            active={routed.chat}
-            fontSize='1rem'
-            palette={pathname === '/chat' ? 'black' : 'gray'}
-          >
+          <MaxBtn active={routed.chat} palette={pathname === '/chat' ? 'black' : 'gray'}>
             채팅
           </MaxBtn>
         </Link>
         <Link to='mypage'>
-          <MaxBtn
-            active={routed.mypage}
-            fontSize='1rem'
-            palette={pathname === '/mypage' ? 'black' : 'gray'}
-          >
+          <MaxBtn active={routed.mypage} palette={pathname === '/mypage' ? 'black' : 'gray'}>
             마이 페이지
           </MaxBtn>
         </Link>
         <Link to='login'>
-          <MaxBtn
-            active={routed.login}
-            fontSize='1rem'
-            palette={pathname === '/login' ? 'black' : 'gray'}
-          >
+          <MaxBtn active={routed.login} palette={pathname === '/login' ? 'black' : 'gray'}>
             로그인
           </MaxBtn>
         </Link>
         <Link to='signup'>
-          <BorderBtn fontSize='1rem' palette='blue' marginLeft='1.2rem'>
+          <NavBorderBtn palette='blue' marginLeft='1.2rem'>
             회원가입
-          </BorderBtn>
+          </NavBorderBtn>
         </Link>
       </FlexBox>
     </NavContainer>

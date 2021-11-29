@@ -173,7 +173,7 @@ export default function MainPage() {
         {isMobile ? (
           <Content>
             <Img src='./asset/main/trip1.png' alt='대체 이미지' ratioY={ratioY} positionedY='0' />
-            <Description marginRight='10rem'>
+            <Description>
               <Title>
                 우리는 여행자이자 <br /> 가이드입니다
               </Title>
@@ -190,7 +190,7 @@ export default function MainPage() {
           </Content>
         ) : (
           <Content>
-            <Description marginRight='10rem'>
+            <Description marginRight='7rem'>
               <Title>
                 우리는 여행자이자 <br /> 가이드입니다
               </Title>
@@ -229,7 +229,7 @@ export default function MainPage() {
         {isMobile ? (
           <Content>
             <Img src='./asset/main/trip3.png' alt='대체 이미지' ratioY={ratioY} positionedY='25' />
-            <Description marginRight='10rem' right marginTop='3rem'>
+            <Description right marginTop='3rem'>
               <Title>
                 현지 가이드가 <br /> 되어 보세요!
               </Title>
@@ -291,7 +291,7 @@ export default function MainPage() {
         {isMobile ? (
           <Content>
             <Img src='./asset/main/trip5.png' alt='대체 이미지' ratioY={ratioY} positionedY='64' />
-            <Description marginRight='10rem' marginTop='3rem'>
+            <Description marginTop='3rem'>
               <Title>
                 일정을 <br /> 한 눈에 보세요!
               </Title>
