@@ -5,3 +5,7 @@ export const checkId = (data) => {
     return res;
   });
 };
+
+export const signUp = (data) => {
+  return axios.post(`http://localhost/signup`, data).then((res) => res);
+};

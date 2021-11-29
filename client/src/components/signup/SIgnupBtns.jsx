@@ -37,14 +37,15 @@ const SignupBtn = styled(BorderBtn)`
   }
 `;
 
-export default function SIgnupBtns() {
+export default function SIgnupBtns(props) {
+  const { handleSignupClick } = props;
   const dispatch = useDispatch();
   const handleCancelClick = () => {
     dispatch(openModal());
   };
   return (
     <BtnsBlock>
-      <SignupBtn>회원가입</SignupBtn>
+      <SignupBtn onClick={handleSignupClick}>회원가입</SignupBtn>
       <CancelBtn onClick={handleCancelClick}>취소</CancelBtn>
     </BtnsBlock>
   );
