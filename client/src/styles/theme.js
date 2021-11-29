@@ -14,4 +14,8 @@ export const theme = {
     maxWidth: '1080px',
     mobile: '767px',
   },
+
+  device: {
+    mobile: `screen and (max-width: 767px)`,
+  },
 };
