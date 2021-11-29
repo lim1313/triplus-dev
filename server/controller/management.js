@@ -1,9 +1,5 @@
 const {createGuideCard, updateGuideCard} = require('./functions/guide_card');
-const REQUESTED = 'REQUESTED';
-const APPROVED = 'APPROVED';
-const REJECTED = 'REJECTED';
-const COMPLETED = 'COMPLETED';
-const CANCELED = 'CANCELED';
+const GLOBAL_VARIABLE = require('./functions/global_variable');
 
 module.exports = {
   example: (req, res) => {
@@ -12,7 +8,7 @@ module.exports = {
   
   createGuideCard: async (req, res) => {
     const params = req.body;
-    params.state = REQUESTED;
+    params.state = GLOBAL_VARIABLE.REQUESTED;
     const resCode = await createGuideCard(params);
 
     if(resCode === 200){
@@ -30,28 +26,28 @@ module.exports = {
 
   changeStateApproved: (req, res) => {
     const params = req.body;
-    params.state = APPROVED;
+    params.state = GLOBAL_VARIABLE.APPROVED;
     const resObject = updateGuideCard(params);
     res.status(resObject.code).send(resObject.message);
   },
 
   changeStateRejected: (req, res) => {
     const params = req.body;
-    params.state = REJECTED;
+    params.state = GLOBAL_VARIABLE.REJECTED;
     const resObject = updateGuideCard(params);
     res.status(resObject.code).send(resObject.message);
   },
 
   changeStateCompleted: (req, res) => {
     const params = req.body;
-    params.state = COMPLETED;
+    params.state = GLOBAL_VARIABLE.COMPLETED;
     const resObject = updateGuideCard(params);
     res.status(resObject.code).send(resObject.message);
   },
 
   changeStateCanceled: (req, res) => {
     const params = req.body;
-    params.state = CANCELED;
+    params.state = GLOBAL_VARIABLE.CANCELED;
     const resObject = updateGuideCard(params);
     res.status(resObject.code).send(resObject.message);
   },

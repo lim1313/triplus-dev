@@ -43,7 +43,6 @@ module.exports = {
   createGuideCard: async (params) => {
     let returnCode;
     const insertValue = checkParams(params);
-    console.log(insertValue);
 
     try {
       await guide_card.create(insertValue).then((result) => {
