@@ -61,9 +61,10 @@ export default function CardFilter({ filterSubmit }) {
   const [date, setDate] = useState([]);
 
   const filterClick = () => {
+    let startDate = date[0];
     let endDate = date[1] === 'Invalid Date' ? null : date[1];
 
-    filterSubmit({ gender, startDate: date[0], endDate });
+    filterSubmit(gender, startDate, endDate);
   };
 
   const changeGender = (data) => {

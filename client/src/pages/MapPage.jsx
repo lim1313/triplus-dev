@@ -1,5 +1,3 @@
-/*eslint-disable no-unused-vars*/
-
 import React, { useState } from 'react';
 import SideBar from '../components/map/SideBar';
 import styled from 'styled-components';
@@ -18,10 +16,15 @@ const MapContainer = styled.section`
 `;
 
 export default function MapPage() {
-  const [filterInfo, setFilterInfo] = useState({});
+  const [filterInfo, setFilterInfo] = useState({ gender: '', startDate: '', endDate: '' });
 
-  const filterSubmit = (data) => {
-    setFilterInfo({ ...data });
+  const filterSubmit = (...args) => {
+    let [gen, start, end] = args;
+    let { gender, startDate, endDate } = filterInfo;
+
+    if (gen !== gender || start !== startDate || end !== endDate) {
+      setFilterInfo({ gender: gen, startDate: start, endDate: end });
+    }
   };
 
   return (
