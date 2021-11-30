@@ -1,6 +1,7 @@
-const {guide_card} = require('./../../models');
-const {Op} = require('sequelize');
+const {guide_card, user} = require('./../../models');
+const {Op, where} = require('sequelize');
 const GLOBAL_VARIABLE = require('./global_variable');
+const moment = require('moment');
 
 const checkParams = (params) => {
   const setParams = {};
@@ -70,55 +71,91 @@ module.exports = {
         where: {guide_id: params.guideId}
       }).then(() => {
         resObject['code'] = 200;
-        resObject['message'] = '가이드 카드를 수정 했습니다'
+        resObject['message'] = '가이드 카드를 수정 했습니다';
       }).catch(error => {
         console.log(error);
       });
     } catch (error) {
       console.log(error);
       resObject['code'] = 400;
-      resObject['message'] = '가이드 카드를 수정하지 못했습니다'
+      resObject['message'] = '가이드 카드를 수정하지 못했습니다';
     } finally {
       return resObject;
     }
   },
 
-  selectGuideCard: (params) => {
+  selectGuideCard: async (params) => {
     const resObject = {};
-    const whereObj = {[Op.and]: []};
+    const whereGuideCard = {[Op.and]: []};
+    const whereUser = {};
 
     try {
-      console.log(params);
-      
       if(params['swLat']){
-        whereObj[Op.and].push({latitude: {[Op.gte]: params['swLat']}});
+        whereGuideCard[Op.and].push({latitude: {[Op.gte]: params['swLat']}});
       }
       if(params['neLat']){
-        whereObj[Op.and].push({latitude: {[Op.lte]: params['neLat']}});
+        whereGuideCard[Op.and].push({latitude: {[Op.lte]: params['neLat']}});
       }
       if(params['swLng']){
-        whereObj[Op.and].push({longitude: {[Op.gte]: params['swLng']}});
+        whereGuideCard[Op.and].push({longitude: {[Op.gte]: params['swLng']}});
       }
       if(params['neLng']){
-        whereObj[Op.and].push({longitude: {[Op.lte]: params['neLng']}});
+        whereGuideCard[Op.and].push({longitude: {[Op.lte]: params['neLng']}});
       }
       if(params['startDate']){
-        whereObj[Op.and].push({guide_date: {[Op.gte]: new Date(params['startDate'])}});
+        whereGuideCard[Op.and].push({guide_date: {[Op.gte]: new Date(params['startDate'])}});
       }
       if(params['endDate']){
-        whereObj[Op.and].push({guide_date: {[Op.lte]: new Date(params['endDate'])}});
+        whereGuideCard[Op.and].push({guide_date: {[Op.lte]: new Date(params['endDate'])}});
       }
-      
-      guide_card.findAll({
-        raw: true,
-        where: whereObj
-      }).then(result => {
-        resObject['guideCardList'] = result;
-      });
+      if(params['gender'] === '0'){
+        whereUser['gender'] = 0;
+      }else if(params['gender'] === '1'){
+        whereUser['gender'] = 1;
+      }
     } catch (error) {
-      
-    } finally {
+      console.log(error);
+      resObject['code'] = 401;
+      resObject['message'] = '가이드 카드 검색 조건을 잘못 입력하였습니다';
+      resObject['guideCardList'] = [];
+
       return resObject;
     }
+
+    await guide_card.findAll({
+      raw: true,
+      include: [
+        {
+          model: user,
+          attributes: ['nick_name', 'gender'],
+          where: whereUser,
+        }
+      ],
+      where: whereGuideCard
+    }).then(result => {
+      for(let item of result){
+        item['guide_date'] = moment(item['guide_date']).format('YYYY.MM.DD');
+        item['createdAt'] = moment(item['createdAt']).format('YYYY.MM.DD');
+        item['updatedAt'] = moment(item['updatedAt']).format('YYYY.MM.DD');
+        item['tourImage'] = '/asset/main/trip5.png';
+
+        item['nick_name'] = item['user.nick_name'];
+        delete item['user.nick_name'];
+
+        item['gender'] = item['user.gender'];
+        delete item['user.gender'];
+      }
+
+      resObject['code'] = 200;
+      resObject['message'] = '가이드 카드를 조회했습니다.'
+      resObject['guideCardList'] = result;
+    }).catch(error => {
+      console.log(error);
+      resObject['code'] = 400;
+      resObject['message'] = '가이드 카드를 조회하지 못하였습니다'
+      resObject['guideCardList'] = [];
+    });
+
+    return resObject;
   },
 }

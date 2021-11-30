@@ -11,6 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      guide_card.hasOne(
+        models.user,
+        {
+          sourceKey: 'user_id',
+          foreignKey: 'user_id',
+        }
+      );
     }
   };
   guide_card.init({
@@ -30,7 +37,8 @@ module.exports = (sequelize, DataTypes) => {
     address: DataTypes.STRING,
     latitude: DataTypes.DOUBLE,
     longitude: DataTypes.DOUBLE,
-    open_date: DataTypes.STRING
+    open_date: DataTypes.STRING,
+    user_id: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'guide_card',
