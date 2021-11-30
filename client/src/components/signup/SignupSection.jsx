@@ -87,6 +87,7 @@ export default function SignupSection() {
       }
     }
     if (result.length === 0) {
+      setErr('');
       let body = {
         userId: inputs.userId,
         password: inputs.password,
