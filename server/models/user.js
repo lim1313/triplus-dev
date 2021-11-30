@@ -27,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
     o_auth: DataTypes.STRING,
     state: DataTypes.STRING,
     role: DataTypes.STRING,
-    expired_datetime: DataTypes.DATE
+    expired_datetime: DataTypes.DATE,
+    user_id: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'user',
