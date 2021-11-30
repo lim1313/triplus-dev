@@ -25,9 +25,6 @@ const LogoWrapper = styled.div`
   margin-left: 3rem;
   justify-content: center;
   align-items: center;
-  @media ${({ theme }) => theme.device.mobile} {
-    margin-left: 2rem;
-  } ;
 `;
 
 const LogoImg = styled.img`
@@ -59,9 +56,6 @@ const MaxBtn = styled(NoBorderBtn)`
   font-size: 1rem;
   border-bottom: 3px solid
     ${({ active, theme }) => (active ? `${theme.color.blue}` : 'rgba(255, 255, 255, 0)')};
-  @media screen and (max-width: 992px) {
-    font-size: 0.85rem;
-  }
 `;
 
 const NavBorderBtn = styled(BorderBtn)`
