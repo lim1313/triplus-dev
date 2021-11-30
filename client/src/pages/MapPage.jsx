@@ -1,3 +1,5 @@
+/*eslint-disable no-unused-vars*/
+
 import React, { useState } from 'react';
 import SideBar from '../components/map/SideBar';
 import styled from 'styled-components';
@@ -16,17 +18,17 @@ const MapContainer = styled.section`
 `;
 
 export default function MapPage() {
-  const [latLng, setLatLng] = useState([]);
+  const [filterInfo, setFilterInfo] = useState({});
 
-  const changeLatLng = (data) => {
-    setLatLng(data);
+  const filterSubmit = (data) => {
+    setFilterInfo({ ...data });
   };
 
   return (
     <MapContainer>
-      <CardFilter latLng={latLng} />
+      <CardFilter filterSubmit={filterSubmit} />
       <SideBar />
-      <KakaoMap changeLatLng={changeLatLng} />
+      <KakaoMap filterInfo={filterInfo} />
     </MapContainer>
   );
 }

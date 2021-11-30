@@ -2,16 +2,10 @@ const { kakao } = window;
 
 //* 좌표 얻기
 export const getInfo = (map) => {
-  // 지도의 현재 영역을 얻어옵니다
   let bounds = map.getBounds();
   let swLatLng = bounds.getSouthWest(); // 남서
   let neLatLng = bounds.getNorthEast(); // 북동
-  let center = map.getCenter();
-  console.log({ swLat: swLatLng.Ma, swLng: swLatLng.La, neLat: neLatLng.Ma, neLng: neLatLng.La });
-  return [
-    { swLat: swLatLng.Ma, swLng: swLatLng.La, neLat: neLatLng.Ma, neLng: neLatLng.La },
-    center,
-  ];
+  return { swLat: swLatLng.Ma, swLng: swLatLng.La, neLat: neLatLng.Ma, neLng: neLatLng.La };
 };
 
 //* 마커 생성
