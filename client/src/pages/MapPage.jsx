@@ -1,8 +1,8 @@
-import React from 'react';
-import Map from '../components/map/Map';
+import React, { useState } from 'react';
 import SideBar from '../components/map/SideBar';
 import styled from 'styled-components';
 import CardFilter from '../components/map/SideBar/CardFilter';
+import KakaoMap from '../components/map/Map/KakaoMap';
 
 const MapContainer = styled.section`
   position: relative;
@@ -16,11 +16,17 @@ const MapContainer = styled.section`
 `;
 
 export default function MapPage() {
+  const [latLng, setLatLng] = useState([]);
+
+  const changeLatLng = (data) => {
+    setLatLng(data);
+  };
+
   return (
     <MapContainer>
-      <CardFilter />
+      <CardFilter latLng={latLng} />
       <SideBar />
-      <Map />
+      <KakaoMap changeLatLng={changeLatLng} />
     </MapContainer>
   );
 }

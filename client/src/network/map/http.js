@@ -10,6 +10,7 @@ axios.defaults.headers.common['Content-Type'] = 'application/json';
 //TODO 범위 내의 카드 가져오기
 export const getGuideCards = (params) => {
   axios.get(`${http}/map`, params).then((res) => {
+    console.log(res);
     return res;
   });
 };

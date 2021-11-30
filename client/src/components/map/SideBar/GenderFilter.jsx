@@ -12,15 +12,20 @@ const SelectBox = styled(FilterFrame).attrs({
   }
 `;
 
-export default function GenderFilter() {
+export default function GenderFilter({ changeGender }) {
   return (
-    <SelectBox name='gender' width='120px'>
-      <option disabled selected>
+    <SelectBox
+      name='gender'
+      width='120px'
+      defaultValue='가이드 성별'
+      onChange={(e) => changeGender(e.target.value)}
+    >
+      <option value='가이드 성별' disabled>
         가이드 성별
       </option>
-      <option value='female'>여성</option>
-      <option value='male'>남성</option>
-      <option value='all'>모두</option>
+      <option value='1'>여성</option>
+      <option value='0'>남성</option>
+      <option value=''>모두</option>
     </SelectBox>
   );
 }
