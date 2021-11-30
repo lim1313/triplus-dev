@@ -4,7 +4,7 @@ const initialState = {
   scrollY: 0,
 };
 
-export default function scrollListener(state = initialState, action) {
+export default function scrollReducer(state = initialState, action) {
   switch (action.type) {
     case SCROLL_LISTENER:
       return {

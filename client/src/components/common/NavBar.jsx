@@ -2,22 +2,29 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { BiMenu } from 'react-icons/bi';
+import { TiDelete } from 'react-icons/ti';
 import { NoBorderBtn, BorderBtn } from '../../styles/common';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../../redux/login/action';
+import { toggleOpen, toggleClose } from '../../redux/toggle/action';
 
 const NavContainer = styled.div`
   position: sticky;
   position: -webkit-sticky;
   top: 0;
   width: 100vw;
-  z-index: 99;
+  z-index: 999;
   display: flex;
   justify-content: space-between;
   background-color: #fff;
   height: 3.8rem;
   border: none;
   box-shadow: 0 2px 1px ${({ theme }) => theme.color.lightGray};
+  @media ${({ theme }) => theme.device.mobile} {
+    height: 2.5rem;
+    justify-content: center;
+  }
 `;
 
 const LogoWrapper = styled.div`
@@ -25,10 +32,16 @@ const LogoWrapper = styled.div`
   margin-left: 3rem;
   justify-content: center;
   align-items: center;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin-left: 2rem;
+  } ;
 `;
 
 const LogoImg = styled.img`
   width: 5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 4rem;
+  } ;
 `;
 
 const FlexBox = styled.div`
@@ -65,6 +78,22 @@ const NavBorderBtn = styled(BorderBtn)`
   }
 `;
 
+const Toggle = styled.button`
+  display: none;
+  @media ${({ theme }) => theme.device.mobile} {
+    display: flex;
+    position: absolute;
+    height: 100%;
+    right: 1rem;
+    justify-content: center;
+    align-items: center;
+    color: ${({ theme }) => theme.color.gray};
+    font-size: 1.7rem;
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+  } ;
+`;
+
 export default function NavBar() {
   const initialRouted = {
     map: false,
@@ -84,6 +113,8 @@ export default function NavBar() {
   const state = useSelector((state) => state.loginReducer);
   const { isLogin } = state;
 
+  const isToggled = useSelector((state) => state.toggleReducer.isToggled);
+
   useEffect(() => {
     const path = pathname.slice(1);
     setRouted({
@@ -97,9 +128,17 @@ export default function NavBar() {
     navigate('/');
   };
 
+  const toggleOpenHandler = () => {
+    dispatch(toggleOpen());
+  };
+
+  const toggleCloseHandler = () => {
+    dispatch(toggleClose());
+  };
+
   return (
     <NavContainer>
-      <LogoWrapper>
+      <LogoWrapper onClick={toggleCloseHandler}>
         <Link to='/'>
           <LogoImg src='./asset/logo/logo.png' alt='로고' />
         </Link>
@@ -148,6 +187,15 @@ export default function NavBar() {
           </Link>
         )}
       </FlexBox>
+      {isToggled ? (
+        <Toggle onClick={toggleCloseHandler}>
+          <TiDelete />
+        </Toggle>
+      ) : (
+        <Toggle onClick={toggleOpenHandler}>
+          <BiMenu />
+        </Toggle>
+      )}
     </NavContainer>
   );
 }

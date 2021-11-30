@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
@@ -71,7 +69,7 @@ export default function Flight() {
 
   // const [currentPath, setCurrentPath] = useState(null);
   // ! ratioY 값이 useEffect 안으로 들어가면 변하질 않음
-  const ratioY = parseInt(useSelector((state) => state.scrollListener.scrollY) * 100);
+  const ratioY = parseInt(useSelector((state) => state.scrollReducer.scrollY) * 100);
   // ! useRef 를 쓰면 오히려 에러가 발생함
   // const path = useRef(null);
 

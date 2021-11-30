@@ -21,7 +21,7 @@ const FilterWrapper = styled.div`
     margin-top: 0;
   }
   //! 조정 필요
-  z-index: 999;
+  z-index: 10;
   @media ${({ theme }) => theme.device.mobile} {
     padding: 0.1rem;
     width: 100vw;
