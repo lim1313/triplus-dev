@@ -29,9 +29,12 @@ const Description = styled.ul`
       text-decoration: none;
       &:hover {
         color: ${({ main, theme }) =>
-          main === 'main' ? `${theme.color.lightBlue}` : `${theme.color.lightBlue}`};
+          main === 'main' ? `${theme.color.lightBlue}` : `${theme.color.lightRed}`};
       }
     }
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    display: none;
   }
 `;
 
@@ -51,25 +54,25 @@ export default function Footer({ main }) {
         <SmallTitle main={main}>Team</SmallTitle>
         <li>NanProgramMerge</li>
       </Description>
-      <Description>
+      <Description main={main}>
         <SmallTitle main={main}>Contributor</SmallTitle>
         <li className='githubId'>
-          <a href='https://github.com/Je-chan' main={main}>
+          <a href='https://github.com/Je-chan'>
             <AiFillGithub className='giticon' /> 박예찬: Je-chan
           </a>
         </li>
         <li className='githubId'>
-          <a href='https://github.com/song-code21' main={main}>
+          <a href='https://github.com/song-code21'>
             <AiFillGithub className='giticon' /> 송하경: song-code21
           </a>
         </li>
         <li className='githubId'>
-          <a href='https://github.com/lim1313' main={main}>
+          <a href='https://github.com/lim1313'>
             <AiFillGithub className='giticon' /> 임예지: lim1313
           </a>
         </li>
         <li className='githubId'>
-          <a href='https://github.com/jortier' main={main}>
+          <a href='https://github.com/jortier'>
             <AiFillGithub className='giticon' /> 최재원: Jortier
           </a>
         </li>
