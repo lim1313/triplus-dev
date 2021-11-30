@@ -39,7 +39,7 @@ module.exports = {
         type: Sequelize.DOUBLE
       },
       open_date: {
-        type: Sequelize.DATE
+        type: Sequelize.STRING
       },
       user_id: {
         type: Sequelize.STRING
