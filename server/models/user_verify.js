@@ -1,7 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class user extends Model {
+  class user_verify extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,28 +11,24 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  user.init(
+  user_verify.init(
     {
       user_id: {
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true,
       },
-      password: DataTypes.STRING,
-      email: DataTypes.STRING,
-      nick_name: DataTypes.STRING,
-      region: DataTypes.STRING,
-      image: DataTypes.STRING,
-      o_auth: DataTypes.STRING,
-      state: DataTypes.STRING,
-      role: DataTypes.STRING,
-      expired_datetime: DataTypes.DATE,
+      email_verified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: 0,
+      },
+      verify_key: DataTypes.STRING,
     },
     {
       sequelize,
-      modelName: 'user',
+      modelName: 'user_verify',
       freezeTableName: true,
     }
   );
-  return user;
+  return user_verify;
 };

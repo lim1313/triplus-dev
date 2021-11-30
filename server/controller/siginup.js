@@ -1,7 +1,9 @@
 require('dotenv').config();
-const bcrypt = require('bcrypt');
-const { user } = require('../models');
+// const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const { user, user_verify } = require('../models');
 const { stmpTransport } = require('../config/email');
+const { genSalt, hash, hashPassword } = require('./functions/secure');
 module.exports = {
   idcheck: (req, res) => {
     const { userId } = req.query;
@@ -16,23 +18,39 @@ module.exports = {
       })
       .catch((err) => console.log(err));
   },
-  signup: (req, res) => {
+  signup: async (req, res) => {
     const { userId, password, email } = req.body;
-    const saltRounds = 12;
-    bcrypt.genSalt(saltRounds, (err, salt) => {
-      bcrypt.hash(password, salt, (err, hash) => {
-        user
-          .findOrCreate({
-            where: { user_id: userId },
-            defaults: { user_id: userId, password: hash, email, role: 'general' },
-          })
-          .then(([data, created]) => {
-            if (created) {
-              res.status(201).json({ success: true, message: '회원가입이 완료되었습니다' });
+    const hashPw = await hashPassword(password);
+    user
+      .findOrCreate({
+        where: { user_id: userId },
+        defaults: { user_id: userId, password: hashPw, email, role: 'general' },
+      })
+      .then(([data, created]) => {
+        if (created) {
+          let key_one = crypto.randomBytes(256).toString('hex').substr(100, 5);
+          let key_two = crypto.randomBytes(256).toString('base64').substr(50, 5);
+          let key_for_verify = key_one + key_two;
+          user_verify.create({ user_id: userId, verify_key: key_for_verify });
+
+          let url = 'http://' + req.get('host') + '/confirmEmail' + '?key=' + key_for_verify;
+          let mailOpt = {
+            from: 'william9563@naver.com',
+            to: email,
+            subject: '안녕하세요 triplus입니다!',
+            html: `<h1>이메일 인증을 위해 URL을 클릭해주세요</h1><br><a href=${url}>url클릭클릭</a>`,
+          };
+          stmpTransport.sendMail(mailOpt, (err, res) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log('success');
             }
-          })
-          .catch((err) => console.log(err));
-      });
-    });
+            stmpTransport.close();
+          });
+          res.json({ success: true, message: '회원가입이 완료되었습니다.' });
+        }
+      })
+      .catch((err) => console.log(err));
   },
 };
