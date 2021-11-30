@@ -7,9 +7,14 @@ import guideCardInfo from '../../../redux/map/action';
 import { createMarker, getInfo } from '../../../utils/kakao';
 
 import { db } from '../../../db/guideCard';
+import styled from 'styled-components';
 
 const { kakao } = window;
 let map;
+
+const MapWrapper = styled.div`
+  height: 100%;
+`;
 
 export default function KakaoMap({ filterInfo }) {
   const mapRef = useRef(null);
@@ -57,5 +62,5 @@ export default function KakaoMap({ filterInfo }) {
     createMarker(db, map);
   };
 
-  return <div ref={mapRef} style={{ width: '100%', height: '100%' }} />;
+  return <MapWrapper ref={mapRef} style={{ width: '100%', height: '100%' }} />;
 }

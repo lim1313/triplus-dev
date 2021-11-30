@@ -6,14 +6,14 @@ import CardBar from './SideBar/CardBar';
 
 const SideWrapper = styled.aside`
   position: relative;
-  width: 360px;
-  height: 100%;
   flex: 0 0 auto;
+  width: 320px;
+  height: 100%;
   background-color: ${({ theme }) => theme.color.lightGray};
 
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
-    height: 30vh;
+    height: auto;
   }
 `;
 

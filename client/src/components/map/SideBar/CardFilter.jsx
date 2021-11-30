@@ -13,14 +13,14 @@ const FilterWrapper = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  width: 360px;
+  width: 320px;
   padding: 1.5rem;
   background-color: ${({ theme }) => theme.color.lightGray};
   & h3 {
     margin-top: 0;
   }
   //! 조정 필요
-  z-index: 999;
+  z-index: 10;
   @media ${({ theme }) => theme.device.mobile} {
     padding: 0.1rem;
     width: 100vw;
