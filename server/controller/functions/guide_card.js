@@ -1,5 +1,6 @@
 const {guide_card} = require('./../../models');
-const sequelize = require('sequelize');
+const {Op} = require('sequelize');
+const GLOBAL_VARIABLE = require('./global_variable');
 
 const checkParams = (params) => {
   const setParams = {};
@@ -67,6 +68,9 @@ module.exports = {
     try {
       guide_card.update(updateValue, {
         where: {guide_id: params.guideId}
+      }).then(() => {
+        resObject['code'] = 200;
+        resObject['message'] = '가이드 카드를 수정 했습니다'
       }).catch(error => {
         console.log(error);
       });
@@ -75,23 +79,46 @@ module.exports = {
       resObject['code'] = 400;
       resObject['message'] = '가이드 카드를 수정하지 못했습니다'
     } finally {
-      resObject['code'] = 200;
-      resObject['message'] = '가이드 카드를 수정 했습니다'
-
       return resObject;
     }
   },
 
   selectGuideCard: (params) => {
-    let query = `select * from guide_card`;
+    const resObject = {};
+    const whereObj = {[Op.and]: []};
 
-    return guide_card.sequelize.query(
-      query,
-      {
-        type: sequelize.QueryTypes.SELECT
+    try {
+      console.log(params);
+      
+      if(params['swLat']){
+        whereObj[Op.and].push({latitude: {[Op.gte]: params['swLat']}});
       }
-    ).then(result => {
-      return result;
-    });
+      if(params['neLat']){
+        whereObj[Op.and].push({latitude: {[Op.lte]: params['neLat']}});
+      }
+      if(params['swLng']){
+        whereObj[Op.and].push({longitude: {[Op.gte]: params['swLng']}});
+      }
+      if(params['neLng']){
+        whereObj[Op.and].push({longitude: {[Op.lte]: params['neLng']}});
+      }
+      if(params['startDate']){
+        whereObj[Op.and].push({guide_date: {[Op.gte]: new Date(params['startDate'])}});
+      }
+      if(params['endDate']){
+        whereObj[Op.and].push({guide_date: {[Op.lte]: new Date(params['endDate'])}});
+      }
+      
+      guide_card.findAll({
+        raw: true,
+        where: whereObj
+      }).then(result => {
+        resObject['guideCardList'] = result;
+      });
+    } catch (error) {
+      
+    } finally {
+      return resObject;
+    }
   },
 }
