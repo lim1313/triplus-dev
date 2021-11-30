@@ -2,62 +2,78 @@
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FaFemale } from 'react-icons/fa';
-import { FaMale } from 'react-icons/fa';
+import { FilterFrame } from '../../../styles/map/filterFrame';
+import DateFilter from './DateFilter';
+import { FaSearchLocation } from 'react-icons/fa';
+import GenderFilter from './GenderFilter';
 
 const FilterWrapper = styled.div`
-  width: 100%;
-  height: auto;
-  margin-bottom: 1.5rem;
+  display: inline-black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 360px;
+  padding: 1.5rem;
+  background-color: ${({ theme }) => theme.color.lightGray};
+  & h3 {
+    margin-top: 0;
+  }
+  //! 조정 필요
+  z-index: 999;
 
   @media ${({ theme }) => theme.device.mobile} {
-    height: 20%;
-    margin-bottom: 0;
-  }
-`;
-
-const GenderWrapper = styled.form`
-  display: inline;
-  font-size: 1.5rem;
-
-  & .female {
-    background-color: ${({ theme }) => theme.color.red};
-    border-radius: 50%;
-  }
-
-  & .male {
-    background-color: ${({ theme }) => theme.color.blue};
-    border-radius: 50%;
-  }
-
-  & .radio {
-    & input[type='radio'] {
+    padding: 0.1rem;
+    width: 100vw;
+    background-color: unset;
+    & h3 {
       display: none;
     }
   }
 `;
 
+const Filter = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  & .genderWrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+`;
+
+const SearchBtn = styled(FilterFrame).attrs({
+  as: 'button',
+})`
+  border: none;
+  padding: 0;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.color.lightRed};
+    color: ${({ theme }) => theme.color.darkGray};
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    border: 3px solid ${({ theme }) => theme.color.lightGray};
+  }
+`;
+
 export default function CardFilter() {
-  const [gender, setGender] = useState();
-  const [guideDate, setGuideDate] = useState();
+  const filterClick = (e) => {
+    console.log(e);
+  };
 
   return (
     <FilterWrapper>
       <h3>가이드 찾기</h3>
-      <button>날짜</button>
-      <GenderWrapper>
-        {/* 0 : male / 1 :female */}
-        {[0, 1].map((value) => (
-          <span key={value} className='radio'>
-            <input type='radio' id={value} name='gender' value={value} />
-            <label htmlFor={value}>
-              {value ? <FaFemale className='female' /> : <FaMale className='male' />}
-            </label>
-          </span>
-        ))}
-      </GenderWrapper>
-      {/* 적용하면 현재 card state에서 state를 필터링(서버 통신 X) */}
-      <button>적용하기</button>
+      <Filter>
+        <DateFilter />
+        <div className='genderWrapper'>
+          <GenderFilter />
+          <SearchBtn width='40px' color='red' onClick={filterClick}>
+            <FaSearchLocation />
+          </SearchBtn>
+        </div>
+      </Filter>
     </FilterWrapper>
   );
 }

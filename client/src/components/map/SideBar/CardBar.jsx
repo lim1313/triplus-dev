@@ -1,7 +1,8 @@
+/*eslint-disable no-unused-vars*/
+
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import CardFilter from './CardFilter';
 import GuideCard from './GuideCard';
 
 const SideCardWrapper = styled.div`
@@ -10,6 +11,7 @@ const SideCardWrapper = styled.div`
   height: 100%;
   padding: 1.5rem;
   overflow: auto;
+  padding-top: 12.5rem;
 
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
@@ -19,20 +21,8 @@ const SideCardWrapper = styled.div`
 
   @media ${({ theme }) => theme.device.mobile} {
     padding: 0;
-  }
-`;
-
-const GuideCardsWrapper = styled.ul`
-  @media ${({ theme }) => theme.device.mobile} {
     display: flex;
     height: 80%;
-
-    overflow: auto;
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-    &::-webkit-scrollbar {
-      display: none; /* Chrome, Safari, Opera*/
-    }
   }
 `;
 
@@ -41,12 +31,9 @@ export default function CardBar({ modalClick }) {
 
   return (
     <SideCardWrapper>
-      <CardFilter />
-      <GuideCardsWrapper>
-        {cards.map((cardInfo, index) => (
-          <GuideCard key={index} cardInfo={cardInfo} modalClick={modalClick} />
-        ))}
-      </GuideCardsWrapper>
+      {cards.map((cardInfo, index) => (
+        <GuideCard key={index} cardInfo={cardInfo} modalClick={modalClick} />
+      ))}
     </SideCardWrapper>
   );
 }
