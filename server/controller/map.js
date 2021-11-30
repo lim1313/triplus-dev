@@ -9,6 +9,7 @@ module.exports = {
   selectGuideCard: async (req, res) => {
     const params = req.query;
     const guideCardList = await selectGuideCard(params);
+    console.log(guideCardList);
 
     res.status(200).json({
       code: 200,
