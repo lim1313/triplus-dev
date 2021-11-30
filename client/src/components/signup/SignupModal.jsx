@@ -11,6 +11,8 @@ const OkBtn = styled(ColorBtn)`
   color: ${({ theme }) => theme.color.black};
   background: ${({ theme }) => theme.color.lightGray};
   border: 1px solid ${({ theme }) => theme.color.lightGray};
+  flex: none;
+  margin: 0.5rem;
   &:hover {
     background: ${({ theme }) => theme.color.blue};
     border: 1px solid ${({ theme }) => theme.color.blue};
@@ -22,6 +24,8 @@ const CancelBtn = styled(ColorBtn)`
   color: ${({ theme }) => theme.color.black};
   background: ${({ theme }) => theme.color.lightGray};
   border: 1px solid ${({ theme }) => theme.color.lightGray};
+  flex: none;
+  margin: 0.5rem;
   &:hover {
     background: ${({ theme }) => theme.color.blue};
     border: 1px solid ${({ theme }) => theme.color.blue};
@@ -32,7 +36,7 @@ const CancelBtn = styled(ColorBtn)`
 const BtnBlock = styled.div`
   margin: 3rem auto;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
 `;
 
 export default function SignupModal() {
@@ -44,7 +48,7 @@ export default function SignupModal() {
   };
   const handleOkClick = () => {
     dispatch(openModal());
-    navigate('/');
+    navigate('/login');
   };
   return (
     <Background>

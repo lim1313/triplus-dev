@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { LOGIN_USER } from './type';
-
+import { LOGIN_USER, LOGOUT_USER } from './type';
+// import { logOut } from '../../network/login/http';
 // axios.defaults.withCredentials = true;
 // axios.defaults.headers.common['Content-Type'] = 'application/json';
 
@@ -16,4 +16,12 @@ export const loginUser = (dataToSubmit) => (dispatch) => {
         payload: { success: res.success, message: res.message },
       });
     });
+};
+
+export const logoutUser = () => (dispatch) => {
+  axios.get(`http://localhost/logout`, { crossDomain: true }).then((response) => {
+    if (response.data.success) {
+      dispatch({ type: LOGOUT_USER });
+    }
+  });
 };

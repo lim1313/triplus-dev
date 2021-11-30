@@ -14,7 +14,8 @@ export const Background = styled.div`
 `;
 
 export const ModalWrapper = styled.div`
-  width: ${({ width }) => width || '23rem'};
+  width: ${({ width }) => width || '26vw'};
+  min-width: 18rem;
   background: white;
   min-height: 20vh;
   border-radius: 1rem;

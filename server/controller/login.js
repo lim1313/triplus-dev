@@ -54,4 +54,11 @@ module.exports = {
       }
     }
   },
+  checkToken: (req, res) => {
+    const accessToken = isAuthorized(req);
+    if (!accessToken)
+      return res.json({ success: false, loginId: null, message: '로그아웃 상태입니다' });
+    const loginId = accessToken.user_id;
+    res.json({ success: true, loginId: loginId, message: '로그인 상태입니다' });
+  },
 };
