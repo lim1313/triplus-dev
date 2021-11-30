@@ -1,4 +1,5 @@
 const {guide_card} = require('./../../models');
+const sequelize = require('sequelize');
 
 const checkParams = (params) => {
   const setParams = {};
@@ -79,5 +80,18 @@ module.exports = {
 
       return resObject;
     }
+  },
+
+  selectGuideCard: (params) => {
+    let query = `select * from guide_card`;
+
+    return guide_card.sequelize.query(
+      query,
+      {
+        type: sequelize.QueryTypes.SELECT
+      }
+    ).then(result => {
+      return result;
+    });
   },
 }
