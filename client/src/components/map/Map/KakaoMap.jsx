@@ -27,6 +27,7 @@ export default function KakaoMap() {
     let map = new kakao.maps.Map(container, options);
 
     const kakaoEvent = () => {
+      let latLngparams = getInfo(map);
       // TODO GET 요청
       // getGuideCards(latLngparams).then((data) => {
 
@@ -47,5 +48,5 @@ export default function KakaoMap() {
     kakao.maps.event.addListener(map, 'zoom_changed', kakaoEvent);
   }, []);
 
-  return <div ref={mapRef} style={{ width: '100%', height: '100%' }}></div>;
+  return <div ref={mapRef} style={{ width: '100%', height: '100%' }} />;
 }

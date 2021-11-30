@@ -11,10 +11,10 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
-    return queryInterface.bulkInsert('User', [
+    return queryInterface.bulkInsert('user', [
       {
         user_id: 'william9563',
-        passWord: '123412',
+        password: '123412',
         email: 'example@example.com',
         nick_name: 'mola',
         region: '서울',
@@ -28,7 +28,7 @@ module.exports = {
       },
       {
         user_id: 'cindy12',
-        passWord: '123412',
+        password: '123412',
         email: 'example1@example.com',
         nick_name: 'cindy12',
         region: '서울',
@@ -50,5 +50,7 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
+
+    return queryInterface.bulkDelete('user', null, {});
   },
 };

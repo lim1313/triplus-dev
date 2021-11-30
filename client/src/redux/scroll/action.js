@@ -1,10 +1,10 @@
 import { SCROLL_LISTENER } from './type';
 
-export const scrollListener = (currentY) => {
+export const scrollListener = (ratioY) => {
   return {
     type: SCROLL_LISTENER,
     payload: {
-      scrollY: currentY,
+      scrollY: ratioY,
     },
   };
 };
