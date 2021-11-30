@@ -1,8 +1,8 @@
 /*eslint-disable no-unused-vars*/
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getGuideCards } from '../../../network/map/http';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import guideCardInfo from '../../../redux/map/action';
 import { createMarker, getInfo } from '../../../utils/kakao';
 
@@ -10,9 +10,10 @@ import { db } from '../../../db/guideCard';
 
 const { kakao } = window;
 
-export default function KakaoMap() {
+export default function KakaoMap({ changeLatLng }) {
   const mapRef = useRef(null);
   const dispatch = useDispatch();
+  const guidCard = useSelector((state) => state.guideardsReducer);
 
   useEffect(() => {
     let startLat = 37.518197895084874;
@@ -28,14 +29,15 @@ export default function KakaoMap() {
 
     const kakaoEvent = () => {
       let latLngparams = getInfo(map);
+      changeLatLng(latLngparams);
+
       // TODO GET 요청
       // getGuideCards(latLngparams).then((data) => {
-
-      //   dispatch(guideCardInfo(data))
-      //   createMarker(data,map);
+      //   dispatch(guideCardInfo(data));
+      //   createMarker(data, map);
       // });
 
-      //! dummy data
+      // //! dummy data
       dispatch(guideCardInfo(db));
       createMarker(db, map);
     };

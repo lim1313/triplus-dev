@@ -6,8 +6,12 @@ export const getInfo = (map) => {
   let bounds = map.getBounds();
   let swLatLng = bounds.getSouthWest(); // 남서
   let neLatLng = bounds.getNorthEast(); // 북동
+  let center = map.getCenter();
   console.log({ swLat: swLatLng.Ma, swLng: swLatLng.La, neLat: neLatLng.Ma, neLng: neLatLng.La });
-  return [{ swLat: swLatLng.Ma, swLng: swLatLng.La, neLat: neLatLng.Ma, neLng: neLatLng.La }];
+  return [
+    { swLat: swLatLng.Ma, swLng: swLatLng.La, neLat: neLatLng.Ma, neLng: neLatLng.La },
+    center,
+  ];
 };
 
 //* 마커 생성
