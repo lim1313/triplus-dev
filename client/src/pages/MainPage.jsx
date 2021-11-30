@@ -145,12 +145,12 @@ const Img = styled.img`
 
 export default function MainPage() {
   const dispatch = useDispatch();
-  const ratioY = useSelector((state) => state.scrollListener.scrollY);
-  // console.log(ratioY);
+  const ratioY = parseInt(useSelector((state) => state.scrollListener.scrollY) * 100);
+  // console.log('main', ratioY);
   const scrollEventListener = () => {
     const maxScroll = document.body.offsetHeight - window.innerHeight;
     const currentY = window.pageYOffset;
-    const ratio = parseInt((currentY / maxScroll) * 100);
+    const ratio = currentY / maxScroll;
     dispatch(scrollListener(ratio));
   };
 

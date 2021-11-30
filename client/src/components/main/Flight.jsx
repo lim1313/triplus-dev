@@ -1,7 +1,11 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 const SVG = styled.svg.attrs({
+  id: 'svg-path',
   xmlns: 'http://www.w3.org/2000/svg',
   viewBox: '0 0 49.47 341.57',
 })`
@@ -22,8 +26,26 @@ const SVG = styled.svg.attrs({
 
 export default function Flight() {
   const style1 = { fill: 'none', stroke: '#e9edf3', strokeWidth: '3px', strokeMiterlimit: '10' };
-  const style2 = { fill: '#3287f7' };
+  const style2 = { fill: '#3386f7' };
   const style3 = { fill: '#fff', stroke: '#8d97a1', strokeWidth: '2px', strokeMiterlimit: '10' };
+  const style4 = { fill: 'none', stroke: '#7dcbf8', strokeWidth: '3px', strokeMiterlimit: '10' };
+  // const style5 = { fill: '#fff', stroke: '#3287f7', strokeWidth: '2px', strokeMiterlimit: '10' };
+
+  const [currentPath, setCurrentPath] = useState(null);
+
+  const ratioY = useSelector((state) => state.scrollListener.scrollY);
+  const path = useRef(null);
+
+  useEffect(() => {
+    const allPath = path.current.getTotalLength();
+    path.current.style.strokeDasharray = allPath;
+    path.current.style.strokeDashoffset = allPath;
+    window.addEventListener('scroll', () => {
+      const move = allPath * ratioY;
+      setCurrentPath(allPath - move);
+      path.current.style.strokeDashoffset = allPath - move;
+    });
+  }, [ratioY]);
 
   return (
     <SVG>
@@ -32,19 +54,26 @@ export default function Flight() {
       </defs> */}
       <g id='레이어_2' data-name='레이어 2'>
         <g id='레이어_1-2' data-name='레이어 1'>
-          <path
-            style={style1}
-            d='M23.9,21.84s17.34,10.37,14,25-18,36.38-18,52.51-1.42,19.18,10.84,30.85,14.61,4.4,14.62,20.4-19.27,26.88-19.27,40.82,21.07,25.48,8.57,48.79S4.89,264.9,4.24,257.08s6.82-9.43,10.39-7.67,10.73,11.1,13.66,49.79'
-          />
           <circle style={style2} cx='20.48' cy='20.16' r='1.43' />
           <path
             style={style2}
             d='M20.53,0C16.28,0,14,3,14,6.58s6.5,10.57,6.5,10.57C26.44,10.24,26.94,8,26.94,5.74A6.25,6.25,0,0,0,20.53,0Zm-.05,10.12a4.29,4.29,0,1,1,4.29-4.29A4.29,4.29,0,0,1,20.48,10.12Z'
           />
           <path
+            style={style1}
+            d='M23.9,21.84s17.34,10.37,14,25-18,36.38-18,52.51-1.42,19.18,10.84,30.85,14.61,4.4,14.62,20.4-19.27,26.88-19.27,40.82,21.07,25.48,8.57,48.79S4.89,264.9,4.24,257.08s6.82-9.43,10.39-7.67,10.73,11.1,13.66,49.79'
+          />
+          <path
+            ref={path}
+            id='colored-path'
+            style={style4}
+            d='M23.9,21.84s17.34,10.37,14,25-18,36.38-18,52.51-1.42,19.18,10.84,30.85,14.61,4.4,14.62,20.4-19.27,26.88-19.27,40.82,21.07,25.48,8.57,48.79S4.89,264.9,4.24,257.08s6.82-9.43,10.39-7.67,10.73,11.1,13.66,49.79'
+          />
+          <path
             style={style2}
             d='M30.41,328.64s.21,8.21,0,9.26-1.95,3.57-2.6,3.67-2.17-2-2.41-2.73-.31-9.86-.31-9.86l-3.26-2s-1,1.06-1.69.66,0-2,0-2l-1.94-1.37s-1.14.9-1.86.47-.45-2.05-.45-2.05L13,320.71l-.14-1.07,12.38,1.9.66-7.51-3.92-2.35-.06-3.19,5.68,2.22,6-1.65.16,2.28-4.21,2.41.77,7.76,11-2.07.49,1.48-2.48,1.67s.54,1.41-.26,1.92-1.88-.83-1.88-.83l-1.93.92s.6,1.64-.23,2.52-2.19-.46-2.19-.46Z'
           />
+
           <circle style={style3} cx='37.02' cy='46.84' r='3.82' />
           <circle style={style3} cx='19.06' cy='95.53' r='3.82' />
           <circle style={style3} cx='44.66' cy='143.86' r='3.82' />

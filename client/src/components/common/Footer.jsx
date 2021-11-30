@@ -9,11 +9,21 @@ const Container = styled.div`
   width: 100vw;
   height: ${({ main }) => (main === 'main' ? '40vh' : '30vh')};
   background-color: ${({ main, theme }) => (main === 'main' ? '#fff' : `${theme.color.darkGray}`)};
+  @media ${({ theme }) => theme.device.mobile} {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: ${({ main }) => (main === 'main' ? '40vh' : '50vh')};
+  }
 `;
 
 const LogoImg = styled.img`
   width: 6rem;
   object-fit: contain;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 0.5rem 0;
+    text-align: center;
+  }
 `;
 
 const Description = styled.ul`
@@ -34,7 +44,9 @@ const Description = styled.ul`
     }
   }
   @media ${({ theme }) => theme.device.mobile} {
-    display: none;
+    padding: 1rem;
+    margin-left: 0;
+    text-align: center;
   }
 `;
 
@@ -57,22 +69,22 @@ export default function Footer({ main }) {
       <Description main={main}>
         <SmallTitle main={main}>Contributor</SmallTitle>
         <li className='githubId'>
-          <a href='https://github.com/Je-chan'>
+          <a href='https://github.com/Je-chan' target='_blank' rel='noreferrer'>
             <AiFillGithub className='giticon' /> 박예찬: Je-chan
           </a>
         </li>
         <li className='githubId'>
-          <a href='https://github.com/song-code21'>
+          <a href='https://github.com/song-code21' target='_blank' rel='noreferrer'>
             <AiFillGithub className='giticon' /> 송하경: song-code21
           </a>
         </li>
         <li className='githubId'>
-          <a href='https://github.com/lim1313'>
+          <a href='https://github.com/lim1313' target='_blank' rel='noreferrer'>
             <AiFillGithub className='giticon' /> 임예지: lim1313
           </a>
         </li>
         <li className='githubId'>
-          <a href='https://github.com/jortier'>
+          <a href='https://github.com/jortier' target='_blank' rel='noreferrer'>
             <AiFillGithub className='giticon' /> 최재원: Jortier
           </a>
         </li>
