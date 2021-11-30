@@ -1,4 +1,4 @@
-const nodemailer = require('ndoemailer');
+const nodemailer = require('nodemailer');
 
 const stmpTransport = nodemailer.createTransport({
   service: 'Naver',
