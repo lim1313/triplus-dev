@@ -1,5 +1,5 @@
 const {guide_card, user} = require('./../../models');
-const {Op, where} = require('sequelize');
+const {Op} = require('sequelize');
 const GLOBAL_VARIABLE = require('./global_variable');
 const moment = require('moment');
 
