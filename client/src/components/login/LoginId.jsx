@@ -5,7 +5,7 @@ export default function LoginId(props) {
   const { userId, handleIdChange } = props;
   return (
     <InputBlock>
-      <LoginLabel for='idInput'>ID</LoginLabel>
+      <LoginLabel htmlFor='idInput'>ID</LoginLabel>
       <LoginInput id='idInput' placeholder='아이디' onChange={handleIdChange} value={userId} />
     </InputBlock>
   );

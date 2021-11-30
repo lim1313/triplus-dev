@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { BorderBtn } from '../../styles/common';
+import { useDispatch } from 'react-redux';
+import { openModal } from '../../redux/signup/action';
 
 const BtnsBlock = styled.div`
   display: flex;
@@ -35,11 +37,16 @@ const SignupBtn = styled(BorderBtn)`
   }
 `;
 
-export default function SIgnupBtns() {
+export default function SIgnupBtns(props) {
+  const { handleSignupClick } = props;
+  const dispatch = useDispatch();
+  const handleCancelClick = () => {
+    dispatch(openModal());
+  };
   return (
     <BtnsBlock>
-      <SignupBtn>회원가입</SignupBtn>
-      <CancelBtn>취소</CancelBtn>
+      <SignupBtn onClick={handleSignupClick}>회원가입</SignupBtn>
+      <CancelBtn onClick={handleCancelClick}>취소</CancelBtn>
     </BtnsBlock>
   );
 }

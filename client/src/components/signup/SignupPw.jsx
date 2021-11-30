@@ -33,7 +33,7 @@ export default function SignupPw(props) {
   return (
     <>
       <InputBlock>
-        <LoginLabel for='pwInput'>PASSWORD</LoginLabel>
+        <LoginLabel htmlFor='pwInput'>PASSWORD</LoginLabel>
         <LoginInput
           id='pwInput'
           placeholder='비밀번호'
@@ -53,7 +53,7 @@ export default function SignupPw(props) {
         <CheckMessage>{pwMessage}</CheckMessage>
       </InputBlock>
       <InputBlock>
-        <LoginLabel for='pwCheck'>CHECK PASSWORD</LoginLabel>
+        <LoginLabel htmlFor='pwCheck'>CHECK PASSWORD</LoginLabel>
         <LoginInput
           id='pwCheck'
           placeholder='비밀번호 확인'

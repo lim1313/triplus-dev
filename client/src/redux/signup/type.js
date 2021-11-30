@@ -1,1 +1,1 @@
-export const ID_CHECK = 'id_check';
+export const OPEN_MODAL = 'open_modal';

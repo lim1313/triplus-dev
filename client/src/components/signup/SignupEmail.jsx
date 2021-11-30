@@ -10,7 +10,7 @@ export default function SignupEmail(props) {
   const { value, handleInputChange, emailMessage, handleEmailBlur } = props;
   return (
     <InputBlock>
-      <LoginLabel for='emailInput'>EMAIL</LoginLabel>
+      <LoginLabel htmlFor='emailInput'>EMAIL</LoginLabel>
       <LoginInput
         id='emailInput'
         placeholder='이메일'
