@@ -14,7 +14,6 @@ import MyPage from './pages/MyPage';
 import AdminPage from './pages/AdminPage';
 
 function App() {
-  // const [isAdmin] = useState(false);
   const { pathname } = useLocation();
   console.log(pathname);
   return (

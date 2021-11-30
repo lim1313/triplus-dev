@@ -1,7 +1,7 @@
 require('dotenv').config();
 const bcrypt = require('bcrypt');
 const { user } = require('../models');
-
+const { stmpTransport } = require('../config/email');
 module.exports = {
   idcheck: (req, res) => {
     const { userId } = req.query;

@@ -4,6 +4,14 @@ import { adminReducer, adminOpenReducer } from '../redux/admin/reducer';
 import { openModalReducer } from '../redux/signup/reducer';
 import { guideCardsReducer } from '../redux/map/reducer';
 import scrollListener from '../redux/scroll/reducer';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  whiteList: ['loginReducer'],
+};
 
 const rootReducer = combineReducers({
   loginReducer,
@@ -14,4 +22,4 @@ const rootReducer = combineReducers({
   openModalReducer,
 });
 
-export default rootReducer;
+export default persistReducer(persistConfig, rootReducer);

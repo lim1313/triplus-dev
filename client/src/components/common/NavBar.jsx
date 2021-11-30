@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NoBorderBtn, BorderBtn } from '../../styles/common';
+import { useSelector, useDispatch } from 'react-redux';
+import { logoutUser } from '../../redux/login/action';
 
 const NavContainer = styled.div`
   position: sticky;
@@ -78,9 +80,15 @@ export default function NavBar() {
     login: false,
   };
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [routed, setRouted] = useState(initialRouted);
 
   const { pathname } = useLocation();
+
+  const state = useSelector((state) => state.loginReducer);
+  const { isLogin } = state;
 
   useEffect(() => {
     const path = pathname.slice(1);
@@ -89,6 +97,11 @@ export default function NavBar() {
       [path]: true,
     });
   }, [pathname]);
+
+  const handleLogoutClick = () => {
+    dispatch(logoutUser());
+    navigate('/');
+  };
 
   return (
     <NavContainer>
@@ -116,21 +129,30 @@ export default function NavBar() {
             채팅
           </MaxBtn>
         </Link>
-        <Link to='mypage'>
-          <MaxBtn active={routed.mypage} palette={pathname === '/mypage' ? 'black' : 'gray'}>
-            마이 페이지
-          </MaxBtn>
-        </Link>
-        <Link to='login'>
-          <MaxBtn active={routed.login} palette={pathname === '/login' ? 'black' : 'gray'}>
-            로그인
-          </MaxBtn>
-        </Link>
-        <Link to='signup'>
-          <NavBorderBtn palette='blue' marginLeft='1.2rem'>
-            회원가입
+        {isLogin ? (
+          <Link to='mypage'>
+            <MaxBtn active={routed.mypage} palette={pathname === '/mypage' ? 'black' : 'gray'}>
+              마이 페이지
+            </MaxBtn>
+          </Link>
+        ) : (
+          <Link to='login'>
+            <MaxBtn active={routed.login} palette={pathname === '/login' ? 'black' : 'gray'}>
+              로그인
+            </MaxBtn>
+          </Link>
+        )}
+        {isLogin ? (
+          <NavBorderBtn palette='blue' marginLeft='1.2rem' onClick={handleLogoutClick}>
+            로그아웃
           </NavBorderBtn>
-        </Link>
+        ) : (
+          <Link to='signup'>
+            <NavBorderBtn palette='blue' marginLeft='1.2rem'>
+              회원가입
+            </NavBorderBtn>
+          </Link>
+        )}
       </FlexBox>
     </NavContainer>
   );
