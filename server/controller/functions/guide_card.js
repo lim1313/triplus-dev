@@ -43,23 +43,23 @@ const checkParams = (params) => {
 };
 
 module.exports = {
-  createGuideCard: async (params) => {
-    let returnCode;
+  createGuideCard: (params) => {
+    let resObject = {};
     const insertValue = checkParams(params);
 
     try {
-      await guide_card.create(insertValue).then((result) => {
-        returnCode = 200;
-      }).catch(error => {
-        console.log(error);
-        returnCode = 400;
+      guide_card.create(insertValue).then((result) => {
+        resObject['code'] = 200;
+        resObject['message'] = '가이드 카드를 작성하였습니다';
       });
     } catch (error) {
       console.log(error);
-      returnCode = 400;
-    }finally{
-      return returnCode;
+      resObject['code'] = 400;
+      resObject['message'] = '가이드 카드를 작성하지 못하였습니다';
+    } finally {
+      return resObject;
     }
+    
   },
 
   updateGuideCard: (params) => {
@@ -109,9 +109,9 @@ module.exports = {
         whereGuideCard[Op.and].push({guide_date: {[Op.lte]: new Date(params['endDate'])}});
       }
       if(params['gender'] === '0'){
-        whereUser['gender'] = 0;
+        whereUser['gender'] = false;
       }else if(params['gender'] === '1'){
-        whereUser['gender'] = 1;
+        whereUser['gender'] = true;
       }
     } catch (error) {
       console.log(error);
