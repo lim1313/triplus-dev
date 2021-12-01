@@ -9,5 +9,8 @@ export const HeaderBlock = styled.div`
   align-items: center;
   & img {
     width: 12rem;
+    @media ${({ theme }) => theme.device.mobile} {
+      width: 10rem;
+    }
   }
 `;

@@ -1,19 +1,25 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { AiFillGithub } from 'react-icons/ai';
 
 const Container = styled.div`
   display: flex;
   align-items: flex-start;
-  padding: ${({ main }) => (main === 'main' ? '6rem 5rem 5rem' : '2rem')};
+  padding: ${({ main }) => (main === 'main' ? '6rem 5rem 6rem' : '1.3rem 2rem')};
   width: 100vw;
-  height: ${({ main }) => (main === 'main' ? '40vh' : '20vh')};
+  height: ${({ main }) => (main === 'main' ? '20rem' : '11rem')};
   background-color: ${({ main, theme }) => (main === 'main' ? '#fff' : `${theme.color.darkGray}`)};
   @media ${({ theme }) => theme.device.mobile} {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: ${({ main }) => (main === 'main' ? '40vh' : '50vh')};
+    display: none;
+    ${({ main }) =>
+      main &&
+      css`
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: ${({ main }) => (main === 'main' ? '20rem' : '22rem')};
+      `}
   }
 `;
 
