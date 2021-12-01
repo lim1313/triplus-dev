@@ -2,6 +2,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import { Profile } from '../../../styles/map/card';
 
 const CardLi = styled.li`
   width: 100%;
@@ -90,17 +91,6 @@ const GuideInfo = styled.div`
   top: 43px;
   align-items: flex-end;
 
-  & .userImg {
-    background: url(${({ userImg }) => userImg}) no-repeat center;
-    background-size: contain;
-    background-color: white;
-    width: 80px;
-    height: 80px;
-    border: 3px solid ${({ theme }) => theme.color.lightGray};
-    border-radius: 35px;
-    margin-right: 1rem;
-  }
-
   & .nick {
     font-size: 0.8rem;
     color: ${({ theme }) => theme.color.gray};
@@ -113,10 +103,6 @@ const GuideInfo = styled.div`
     align-items: center;
     top: 80px;
 
-    & .userImg {
-      width: 70px;
-      height: 70px;
-    }
     & .nickName {
       font-weight: 800;
       font-size: 0.7rem;
@@ -136,7 +122,7 @@ const GuideContent = styled.div`
 `;
 
 export default function GuideCard({ cardInfo, modalClick }) {
-  const { title, gender, guide_date, tourImage, userImage, state, nick_name, content } = cardInfo;
+  const { title, gender, guideDate, tourImage, userImage, state, nickName, content } = cardInfo;
 
   // 마감기한 => 빨강 파랑
   // 성별 표시
@@ -145,14 +131,21 @@ export default function GuideCard({ cardInfo, modalClick }) {
   return (
     <CardLi onClick={() => modalClick(1)}>
       <ImageFrame backImage={tourImage}>
-        <div className='date'>D-{guide_date}</div>
+        <div className='date'>D-{guideDate}</div>
         <h2 className='title'>{title}</h2>
       </ImageFrame>
-      <GuideInfo userImg={userImage}>
-        <div className='userImg' />
+      <GuideInfo>
+        <Profile
+          userImg={userImage}
+          width='80px'
+          height='80px'
+          mWidth='70px'
+          mHeight='70px'
+          marginRight='1rem'
+        />
         <div>
           <div className='nick'>닉네임</div>
-          <span className='nickName'>{nick_name}님 </span>
+          <span className='nickName'>{nickName}님 </span>
           <span className='nickName'>{gender}여</span>
         </div>
       </GuideInfo>

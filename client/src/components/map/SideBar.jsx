@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { dbModal } from '../../db/guideModal';
 import CardModal from './CardModal';
 import CardBar from './SideBar/CardBar';
 
@@ -25,7 +26,7 @@ export default function SideBar() {
     // TODO GET /map/guide-card?guide-id=cardId
 
     setIsModal(true);
-    setModalInfo({ title: '카페 카페 카페' });
+    setModalInfo({ ...dbModal });
   };
 
   const closeModal = () => {

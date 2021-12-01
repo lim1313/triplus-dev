@@ -5,8 +5,6 @@ import { getGuideCards } from '../../../network/map/http';
 import { useDispatch, useSelector } from 'react-redux';
 import guideCardInfo from '../../../redux/map/action';
 import { createMarker, getInfo } from '../../../utils/kakao';
-
-import { db } from '../../../db/guideCard';
 import styled from 'styled-components';
 
 const { kakao } = window;
@@ -19,7 +17,6 @@ const MapWrapper = styled.div`
 export default function KakaoMap({ filterInfo }) {
   const mapRef = useRef(null);
   const dispatch = useDispatch();
-  const guidCard = useSelector((state) => state.guideardsReducer);
 
   useEffect(() => {
     let startLat = 37.518197895084874;
@@ -34,13 +31,12 @@ export default function KakaoMap({ filterInfo }) {
     map = new kakao.maps.Map(container, options);
 
     //* 지도 이동, 확대, 축소 이벤트 발생
-    kakao.maps.event.addListener(map, 'dragend', () => kakaoEvent(map));
-    kakao.maps.event.addListener(map, 'zoom_changed', () => kakaoEvent(map));
+    kakao.maps.event.addListener(map, 'dragend', () => kakaoEvent(map, filterInfo));
+    kakao.maps.event.addListener(map, 'zoom_changed', () => kakaoEvent(map, filterInfo));
   }, []);
 
   useEffect(() => {
     //* 첫 렌더링 & 가이드 필터를 했을 때 filter
-
     kakaoEvent(map, filterInfo);
   }, [filterInfo]);
 
@@ -50,16 +46,12 @@ export default function KakaoMap({ filterInfo }) {
     if (info) {
       latLngparams = { ...latLngparams, ...info };
     }
-    console.log('kakaomap', latLngparams);
-    // TODO GET 요청
-    // getGuideCards(latLngparams).then((data) => {
-    //   dispatch(guideCardInfo(data));
-    //   createMarker(data, map);
-    // });
 
-    // //! dummy data
-    dispatch(guideCardInfo(db));
-    createMarker(db, map);
+    // TODO GET 요청
+    getGuideCards(latLngparams).then((data) => {
+      dispatch(guideCardInfo(data));
+      createMarker(data, map);
+    });
   };
 
   return <MapWrapper ref={mapRef} style={{ width: '100%', height: '100%' }} />;
