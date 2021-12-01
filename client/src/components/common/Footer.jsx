@@ -7,7 +7,7 @@ const Container = styled.div`
   align-items: flex-start;
   padding: ${({ main }) => (main === 'main' ? '6rem 5rem 5rem' : '2rem')};
   width: 100vw;
-  height: ${({ main }) => (main === 'main' ? '40vh' : '25vh')};
+  height: ${({ main }) => (main === 'main' ? '40vh' : '20vh')};
   background-color: ${({ main, theme }) => (main === 'main' ? '#fff' : `${theme.color.darkGray}`)};
   @media ${({ theme }) => theme.device.mobile} {
     flex-direction: column;

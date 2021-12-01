@@ -163,7 +163,6 @@ export default function MainPage() {
   }, []);
 
   const isMobile = window.matchMedia('screen and (max-width: 768px)').matches;
-  // console.log('isMobile', isMobile);
 
   return (
     <>
