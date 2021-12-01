@@ -11,3 +11,7 @@ export const checkId = (data) => {
 export const signUp = (data) => {
   return axios.post(`${http}/signup`, data).then((res) => res);
 };
+
+export const emailCheck = (data) => {
+  return axios.get(`${http}/signup/email-check?userEmail=${data}`);
+};

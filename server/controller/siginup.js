@@ -11,9 +11,9 @@ module.exports = {
       .findOne({ where: { user_id: userId } })
       .then((data) => {
         if (data) {
-          return res.json({ message: '사용이 불가능한 아이디입니다' });
+          return res.json({ success: false, message: '사용이 불가능한 아이디입니다' });
         } else {
-          return res.json({ message: '사용이 가능한 아이디입니다.' });
+          return res.json({ success: true, message: '사용이 가능한 아이디입니다' });
         }
       })
       .catch((err) => console.log(err));
@@ -24,9 +24,9 @@ module.exports = {
       .findOne({ where: { email: userEmail } })
       .then((data) => {
         if (data) {
-          return res.json({ message: '사용이 불가능한 이메일입니다' });
+          return res.json({ success: false, message: '사용이 불가능한 이메일입니다' });
         } else {
-          return res.json({ message: '사용이 가능한 이메일입니다' });
+          return res.json({ success: true, message: '사용이 가능한 이메일입니다' });
         }
       })
       .catch((err) => console.log(err));

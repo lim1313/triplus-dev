@@ -3,7 +3,8 @@ import { InputBlock, LoginInput, LoginLabel } from '../../styles/login/LoginInpu
 import styled from 'styled-components';
 
 const CheckMessage = styled.span`
-  color: ${({ theme }) => theme.color.red};
+  color: ${({ emailMessage, theme }) =>
+    emailMessage === '사용이 가능한 이메일입니다' ? '#08A600' : theme.color.red};
 `;
 
 export default function SignupEmail(props) {
@@ -20,7 +21,7 @@ export default function SignupEmail(props) {
         name='email'
         emailMessage={emailMessage}
       />
-      <CheckMessage>{emailMessage}</CheckMessage>
+      <CheckMessage emailMessage={emailMessage}>{emailMessage}</CheckMessage>
     </InputBlock>
   );
 }
