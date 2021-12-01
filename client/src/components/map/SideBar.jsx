@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { dbModal } from '../../db/guideModal';
+import { getCardModal } from '../../network/map/http';
 import CardModal from './CardModal';
 import CardBar from './SideBar/CardBar';
 
@@ -20,10 +21,14 @@ const SideWrapper = styled.aside`
 
 export default function SideBar() {
   const [isModal, setIsModal] = useState(false);
-  const [modalInof, setModalInfo] = useState({});
+  const [modalInfo, setModalInfo] = useState({});
 
   const modalClick = (cardId) => {
     // TODO GET /map/guide-card?guide-id=cardId
+    // getCardModal(cardId).then(res => {
+    // setModalInfo( res );
+    // setIsModal(true)
+    // })
 
     setIsModal(true);
     setModalInfo({ ...dbModal });
@@ -36,7 +41,7 @@ export default function SideBar() {
   return (
     <SideWrapper>
       <CardBar modalClick={modalClick} />
-      {isModal && <CardModal modalInof={modalInof} closeModal={closeModal} />}
+      {isModal && <CardModal modalInfo={modalInfo} closeModal={closeModal} />}
     </SideWrapper>
   );
 }

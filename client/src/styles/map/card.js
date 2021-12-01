@@ -17,3 +17,13 @@ export const Profile = styled.div`
     border-radius: calc(${({ mHeight }) => mHeight} / 2);
   }
 `;
+
+export const CardModalSubTitle = styled.div`
+  font-size: 1.1rem;
+  color: ${({ theme }) => theme.color.blue};
+  margin: 2.5rem 0 1rem 0;
+  /* font-weight: 700; */
+
+  @media ${({ theme }) => theme.device.mobile} {
+  }
+`;
