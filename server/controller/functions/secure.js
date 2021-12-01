@@ -1,19 +1,18 @@
-// const bcrypt = require('bcrypt');
-// const saltRounds = 12;
+const bcrypt = require('bcrypt');
 
-// // export const genSalt = async () => {
-// //   return bcrypt.genSalt(saltRounds);
-// // };
+module.exports = {
+  hashPassword: async (plainPassword) => {
+    const password = plainPassword;
+    const saltRounds = 12;
 
-// // export const hash = async (plainPassword, salt) => {
-// //   return bcrypt.hash(plainPassword, salt);
-// // };
-
-// module.exports = {
-//   genSalt: async () => {
-//     return bcrypt.genSalt(saltRounds);
-//   },
-//   hash: async (plainPassword, salt) => {
-//     return bcrypt.hash(plainPassword, salt);
-//   },
-// };
+    const hashedPassword = await new Promise((resolve, reject) => {
+      bcrypt.genSalt(saltRounds, (err, salt) => {
+        bcrypt.hash(password, salt, (err, hash) => {
+          if (err) reject(err);
+          resolve(hash);
+        });
+      });
+    });
+    return hashedPassword;
+  },
+};

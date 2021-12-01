@@ -1,6 +1,6 @@
 require('dotenv').config();
 const bcrypt = require('bcrypt');
-const { user } = require('../models');
+const { user, user_verify } = require('../models');
 const { generateAccessToken, sendAccessToken, isAuthorized } = require('./functions/user');
 
 module.exports = {
@@ -31,6 +31,8 @@ module.exports = {
         console.log(err);
       }
     } else {
+      // const verify = await user_verify.findOne({ where: { user_id: userId } });
+      // if (verify.dataValues.email_verified) {
       if (!userId) return res.json({ success: false, message: '아이디를 입력해주세요' });
       if (!password) return res.json({ success: false, message: '비밀번호를 입력해주세요' });
       try {
@@ -43,6 +45,12 @@ module.exports = {
           console.log(userInfo.dataValues);
           return res.json({ success: false, message: '아이디 또는 비밀번호가 잘못되었습니다' });
         }
+        const verify = await user_verify.findOne({ where: { user_id: userId } });
+        if (verify) {
+          if (!verify.dataValues.email_verified) {
+            return res.json({ success: false, message: '이메일 인증을 완료해주세요' });
+          }
+        }
 
         delete userInfo.dataValues.password;
         const accessToken = generateAccessToken(userInfo.dataValues);
@@ -52,6 +60,9 @@ module.exports = {
       } catch (err) {
         console.log(err);
       }
+      // } else {
+      //   return res.json({ success: false, message: '이메일 인증을 완료해주세요.' });
+      // }
     }
   },
   checkToken: (req, res) => {
