@@ -12,6 +12,7 @@ const MapContainer = styled.section`
 
   @media ${({ theme }) => theme.device.mobile} {
     flex-direction: column-reverse;
+    height: calc(100vh - 2.5rem);
   }
 `;
 

@@ -19,9 +19,5 @@ export const ImgWrap = styled.div`
 `;
 
 export default function ImgFrame({ width, height, border, borderRadius, children }) {
-  return (
-    <ImgWrap width={width} height={height} border={border} borderRadius={borderRadius}>
-      {children}
-    </ImgWrap>
-  );
+  return <ImgWrap width={width} height={height} border={border} borderRadius={borderRadius} />;
 }

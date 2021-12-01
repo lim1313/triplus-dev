@@ -6,9 +6,11 @@ import { LOGIN_USER, LOGOUT_USER, SET_MESSAGE } from './type';
 
 // const http = process.env.REACT_APP_HTTPURL;
 
+const http = process.env.REACT_APP_HTTPSURL;
+
 export const loginUser = (dataToSubmit) => (dispatch) => {
   axios
-    .post(`http://localhost/login`, dataToSubmit)
+    .post(`${http}/login`, dataToSubmit)
     .then((response) => response.data)
     .then((res) => {
       dispatch({
@@ -19,7 +21,7 @@ export const loginUser = (dataToSubmit) => (dispatch) => {
 };
 
 export const logoutUser = () => (dispatch) => {
-  axios.get(`http://localhost/logout`, { crossDomain: true }).then((response) => {
+  axios.get(`${http}/logout`, { crossDomain: true }).then((response) => {
     if (response.data.success) {
       dispatch({ type: LOGOUT_USER });
     }
