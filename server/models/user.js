@@ -13,21 +13,31 @@ module.exports = (sequelize, DataTypes) => {
   }
   user.init(
     {
-      user_id: {
+      userId: {
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true,
+        field: 'user_id'
       },
       password: DataTypes.STRING,
       email: DataTypes.STRING,
-      nick_name: DataTypes.STRING,
+      nickName: {
+        type: DataTypes.STRING,
+        field: 'nick_name'
+      },
       gender: DataTypes.STRING,
       region: DataTypes.STRING,
       image: DataTypes.STRING,
-      o_auth: DataTypes.STRING,
+      OAuth: {
+        type: DataTypes.STRING,
+        field: 'o_auth',
+      },
       state: DataTypes.STRING,
       role: DataTypes.STRING,
-      expired_datetime: DataTypes.DATE,
+      expiredDatetime: {
+        type: DataTypes.DATE,
+        field: 'expired_datetime'
+      },
     },
     {
       sequelize,

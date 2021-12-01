@@ -1,7 +1,7 @@
 const {guide_card, user} = require('./../../models');
 const {Op} = require('sequelize');
 const GLOBAL_VARIABLE = require('./global_variable');
-const moment = require('moment');
+const date_fns = require('date-fns');
 
 const checkParams = (params) => {
   const setParams = {};
@@ -127,19 +127,19 @@ module.exports = {
       include: [
         {
           model: user,
-          attributes: ['nick_name', 'gender'],
+          attributes: ['nickName', 'gender'],
           where: whereUser,
         }
       ],
       where: whereGuideCard
     }).then(result => {
       for(let item of result){
-        item['guide_date'] = moment(item['guide_date']).format('YYYY.MM.DD');
-        item['createdAt'] = moment(item['createdAt']).format('YYYY.MM.DD');
-        item['updatedAt'] = moment(item['updatedAt']).format('YYYY.MM.DD');
+        item['guideDate'] = date_fns.format(item['guideDate'], 'yyyy.MM.dd');
+        item['createdAt'] = date_fns.format(item['createdAt'], 'yyyy.MM.dd');
+        item['updatedAt'] = date_fns.format(item['updatedAt'], 'yyyy.MM.dd');
         item['tourImage'] = '/asset/main/trip5.png';
 
-        item['nick_name'] = item['user.nick_name'];
+        item['nickName'] = item['user.nickName'];
         delete item['user.nick_name'];
 
         item['gender'] = item['user.gender'];
