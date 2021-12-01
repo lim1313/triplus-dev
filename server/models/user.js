@@ -20,11 +20,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       password: DataTypes.STRING,
       email: DataTypes.STRING,
-      verified: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: 0,
-      },
       nick_name: DataTypes.STRING,
+      gender: DataTypes.STRING,
       region: DataTypes.STRING,
       image: DataTypes.STRING,
       o_auth: DataTypes.STRING,

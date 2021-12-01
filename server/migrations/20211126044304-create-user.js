@@ -13,11 +13,10 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
       },
-      verified: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: 0,
-      },
       nick_name: {
+        type: Sequelize.STRING,
+      },
+      gender: {
         type: Sequelize.STRING,
       },
       region: {
