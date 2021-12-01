@@ -35,10 +35,19 @@ module.exports = {
 
           let url = 'http://' + req.get('host') + '/confirmEmail' + '?key=' + key_for_verify;
           let mailOpt = {
-            from: 'william9563@naver.com',
+            from: process.env.AUTH_EMAIL,
             to: email,
             subject: '안녕하세요 triplus입니다!',
-            html: `<h1>이메일 인증을 위해 URL을 클릭해주세요</h1><br><a href=${url}>url클릭클릭</a>`,
+            html: `
+            <h1>이메일 인증을 위해 '여행시작하기'를 클릭해주세요</h1><br>
+            <a href=${url}><button style="background: #3386f7;
+              border: 1px solid #3386f7;
+              color: #e9edf3;
+              padding: 10px;
+              cursor: pointer;
+              font-size: 28px;
+              border-radius: 5px;
+              ">여행시작하기</button></a>`,
           };
           stmpTransport.sendMail(mailOpt, (err, res) => {
             if (err) {

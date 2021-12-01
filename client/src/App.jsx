@@ -13,6 +13,7 @@ import ChattingPage from './pages/ChattingPage';
 import MyPage from './pages/MyPage';
 import AdminPage from './pages/AdminPage';
 import Toggle from './components/common/Toggle';
+import GoogleCallback from './pages/Googlecallback';
 
 import { useSelector } from 'react-redux';
 
@@ -33,6 +34,7 @@ function App() {
         <Route path='/management' element={<ManagementPage />} />
         <Route path='/chat' element={<ChattingPage />} />
         <Route path='/mypage' element={<MyPage />} />
+        <Route path='/googlecallback' element={<GoogleCallback />} />
       </Routes>
       {pathname === '/map' || pathname === '/admin' || pathname === '/mypage' ? null : (
         <Footer main={pathname === '/' ? 'main' : null} />
