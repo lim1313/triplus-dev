@@ -1,10 +1,11 @@
 const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 const stmpTransport = nodemailer.createTransport({
   service: 'Naver',
   auth: {
-    user: 'william9563@naver.com',
-    pass: 'ks0512**99',
+    user: process.env.AUTH_EMAIL,
+    pass: process.env.AUTH_PASSWORD,
   },
   tls: {
     rejectUnauthorized: false,
