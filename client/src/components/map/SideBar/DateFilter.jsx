@@ -15,6 +15,7 @@ const FilterWrapper = styled(FilterFrame)`
 const DateFrame = styled(DatePicker)`
   border: none;
   text-align: center;
+  width: 100%;
 
   &:focus {
     outline: none;

@@ -16,17 +16,22 @@ const MapContainer = styled.section`
 `;
 
 export default function MapPage() {
-  const [latLng, setLatLng] = useState([]);
+  const [filterInfo, setFilterInfo] = useState({ gender: '', startDate: '', endDate: '' });
 
-  const changeLatLng = (data) => {
-    setLatLng(data);
+  const filterSubmit = (...args) => {
+    let [gen, start, end] = args;
+    let { gender, startDate, endDate } = filterInfo;
+
+    if (gen !== gender || start !== startDate || end !== endDate) {
+      setFilterInfo({ gender: gen, startDate: start, endDate: end });
+    }
   };
 
   return (
     <MapContainer>
-      <CardFilter latLng={latLng} />
+      <CardFilter filterSubmit={filterSubmit} />
       <SideBar />
-      <KakaoMap changeLatLng={changeLatLng} />
+      <KakaoMap filterInfo={filterInfo} />
     </MapContainer>
   );
 }

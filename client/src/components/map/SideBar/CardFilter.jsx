@@ -7,14 +7,13 @@ import DateFilter from './DateFilter';
 import { FaSearchLocation } from 'react-icons/fa';
 import GenderFilter from './GenderFilter';
 import { getGuideCards } from '../../../network/map/http';
-import { useDispatch } from 'react-redux';
 import guideCardInfo from '../../../redux/map/action';
 
 const FilterWrapper = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  width: 360px;
+  width: 320px;
   padding: 1.5rem;
   background-color: ${({ theme }) => theme.color.lightGray};
   & h3 {
@@ -57,19 +56,15 @@ const SearchBtn = styled(FilterFrame).attrs({
   }
 `;
 
-export default function CardFilter({ latLng }) {
+export default function CardFilter({ filterSubmit }) {
   const [gender, setGender] = useState('');
   const [date, setDate] = useState([]);
 
-  const dispatch = useDispatch();
-
   const filterClick = () => {
+    let startDate = date[0];
     let endDate = date[1] === 'Invalid Date' ? null : date[1];
 
-    // TODO GET /map
-    // getGuideCards([{ ...latLng, gender, startDate: date[0], endDate }]).then((res) => {
-    //   dispatch(guideCardInfo());
-    // });
+    filterSubmit(gender, startDate, endDate);
   };
 
   const changeGender = (data) => {
