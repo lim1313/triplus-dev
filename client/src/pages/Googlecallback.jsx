@@ -12,6 +12,7 @@ export default function GoogleCallback({ loginHandler }) {
 
   useEffect(() => {
     googleOauth(authorizationCode).then((res) => {
+      console.log(res);
       dispatch(oauthLogin());
       navigate(-1);
     });

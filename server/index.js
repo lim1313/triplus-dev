@@ -19,6 +19,7 @@ const managementPage = require('./router/managementPage');
 const mapPage = require('./router/mapPage');
 const myPage = require('./router/myPage');
 const signupPage = require('./router/signupPage');
+const authPage = require('./router/authPage');
 const logout = require('./controller/logout');
 const confirmEmail = require('./controller/functions/confirmEmail');
 
@@ -42,6 +43,7 @@ app.use('/management', managementPage);
 app.use('/map', mapPage);
 app.use('/my', myPage);
 app.use('/signup', signupPage);
+app.use('/oauth', authPage);
 app.get('/logout', logout.logout);
 app.get('/confirmEmail', confirmEmail.confirmEmail);
 

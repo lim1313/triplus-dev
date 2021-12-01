@@ -19,7 +19,7 @@ export const logOut = () => {
 
 export const googleOauth = (authorizationCode) =>
   axios.post(
-    '/auth/google',
+    `${http}/oauth/google`,
     { authorizationCode },
     {
       headers: {
