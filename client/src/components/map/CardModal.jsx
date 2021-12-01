@@ -22,7 +22,7 @@ const ModalWrapper = styled.div`
     width: 100vw;
     height: calc(100vh - 3.8rem);
     transform: translateX(0);
-    z-index: 999;
+    z-index: 998;
   }
 `;
 

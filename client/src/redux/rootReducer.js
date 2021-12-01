@@ -3,7 +3,8 @@ import loginReducer from '../redux/login/reducer';
 import { adminReducer, adminOpenReducer } from '../redux/admin/reducer';
 import { openModalReducer } from '../redux/signup/reducer';
 import { guideCardsReducer } from '../redux/map/reducer';
-import scrollListener from '../redux/scroll/reducer';
+import scrollReducer from '../redux/scroll/reducer';
+import toggleReducer from '../redux/toggle/reducer';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -18,8 +19,9 @@ const rootReducer = combineReducers({
   adminReducer,
   adminOpenReducer,
   guideCardsReducer,
-  scrollListener,
+  scrollReducer,
   openModalReducer,
+  toggleReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

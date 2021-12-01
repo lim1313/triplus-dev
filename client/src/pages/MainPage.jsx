@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars  */
 /* eslint-disable react-hooks/exhaustive-deps*/
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
@@ -145,11 +144,13 @@ const Img = styled.img`
 
 export default function MainPage() {
   const dispatch = useDispatch();
-  const ratioY = parseInt(useSelector((state) => state.scrollListener.scrollY) * 100);
-  // console.log('main', ratioY);
+  const ratioY = parseInt(useSelector((state) => state.scrollReducer.scrollY) * 100);
+  console.log('main', ratioY);
   const scrollEventListener = () => {
     const maxScroll = document.body.offsetHeight - window.innerHeight;
+    console.log(maxScroll);
     const currentY = window.pageYOffset;
+    console.log(currentY);
     const ratio = currentY / maxScroll;
     dispatch(scrollListener(ratio));
   };
@@ -164,9 +165,6 @@ export default function MainPage() {
   const isMobile = window.matchMedia('screen and (max-width: 768px)').matches;
   // console.log('isMobile', isMobile);
 
-  useEffect(() => {
-    console.log('hey');
-  }, [isMobile]);
   return (
     <>
       <Section>
