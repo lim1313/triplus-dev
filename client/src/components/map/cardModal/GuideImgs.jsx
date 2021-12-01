@@ -35,14 +35,11 @@ const MoveBtn = styled.button`
   background-color: unset;
   border-radius: 7px;
   opacity: 0.7;
-  padding: 1rem;
+  padding: 0.5rem;
 
   &:hover {
     cursor: pointer;
     background-color: ${({ theme }) => theme.color.lightGray};
-  }
-
-  @media ${({ theme }) => theme.device.mobile} {
   }
 `;
 
