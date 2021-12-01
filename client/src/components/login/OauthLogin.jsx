@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import GoogleLogin from './GoogleLogin';
+import GoogleLoginBtn from './GoogleLoginBtn';
 import KakaoLogin from './KakaoLogin';
 import NaverLogin from './NaverLogin';
 
@@ -13,7 +13,7 @@ export default function OauthLogin() {
   return (
     <OauthBlock>
       <KakaoLogin />
-      <GoogleLogin />
+      <GoogleLoginBtn />
       <NaverLogin />
     </OauthBlock>
   );
