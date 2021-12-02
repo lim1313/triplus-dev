@@ -8,7 +8,8 @@ import MainPage from './pages/MainPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import MapPage from './pages/MapPage';
-import ManagementPage from './pages/ManagementPage';
+import GuideManagementPage from './pages/GuideManagementPage';
+import TourManagementPage from './pages/TourManagementPage';
 import ChattingPage from './pages/ChattingPage';
 import MyPage from './pages/MyPage';
 import AdminPage from './pages/AdminPage';
@@ -31,7 +32,8 @@ function App() {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/signup' element={<SignupPage />} />
         <Route path='/map' element={<MapPage />} />
-        <Route path='/management' element={<ManagementPage />} />
+        <Route path='/management' element={<GuideManagementPage />} />
+        <Route path='/tourmanagement' element={<TourManagementPage />} />
         <Route path='/chat' element={<ChattingPage />} />
         <Route path='/mypage' element={<MyPage />} />
         <Route path='/googlecallback' element={<GoogleCallback />} />
