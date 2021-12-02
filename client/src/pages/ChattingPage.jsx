@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Loading from '../components/common/Loading';
+
 export default function ChattingPage() {
-  return <div></div>;
+  return <Loading></Loading>;
 }
