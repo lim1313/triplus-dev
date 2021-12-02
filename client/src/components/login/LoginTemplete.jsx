@@ -9,10 +9,13 @@ const TempleteBlock = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 4rem 1rem 2rem 1rem;
+  padding: 2rem 1rem 4rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding-bottom: 0;
+  }
 `;
 
-export default function LoginTemplete(props) {
+export default function LoginTemplete() {
   return (
     <TempleteBlock>
       <LoginHeader />

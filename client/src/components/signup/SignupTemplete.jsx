@@ -8,8 +8,10 @@ const TempleteBlock = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 4rem 1rem 2rem 1rem;
-  margin: 0rem 0rem 3rem 0rem;
+  padding: 2rem 1rem 4rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding-bottom: 2rem;
+  }
 `;
 
 export default function SignupTemplete(props) {

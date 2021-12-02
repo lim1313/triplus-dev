@@ -5,6 +5,7 @@ import styled from 'styled-components';
 const CheckMessage = styled.span`
   color: ${({ emailMessage, theme }) =>
     emailMessage === '사용이 가능한 이메일입니다' ? '#08A600' : theme.color.red};
+  font-size: 0.8rem;
 `;
 
 export default function SignupEmail(props) {

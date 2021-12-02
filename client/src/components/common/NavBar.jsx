@@ -30,10 +30,11 @@ const NavContainer = styled.div`
 const LogoWrapper = styled.div`
   display: flex;
   margin-left: 3rem;
+  padding-top: 0.5rem;
   justify-content: center;
   align-items: center;
   @media ${({ theme }) => theme.device.mobile} {
-    margin-left: 2rem;
+    margin-left: 0;
   } ;
 `;
 

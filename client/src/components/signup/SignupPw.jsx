@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { AiOutlineLock, AiFillLock } from 'react-icons/ai';
 
 const CheckMessage = styled.span`
+  font-size: 0.8rem;
   color: ${({ theme }) => theme.color.red};
 `;
 const IconBlock = styled.div`

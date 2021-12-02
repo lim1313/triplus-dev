@@ -22,6 +22,7 @@ const signupPage = require('./router/signupPage');
 const authPage = require('./router/authPage');
 const logout = require('./controller/logout');
 const confirmEmail = require('./controller/functions/confirmEmail');
+const s3router = require('./router/s3');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -44,8 +45,10 @@ app.use('/map', mapPage);
 app.use('/my', myPage);
 app.use('/signup', signupPage);
 app.use('/oauth', authPage);
+
 app.get('/logout', logout.logout);
 app.get('/confirmEmail', confirmEmail.confirmEmail);
+
 
 app.get('/hello-triplus', (req, res) => {
   res.status(200).send('Hello triplus');

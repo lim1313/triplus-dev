@@ -1,23 +1,31 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Profile } from '../../../styles/map/card';
+import { FaFemale, FaMale } from 'react-icons/fa';
 
 const User = styled.div`
   margin: 1rem;
   text-align: center;
 
+  & .nick {
+    color: ${({ theme }) => theme.color.gray};
+  }
+
   & .userNick {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
   & .gender {
     display: inline-block;
-    width: 1.7rem;
-    height: 1.7rem;
-    background-color: ${({ theme }) => theme.color.red};
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 0.7rem;
+    margin-left: 0.5rem;
+    color: #fff;
+    background-color: ${({ theme, gender }) => (gender ? theme.color.red : theme.color.blue)};
   }
 `;
 
-export default function UserInfo({ userImage, nickName, gender, guideDate }) {
+export default function UserInfo({ userImage, nickName, gender }) {
   return (
     <>
       <Profile
@@ -28,14 +36,13 @@ export default function UserInfo({ userImage, nickName, gender, guideDate }) {
         mWidth='130px'
         mHeight='130px'
       />
-      <User>
-        <div>닉네임</div>
-        <div className='userNick'>
-          {/* <span>{nickName}</span>
-          <span>{gender}</span> */}
-          <div>나의닉네임나네임임</div>
-          <span className='gender'>1</span>
+      <User gender={gender}>
+        <div>
+          <span className='nick'>가이드 닉네임</span>
+          <span className='gender'>{gender ? <FaFemale /> : <FaMale />}</span>
         </div>
+        <div className='userNick'>신나는 여행자님</div>
+        {/* <div className='userNick'>{nickName}</div> */}
       </User>
     </>
   );
