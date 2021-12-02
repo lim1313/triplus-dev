@@ -8,7 +8,7 @@ module.exports = {
   idcheck: (req, res) => {
     const { userId } = req.query;
     user
-      .findOne({ where: { user_id: userId } })
+      .findOne({ where: { userId } })
       .then((data) => {
         if (data) {
           return res.json({ success: false, message: '사용이 불가능한 아이디입니다' });
@@ -36,8 +36,8 @@ module.exports = {
     const hashPw = await hashPassword(password);
     user
       .findOrCreate({
-        where: { user_id: userId },
-        defaults: { user_id: userId, password: hashPw, email, role: 'general' },
+        where: { userId },
+        defaults: { userId, password: hashPw, email, role: 'general' },
       })
       .then(([data, created]) => {
         if (created) {
