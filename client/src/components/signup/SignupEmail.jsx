@@ -3,6 +3,7 @@ import { InputBlock, LoginInput, LoginLabel } from '../../styles/login/LoginInpu
 import styled from 'styled-components';
 
 const CheckMessage = styled.span`
+  font-size: 0.8rem;
   color: ${({ theme }) => theme.color.red};
 `;
 
