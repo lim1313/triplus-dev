@@ -1,13 +1,9 @@
-/*eslint-disable no-unused-vars*/
-
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FilterFrame } from '../../../styles/map/filterFrame';
 import DateFilter from './DateFilter';
 import { FaSearchLocation } from 'react-icons/fa';
 import GenderFilter from './GenderFilter';
-import { getGuideCards } from '../../../network/map/http';
-import guideCardInfo from '../../../redux/map/action';
 
 const FilterWrapper = styled.div`
   position: absolute;

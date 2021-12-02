@@ -38,6 +38,7 @@ export default function GuideBtn({ guideId, userParticipate }) {
     console.log(id);
   };
 
+  //TODO 로그인한 경우만 가능
   return (
     <ModalBottomBtn>
       {userParticipate ? (
