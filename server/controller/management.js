@@ -9,13 +9,9 @@ module.exports = {
   createGuideCard: async (req, res) => {
     const params = req.body;
     params.state = GLOBAL_VARIABLE.REQUESTED;
-    const resCode = await createGuideCard(params);
+    const resObject = await createGuideCard(params);
 
-    if(resCode === 200){
-      res.status(200).send('가이드 카드를 작성하였습니다');
-    }else{
-      res.status(400).send('가이드 카드를 작성하지 못하였습니다');
-    }
+    res.status(resObject.code).send(resObject.message);
   },
 
   updateGuideCard: async (req, res) => {

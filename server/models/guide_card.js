@@ -14,31 +14,52 @@ module.exports = (sequelize, DataTypes) => {
       guide_card.hasOne(
         models.user,
         {
-          sourceKey: 'user_id',
-          foreignKey: 'user_id',
+          sourceKey: 'userId',
+          foreignKey: 'userId',
         }
       );
     }
   };
   guide_card.init({
-    guide_id: {
+    guideId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
+      field: 'guide_id',
     },
-    title: DataTypes.STRING,
+    title: {
+      type: DataTypes.STRING,
+    },
     content: DataTypes.STRING,
-    guide_date: DataTypes.DATE,
-    start_time: DataTypes.STRING,
-    end_time: DataTypes.STRING,
-    num_people: DataTypes.INTEGER,
+    guideDate: {
+      type: DataTypes.DATE,
+      field: 'guide_date',
+    },
+    startTime: {
+      type: DataTypes.STRING,
+      field: 'start_time',
+    },
+    endTime: {
+      type: DataTypes.STRING,
+      field: 'end_time'
+    },
+    numPeople: {
+      type: DataTypes.INTEGER,
+      field: 'num_people'
+    },
     state: DataTypes.STRING,
     address: DataTypes.STRING,
     latitude: DataTypes.DOUBLE,
     longitude: DataTypes.DOUBLE,
-    open_date: DataTypes.STRING,
-    user_id: DataTypes.STRING
+    openDate: {
+      type: DataTypes.STRING,
+      field: 'open_date',
+    },
+    userId: {
+      type: DataTypes.STRING,
+      field: 'user_id',
+    }
   }, {
     sequelize,
     modelName: 'guide_card',
