@@ -1,5 +1,5 @@
 import React from 'react';
 
-export default function ManagementPage() {
+export default function TourManagementPage() {
   return <div></div>;
 }
