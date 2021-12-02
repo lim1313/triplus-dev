@@ -3,6 +3,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { db } from '../../../db/guideModal';
 import GuideCard from './GuideCard';
 
 const SideCardWrapper = styled.ul`
@@ -35,13 +36,17 @@ const CardNone = styled.div`
   }
 `;
 export default function CardBar({ modalClick }) {
-  const cards = useSelector((state) => state.guideCardsReducer);
+  // const cards = useSelector((state) => state.guideCardsReducer);
+
+  //! dummy db
+  let cards = db;
+
   return (
     <SideCardWrapper>
       {cards.length ? (
         <>
           {cards.map((cardInfo) => (
-            <GuideCard key={cardInfo.guide_id} cardInfo={cardInfo} modalClick={modalClick} />
+            <GuideCard key={cardInfo.guideId} cardInfo={cardInfo} modalClick={modalClick} />
           ))}
         </>
       ) : (

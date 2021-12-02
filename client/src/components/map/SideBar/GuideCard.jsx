@@ -122,14 +122,15 @@ const GuideContent = styled.div`
 `;
 
 export default function GuideCard({ cardInfo, modalClick }) {
-  const { title, gender, guideDate, tourImage, userImage, state, nickName, content } = cardInfo;
+  const { title, gender, guideDate, tourImage, userImage, state, nickName, content, guideId } =
+    cardInfo;
 
   // 마감기한 => 빨강 파랑
   // 성별 표시
   // 마감 회색 표시
 
   return (
-    <CardLi onClick={() => modalClick(1)}>
+    <CardLi onClick={() => modalClick(guideId)}>
       <ImageFrame backImage={tourImage}>
         <div className='date'>D-{guideDate}</div>
         <h2 className='title'>{title}</h2>
