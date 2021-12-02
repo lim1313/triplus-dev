@@ -5,7 +5,7 @@ import SIgnupBtns from './SIgnupBtns';
 import SignupEmail from './SignupEmail';
 import styled from 'styled-components';
 import { idValidation, emailValidation, pwValidaton } from '../../utils/validation';
-import { checkId, signUp } from '../../network/signup/http';
+import { checkId, emailCheck, signUp } from '../../network/signup/http';
 import { useNavigate } from 'react-router-dom';
 
 const SectionBlock = styled.div`
@@ -48,7 +48,9 @@ export default function SignupSection() {
     } else {
       checkId(inputs.userId).then((res) => {
         setMessage({ ...message, userId: res.data.message });
-        setValid({ ...valid, userId: true });
+        if (res.data.success) {
+          setValid({ ...valid, userId: true });
+        }
       });
     }
   };
@@ -57,8 +59,12 @@ export default function SignupSection() {
       setMessage({ ...message, email: '이메일 형식에 맞춰 작성해주세요.' });
       setValid({ ...valid, email: false });
     } else {
-      setMessage({ ...message, email: '' });
-      setValid({ ...valid, email: true });
+      emailCheck(inputs.email).then((res) => {
+        setMessage({ ...message, email: res.data.message });
+        if (res.data.success) {
+          setValid({ ...valid, email: true });
+        }
+      });
     }
   };
   const handlePwBlur = () => {

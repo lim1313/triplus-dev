@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LOGIN_USER, LOGOUT_USER, SET_MESSAGE } from './type';
+import { LOGIN_USER, LOGOUT_USER, SET_MESSAGE, OAUTH_LOGIN } from './type';
 // import { logOut } from '../../network/login/http';
 // axios.defaults.withCredentials = true;
 // axios.defaults.headers.common['Content-Type'] = 'application/json';
@@ -30,4 +30,8 @@ export const logoutUser = () => (dispatch) => {
 
 export const setMessage = () => (dispatch) => {
   dispatch({ type: SET_MESSAGE });
+};
+
+export const oauthLogin = () => (dispatch) => {
+  dispatch({ type: OAUTH_LOGIN });
 };

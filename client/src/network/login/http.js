@@ -16,3 +16,14 @@ export const logOut = () => {
     })
     .then((res) => res);
 };
+
+export const googleOauth = (authorizationCode) =>
+  axios.post(
+    `${http}/oauth/google`,
+    { authorizationCode },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );

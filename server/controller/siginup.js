@@ -11,9 +11,22 @@ module.exports = {
       .findOne({ where: { user_id: userId } })
       .then((data) => {
         if (data) {
-          return res.json({ message: '사용이 불가능한 아이디입니다' });
+          return res.json({ success: false, message: '사용이 불가능한 아이디입니다' });
         } else {
-          return res.json({ message: '사용이 가능한 아이디입니다.' });
+          return res.json({ success: true, message: '사용이 가능한 아이디입니다' });
+        }
+      })
+      .catch((err) => console.log(err));
+  },
+  emailCheck: (req, res) => {
+    const { userEmail } = req.query;
+    user
+      .findOne({ where: { email: userEmail } })
+      .then((data) => {
+        if (data) {
+          return res.json({ success: false, message: '사용이 불가능한 이메일입니다' });
+        } else {
+          return res.json({ success: true, message: '사용이 가능한 이메일입니다' });
         }
       })
       .catch((err) => console.log(err));
@@ -35,10 +48,19 @@ module.exports = {
 
           let url = 'http://' + req.get('host') + '/confirmEmail' + '?key=' + key_for_verify;
           let mailOpt = {
-            from: 'william9563@naver.com',
+            from: process.env.AUTH_EMAIL,
             to: email,
             subject: '안녕하세요 triplus입니다!',
-            html: `<h1>이메일 인증을 위해 URL을 클릭해주세요</h1><br><a href=${url}>url클릭클릭</a>`,
+            html: `
+            <h1>이메일 인증을 위해 '여행시작하기'를 클릭해주세요</h1><br>
+            <a href=${url}><button style="background: #3386f7;
+              border: 1px solid #3386f7;
+              color: #e9edf3;
+              padding: 10px;
+              cursor: pointer;
+              font-size: 28px;
+              border-radius: 5px;
+              ">여행시작하기</button></a>`,
           };
           stmpTransport.sendMail(mailOpt, (err, res) => {
             if (err) {
