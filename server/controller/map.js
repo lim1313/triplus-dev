@@ -14,5 +14,10 @@ module.exports = {
       message: resObject.message,
       guideCardList: resObject.guideCardList,
     });
+  },
+
+  selectGuideCardById: async (req, res) => {
+
+    res.status(200).send('selectGuideCardById');
   }
 }

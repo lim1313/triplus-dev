@@ -1,3 +1,7 @@
+const express = require('express');
+const router = express.Router();
+const controller = require('./../controller/functions/fileManagement');
+
 const AWS = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
@@ -8,18 +12,18 @@ const s3 = new AWS.S3({
   secretAccessKey: process.env.TRIPLUS_S3_SECRET_ACCESS_KEY,
 });
 
-const upload = (filePath) => multer({
+const upload = multer({
   storage: multerS3({
     s3: s3,
     bucket: process.env.TRIPLUS_S3_BUCKET_NAME,
     key: function (req, file, cb) {
       let extension = path.extname(file.originalname);
-      cb(null, `asset/${filePath}/` + Date.now().toString() + extension);
+      cb(null, `asset/images/` + Date.now().toString() + extension);
     },
     acl: 'public-read-write'
   })
 });
 
-module.exports = {
-  upload,
-}
+router.post('/guide-image', upload.array('file'), controller.fileUploadMulti);
+
+module.exports = router;
