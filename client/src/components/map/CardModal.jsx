@@ -71,8 +71,19 @@ const CloseBtn = styled.button`
 `;
 
 export default function CardModal({ modalInfo, closeModal }) {
-  const { title, address, gender, guideDate, tourImage, userImage, nickName, openDate, content } =
-    modalInfo;
+  const {
+    title,
+    address,
+    gender,
+    guideId,
+    guideDate,
+    tourImage,
+    userImage,
+    nickName,
+    openDate,
+    content,
+    userParticipate,
+  } = modalInfo;
 
   return (
     <ModalWrapper>
@@ -92,7 +103,7 @@ export default function CardModal({ modalInfo, closeModal }) {
           openDate={openDate}
         />
       </Wrapper>
-      <GuideBtn />
+      <GuideBtn guideId={guideId} userParticipate={userParticipate} />
     </ModalWrapper>
   );
 }

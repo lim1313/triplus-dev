@@ -36,10 +36,7 @@ const CardNone = styled.div`
   }
 `;
 export default function CardBar({ modalClick }) {
-  // const cards = useSelector((state) => state.guideCardsReducer);
-
-  //! dummy db
-  let cards = db;
+  const cards = useSelector((state) => state.guideCardsReducer);
 
   return (
     <SideCardWrapper>

@@ -15,6 +15,7 @@ export const db = [
     endTime: '16:00',
     numPeople: 4,
     address: '대전 중구 00동 00아파트',
+    userParticipate: 0,
   },
   {
     title: '지하벙커 체험2',
@@ -32,6 +33,7 @@ export const db = [
     endTime: '16:00',
     numPeople: 4,
     address: '대전 중구 00동 00아파트',
+    userParticipate: 0,
   },
   {
     title: '지하벙커 체험3',
@@ -49,6 +51,7 @@ export const db = [
     endTime: '16:00',
     numPeople: 4,
     address: '서울',
+    userParticipate: 1,
   },
 ];
 
@@ -69,6 +72,7 @@ export const dbModal = {
   endTime: '16:00',
   numPeople: 4,
   address: '서울',
+  userParticipate: 0,
 };
 // REQUESTED,
 // APPROVED,

@@ -1,8 +1,8 @@
 /*eslint-disable no-unused-vars*/
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { getGuideCards } from '../../../network/map/http';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import guideCardInfo from '../../../redux/map/action';
 import { createMarker, getInfo } from '../../../utils/kakao';
 import styled from 'styled-components';
@@ -18,11 +18,11 @@ export default function KakaoMap({ filterInfo }) {
   const mapRef = useRef(null);
   const dispatch = useDispatch();
 
+  //* 지도 생성
   useEffect(() => {
     let startLat = 37.518197895084874;
     let startLog = 126.98255734652028;
 
-    //* 지도 생성
     let container = mapRef.current;
     let options = {
       center: new kakao.maps.LatLng(startLat, startLog),
@@ -31,24 +31,23 @@ export default function KakaoMap({ filterInfo }) {
     map = new kakao.maps.Map(container, options);
 
     //* 지도 이동, 확대, 축소 이벤트 발생
-    kakao.maps.event.addListener(map, 'dragend', () => kakaoEvent(map, filterInfo));
-    kakao.maps.event.addListener(map, 'zoom_changed', () => kakaoEvent(map, filterInfo));
+    kakao.maps.event.addListener(map, 'dragend', kakaoEvent);
+    kakao.maps.event.addListener(map, 'zoom_changed', kakaoEvent);
   }, []);
 
   useEffect(() => {
     //* 첫 렌더링 & 가이드 필터를 했을 때 filter
-    kakaoEvent(map, filterInfo);
+    kakaoEvent();
   }, [filterInfo]);
 
-  const kakaoEvent = (map, info) => {
+  const kakaoEvent = () => {
     let latLngparams = getInfo(map);
-
-    if (info) {
-      latLngparams = { ...latLngparams, ...info };
+    if (filterInfo) {
+      latLngparams = { ...latLngparams, ...filterInfo };
     }
-
     // TODO GET 요청
     getGuideCards(latLngparams).then((data) => {
+      if (!data) return;
       dispatch(guideCardInfo(data));
       createMarker(data, map);
     });
