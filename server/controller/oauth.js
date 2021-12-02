@@ -24,15 +24,9 @@ module.exports = {
         defaults: { user_id: sub, email: email, image: picture },
       })
       .then(([data, created]) => {
-        if (created) {
-          console.log(data);
-          const accessToken = generateAccessToken(data.dataValues);
-          sendAccessToken(res, accessToken);
-          console.log(accessToken);
-          return res.status(201).json({ success: true, message: '로그인이 완료되었습니다' });
-        } else {
-          return res.status(400).json({ success: false, message: '로그인이 실패했습니다' });
-        }
+        const accessToken = generateAccessToken(data.dataValues);
+        sendAccessToken(res, accessToken);
+        return res.status(201).json({ success: true, message: '로그인이 완료되었습니다' });
       })
       .catch((err) => console.log(err));
   },
