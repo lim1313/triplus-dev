@@ -158,4 +158,9 @@ module.exports = {
 
     return resObject;
   },
+
+  selectGuideCardById: (id) => {
+    const resObject = {};
+
+  }
 }
