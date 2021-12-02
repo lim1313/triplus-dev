@@ -8,8 +8,6 @@ import MainPage from './pages/MainPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import MapPage from './pages/MapPage';
-import GuideManagementPage from './pages/GuideManagementPage';
-import TourManagementPage from './pages/TourManagementPage';
 import ChattingPage from './pages/ChattingPage';
 import MyPage from './pages/MyPage';
 import AdminPage from './pages/AdminPage';
@@ -17,6 +15,9 @@ import Toggle from './components/common/Toggle';
 import GoogleCallback from './pages/Googlecallback';
 
 import { useSelector } from 'react-redux';
+import ManagementPage from './pages/ManagementPage';
+import GuideManagementPage from './pages/GuideManagementPage';
+import TourManagementPage from './pages/TourManagementPage';
 
 function App() {
   const { pathname } = useLocation();
@@ -32,8 +33,10 @@ function App() {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/signup' element={<SignupPage />} />
         <Route path='/map' element={<MapPage />} />
-        <Route path='/management' element={<GuideManagementPage />} />
-        <Route path='/tourmanagement' element={<TourManagementPage />} />
+        <Route path='/management' element={<ManagementPage />}>
+          <Route path='guidelist' element={<GuideManagementPage />} />
+          <Route path='tourlist' element={<TourManagementPage />} />
+        </Route>
         <Route path='/chat' element={<ChattingPage />} />
         <Route path='/mypage' element={<MyPage />} />
         <Route path='/googlecallback' element={<GoogleCallback />} />
