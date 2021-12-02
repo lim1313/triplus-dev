@@ -1,11 +1,16 @@
 import { LOCATION_GUIDE_CARD } from './type';
+import { GUIDE_MODAL } from './type';
 
-const guideCardInfo = (data) => {
-  //thunk로 비동기 처리 필요하나?
+export const guideCardInfo = (data) => {
   return {
     type: LOCATION_GUIDE_CARD,
     payload: data,
   };
 };
 
-export default guideCardInfo;
+export const openGuideModal = (data) => {
+  return {
+    type: GUIDE_MODAL,
+    payload: data,
+  };
+};
