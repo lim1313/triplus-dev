@@ -141,7 +141,7 @@ export default function NavBar() {
     <NavContainer>
       <LogoWrapper onClick={toggleCloseHandler}>
         <Link to='/'>
-          <LogoImg src='./asset/logo/logo.png' alt='로고' />
+          <LogoImg src='../asset/logo/logo.png' alt='로고' />
         </Link>
       </LogoWrapper>
       <FlexBox marginRight='3rem'>
