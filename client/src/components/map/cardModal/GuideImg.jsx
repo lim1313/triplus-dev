@@ -12,6 +12,6 @@ const ImageWrapper = styled.li`
   background-size: contain;
 `;
 
-export default function GuideImg({ img, title, index }) {
+export default function GuideImg({ img }) {
   return <ImageWrapper backImage={img} />;
 }

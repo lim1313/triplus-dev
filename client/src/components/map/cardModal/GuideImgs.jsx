@@ -47,6 +47,7 @@ export default function GuideImgs({ tourImage }) {
   const [fromLeft, setFromLeft] = useState(0);
 
   const moveImg = (direct) => {
+    console.log(direct);
     if (direct === 'l' && fromLeft === 0) {
       return;
     } else if (direct === 'r' && fromLeft === -220 * (tourImage.length - 1)) {
@@ -76,8 +77,8 @@ export default function GuideImgs({ tourImage }) {
         <MoveBtn left onClick={() => moveImg('l')}>
           <FaAngleLeft />
         </MoveBtn>
-        <MoveBtn>
-          <FaAngleRight onClick={() => moveImg('r')} />
+        <MoveBtn onClick={() => moveImg('r')}>
+          <FaAngleRight />
         </MoveBtn>
       </Wrapper>
     </div>
