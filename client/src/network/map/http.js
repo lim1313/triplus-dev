@@ -27,7 +27,7 @@ export const getGuideCards = async (params) => {
     .then((res) => res.data.guideCardList)
     .catch((err) => {
       if (axios.isCancel(err)) {
-        console.log('cancel', err);
+        // console.log('cancel', err);
       } else {
         console.log('err', err);
       }

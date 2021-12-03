@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import SideBar from '../components/map/SideBar';
 import styled from 'styled-components';
-import CardFilter from '../components/map/SideBar/CardFilter';
-import KakaoMap from '../components/map/Map/KakaoMap';
+import KakaoMap from '../components/map/map/KakaoMap';
+import CardFilter from '../components/map/sideBar/CardFilter';
 
 const MapContainer = styled.section`
   position: relative;
@@ -22,9 +22,10 @@ export default function MapPage() {
   const filterSubmit = (...args) => {
     let [gen, start, end] = args;
     let { gender, startDate, endDate } = filterInfo;
-
+    // setFilterInfo({ gender: gen, startDate: start, endDate: end });
     if (gen !== gender || start !== startDate || end !== endDate) {
-      setFilterInfo({ gender: gen, startDate: start, endDate: end });
+      let cardFilter = { gender: gen, startDate: start, endDate: end };
+      setFilterInfo(cardFilter);
     }
   };
 
