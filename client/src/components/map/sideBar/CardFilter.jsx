@@ -15,7 +15,6 @@ const FilterWrapper = styled.div`
   & h3 {
     margin-top: 0;
   }
-  //! 조정 필요
   z-index: 10;
   @media ${({ theme }) => theme.device.mobile} {
     padding: 0.1rem;

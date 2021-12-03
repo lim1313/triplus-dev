@@ -1,13 +1,20 @@
 import { LOCATION_GUIDE_CARD } from './type';
+import { GUIDE_MODAL } from './type';
 
-const initialState = [];
-
-// 불변성 체크 => immer 고려
-
-export const guideCardsReducer = (state = initialState, action) => {
+export const guideCardsReducer = (state = [], action) => {
   switch (action.type) {
     case LOCATION_GUIDE_CARD:
       return [...action.payload];
+    default:
+      return state;
+  }
+};
+
+//{isOpen : true, modalInfo :{}}
+export const guideModalReducer = (state = [], action) => {
+  switch (action.type) {
+    case GUIDE_MODAL:
+      return { ...action.payload };
     default:
       return state;
   }

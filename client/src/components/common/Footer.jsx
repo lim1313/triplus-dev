@@ -67,7 +67,7 @@ const SmallTitle = styled.h3`
 export default function Footer({ main }) {
   return (
     <Container main={main}>
-      <LogoImg src={main ? './asset/logo/logo.png' : './asset/logo/logoGray.png'} alt='로고' />
+      <LogoImg src={main ? '../asset/logo/logo.png' : '../asset/logo/logoGray.png'} alt='로고' />
       <Description>
         <SmallTitle main={main}>Team</SmallTitle>
         <li>NanProgramMerge</li>

@@ -20,8 +20,8 @@ module.exports = {
     const { sub, email, picture } = userInfo.data;
     user
       .findOrCreate({
-        where: { user_id: sub, email: email },
-        defaults: { user_id: sub, email: email, image: picture },
+        where: { userId: sub, email: email },
+        defaults: { userId: sub, email: email, image: picture },
       })
       .then(([data, created]) => {
         const accessToken = generateAccessToken(data.dataValues);

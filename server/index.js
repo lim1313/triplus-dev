@@ -28,7 +28,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: ['https://localhost:3000', 'http://localhost:3000', 'http://localhost'],
+    origin: [
+      'https://localhost:3000', 'http://localhost:3000', 'http://localhost',
+      'https://triplus.world', 'https://www.triplus.world'
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   })

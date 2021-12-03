@@ -3,6 +3,8 @@ import styled, { css } from 'styled-components';
 export const H2 = styled.h2`
   font-size: 2rem;
   font-weight: 600;
+  color: ${({ palette, theme }) => theme.color[palette]};
+  line-height: 2rem;
 `;
 
 export const BorderBtn = styled.button`

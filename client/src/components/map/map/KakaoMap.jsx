@@ -1,21 +1,39 @@
 /*eslint-disable no-unused-vars*/
 
 import React, { useEffect, useRef } from 'react';
-import { getGuideCards } from '../../../network/map/http';
+import { getCardModal, getGuideCards } from '../../../network/map/http';
 import { useDispatch } from 'react-redux';
-import guideCardInfo from '../../../redux/map/action';
+import { guideCardInfo, openGuideModal } from '../../../redux/map/action';
 import { createMarker, getInfo } from '../../../utils/kakao';
 import styled from 'styled-components';
+import { dbModal } from '../../../db/guideModal';
 
 const { kakao } = window;
 let map;
 
 const MapWrapper = styled.div`
   height: 100%;
+
+  & .infowindow {
+    display: inline-block;
+    position: relative;
+    top: -70px;
+    background: white;
+    border-radius: 10px;
+    word-break: break-word;
+    text-align: center;
+    padding: 10px 13px;
+    font-weight: 500;
+    box-shadow: 0px 0px 5px 2px rgba(46, 46, 46, 0.2);
+    border: 4px solid ${({ theme }) => theme.color.lightGray};
+  }
 `;
 
 export default function KakaoMap({ filterInfo }) {
+  const filterRef = useRef();
+  filterRef.current = filterInfo;
   const mapRef = useRef(null);
+
   const dispatch = useDispatch();
 
   //* 지도 생성
@@ -29,7 +47,6 @@ export default function KakaoMap({ filterInfo }) {
       level: 7,
     };
     map = new kakao.maps.Map(container, options);
-
     //* 지도 이동, 확대, 축소 이벤트 발생
     kakao.maps.event.addListener(map, 'dragend', kakaoEvent);
     kakao.maps.event.addListener(map, 'zoom_changed', kakaoEvent);
@@ -40,16 +57,26 @@ export default function KakaoMap({ filterInfo }) {
     kakaoEvent();
   }, [filterInfo]);
 
+  //! 불필요 리렌더링 발생,, 확인 필요
+  const clickMarker = (id) => {
+    //TODO GET /map 모달
+    // getCardModal(id).then((res) => {
+    //   dispatch(openGuideModal({ isOpen: true, modalInfo:res }));
+    // });
+
+    //! dummy db
+    dispatch(openGuideModal({ isOpen: true, modalInfo: { ...dbModal } }));
+  };
+
   const kakaoEvent = () => {
     let latLngparams = getInfo(map);
-    if (filterInfo) {
-      latLngparams = { ...latLngparams, ...filterInfo };
-    }
+    latLngparams = { ...latLngparams, ...filterRef.current };
+
     // TODO GET 요청
     getGuideCards(latLngparams).then((data) => {
       if (!data) return;
       dispatch(guideCardInfo(data));
-      createMarker(data, map);
+      createMarker(data, map, clickMarker);
     });
   };
 
