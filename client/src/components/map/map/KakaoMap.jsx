@@ -57,12 +57,13 @@ export default function KakaoMap({ filterInfo }) {
     kakaoEvent();
   }, [filterInfo]);
 
-  //! 불필요 리렌더링 발생,, 확인 필요
+  //! 불필요 리렌더링 발생. 개선 필요
   const clickMarker = (id) => {
     //TODO GET /map 모달
     // getCardModal(id).then((res) => {
     //   dispatch(openGuideModal({ isOpen: true, modalInfo:res }));
     // });
+
     //! dummy db
     dispatch(openGuideModal({ isOpen: true, modalInfo: { ...dbModal, guideId: id } }));
   };

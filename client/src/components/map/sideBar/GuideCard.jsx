@@ -153,7 +153,7 @@ export default function GuideCard({ cardInfo, modalClick, modalId }) {
         <div>
           <div className='nick'>닉네임</div>
           <span className='nickName'>{nickName}님 </span>
-          <span className='nickName'>{gender}여</span>
+          <span className='nickName'>{gender}</span>
         </div>
       </GuideInfo>
       <GuideContent>{content.length > 60 ? content.slice(0, 60) + '...' : content}</GuideContent>
