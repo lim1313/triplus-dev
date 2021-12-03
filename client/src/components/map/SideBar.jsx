@@ -33,7 +33,7 @@ export default function SideBar() {
     //  dispatch(openGuideModal({ isOpen: true, modalInfo:res }));
     // })
 
-    dispatch(openGuideModal({ isOpen: true, modalInfo: { ...dbModal } }));
+    dispatch(openGuideModal({ isOpen: true, modalInfo: { ...dbModal, guideId: cardId } }));
   };
 
   const closeModal = () => {

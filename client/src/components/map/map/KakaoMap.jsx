@@ -63,9 +63,9 @@ export default function KakaoMap({ filterInfo }) {
     // getCardModal(id).then((res) => {
     //   dispatch(openGuideModal({ isOpen: true, modalInfo:res }));
     // });
-
+    console.log(id);
     //! dummy db
-    dispatch(openGuideModal({ isOpen: true, modalInfo: { ...dbModal } }));
+    dispatch(openGuideModal({ isOpen: true, modalInfo: { ...dbModal, guideId: id } }));
   };
 
   const kakaoEvent = () => {

@@ -77,7 +77,7 @@ export default function GuideImgs({ tourImage }) {
           <FaAngleLeft />
         </MoveBtn>
         <MoveBtn>
-          <FaAngleRight right onClick={() => moveImg('r')} />
+          <FaAngleRight onClick={() => moveImg('r')} />
         </MoveBtn>
       </Wrapper>
     </div>

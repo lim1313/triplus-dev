@@ -57,6 +57,7 @@ const FilterWrapper = styled(FilterFrame)`
     .react-datepicker__day--today {
       border: 1px solid ${({ theme }) => theme.color.lightGray};
     }
+
     .react-datepicker__day--in-range {
       background-color: ${({ theme }) => theme.color.blue};
       :hover {
@@ -74,7 +75,7 @@ const DateFrame = styled(DatePicker)`
   text-align: center;
   width: 100%;
   font-size: 1rem;
-
+  caret-color: transparent;
   &:focus {
     outline: none;
   }

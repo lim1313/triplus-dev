@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Profile } from '../../../styles/map/card';
 
 const CardLi = styled.li`
@@ -19,6 +19,13 @@ const CardLi = styled.li`
   display: flex;
   flex-direction: column;
   box-shadow: 0px 0px 9px -1px rgba(46, 46, 46, 0.57);
+
+  ${({ theme, isClicked }) =>
+    isClicked &&
+    css`
+      border: 5px solid ${isClicked && theme.color.blue};
+      box-shadow: 0px 0px 10px ${theme.color.blue};
+    `}
 
   @media ${({ theme }) => theme.device.mobile} {
     flex: 0 0 auto;
@@ -121,16 +128,15 @@ const GuideContent = styled.div`
   }
 `;
 
-export default function GuideCard({ cardInfo, modalClick }) {
+export default function GuideCard({ cardInfo, modalClick, modalId }) {
   const { title, gender, guideDate, tourImage, userImage, state, nickName, content, guideId } =
     cardInfo;
-
   // 마감기한 => 빨강 파랑
   // 성별 표시
   // 마감 회색 표시
 
   return (
-    <CardLi onClick={() => modalClick(guideId)}>
+    <CardLi onClick={() => modalClick(guideId)} isClicked={modalId && 1}>
       <ImageFrame backImage={tourImage}>
         <div className='date'>D-{guideDate}</div>
         <h2 className='title'>{title}</h2>
