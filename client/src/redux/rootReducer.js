@@ -13,17 +13,18 @@ const persistConfig = {
   key: 'root',
   storage,
   whiteList: ['loginReducer'],
+  blacklist: ['cardFilterReducer', 'guideModalReducer', 'guideCardsReducer'],
 };
 
 const rootReducer = combineReducers({
   loginReducer,
   adminReducer,
   adminOpenReducer,
-  guideCardsReducer,
   scrollReducer,
-  openModalReducer,
   toggleReducer,
+  openModalReducer,
   cardFilterReducer,
+  guideCardsReducer,
   guideModalReducer,
 });
 
