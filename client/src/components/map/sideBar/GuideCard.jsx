@@ -27,9 +27,12 @@ const CardLi = styled.li`
       box-shadow: 0px 0px 10px ${theme.color.blue};
     `}
 
+  &:hover {
+    cursor: pointer;
+  }
+
   @media ${({ theme }) => theme.device.mobile} {
     flex: 0 0 auto;
-    height: 100%;
     width: 200px;
     margin: 6px;
     height: 175px;

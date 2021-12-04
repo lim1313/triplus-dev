@@ -1,8 +1,11 @@
+/*eslint-disable no-unused-vars*/
+
 import React, { useState } from 'react';
 import SideBar from '../components/map/SideBar';
 import styled from 'styled-components';
 import KakaoMap from '../components/map/map/KakaoMap';
 import CardFilter from '../components/map/sideBar/CardFilter';
+import Loading from '../components/common/Loading';
 
 const MapContainer = styled.section`
   position: relative;

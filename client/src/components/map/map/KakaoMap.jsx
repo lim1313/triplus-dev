@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { getCardModal, getGuideCards } from '../../../network/map/http';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { guideCardInfo, openGuideModal } from '../../../redux/map/action';
 import { createMarker, getInfo } from '../../../utils/kakao';
 import styled from 'styled-components';
@@ -29,7 +29,7 @@ const MapWrapper = styled.div`
   }
 `;
 
-export default function KakaoMap({ filterInfo }) {
+export default function KakaoMap({ filterInfo, loading }) {
   const filterRef = useRef();
   filterRef.current = filterInfo;
   const mapRef = useRef(null);
@@ -69,14 +69,17 @@ export default function KakaoMap({ filterInfo }) {
   };
 
   const kakaoEvent = () => {
+    loading(true);
     let latLngparams = getInfo(map);
     latLngparams = { ...latLngparams, ...filterRef.current };
 
     // TODO GET 요청
     getGuideCards(latLngparams).then((data) => {
+      dispatch(openGuideModal({ isOpen: false, modalInfo: {} }));
       if (!data) return;
       dispatch(guideCardInfo(data));
       createMarker(data, map, clickMarker);
+      loading(false);
     });
   };
 
