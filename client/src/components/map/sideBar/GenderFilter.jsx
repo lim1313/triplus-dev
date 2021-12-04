@@ -6,7 +6,9 @@ const SelectBox = styled(FilterFrame).attrs({
   as: 'select',
 })`
   border: none;
+  font-size: 1rem;
 
+  outline: 0;
   @media ${({ theme }) => theme.device.mobile} {
     border: 3px solid ${({ theme }) => theme.color.lightGray};
   }
