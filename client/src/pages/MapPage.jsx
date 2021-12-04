@@ -18,6 +18,7 @@ const MapContainer = styled.section`
 
 export default function MapPage() {
   const [filterInfo, setFilterInfo] = useState({ gender: '', startDate: '', endDate: '' });
+  const [isLoading, setIsLoading] = useState(false);
 
   const filterSubmit = (...args) => {
     let [gen, start, end] = args;
@@ -29,11 +30,15 @@ export default function MapPage() {
     }
   };
 
+  const loading = (bool) => {
+    setIsLoading(bool);
+  };
+
   return (
     <MapContainer>
       <CardFilter filterSubmit={filterSubmit} />
-      <SideBar />
-      <KakaoMap filterInfo={filterInfo} />
+      <SideBar isLoading={isLoading} />
+      <KakaoMap filterInfo={filterInfo} loading={loading} />
     </MapContainer>
   );
 }

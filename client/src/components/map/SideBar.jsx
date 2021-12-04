@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { dbModal } from '../../db/guideModal';
 import { getCardModal } from '../../network/map/http';
 import { openGuideModal } from '../../redux/map/action';
+import Loading from '../common/Loading';
 import CardModal from './CardModal';
 import CardBar from './sideBar/CardBar';
 
@@ -21,7 +22,7 @@ const SideWrapper = styled.aside`
   }
 `;
 
-export default function SideBar() {
+export default function SideBar({ isLoading }) {
   const dispatch = useDispatch();
   const { isOpen, modalInfo } = useSelector((state) => state.guideModalReducer);
 
@@ -42,7 +43,8 @@ export default function SideBar() {
 
   return (
     <SideWrapper>
-      <CardBar modalClick={modalClick} />
+      {/* <CardBar modalClick={modalClick} /> */}
+      {isLoading ? <Loading /> : <CardBar modalClick={modalClick} />}
       {isOpen && <CardModal modalInfo={modalInfo} closeModal={closeModal} />}
     </SideWrapper>
   );
