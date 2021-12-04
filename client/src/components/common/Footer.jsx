@@ -18,7 +18,7 @@ const Container = styled.div`
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: ${({ main }) => (main === 'main' ? '20rem' : '22rem')};
+        /* height: ${({ main }) => (main === 'main' ? '20rem' : '22rem')}; */
       `}
   }
 `;

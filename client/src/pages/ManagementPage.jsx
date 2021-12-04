@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { PageContainer } from '../styles/management/container';
 import { Outlet, useLocation } from 'react-router-dom';
-import ManageNav from '../components/management/ManageNav';
+import ManageNav from '../components/guidemanagement/ManageNav';
 
 const Background = styled(PageContainer)`
   ${({ pathName }) =>

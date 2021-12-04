@@ -6,6 +6,8 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const { sequelize } = require('./models');
 const app = express();
+const { Server } = require('socket.io');
+const { createServer } = require('http');
 
 // port 80으로 변경
 const port = process.env.HTTP_PORT || 80;
@@ -23,14 +25,18 @@ const authPage = require('./router/authPage');
 const fileManagement = require('./router/fileManagement');
 const logout = require('./controller/logout');
 const confirmEmail = require('./controller/functions/confirmEmail');
+const { IncomingMessage } = require('http');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
     origin: [
-      'https://localhost:3000', 'http://localhost:3000', 'http://localhost',
-      'https://triplus.world', 'https://www.triplus.world'
+      'https://localhost:3000',
+      'http://localhost:3000',
+      'http://localhost',
+      'https://triplus.world',
+      'https://www.triplus.world',
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -52,9 +58,27 @@ app.use('/file-management', fileManagement);
 app.get('/logout', logout.logout);
 app.get('/confirmEmail', confirmEmail.confirmEmail);
 
-
 app.get('/hello-triplus', (req, res) => {
   res.status(200).send('Hello triplus');
+});
+
+// * socket.io 부분
+const httpServer = createServer();
+const io = new Server(httpServer, {
+  cors: {
+    origin: [
+      'https://localhost:3000',
+      'http://localhost:3000',
+      'http://localhost',
+      'https://triplus.world',
+      'https://www.triplus.world',
+    ],
+    credentials: true,
+  },
+});
+
+io.on('connection', (socket) => {
+  console.log(`connect with id: ${socket.id}`);
 });
 
 // 서버 실행할 때, sequelize 실행하여 데이터베이스 생성
@@ -71,4 +95,8 @@ sequelize
 
 app.listen(port, () => {
   console.log(`          server listening on ${port}`);
+});
+
+httpServer.listen(6000, () => {
+  console.log(`          socket server open on ${port}`);
 });
