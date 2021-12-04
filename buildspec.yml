@@ -8,10 +8,6 @@ phases:
   build:
     commands:
       - npm run build
-  post_build:
-    commands:
-      - aws s3 cp index.html s3://triplus-deploy
-      - aws cloudfront create-invalidation --distribution-id E3C373F76N32W -- paths '/*'
 artifacts:
   files:
     - '**/*'
