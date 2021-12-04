@@ -140,7 +140,7 @@ module.exports = {
         item['tourImage'] = '/asset/main/trip5.png';
 
         item['nickName'] = item['user.nickName'];
-        delete item['user.nick_name'];
+        delete item['user.nickName'];
 
         item['gender'] = item['user.gender'];
         delete item['user.gender'];
@@ -177,7 +177,7 @@ module.exports = {
       result['updatedAt'] = date_fns.format(result['updatedAt'], 'yyyy.MM.dd');
 
       result['nickName'] = result['user.nickName'];
-      delete result['user.nick_name'];
+      delete result['user.nickName'];
 
       result['gender'] = result['user.gender'];
       delete result['user.gender'];
