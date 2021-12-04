@@ -85,6 +85,7 @@ export default function CardModal({ modalInfo }) {
     openDate,
     content,
     userParticipate,
+    state,
   } = modalInfo;
 
   const dispatch = useDispatch();
@@ -110,7 +111,7 @@ export default function CardModal({ modalInfo }) {
           openDate={openDate}
         />
       </Wrapper>
-      <GuideBtn guideId={guideId} userParticipate={userParticipate} />
+      <GuideBtn guideId={guideId} userParticipate={userParticipate} state={state} />
     </ModalWrapper>
   );
 }
