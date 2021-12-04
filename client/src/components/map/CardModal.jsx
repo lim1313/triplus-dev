@@ -32,7 +32,7 @@ const ModalWrapper = styled.section`
     top: unset;
     bottom: 0;
     width: 100vw;
-    height: calc(100vh - 2.5rem);
+    height: calc(100vh - ${({ theme }) => theme.size.navHeight});
     transform: translateX(0);
     z-index: 10;
   }
