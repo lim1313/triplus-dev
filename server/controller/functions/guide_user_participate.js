@@ -1,11 +1,12 @@
 const {isAuthorized} = require('./user');
+const {guide_user_participate} = require('./../../models');
+const {selectGuideCardById} = require('./../functions/guide_card');
 
 module.exports = {
-  createGuideUserParticipate: (req) => {
+  createGuideUserParticipate: async (req) => {
     const resObject = {};
     const accessToken = isAuthorized(req);
-    console.log(req.cookies.accessToken);
-    console.log(accessToken);
+    const guideCard = await selectGuideCardById(req.body.guideId);
 
     // 토큰이 없었을 때
     try {
@@ -19,10 +20,29 @@ module.exports = {
     }
 
     // 참가인원이 다 찼을 때
+    console.log(guideCard);
+    try {
+      await guide_user_participate.findAll({
+        raw: true,
+        where: {guideId: req.body.guideId}
+      }).then(result => {
+        console.log(result);
+      });
+    } catch (error) {
+      
+    }
 
-    // 토큰이 있을 때
-    resObject['code'] = 201;
-    resObject['message'] = '참가신청이 되었습니다'
+    // 중복 참가신청 됐을 때
+
+    // 참가신청이 됐을 때
+    try {
+
+      resObject['code'] = 201;
+      resObject['message'] = '참가신청이 되었습니다'
+    } catch (error) {
+      
+    }
+    
 
     return resObject;
   }
