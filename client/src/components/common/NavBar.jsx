@@ -18,11 +18,10 @@ const NavContainer = styled.div`
   display: flex;
   justify-content: space-between;
   background-color: #fff;
-  height: 3.8rem;
+  height: 8vh;
   border: none;
   box-shadow: 0 2px 1px ${({ theme }) => theme.color.lightGray};
   @media ${({ theme }) => theme.device.mobile} {
-    height: 2.5rem;
     justify-content: center;
   }
 `;

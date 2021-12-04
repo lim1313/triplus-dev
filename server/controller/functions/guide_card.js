@@ -140,14 +140,14 @@ module.exports = {
         item['tourImage'] = '/asset/main/trip5.png';
 
         item['nickName'] = item['user.nickName'];
-        delete item['user.nick_name'];
+        delete item['user.nickName'];
 
         item['gender'] = item['user.gender'];
         delete item['user.gender'];
       }
 
       resObject['code'] = 200;
-      resObject['message'] = '가이드 카드를 조회했습니다.'
+      resObject['message'] = '가이드 카드를 조회했습니다'
       resObject['guideCardList'] = result;
     }).catch(error => {
       console.log(error);
@@ -159,8 +159,39 @@ module.exports = {
     return resObject;
   },
 
-  selectGuideCardById: (id) => {
+  selectGuideCardById: async (guideId) => {
     const resObject = {};
+    
+    await guide_card.findOne({
+      raw: true,
+      include: [
+        {
+          model: user,
+          attributes: ['nickName', 'gender'],
+        }
+      ],
+      where: {guideId}
+    }).then(result => {
+      result['guideDate'] = date_fns.format(result['guideDate'], 'yyyy.MM.dd');
+      result['createdAt'] = date_fns.format(result['createdAt'], 'yyyy.MM.dd');
+      result['updatedAt'] = date_fns.format(result['updatedAt'], 'yyyy.MM.dd');
 
+      result['nickName'] = result['user.nickName'];
+      delete result['user.nickName'];
+
+      result['gender'] = result['user.gender'];
+      delete result['user.gender'];
+
+      resObject['code'] = 200;
+      resObject['message'] = '가이드 카드를 조회했습니다';
+      resObject['guideCard'] = result;
+    }).catch(error => {
+      console.log(error);
+      resObject['code'] = 400;
+      resObject['message'] = '가이드 카드를 조회하지 못하였습니다';
+      resObject['guideCard'] = {};
+    });
+
+    return resObject;
   }
 }

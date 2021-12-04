@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: ${({ isMap }) => (isMap ? '100%' : '71.75vh')};
+  height: ${({ isMap }) => (isMap ? '100%' : '70vh')};
 `;
 
 export const LoadingImg = styled.img`

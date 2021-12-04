@@ -11,13 +11,11 @@ const SideCardWrapper = styled.ul`
   padding-top: 12.5rem;
   height: 100%;
   overflow: auto;
-
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
   &::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
   }
-
   @media ${({ theme }) => theme.device.mobile} {
     display: flex;
     padding: 0;
@@ -28,7 +26,6 @@ const SideCardWrapper = styled.ul`
 const CardNone = styled.div`
   text-align: center;
   color: ${({ theme }) => theme.color.darkGray};
-
   @media ${({ theme }) => theme.device.mobile} {
     background-color: ${({ theme }) => theme.color.lightRed};
     padding: 0;
@@ -37,17 +34,23 @@ const CardNone = styled.div`
 `;
 export default function CardBar({ modalClick }) {
   const cards = useSelector((state) => state.guideCardsReducer);
+  const { modalInfo } = useSelector((state) => state.guideModalReducer);
 
   return (
     <SideCardWrapper>
       {cards.length ? (
         <>
           {cards.map((cardInfo) => (
-            <GuideCard key={cardInfo.guideId} cardInfo={cardInfo} modalClick={modalClick} />
+            <GuideCard
+              key={cardInfo.guideId}
+              cardInfo={cardInfo}
+              modalClick={modalClick}
+              modalId={modalInfo && modalInfo.guideId === cardInfo.guideId && true}
+            />
           ))}
         </>
       ) : (
-        <CardNone>생성된 카드가 없습니다</CardNone>
+        <CardNone>가이드 카드가 없습니다</CardNone>
       )}
     </SideCardWrapper>
   );
