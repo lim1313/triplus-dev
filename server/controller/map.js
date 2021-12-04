@@ -1,5 +1,6 @@
 const GLOBAL_VARIABLE = require('./functions/global_variable');
 const {selectGuideCard, selectGuideCardById} = require('./functions/guide_card');
+const { createGuideUserParticipate } = require('./functions/guide_user_participate');
 
 module.exports = {
   example: (req, res) => {
@@ -23,5 +24,13 @@ module.exports = {
       message: resObject.message,
       guideCard: resObject.guideCard,
     });
-  }
+  },
+
+  createGuideUserParticipate: async (req, res) => {
+    const resObject = await createGuideUserParticipate(req);
+
+    res.status(resObject.code).json({
+      message: resObject.message,
+    });
+  },
 }
