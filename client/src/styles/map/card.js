@@ -53,17 +53,20 @@ export const User = styled.div`
       card || (gender ? theme.color.red : theme.color.blue)};
   }
   & .icon {
-    color: ${({ theme, gender, card }) => card && (gender ? theme.color.red : theme.color.blue)};
+    position: relative;
+    color: ${({ theme, gender, card }) => card && (+gender ? theme.color.red : theme.color.blue)};
+    top: 1px;
   }
 `;
 
 export const UserNick = ({ gender, nickName, card, margin }) => {
+  console.log(typeof gender, gender);
   return (
     <User gender={gender} card={card} margin={margin}>
       <div>
         <span className='nick'>{card || '가이드'} 닉네임</span>
         <span className='gender'>
-          {gender ? <FaFemale className='icon' /> : <FaMale className='icon' />}
+          {+gender ? <FaFemale className='icon' /> : <FaMale className='icon' />}
         </span>
       </div>
       <div className='userNick'>{nickName}</div>
