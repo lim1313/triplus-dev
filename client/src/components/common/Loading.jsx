@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps*/
 import React, { useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const Wrapper = styled.div`
   position: relative;
@@ -8,6 +8,14 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   height: ${({ isMap }) => (isMap ? '100%' : '70vh')};
+
+  @media ${({ theme }) => theme.device.mobile} {
+    ${({ isMap }) =>
+      isMap &&
+      css`
+        height: 175px;
+      `}
+  }
 `;
 
 export const LoadingImg = styled.img`

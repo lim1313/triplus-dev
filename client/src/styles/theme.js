@@ -11,6 +11,7 @@ export const theme = {
   },
 
   size: {
+    navHeight: '8vh',
     maxWidth: '1080px',
     mobile: '767px',
   },

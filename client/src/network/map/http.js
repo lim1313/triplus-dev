@@ -41,6 +41,9 @@ export const getCardModal = async (params) => {
 };
 
 // TODO POST 가이드 신청하기
+// - 예약완료 => 204
+// - 예약 이미 마감 => 201 {state: "COMPLETED"}
+// - 서버에러 => 500번대
 export const rezGuide = async (guideId) => {
   const res = await axios.post(`${http}/map`, { guideId });
   return res;

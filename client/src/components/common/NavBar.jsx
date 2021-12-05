@@ -18,7 +18,7 @@ const NavContainer = styled.div`
   display: flex;
   justify-content: space-between;
   background-color: #fff;
-  height: 8vh;
+  height: ${({ theme }) => theme.size.navHeight};
   border: none;
   box-shadow: 0 2px 1px ${({ theme }) => theme.color.lightGray};
   @media ${({ theme }) => theme.device.mobile} {

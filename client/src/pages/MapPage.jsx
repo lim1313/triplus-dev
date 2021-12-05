@@ -1,18 +1,20 @@
+/*eslint-disable no-unused-vars*/
+
 import React, { useState } from 'react';
 import SideBar from '../components/map/SideBar';
 import styled from 'styled-components';
 import KakaoMap from '../components/map/map/KakaoMap';
 import CardFilter from '../components/map/sideBar/CardFilter';
+import Loading from '../components/common/Loading';
 
 const MapContainer = styled.section`
   position: relative;
   width: 100vw;
-  height: calc(100vh - 3.8rem);
+  height: calc(100vh - ${({ theme }) => theme.size.navHeight});
   display: flex;
 
   @media ${({ theme }) => theme.device.mobile} {
     flex-direction: column-reverse;
-    height: calc(100vh - 2.5rem);
   }
 `;
 

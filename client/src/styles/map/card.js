@@ -1,4 +1,6 @@
+import React from 'react';
 import styled from 'styled-components';
+import { FaFemale, FaMale } from 'react-icons/fa';
 
 export const Profile = styled.div`
   background: url(${({ userImg }) => userImg}) no-repeat center;
@@ -27,3 +29,44 @@ export const CardModalSubTitle = styled.div`
   @media ${({ theme }) => theme.device.mobile} {
   }
 `;
+
+export const User = styled.div`
+  margin: ${({ card }) => card || '1rem'};
+  text-align: ${({ card }) => card || 'center'};
+
+  & .nick {
+    color: ${({ theme }) => theme.color.gray};
+    font-size: ${({ card }) => (card ? '0.8rem' : '1rem')};
+  }
+
+  & .userNick {
+    font-size: ${({ card }) => (card ? '1rem' : '1.3rem')};
+  }
+  & .gender {
+    display: inline-block;
+    width: ${({ card }) => (card ? '1.2rem' : '1.4rem')};
+    height: ${({ card }) => (card ? '1.2rem' : '1.4rem')};
+    border-radius: 0.7rem;
+    margin-left: ${({ card }) => card || '0.5rem'};
+    color: #fff;
+    background-color: ${({ theme, gender, card }) =>
+      card || (gender ? theme.color.red : theme.color.blue)};
+  }
+  & .icon {
+    color: ${({ theme, gender, card }) => card && (gender ? theme.color.red : theme.color.blue)};
+  }
+`;
+
+export const UserNick = ({ gender, nickName, card, margin }) => {
+  return (
+    <User gender={gender} card={card} margin={margin}>
+      <div>
+        <span className='nick'>{card || '가이드'} 닉네임</span>
+        <span className='gender'>
+          {gender ? <FaFemale className='icon' /> : <FaMale className='icon' />}
+        </span>
+      </div>
+      <div className='userNick'>{nickName}</div>
+    </User>
+  );
+};
