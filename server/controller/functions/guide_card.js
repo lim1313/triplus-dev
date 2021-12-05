@@ -43,12 +43,12 @@ const checkParams = (params) => {
 };
 
 module.exports = {
-  createGuideCard: (params) => {
+  createGuideCard: async (params) => {
     let resObject = {};
     const insertValue = checkParams(params);
 
     try {
-      guide_card.create(insertValue).then((result) => {
+      await guide_card.create(insertValue).then((result) => {
         resObject['code'] = 200;
         resObject['message'] = '가이드 카드를 작성하였습니다';
       });
@@ -59,15 +59,14 @@ module.exports = {
     } finally {
       return resObject;
     }
-    
   },
 
-  updateGuideCard: (params) => {
+  updateGuideCard: async (params) => {
     const resObject = {};
     const updateValue = checkParams(params);
 
     try {
-      guide_card.update(updateValue, {
+      await guide_card.update(updateValue, {
         where: {guide_id: params.guideId}
       }).then(() => {
         resObject['code'] = 200;
