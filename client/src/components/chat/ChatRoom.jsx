@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable no-unused-vars*/
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { ColorBtn } from '../../styles/common/index';
@@ -40,13 +41,26 @@ const ChatButton = styled(ColorBtn)`
   border-radius: 5px;
 `;
 
-export default function ChatRoom() {
+export default function ChatRoom({ sendMessageHandler }) {
+  const [msg, setMsg] = useState('');
+
+  const msgInputHandler = (e) => {
+    setMsg(e.target.value);
+  };
+
+  const submitHandler = () => {
+    console.log(msg);
+    sendMessageHandler(msg);
+  };
+
   return (
     <RoomContainer>
       <ChatBoard></ChatBoard>
       <ChatMessageBox>
-        <ChatMessage placeholder='메세지를 입력하세요'></ChatMessage>
-        <ChatButton palette='blue'>전송</ChatButton>
+        <ChatMessage placeholder='메세지를 입력하세요' onChange={msgInputHandler}></ChatMessage>
+        <ChatButton palette='blue' onClick={submitHandler}>
+          전송
+        </ChatButton>
       </ChatMessageBox>
     </RoomContainer>
   );
