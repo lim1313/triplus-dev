@@ -14,8 +14,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   guide_user_participate.init({
-    guide_id: DataTypes.INTEGER,
-    user_id: DataTypes.STRING,
+    guideId: {
+      type: DataTypes.INTEGER,
+      field: 'guide_id'
+    },
+    userId: {
+      type: DataTypes.STRING,
+      field: 'user_id'
+    },
     state: DataTypes.STRING
   }, {
     sequelize,
