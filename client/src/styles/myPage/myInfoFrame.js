@@ -21,13 +21,13 @@ const BtnColor = styled(ColorBtn)`
   padding: 0.1em 0.7em;
 `;
 
-export const UserInfo = ({ title, content, marginRight }) => {
+export const UserInfo = ({ title, content, marginRight, noBtn }) => {
   return (
     <LiWrapper marginRight={marginRight}>
       <div className='title'>{title}</div>
       <NameWrapper>
         <div className='content'>{content}</div>
-        <BtnColor palette='blue'>수정</BtnColor>
+        {noBtn || <BtnColor palette='blue'>수정</BtnColor>}
       </NameWrapper>
     </LiWrapper>
   );
