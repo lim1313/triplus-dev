@@ -74,7 +74,7 @@ export default function MyPage() {
       ) : (
         <MyWrapper>
           <BackgroundImg />
-          <MyProfile image={userInfo} />
+          <MyProfile image={userInfo.image} />
           <MyInfo userInfo={userInfo} />
         </MyWrapper>
       )}
