@@ -6,8 +6,9 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const { sequelize } = require('./models');
 const app = express();
-const { Server } = require('socket.io');
 const { createServer } = require('http');
+const httpServer = createServer(app);
+const { Server } = require('socket.io');
 
 // port 80으로 변경
 const port = process.env.HTTP_PORT || 80;
@@ -25,7 +26,6 @@ const authPage = require('./router/authPage');
 const fileManagement = require('./router/fileManagement');
 const logout = require('./controller/logout');
 const confirmEmail = require('./controller/functions/confirmEmail');
-const { IncomingMessage } = require('http');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -62,8 +62,11 @@ app.get('/hello-triplus', (req, res) => {
   res.status(200).send('Hello triplus');
 });
 
+httpServer.listen(port, () => {
+  console.log(`          server listening on ${port}`);
+});
+
 // * socket.io 부분
-const httpServer = createServer();
 const io = new Server(httpServer, {
   cors: {
     origin: [
@@ -79,6 +82,13 @@ const io = new Server(httpServer, {
 
 io.on('connection', (socket) => {
   console.log(`connect with id: ${socket.id}`);
+
+  socket.on('sendMessage', (msg, callback) => {
+    callback();
+    console.log(msg);
+    console.log(socket.id);
+    socket.to();
+  });
 });
 
 // 서버 실행할 때, sequelize 실행하여 데이터베이스 생성
@@ -92,11 +102,3 @@ sequelize
   .catch((error) => {
     console.log(error);
   });
-
-app.listen(port, () => {
-  console.log(`          server listening on ${port}`);
-});
-
-httpServer.listen(6000, () => {
-  console.log(`          socket server open on ${port}`);
-});
