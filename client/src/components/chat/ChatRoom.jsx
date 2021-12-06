@@ -48,9 +48,9 @@ export default function ChatRoom({ sendMessageHandler }) {
     setMsg(e.target.value);
   };
 
-  const submitHandler = () => {
-    console.log(msg);
-    sendMessageHandler(msg);
+  const submitHandler = (e) => {
+    console.log('msg', msg);
+    sendMessageHandler(e, msg);
   };
 
   return (
