@@ -1,4 +1,4 @@
-const {createGuideCard, updateGuideCard} = require('./functions/guide_card');
+const {createGuideCard, updateGuideCard, selectGuideCardByUserId} = require('./functions/guide_card');
 const GLOBAL_VARIABLE = require('./functions/global_variable');
 
 module.exports = {
@@ -45,4 +45,14 @@ module.exports = {
     const resObject = updateGuideCard(params);
     res.status(resObject.code).send(resObject.message);
   },
+
+  selectGuideCardByUserId: async (req, res) => {
+    const resObject = await selectGuideCardByUserId(req);
+    console.log(resObject);
+    res.status(resObject.code).json({
+      guideData: resObject.guideData,
+      applicant: resObject.applicant,
+      message: resObject.message,
+    });
+  }
 }

@@ -11,6 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      guide_user_participate.hasOne(
+        models.user,
+        {
+          sourceKey: 'userId',
+          foreignKey: 'userId',
+        }
+      );
     }
   };
   guide_user_participate.init({
