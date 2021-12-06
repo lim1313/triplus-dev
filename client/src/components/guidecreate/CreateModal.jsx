@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Background, ModalTitle, ModalWrapper } from '../../styles/common/modal';
 import { ColorBtn } from '../../styles/common/index';
 import styled from 'styled-components';

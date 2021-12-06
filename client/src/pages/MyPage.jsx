@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import MyInfo from '../components/mypage/MyInfo';
 import MyProfile from '../components/mypage/MyProfile';
+import { userInfodb } from '../db/guideModal';
+import Loading from '../components/common/Loading';
+// import { getUserInfo } from '../network/my/http';
 
 const Wrapper = styled.div`
   display: flex;
@@ -18,8 +21,8 @@ const MyWrapper = styled.div`
   border-radius: 1rem;
   width: calc(${({ theme }) => theme.size.maxWidth} - 350px);
   background-color: ${({ theme }) => theme.color.lightGray};
-  padding: 4rem;
-  padding-top: 4.5rem;
+  padding: 6rem 4rem;
+  padding-top: 6.5rem;
   font-size: 1.2rem;
 
   &::before {
@@ -45,13 +48,36 @@ const BackgroundImg = styled.div`
 `;
 
 export default function MyPage() {
+  const [userInfo, setUserInfo] = useState();
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    //TODO GET /mypage
+    // setIsLoading(true);
+    // getUserInfo().then((res) => {
+    //   setUserInfo(res);
+    //   setIsLoading(false);
+    // });
+
+    setIsLoading(true);
+    setTimeout(() => {
+      setUserInfo({ ...userInfodb });
+      setIsLoading(false);
+    }, 2000);
+  }, []);
+
   return (
     <Wrapper>
-      <MyWrapper>
-        <BackgroundImg />
-        <MyProfile />
-        <MyInfo />
-      </MyWrapper>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <MyWrapper>
+          <BackgroundImg />
+          <MyProfile image={userInfo.image} />
+          <MyInfo userInfo={userInfo} />
+        </MyWrapper>
+      )}
     </Wrapper>
   );
 }
