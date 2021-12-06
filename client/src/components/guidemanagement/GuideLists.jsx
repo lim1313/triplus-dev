@@ -7,7 +7,7 @@ import { BorderBtn } from '../../styles/common/index.js';
 const H3 = styled.h3``;
 
 export default function GuideLists(props) {
-  const { handleCreateClick } = props;
+  const { handleCreateClick, guideInfo } = props;
   return (
     <div>
       <H3Ctn>
@@ -18,7 +18,7 @@ export default function GuideLists(props) {
       </H3Ctn>
       <GuideTable
         columns={['날짜', '가이드 명', ' ', '', '']}
-        data={[{ date: '2021-08-08', title: '이태원의 숨겨진 화원' }]}
+        data={[{ date: guideInfo.guideDate, title: guideInfo.title }]}
       />
     </div>
   );

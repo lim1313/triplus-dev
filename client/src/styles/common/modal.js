@@ -15,12 +15,13 @@ export const Background = styled.div`
 
 export const ModalWrapper = styled.div`
   width: ${({ width }) => width || '26vw'};
-  min-width: 18rem;
+  min-width: ${({ minWidth }) => minWidth || '18rem'};
   background: white;
   min-height: 20vh;
-  border-radius: 1rem;
+  border-radius: 2rem;
   padding: 1.5rem;
-  box-shadow: 8px 8px 10px ${({ theme }) => theme.color.gray};
+  position: relative;
+  box-shadow: 8px 10px 5px rgba(0, 0, 0, 0.2);
 `;
 
 export const ModalTitle = styled.div`
