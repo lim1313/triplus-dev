@@ -33,7 +33,8 @@ export default function MyInfo() {
   return (
     <Wrapper>
       <NameWrapper>
-        <UserInfo title='name' content='트리플' marginRight='1.5rem' />
+        <UserInfo title='user' content='트리플' marginRight='1.5rem' noBtn />
+        {/* 8글자로 제한  */}
         <UserInfo title='nickname' content='트리플' />
       </NameWrapper>
       <UserInfo title='e-mail' content='gogogo@gmail.com' />
