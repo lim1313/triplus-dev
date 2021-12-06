@@ -4,7 +4,7 @@ import ChatRoom from './ChatRoom';
 
 import SideContainer from './SideBar';
 
-export default function ChatContainer() {
+export default function ChatContainer({ sendMessageHandler }) {
   const Container = styled.div`
     display: flex;
     height: 92vh;
@@ -23,7 +23,7 @@ export default function ChatContainer() {
     <Container>
       <ChatBox>
         <SideContainer></SideContainer>
-        <ChatRoom></ChatRoom>
+        <ChatRoom sendMessageHandler={sendMessageHandler}></ChatRoom>
       </ChatBox>
     </Container>
   );

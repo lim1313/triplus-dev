@@ -64,7 +64,7 @@ export const dbModal = {
   userImage: '/asset/main/stamp.png',
   guideDate: '2021.12.05',
   guideId: 2,
-  state: 'APPROVED', // => (예약 진행중)
+  state: 'COMPLETED', // => (예약 진행중)
   openDate: '20200203에 오픈합니다',
   content:
     '지하벙커 체험을 해보세요지하벙커 체험을 해보세요지하벙커 체험을 해보세요지하벙커 체험을 해보세요지하벙커 체험을 해보세요지하벙커 체험을 해보세요지하벙커 체험을 해보세요지하벙커 체험을 해보세요지하벙커 체험을 해보세요',
@@ -79,3 +79,11 @@ export const dbModal = {
 // REJECTED,
 // COMPLETED,
 // CANCELED,
+
+export const userInfodb = {
+  userId: 'useruser',
+  email: 'sss@naver.com',
+  nickName: 'nicnik',
+  reigion: '서울특별시 강남구 ',
+  image: '/asset/logo/logo.png',
+};

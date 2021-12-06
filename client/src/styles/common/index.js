@@ -13,14 +13,19 @@ export const BorderBtn = styled.button`
   font-size: ${({ fontSize }) => fontSize || '.9rem'};
   padding: 0.3em 1.1em;
   color: ${({ palette, theme }) => theme.color[palette]};
-  border: 1px solid
+  border: 1.5px solid
     ${({ palette, theme }) => (palette ? theme.color[palette] : theme.color['black'])};
   margin-left: ${({ marginLeft }) => marginLeft || '0'};
   border-radius: 2px;
   background: none;
   transition: all 0.2s;
   &:hover {
-    border: 1px solid ${({ theme }) => theme.color['gray']};
+    background-color: ${({ palette, theme }) =>
+      palette ? theme.color[palette] : theme.color['black']};
+
+    color: #fff;
+
+    /* border: 1px solid ${({ theme }) => theme.color['gray']};
     color: ${({ theme }) => theme.color['gray']};
     ${({ palette, theme }) =>
       palette === 'blue' &&
@@ -39,7 +44,7 @@ export const BorderBtn = styled.button`
       css`
         border: 1px solid ${theme.color['black']};
         color: ${theme.color['black']};
-      `}
+      `} */
     cursor: pointer;
   }
 `;
@@ -85,14 +90,16 @@ export const ColorBtn = styled.button`
   margin-left: ${({ marginLeft }) => marginLeft || '0'};
   padding: 0.3em 1.1em;
   color: #fff;
-  border: none;
   border-radius: 2px;
   border: 1px solid
     ${({ palette, theme }) => (palette ? theme.color[palette] : theme.color['black'])};
   background: ${({ palette, theme }) => (palette ? theme.color[palette] : theme.color['black'])};
   transition: all 0.2s;
   &:hover {
-    border: 1px solid ${({ theme }) => theme.color['gray']};
+    background: none;
+    color: ${({ palette, theme }) => (palette ? theme.color[palette] : theme.color['black'])};
+
+    /* border: 1px solid ${({ theme }) => theme.color['gray']};
     background: ${({ theme }) => theme.color['gray']};
     ${({ palette, theme }) =>
       palette === 'blue' &&
@@ -105,7 +112,7 @@ export const ColorBtn = styled.button`
       css`
         border: 1px solid ${theme.color['lightRed']};
         background: ${theme.color['lightRed']};
-      `}
+      `} */
     cursor: pointer;
   }
 `;

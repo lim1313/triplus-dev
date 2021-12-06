@@ -8,9 +8,11 @@ export const theme = {
     gray: '#8d97a1',
     darkGray: '#313131',
     lightGray: '#e9edf3',
+    inputColor: '#e8ecf6',
   },
 
   size: {
+    navHeight: '8vh',
     maxWidth: '1080px',
     mobile: '767px',
   },

@@ -12,12 +12,13 @@ const SectionCtn = styled.section`
   padding: 0 1.5rem;
 `;
 
-export default function ManageSection() {
+export default function ManageSection(props) {
+  const { handleCreateClick, guideInfo, applicantInfo } = props;
   return (
     <SectionCtn>
       <SectionHeader />
-      <GuideLists />
-      <Applicants />
+      <GuideLists handleCreateClick={handleCreateClick} guideInfo={guideInfo} />
+      <Applicants applicantInfo={applicantInfo} />
     </SectionCtn>
   );
 }

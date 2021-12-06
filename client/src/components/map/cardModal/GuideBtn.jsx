@@ -25,16 +25,34 @@ const ModalBtn = styled(ColorBtn)`
         border: 1px solid ${({ theme }) => theme.color.red};
       `}
   }
+
+  ${({ theme, state }) =>
+    state === 'COMPLETED' &&
+    css`
+      color: #fff;
+      background-color: ${theme.color.gray};
+      border: ${theme.color.gray};
+
+      &:hover {
+        cursor: not-allowed;
+        background-color: ${theme.color.gray};
+        border: ${theme.color.gray};
+      }
+    `}
 `;
 
-export default function GuideBtn({ guideId, userParticipate }) {
+export default function GuideBtn({ guideId, userParticipate, state }) {
   const clickGuide = (id) => {
+    if (state === 'COMPLETED') return;
+
     //TODO POST 가이드 신청
     // 마감된 경우, 서버 에러
     rezGuide(id);
   };
 
   const clikcChat = (id) => {
+    if (state === 'COMPLETED') return;
+
     console.log(id);
   };
 
@@ -46,11 +64,16 @@ export default function GuideBtn({ guideId, userParticipate }) {
           예약완료
         </ModalBtn>
       ) : (
-        <ModalBtn palette='blue' onClick={() => clickGuide(guideId)}>
-          신청하기
+        <ModalBtn palette='blue' onClick={() => clickGuide(guideId, state)} state={state}>
+          {state === 'COMPLETED' ? '예약마감' : '신청하기'}
         </ModalBtn>
       )}
-      <ModalBtn palette='lightGray' chatting onClick={() => clikcChat(guideId)}>
+      <ModalBtn
+        palette='lightGray'
+        chatting
+        onClick={() => clikcChat(guideId, state)}
+        state={state}
+      >
         채팅하기
       </ModalBtn>
     </ModalBottomBtn>

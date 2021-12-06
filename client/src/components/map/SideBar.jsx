@@ -1,10 +1,6 @@
-/* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { dbModal } from '../../db/guideModal';
-import { getCardModal } from '../../network/map/http';
-import { openGuideModal } from '../../redux/map/action';
 import Loading from '../common/Loading';
 import CardModal from './CardModal';
 import CardBar from './sideBar/CardBar';
@@ -23,29 +19,12 @@ const SideWrapper = styled.aside`
 `;
 
 export default function SideBar({ isLoading }) {
-  const dispatch = useDispatch();
   const { isOpen, modalInfo } = useSelector((state) => state.guideModalReducer);
-
-  const modalClick = (cardId) => {
-    // TODO GET /map/guide-card?guide-id=cardId
-    // getCardModal(cardId).then(res => {
-    // xxx setModalInfo( res );
-    // xxx setIsModal(true)
-    //  dispatch(openGuideModal({ isOpen: true, modalInfo:res }));
-    // })
-
-    dispatch(openGuideModal({ isOpen: true, modalInfo: { ...dbModal, guideId: cardId } }));
-  };
-
-  const closeModal = () => {
-    dispatch(openGuideModal({ isOpen: false }));
-  };
 
   return (
     <SideWrapper>
-      {/* <CardBar modalClick={modalClick} /> */}
-      {isLoading ? <Loading /> : <CardBar modalClick={modalClick} />}
-      {isOpen && <CardModal modalInfo={modalInfo} closeModal={closeModal} />}
+      {isLoading ? <Loading isMap /> : <CardBar />}
+      {isOpen && <CardModal modalInfo={modalInfo} />}
     </SideWrapper>
   );
 }

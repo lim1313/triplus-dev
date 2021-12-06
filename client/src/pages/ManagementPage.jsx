@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { PageContainer } from '../styles/management/container';
+import { ManageCtn, PageContainer } from '../styles/management/container';
 import { Outlet, useLocation } from 'react-router-dom';
 import ManageNav from '../components/guidemanagement/ManageNav';
+import ManageSection from '../components/guidemanagement/ManageSection';
+import CreateModal from '../components/guidecreate/CreateModal';
+import { getGuideInfo } from '../network/management/http';
 
 const Background = styled(PageContainer)`
   ${({ pathName }) =>
-    pathName === '/management/guidelist'
+    pathName === '/management'
       ? css`
           background: linear-gradient(#fa4b62, #f7929f);
         `
@@ -23,13 +26,38 @@ const Background = styled(PageContainer)`
 `;
 export default function ManagementPage() {
   const location = useLocation();
-  console.log(location.pathname);
-  // const navigate = useNavigate();
-  // navigate('/management/guidelist');
+  const [isOpen, setOpen] = useState(false);
+  const [guideInfo, setGuideInfo] = useState([]);
+  const [applicantInfo, setApplicantInfo] = useState([]);
+  const handleCreateClick = () => {
+    setOpen(!isOpen);
+  };
+  const handleCloseCreate = (e) => {
+    if (e.target === e.currentTarget) {
+      setOpen(false);
+    }
+  };
+  useEffect(() => {
+    getGuideInfo().then((res) => {
+      setGuideInfo(res.guideData);
+      setApplicantInfo(res.applicant);
+    });
+  });
+
   return (
-    <Background pathName={location.pathname}>
-      <ManageNav pathName={location.pathname} />
-      <Outlet />
-    </Background>
+    <>
+      {isOpen ? <CreateModal handleCloseCreate={handleCloseCreate} /> : null}
+      <Background pathName={location.pathname}>
+        <ManageNav pathName={location.pathname} />
+        <Outlet />
+        <ManageCtn>
+          <ManageSection
+            handleCreateClick={handleCreateClick}
+            guideInfo={guideInfo}
+            applicantInfo={applicantInfo}
+          />
+        </ManageCtn>
+      </Background>
+    </>
   );
 }

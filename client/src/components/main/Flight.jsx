@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
@@ -70,22 +70,28 @@ export default function Flight() {
   // ! ratioY 값이 useEffect 안으로 들어가면 변하질 않음
   const ratioY = parseInt(useSelector((state) => state.scrollReducer.scrollY) * 100);
   // ! useRef 를 쓰면 오히려 에러가 발생함
-  // const path = useRef(null);
+  const path = useRef(null);
 
   useEffect(() => {
-    const coloredPath = document.getElementById('colored-path');
+    const coloredPath = path.current;
+    console.log(coloredPath);
     const totalLength = coloredPath.getTotalLength();
     coloredPath.style.strokeDasharray = totalLength;
     coloredPath.style.strokeDashoffset = totalLength;
 
-    window.addEventListener('scroll', () => {
+    const scrollHandler = () => {
       const maxScroll = document.body.offsetHeight - window.innerHeight;
       const currentY = window.pageYOffset;
       const ratio = currentY / maxScroll;
       const remainingLength = totalLength * ratio;
       const currentLength = totalLength - remainingLength;
       coloredPath.style.strokeDashoffset = currentLength;
-    });
+    };
+
+    window.addEventListener('scroll', scrollHandler);
+    return () => {
+      window.removeEventListener('scroll', scrollHandler);
+    };
   }, []);
 
   const stopoverClickHandler = (e) => {
@@ -105,7 +111,7 @@ export default function Flight() {
       />
       <Path d='M23.9,21.84s17.34,10.37,14,25-18,36.38-18,52.51-1.42,19.18,10.84,30.85,14.61,4.4,14.62,20.4-19.27,26.88-19.27,40.82,21.07,25.48,8.57,48.79S4.89,264.9,4.24,257.08s6.82-9.43,10.39-7.67,10.73,11.1,13.66,49.79' />
       <Path
-        id='colored-path'
+        ref={path}
         color='#7dcbf8'
         d='M23.9,21.84s17.34,10.37,14,25-18,36.38-18,52.51-1.42,19.18,10.84,30.85,14.61,4.4,14.62,20.4-19.27,26.88-19.27,40.82,21.07,25.48,8.57,48.79S4.89,264.9,4.24,257.08s6.82-9.43,10.39-7.67,10.73,11.1,13.66,49.79'
       />

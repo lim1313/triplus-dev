@@ -7,6 +7,8 @@ import GuideImgs from './cardModal/GuideImgs';
 import UserInfo from './cardModal/UserInfo';
 import GuideBtn from './cardModal/GuideBtn';
 import { FaTimes } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
+import { openGuideModal } from '../../redux/map/action';
 
 const ModalWrapper = styled.section`
   position: absolute;
@@ -32,7 +34,7 @@ const ModalWrapper = styled.section`
     top: unset;
     bottom: 0;
     width: 100vw;
-    height: calc(100vh - 2.5rem);
+    height: calc(100vh - ${({ theme }) => theme.size.navHeight});
     transform: translateX(0);
     z-index: 10;
   }
@@ -70,7 +72,7 @@ const CloseBtn = styled.button`
   }
 `;
 
-export default function CardModal({ modalInfo, closeModal }) {
+export default function CardModal({ modalInfo }) {
   const {
     title,
     address,
@@ -83,8 +85,14 @@ export default function CardModal({ modalInfo, closeModal }) {
     openDate,
     content,
     userParticipate,
+    state,
   } = modalInfo;
 
+  const dispatch = useDispatch();
+
+  const closeModal = () => {
+    dispatch(openGuideModal({ isOpen: false }));
+  };
   return (
     <ModalWrapper>
       <BtnWrapper onClick={closeModal}>
@@ -103,7 +111,7 @@ export default function CardModal({ modalInfo, closeModal }) {
           openDate={openDate}
         />
       </Wrapper>
-      <GuideBtn guideId={guideId} userParticipate={userParticipate} />
+      <GuideBtn guideId={guideId} userParticipate={userParticipate} state={state} />
     </ModalWrapper>
   );
 }
