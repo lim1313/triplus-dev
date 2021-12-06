@@ -21,7 +21,7 @@ export default function ChattingPage() {
   }, []);
 
   const sendMessageHandler = (e, msg) => {
-    e.prevent.default();
+    e.preventDefault();
     socketRef.current.emit('sendMessage', msg, () => {
       console.log(msg);
     });
