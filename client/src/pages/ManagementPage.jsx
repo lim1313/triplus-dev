@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { ManageCtn, PageContainer } from '../styles/management/container';
 import { Outlet, useLocation } from 'react-router-dom';
 import ManageNav from '../components/guidemanagement/ManageNav';
 import ManageSection from '../components/guidemanagement/ManageSection';
 import CreateModal from '../components/guidecreate/CreateModal';
+import { getGuideInfo } from '../network/management/http';
 
 const Background = styled(PageContainer)`
   ${({ pathName }) =>
@@ -26,15 +27,22 @@ const Background = styled(PageContainer)`
 export default function ManagementPage() {
   const location = useLocation();
   const [isOpen, setOpen] = useState(false);
+  const [guideInfo, setGuideInfo] = useState([]);
+  const [applicantInfo, setApplicantInfo] = useState([]);
   const handleCreateClick = () => {
     setOpen(!isOpen);
   };
   const handleCloseCreate = (e) => {
-    const name = e.currentTarget.getAttribute('name');
-    if (name === 'Background') {
+    if (e.target === e.currentTarget) {
       setOpen(false);
     }
   };
+  useEffect(() => {
+    getGuideInfo().then((res) => {
+      setGuideInfo(res.guideData);
+      setApplicantInfo(res.applicant);
+    });
+  });
 
   return (
     <>
@@ -43,7 +51,11 @@ export default function ManagementPage() {
         <ManageNav pathName={location.pathname} />
         <Outlet />
         <ManageCtn>
-          <ManageSection handleCreateClick={handleCreateClick} />
+          <ManageSection
+            handleCreateClick={handleCreateClick}
+            guideInfo={guideInfo}
+            applicantInfo={applicantInfo}
+          />
         </ManageCtn>
       </Background>
     </>
