@@ -16,7 +16,6 @@ import GoogleCallback from './pages/Googlecallback';
 
 import { useSelector } from 'react-redux';
 import ManagementPage from './pages/ManagementPage';
-import GuideManagementPage from './pages/GuideManagementPage';
 import TourManagementPage from './pages/TourManagementPage';
 
 function App() {
@@ -34,7 +33,6 @@ function App() {
         <Route path='/signup' element={<SignupPage />} />
         <Route path='/map' element={<MapPage />} />
         <Route path='/management' element={<ManagementPage />}>
-          <Route path='guidelist' element={<GuideManagementPage />} />
           <Route path='tourlist' element={<TourManagementPage />} />
         </Route>
         <Route path='/chat' element={<ChattingPage />} />

@@ -61,7 +61,7 @@ export default function ManageNav() {
   };
   return (
     <NavCtn>
-      <Link to='/management/guidelist'>
+      <Link to='/management'>
         <LinkBtn className='guideBtn' onClick={handleGuideClick} active={clicked.guide}>
           <span>가이드 모드</span>
         </LinkBtn>
