@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ColorBtn, BorderBtn } from '../../styles/common';
-import { UserInfo } from '../../styles/myPage/myInfoFrame';
+import { UserInfo } from './MyInfoFrame';
 
 const Wrapper = styled.ul`
   flex-grow: 1;
@@ -29,16 +29,18 @@ const BtnBorder = styled(BorderBtn)`
   flex-grow: 1;
 `;
 
-export default function MyInfo() {
+export default function MyInfo({ userInfo }) {
+  const { userId, email, nickName, reigion } = userInfo;
+
   return (
     <Wrapper>
       <NameWrapper>
-        <UserInfo title='user' content='트리플' marginRight='1.5rem' noBtn />
+        <UserInfo user title='user' content={userId} noBtn />
         {/* 8글자로 제한  */}
-        <UserInfo title='nickname' content='트리플' />
+        <UserInfo user title='nickname' content={nickName} />
       </NameWrapper>
-      <UserInfo title='e-mail' content='gogogo@gmail.com' />
-      <UserInfo title='address' content='서울특별시 강남구 소초동 15-1' />
+      <UserInfo title='e-mail' content={email} />
+      <UserInfo title='address' content={reigion} />
       <BtnWrapper>
         <BtnColor>비밀번호 수정</BtnColor>
         <BtnBorder>회원탈퇴</BtnBorder>

@@ -30,7 +30,7 @@ const BtnBorder = styled(BorderBtn)`
   padding: 0.1em 1.1em;
 `;
 
-export default function MyProfile() {
+export default function MyProfile({ image }) {
   return (
     <ProfileWrapper>
       <ImgWrapper src='/asset/logo/logo.png' alt='프로필' />
