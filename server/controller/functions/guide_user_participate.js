@@ -1,6 +1,7 @@
 const {isAuthorized} = require('./user');
 const {guide_user_participate} = require('./../../models');
 const {selectGuideCardById} = require('./../functions/guide_card');
+const GLOBAL_VARIABLE = require('./global_variable');
 
 module.exports = {
   createGuideUserParticipate: async (req) => {
@@ -17,38 +18,53 @@ module.exports = {
       console.log(`ERROR: ${error}`);
       resObject['code'] = 401;
       resObject['message'] = error;
+      return resObject;
     }
 
     // 참가인원이 다 찼을 때
-    await guide_user_participate.findAll({
-      where: {guideId: guideCard.guideId}
-    }).then(result => {
-      if(result.length >= guideCard.numPeople){
-        throw '참가인원이 다 찼습니다'
-      }
-    }).catch(error => {
-      console.log(error);
-    });
+    if(guideCard.state === GLOBAL_VARIABLE.COMPLETED){
+      resObject['code'] = 201;
+      resObject['message'] = '이미 마감된 가이드입니다';
+
+      return resObject;
+    }
 
     // 중복 참가신청 됐을 때
-    // await guide_user_participate.findAll({
-    //   where: {
-    //     guideId: guideCard.guideId,
-    //     userId: accessToken.userId
-    //   }
-    // }).then(result => {
-    //   console.log(result);
-    // });
-    // 참가신청이 됐을 때
     try {
+      const guideUserParticipate = await guide_user_participate.findOne({
+        where: {
+          guideId: guideCard.guideId,
+          userId: accessToken.userId
+        }
+      });
 
-      resObject['code'] = 201;
-      resObject['message'] = '참가신청이 되었습니다'
+      if(guideUserParticipate){
+        throw '이미 참가신청 된 가이드입니다'
+      }
     } catch (error) {
+      console.log(error);
+      resObject['code'] = 401;
+      resObject['message'] = error;
       
+      return resObject;
     }
     
+    // 참가신청이 됐을 때
+    try {
+      const guideUserParticipate = await guide_user_participate.create({
+        guideId: guideCard.guideId,
+        userId: accessToken.userId
+      });
+      resObject['code'] = 204;
+      resObject['message'] = '참가신청이 되었습니다';
+      
+      return resObject;
+    } catch (error) {
+      console.log(error);
+      resObject['code'] = 401;
+      resObject['message'] = '참가신청이 되지않았습니다';
 
-    return resObject;
+      return resObject;
+    }
   }
 }

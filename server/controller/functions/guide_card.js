@@ -2,6 +2,7 @@ const {guide_card, user} = require('./../../models');
 const {Op} = require('sequelize');
 const GLOBAL_VARIABLE = require('./global_variable');
 const date_fns = require('date-fns');
+const {isAuthorized} = require('./user');
 
 const checkParams = (params) => {
   const setParams = {};
@@ -15,13 +16,13 @@ const checkParams = (params) => {
           setParams[`content`] = params[param];
         }else if(param === 'guideDate'){
           const guideDate = new Date(params[param]);
-          setParams[`guide_date`] = guideDate;
+          setParams[`guideDate`] = guideDate;
         }else if(param === 'startTime'){
-          setParams[`start_time`] = params[param];
+          setParams[`startTime`] = params[param];
         }else if(param === 'endTime'){
-          setParams[`end_time`] = params[param];
+          setParams[`endTime`] = params[param];
         }else if(param === 'numPeople'){
-          setParams[`num_people`] = params[param];
+          setParams[`numPeople`] = params[param];
         }else if(param === 'address'){
           setParams[`address`] = params[param];
         }else if(param === 'latitude'){
@@ -29,7 +30,7 @@ const checkParams = (params) => {
         }else if(param === 'longitude'){
           setParams[`longitude`] = params[param];
         }else if(param === 'openDate'){
-          setParams[`open_date`] = params[param];
+          setParams[`openDate`] = params[param];
         }else if(param === 'state'){
           setParams[`state`] = params[param];
         }
@@ -43,12 +44,27 @@ const checkParams = (params) => {
 };
 
 module.exports = {
-  createGuideCard: (params) => {
+  createGuideCard: async (params) => {
     let resObject = {};
-    const insertValue = checkParams(params);
+    const insertValue = checkParams(params.body);
+    const accessToken = isAuthorized(params);
+
+    // 토큰이 없었을 때
+    try {
+      if(!accessToken){
+        throw 'accessToken이 없습니다';
+      }
+      insertValue['userId'] = accessToken.userId;
+      insertValue['state'] = GLOBAL_VARIABLE.REQUESTED;
+    } catch (error) {
+      console.log(`ERROR: ${error}`);
+      resObject['code'] = 401;
+      resObject['message'] = error;
+      return resObject;
+    }
 
     try {
-      guide_card.create(insertValue).then((result) => {
+      await guide_card.create(insertValue).then((result) => {
         resObject['code'] = 200;
         resObject['message'] = '가이드 카드를 작성하였습니다';
       });
@@ -59,15 +75,14 @@ module.exports = {
     } finally {
       return resObject;
     }
-    
   },
 
-  updateGuideCard: (params) => {
+  updateGuideCard: async (params) => {
     const resObject = {};
     const updateValue = checkParams(params);
 
     try {
-      guide_card.update(updateValue, {
+      await guide_card.update(updateValue, {
         where: {guide_id: params.guideId}
       }).then(() => {
         resObject['code'] = 200;

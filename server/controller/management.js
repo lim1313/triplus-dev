@@ -7,9 +7,7 @@ module.exports = {
   },
   
   createGuideCard: async (req, res) => {
-    const params = req.body;
-    params.state = GLOBAL_VARIABLE.REQUESTED;
-    const resObject = await createGuideCard(params);
+    const resObject = await createGuideCard(req);
 
     res.status(resObject.code).send(resObject.message);
   },
