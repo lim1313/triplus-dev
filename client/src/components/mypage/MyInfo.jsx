@@ -22,6 +22,7 @@ const BtnWrapper = styled.div`
 const BtnColor = styled(ColorBtn)`
   padding: 0.1em 1.1em;
   flex-grow: 1;
+  margin-right: ${({ marginRight }) => marginRight && '0.5rem'};
 `;
 
 const BtnBorder = styled(BorderBtn)`
@@ -36,13 +37,12 @@ export default function MyInfo({ userInfo }) {
     <Wrapper>
       <NameWrapper>
         <UserInfo user title='user' content={userId} noBtn />
-        {/* 8글자로 제한  */}
         <UserInfo user title='nickname' content={nickName} />
       </NameWrapper>
       <UserInfo title='e-mail' content={email} />
       <UserInfo title='address' content={reigion} />
       <BtnWrapper>
-        <BtnColor>비밀번호 수정</BtnColor>
+        <BtnColor marginRight>비밀번호 수정</BtnColor>
         <BtnBorder>회원탈퇴</BtnBorder>
       </BtnWrapper>
     </Wrapper>
