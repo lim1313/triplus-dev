@@ -49,7 +49,6 @@ const BackgroundImg = styled.div`
 
 export default function MyPage() {
   const [userInfo, setUserInfo] = useState();
-
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

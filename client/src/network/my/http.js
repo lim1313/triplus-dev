@@ -6,8 +6,8 @@ axios.defaults.withCredentials = true;
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 
 //TODO GET 유저 정보 가져오기
-export const getUserInfo = (data) => {
-  return axios.get(`${http}/mypage`, { data }).then((res) => res.data);
+export const getUserInfo = () => {
+  return axios.get(`${http}/mypage`).then((res) => res.data);
 };
 
 //TODO POST 정보 변경

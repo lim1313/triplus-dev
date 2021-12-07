@@ -21,6 +21,7 @@ export const ModalWrapper = styled.div`
   background: white;
   width: ${({ width }) => width || '26vw'};
   min-width: ${({ minWidth }) => minWidth || '18rem'};
+  max-width: ${({ maxWidth }) => maxWidth || '25rem'};
   min-height: 20vh;
 `;
 
