@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars*/
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
+import { v4 as uuidV4 } from 'uuid';
 
 import { ColorBtn } from '../../styles/common/index';
 
@@ -74,20 +75,30 @@ const ChatButton = styled(ColorBtn)`
   border-radius: 5px;
 `;
 
+const NoSelectRoom = styled.div`
+  display: flex;
+  height: 92vh;
+  justify-content: center;
+  align-items: center;
+  background-color: #e9ebf6;
+  font-size: 3vw;
+`;
+
 export default function ChatRoom({ sendMessageHandler, userId, chatBubble, selectedRoom }) {
   const [msg, setMsg] = useState('');
-
   const msgInputHandler = (e) => {
     setMsg(e.target.value);
   };
 
   const submitHandler = (e) => {
     console.log('msg', msg);
-    sendMessageHandler(e, msg, userId, selectedRoom);
-    setMsg('');
+    if (msg !== '') {
+      sendMessageHandler(e, msg, userId, selectedRoom);
+      setMsg('');
+    }
   };
 
-  const chatBoard = useRef('0px');
+  const chatBoard = useRef(null);
 
   const scrollToBottom = () => {
     if (chatBoard.current) {
@@ -100,33 +111,40 @@ export default function ChatRoom({ sendMessageHandler, userId, chatBubble, selec
 
   return (
     <RoomContainer>
-      <ChatBoard ref={chatBoard}>
-        {chatBubble.map((el, i) => {
-          return (
-            <>
-              <BubbleBox key={i} me={el.userId === userId}>
-                <span style={{ marginBottom: '10px', marginRight: '5px', fontSize: '0.8rem' }}>
-                  {el.userId}
-                </span>
-                <ChatBubble me={el.userId === userId}>{el.content}</ChatBubble>
-                <span style={{ marginBottom: '10px', marginRight: '5px', fontSize: '0.8rem' }}>
-                  {el.time}
-                </span>
-              </BubbleBox>
-            </>
-          );
-        })}
-      </ChatBoard>
-      <ChatMessageBox>
-        <ChatMessage
-          placeholder='메세지를 입력하세요'
-          onChange={msgInputHandler}
-          value={msg}
-        ></ChatMessage>
-        <ChatButton palette='blue' onClick={submitHandler}>
-          전송
-        </ChatButton>
-      </ChatMessageBox>
+      {selectedRoom ? (
+        <>
+          <ChatBoard ref={chatBoard}>
+            {chatBubble.map((el) => {
+              return (
+                <>
+                  <BubbleBox key={uuidV4()} me={el.userId === userId}>
+                    <span style={{ marginBottom: '10px', marginRight: '5px', fontSize: '0.8rem' }}>
+                      {el.userId}
+                    </span>
+                    <ChatBubble me={el.userId === userId}>{el.content}</ChatBubble>
+                    <span style={{ marginBottom: '10px', marginRight: '5px', fontSize: '0.8rem' }}>
+                      {el.time}
+                    </span>
+                  </BubbleBox>
+                </>
+              );
+            })}
+          </ChatBoard>
+          <ChatMessageBox>
+            <ChatMessage
+              placeholder='메세지를 입력하세요'
+              onChange={msgInputHandler}
+              value={msg}
+              onKeyPress={(e) => e.key === 'Enter' && submitHandler(e)}
+            ></ChatMessage>
+            <ChatButton palette='blue' onClick={submitHandler}>
+              전송
+            </ChatButton>
+          </ChatMessageBox>
+        </>
+      ) : (
+        <NoSelectRoom>방을 선택해주세요!</NoSelectRoom>
+      )}
     </RoomContainer>
   );
 }

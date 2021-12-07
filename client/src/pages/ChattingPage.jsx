@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars*/
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useRef, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import dayjs from 'dayjs';
@@ -13,7 +14,7 @@ export default function ChattingPage() {
   const isLoading = false;
   const socketRef = useRef();
   const [userId, setUserId] = useState('Je-chan');
-  const [selectedRoom, setSelectedRoom] = useState('gogo');
+  const [selectedRoom, setSelectedRoom] = useState(null);
   const [chatBubble, setChatBubble] = useState([]);
 
   const dateConversion = (date) => {
@@ -24,15 +25,18 @@ export default function ChattingPage() {
   };
 
   // ? send, getMessage 함수 목록
-  const myChatBubble = (DBform) => {
-    const { day, time } = dateConversion(DBform.date);
-    const { user_id: userId, content } = DBform;
+  const myChatBubble = (data) => {
+    const { day, time } = dateConversion(data.date);
+    const { userId, content } = data;
     const upState = {
       day,
       time,
       userId,
       content,
     };
+    console.log('1', chatBubble);
+    console.log('2', [...chatBubble]);
+    console.log('3', [...chatBubble, upState]);
 
     setChatBubble([...chatBubble, upState]);
   };
@@ -49,14 +53,15 @@ export default function ChattingPage() {
   // TODO 2. getMessage
   useEffect(() => {
     socketRef.current.on('getMessage', (data) => {
-      console.log(data);
+      console.log('get');
       myChatBubble(data);
     });
-  });
+  }, []);
 
   // * 방에 입장
   const selectRoomHandler = (selectedRoom) => {
     console.log(selectedRoom);
+    setSelectedRoom(selectedRoom);
     socketRef.current.emit('enterRoom', selectedRoom);
   };
 
@@ -64,6 +69,7 @@ export default function ChattingPage() {
   // ? socket 이벤트
   const sendMessageHandler = (e, msg, userId, selectedRoom) => {
     e.preventDefault();
+    console.log(userId);
     const date = dayjs().format('YYYY.MM.DD hh:mm:ss:SSS');
     const DBform = {
       date,
