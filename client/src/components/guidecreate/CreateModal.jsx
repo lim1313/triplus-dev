@@ -9,6 +9,10 @@ import GuidePlace from './GuidePlace';
 import GuideTime from './GuideTime';
 import GuideContent from './GuideContent';
 import { ImCancelCircle } from 'react-icons/im';
+import { createGudie } from '../../network/management/http';
+import dayjs from 'dayjs';
+import GuideGender from './GuideGender';
+
 const DatePlaceCtn = styled.div`
   display: flex;
   justify-content: space-between;
@@ -33,7 +37,9 @@ const DeleteBtn = styled.button`
     font-size: 1rem;
   }
 `;
+
 export default function CreateModal(props) {
+  const { handleCloseCreate, handleCreateClick } = props;
   const [inputs, setInputs] = useState({
     title: '',
     date: '',
@@ -42,27 +48,73 @@ export default function CreateModal(props) {
     endTime: '',
     count: '',
     content: '',
-    reOpen: 'true',
+    openDate: '',
   });
-  // const handleInputChange = () => {};
-  const { handleCloseCreate } = props;
+  const [fileUrl, setFileUrl] = useState({
+    file: null,
+    file2: null,
+    file3: null,
+  });
+  const [startDate, setStartDate] = useState(new Date());
+  const [fileArray, setFileArray] = useState([]);
+  const handleInputChange = (e) => {
+    const id = e.target.getAttribute('id');
+    setInputs({ ...inputs, [id]: e.target.value });
+    console.log(inputs);
+  };
+  const handleDateChange = (date) => {
+    console.log(date);
+    setStartDate(date);
+    setInputs({ ...inputs, date: dayjs(date).format('YYYY.MM.DD') });
+  };
+  const handleImgChange = (e) => {
+    if (e.target.files) {
+      console.log(e.target.files);
+      const targetId = e.target.getAttribute('id');
+      console.log(targetId);
+      const imgFile = e.target.files[0];
+      const imgUrl = URL.createObjectURL(imgFile);
+      setFileUrl({ ...fileUrl, [targetId]: imgUrl });
+      setFileArray([...fileArray, e.target.files[0]]);
+    }
+    console.log(fileArray);
+  };
+
+  const handleSubmitClick = () => {
+    console.log(fileArray);
+    const formData = new FormData();
+    for (let key in inputs) {
+      formData.append(key, inputs[key]);
+    }
+    for (let el of fileArray) {
+      formData.append('file', el);
+    }
+    createGudie(formData).then((res) => console.log(res));
+  };
   return (
     <Background onClick={handleCloseCreate} name='Background'>
       <ModalWrapper width='25rem' minWidth='23rem'>
         <DeleteBtn>
-          <ImCancelCircle className='cancel' onClick={handleCloseCreate} />
+          <ImCancelCircle className='cancel' onClick={handleCreateClick} />
         </DeleteBtn>
         <ModalTitle>가이드 카드 만들기</ModalTitle>
-        <GuideTitle />
-        <GuideImgs />
+        <GuideTitle handleInputChange={handleInputChange} value={inputs.title} />
+        <GuideGender />
+        <GuideImgs handleImgChange={handleImgChange} fileUrl={fileUrl} />
         <DatePlaceCtn>
-          <GuideDate setInputs={setInputs} inputs={inputs} />
-          <GuidePlace />
+          <GuideDate
+            setInputs={setInputs}
+            inputs={inputs}
+            handleDateChange={handleDateChange}
+            value={inputs.date}
+            startDate={startDate}
+          />
+          <GuidePlace handleInputChange={handleInputChange} value={inputs.region} />
         </DatePlaceCtn>
-        <GuideTime />
-        <GuideContent />
+        <GuideTime handleInputChange={handleInputChange} value={inputs} />
+        <GuideContent handleInputChange={handleInputChange} value={inputs} />
         <SubmitCtn>
-          <ColorBtn palette='red' width='8rem' fontSize='1rem'>
+          <ColorBtn palette='red' width='8rem' fontSize='1rem' onClick={handleSubmitClick}>
             카드 만들기
           </ColorBtn>
         </SubmitCtn>

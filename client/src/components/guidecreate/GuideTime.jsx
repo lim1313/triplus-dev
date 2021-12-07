@@ -24,21 +24,40 @@ const Count = styled(Input)`
   width: 100%;
 `;
 
-export default function GuideTime() {
+export default function GuideTime(props) {
+  const { handleInputChange, value } = props;
   return (
     <ContentsCtn>
       <TimeCtn>
         <div>
           <label htmlFor='start'>시작시간</label>
-          <StartTime placeholder='00:00' id='start' type='time' />
+          <StartTime
+            placeholder='00:00'
+            id='startTime'
+            type='time'
+            onChange={handleInputChange}
+            value={value.startTime}
+          />
         </div>
         <div>
           <label htmlFor='end'>종료시간</label>
-          <EndTime placeholder='00:00' id='end' type='time' />
+          <EndTime
+            placeholder='00:00'
+            id='endTime'
+            type='time'
+            onChange={handleInputChange}
+            value={value.endTime}
+          />
         </div>
         <div>
           <label htmlFor='count'>인원입력</label>
-          <Count placeholder='00명' id='count' type='number' />
+          <Count
+            placeholder='00명'
+            id='count'
+            type='number'
+            onChange={handleInputChange}
+            value={value.count}
+          />
         </div>
       </TimeCtn>
     </ContentsCtn>

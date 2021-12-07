@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const ImgForm = styled.form`
@@ -35,20 +35,8 @@ const ImgInput = styled.input`
   border: 0;
 `;
 
-export default function GuideImgs() {
-  const [fileUrl, setFileUrl] = useState({
-    file: null,
-    file2: null,
-    file3: null,
-  });
-
-  const handleImgUpload = (event) => {
-    const targetId = event.target.getAttribute('id');
-    console.log(targetId);
-    const imgFile = event.target.files[0];
-    const imgUrl = URL.createObjectURL(imgFile);
-    setFileUrl({ ...fileUrl, [targetId]: imgUrl });
-  };
+export default function GuideImgs(props) {
+  const { fileUrl, handleImgChange } = props;
   return (
     <ImgForm>
       <ImgCtn>
@@ -58,7 +46,7 @@ export default function GuideImgs() {
           <br />
           사진선택
         </label>
-        <ImgInput type='file' id='file' onChange={handleImgUpload} />
+        <ImgInput type='file' id='file' onChange={handleImgChange} />
       </ImgCtn>
       <ImgCtn>
         {fileUrl.file2 ? <img src={fileUrl.file2} alt='사진2' /> : null}
@@ -67,7 +55,7 @@ export default function GuideImgs() {
           <br />
           사진선택
         </label>
-        <ImgInput type='file' id='file2' onChange={handleImgUpload} />
+        <ImgInput type='file' id='file2' onChange={handleImgChange} />
       </ImgCtn>
       <ImgCtn>
         {fileUrl.file3 ? <img src={fileUrl.file3} alt='사진3' /> : null}
@@ -76,7 +64,7 @@ export default function GuideImgs() {
           <br />
           사진선택
         </label>
-        <ImgInput type='file' id='file3' onChange={handleImgUpload} />
+        <ImgInput type='file' id='file3' onChange={handleImgChange} />
       </ImgCtn>
     </ImgForm>
   );

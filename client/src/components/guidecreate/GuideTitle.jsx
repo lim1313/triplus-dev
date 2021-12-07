@@ -7,6 +7,14 @@ const TitleInput = styled(Input)`
   margin: 1.5rem 0 1rem 0;
 `;
 
-export default function GuideTitle() {
-  return <TitleInput placeholder='제목'></TitleInput>;
+export default function GuideTitle(props) {
+  const { handleInputChange, value } = props;
+  return (
+    <TitleInput
+      placeholder='제목'
+      onChange={handleInputChange}
+      value={value}
+      id='title'
+    ></TitleInput>
+  );
 }
