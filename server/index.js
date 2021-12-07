@@ -83,15 +83,26 @@ const io = new Server(httpServer, {
 io.on('connection', (socket) => {
   console.log(`connect with id: ${socket.id}`);
 
-  socket.on('sendMessage', (msg, callback) => {
+  socket.onAny((event) => {
+    console.log(`Socket Event : ${event}`);
+    console.log(io.sockets.adapter.rooms);
+  });
+
+  socket.on('enterRoom', (selectedRoom) => {
+    socket.join(selectedRoom);
+  });
+
+  socket.on('sendMessage', (DBform, selectedRoom, callback) => {
     callback();
-    console.log(msg);
+    console.log(DBform);
     console.log(socket.id);
-    socket.to();
+
+    socket.to(selectedRoom).emit('getMessage', DBform);
   });
 });
 
 // 서버 실행할 때, sequelize 실행하여 데이터베이스 생성
+
 sequelize
   .sync({
     force: false,
@@ -125,12 +136,12 @@ sequelize
  * > roomId도 함께 보낸다
  *
  * > 프론트엔드:
- * >> 콜백 함수를 이용해서 자신이 전달한 메세지를 컴포넌트로 만든다
+ * >>> 콜백 함수를 이용해서 자신이 전달한 메세지를 컴포넌트로 만든다
  *
  * > 백엔드:
- * >> 해당 roomId인 chat_room 테이블에 message 를 업데이트 한다
- * >> 프론트엔드에서 받은 콜백 함수를 실행한다
- * >> socket.to(roomId).emit('getMessage', msg) 를 통해서 룸에 존재하는 본인 이외의 다른 사람에게 받은 메세지를 전달한다
+ * >>> 해당 roomId인 chat_room 테이블에 message 를 업데이트 한다
+ * >>> 프론트엔드에서 받은 콜백 함수를 실행한다
+ * >>> socket.to(roomId).emit('getMessage', msg) 를 통해서 룸에 존재하는 본인 이외의 다른 사람에게 받은 메세지를 전달한다
  *
  * * 4. getMessage
  * > 받은 메세지는 왼쪽 채팅 컴포넌트로 만든다
@@ -146,10 +157,10 @@ sequelize
  * > const yourRoom = chat_member.findAll({where: userId = req.body.userId})
  * > for(let room of myRoom) {
  * >   for (let another of yourRoom){
- * >.     if(room.room_id === another.room_id) {
- * >.       isDuplicate = true
- * >.       break
- * >.     }
+ * >      if(room.room_id === another.room_id) {
+ * >        isDuplicate = true
+ * >        break
+ * >      }
  * >    }
  * > }
  *
@@ -160,7 +171,7 @@ sequelize
  * >   // 채팅방을 생성한 것
  * >   chat_room.create()
  * >   userList 에 room_id 넣기
- * >.  chat_member.bulkCreate(userList)
+ * >   chat_member.bulkCreate(userList)
  * >   return room_Id
  * > }
  *

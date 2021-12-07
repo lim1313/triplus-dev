@@ -12,7 +12,7 @@ export const theme = {
   },
 
   size: {
-    navHeight: '8vh',
+    navHeight: '7vh',
     maxWidth: '1080px',
     mobile: '767px',
   },
