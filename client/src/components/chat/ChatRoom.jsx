@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { v4 as uuidV4 } from 'uuid';
 
+import { useSelector } from 'react-redux';
+
 import { ColorBtn } from '../../styles/common/index';
 
 const RoomContainer = styled.div`
@@ -84,8 +86,11 @@ const NoSelectRoom = styled.div`
   font-size: 3vw;
 `;
 
-export default function ChatRoom({ sendMessageHandler, userId, chatBubble, selectedRoom }) {
+export default function ChatRoom({ sendMessageHandler, userId, selectedRoom }) {
   const [msg, setMsg] = useState('');
+
+  const chatBubble = useSelector((state) => state.chatListReducer);
+
   const msgInputHandler = (e) => {
     setMsg(e.target.value);
   };

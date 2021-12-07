@@ -96,8 +96,9 @@ io.on('connection', (socket) => {
   socket.on('sendMessage', (DBform, selectedRoom) => {
     console.log(DBform);
     console.log(socket.id);
-    // const { date, user_id, content } = DBform;
-    io.to(selectedRoom).emit('getMessage', DBform);
+    const { DBdate, date, user_id, content } = DBform;
+    const data = { date, user_id, content };
+    io.to(selectedRoom).emit('getMessage', data);
   });
 });
 

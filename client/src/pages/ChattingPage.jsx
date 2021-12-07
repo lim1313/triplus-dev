@@ -2,8 +2,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useRef, useEffect } from 'react';
 import { io } from 'socket.io-client';
+
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
+
+import { useDispatch } from 'react-redux';
+import { getUserChatInfo, getChatList } from '../redux/chat/action';
 
 import Loading from '../components/common/Loading';
 import ChatContainer from '../components/chat/ChatContainer';
@@ -11,15 +15,18 @@ import ChatContainer from '../components/chat/ChatContainer';
 dayjs.locale('ko');
 
 export default function ChattingPage() {
-  const isLoading = false;
   const socketRef = useRef();
+
+  const dispatch = useDispatch();
+
+  const [isLoading, setIsLoading] = useState(false);
   const [userId, setUserId] = useState('Je-chan');
   const [selectedRoom, setSelectedRoom] = useState(null);
-  const [chatBubble, setChatBubble] = useState([]);
+  // const [chatBubble, setChatBubble] = useState([]);
 
   const dateConversion = (date) => {
     const day = dayjs(date).format('YYYY년 M월 D일');
-    const time = dayjs(date).add('12', 'hour').format('a hh시 mm분');
+    const time = dayjs(date).format('a hh시 mm분');
 
     return { day, time };
   };
@@ -35,9 +42,11 @@ export default function ChattingPage() {
       userId: user_id,
       content,
     };
-    console.log('1', chatBubble);
+    // console.log('1', chatBubble);
 
-    setChatBubble((chatBubble) => [...chatBubble, upState]);
+    // setChatBubble((chatBubble) => [...chatBubble, upState]);
+
+    dispatch(getChatList(upState));
   };
 
   //* 채팅 페이지 초기 렌더링
@@ -52,7 +61,7 @@ export default function ChattingPage() {
   useEffect(() => {
     socketRef.current.on('getMessage', (data) => {
       console.log('get');
-      console.log(chatBubble);
+      // console.log(chatBubble);
       myChatBubble(data);
     });
   }, []);
@@ -68,8 +77,12 @@ export default function ChattingPage() {
   // ? socket 이벤트
   const sendMessageHandler = (e, msg, userId, selectedRoom) => {
     e.preventDefault();
-    const date = dayjs().format('YYYY.MM.DD hh:mm:ss:SSS');
+    // firefox 를 위해서 date와 DBdate 로 분기
+    const date = dayjs();
+    const DBdate = dayjs().format('YYYY.MM.DD hh:mm:ss:SSS');
+
     const DBform = {
+      DBdate,
       date,
       user_id: userId,
       content: msg,
@@ -83,7 +96,7 @@ export default function ChattingPage() {
     <ChatContainer
       sendMessageHandler={sendMessageHandler}
       userId={userId}
-      chatBubble={chatBubble}
+      // chatBubble={chatBubble}
       selectedRoom={selectedRoom}
       selectRoomHandler={selectRoomHandler}
       // setUserId 는 없어져야 함

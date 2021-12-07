@@ -21,7 +21,7 @@ const ChatBox = styled.div`
 export default function ChatContainer({
   sendMessageHandler,
   userId,
-  chatBubble,
+  // chatBubble,
   selectedRoom,
   selectRoomHandler,
   setUserId,
@@ -33,7 +33,7 @@ export default function ChatContainer({
         <ChatRoom
           sendMessageHandler={sendMessageHandler}
           userId={userId}
-          chatBubble={chatBubble}
+          // chatBubble={chatBubble}
           selectedRoom={selectedRoom}
         ></ChatRoom>
       </ChatBox>
