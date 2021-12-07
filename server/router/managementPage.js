@@ -9,5 +9,6 @@ router.put('/change-state-approved', controller.changeStateApproved);
 router.put('/change-state-rejected', controller.changeStateRejected);
 router.put('/change-state-completed', controller.changeStateCompleted);
 router.put('/change-state-canceled', controller.changeStateCanceled);
+router.get('/guide', controller.selectGuideCardByUserId);
 
 module.exports = router;
