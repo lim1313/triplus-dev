@@ -22,7 +22,8 @@ const PlaceInput = styled(Input)`
   }
 `;
 
-export default function GuidePlace() {
+export default function GuidePlace(props) {
+  const { handleInputChange, value } = props;
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [address, setAddress] = useState('');
 
@@ -50,9 +51,9 @@ export default function GuidePlace() {
           <DaumPostcode onClick={closePostCode} onComplete={onCompletePost} style={postCodeStyle} />
         )}
       </div>
-      <lable htmlFor='place'>장소입력</lable>
+      <label htmlFor='place'>장소입력</label>
       <PlaceInput id='place' placeholder='도로명주소' onClick={openPostCode} value={address} />
-      <PlaceInput placeholder='상세주소' />
+      <PlaceInput placeholder='상세주소' onChange={handleInputChange} value={value} />
     </InputCtn>
   );
 }

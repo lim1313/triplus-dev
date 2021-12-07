@@ -16,7 +16,7 @@ const H3Ctn = styled.div`
 
 const H3 = styled.h3``;
 
-export default function Applicants() {
+export default function Applicants({ applicantInfo }) {
   return (
     <ListCtn>
       <H3Ctn>
@@ -24,14 +24,18 @@ export default function Applicants() {
       </H3Ctn>
       <ApplicantTable
         columns={['신청자', '지역', '가이드 명', '신청일자', '']}
-        data={[
-          {
-            nickName: '송코딩',
-            region: '서울',
-            title: '이태원의 숨겨진 화원',
-            date: '2021-08-08',
-          },
-        ]}
+        data={
+          applicantInfo.length !== 0
+            ? [
+                {
+                  nickName: applicantInfo.nickName,
+                  region: applicantInfo.region,
+                  title: applicantInfo.title,
+                  date: applicantInfo.date,
+                },
+              ]
+            : []
+        }
       />
     </ListCtn>
   );

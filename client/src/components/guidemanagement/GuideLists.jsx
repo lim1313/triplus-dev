@@ -18,7 +18,7 @@ export default function GuideLists(props) {
       </H3Ctn>
       <GuideTable
         columns={['날짜', '가이드 명', ' ', '', '']}
-        data={[{ date: guideInfo.guideDate, title: guideInfo.title }]}
+        data={guideInfo.length !== 0 ? [{ date: guideInfo.guideDate, title: guideInfo.title }] : []}
       />
     </div>
   );

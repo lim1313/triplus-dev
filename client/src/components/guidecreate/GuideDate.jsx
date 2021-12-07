@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -50,8 +50,8 @@ const CustomDatePicker = styled(DatePicker)`
   background-color: ${({ theme }) => theme.color.inputColor};
 `;
 
-export default function GuideDate() {
-  const [startDate, setStartDate] = useState(new Date());
+export default function GuideDate(props) {
+  const { handleDateChange, startDate } = props;
   return (
     <Wrapper>
       <CustomDatePicker
@@ -59,12 +59,11 @@ export default function GuideDate() {
         startDate={startDate}
         selected={startDate}
         placeholderText='날짜를 선택하세요'
-        onChange={(date) => {
-          setStartDate(date);
-        }}
+        onChange={handleDateChange}
         dateFormat='yyyy.MM.dd'
         minDate={new Date()}
         inline
+        id='date'
       />
     </Wrapper>
   );

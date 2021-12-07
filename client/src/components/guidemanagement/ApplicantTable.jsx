@@ -37,19 +37,23 @@ export default function ApplicantTable(props) {
         </tr>
       </Thead>
       <tbody>
-        {data.map(({ nickName, region, title, date }) => {
-          return (
-            <tr key={date + title}>
-              <td>{nickName}</td>
-              <td>{region}</td>
-              <td>{title}</td>
-              <td>{date}</td>
-              <td>
-                <ColorBtn palette='red'>채팅</ColorBtn>
-              </td>
-            </tr>
-          );
-        })}
+        {data.length !== 0 ? (
+          data.map(({ nickName, region, title, date }) => {
+            return (
+              <tr key={date + title}>
+                <td>{nickName}</td>
+                <td>{region}</td>
+                <td>{title}</td>
+                <td>{date}</td>
+                <td>
+                  <ColorBtn palette='red'>채팅</ColorBtn>
+                </td>
+              </tr>
+            );
+          })
+        ) : (
+          <td colSpan='5'>조회된 신청자 정보가 없습니다.</td>
+        )}
       </tbody>
     </Table>
   );
