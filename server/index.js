@@ -46,7 +46,7 @@ app.use(
 app.use(cookieParser());
 
 app.use('/admin', adminPage);
-app.use('/chatting', chattingPage);
+app.use('/chat', chattingPage);
 app.use('/login', loginPage);
 app.use('/main', mainPage);
 app.use('/management', managementPage);

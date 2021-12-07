@@ -44,10 +44,10 @@ const checkParams = (params) => {
 };
 
 module.exports = {
-  createGuideCard: async (params) => {
+  createGuideCard: async (req) => {
     let resObject = {};
-    const insertValue = checkParams(params.body);
-    const accessToken = isAuthorized(params);
+    const insertValue = checkParams(req.body);
+    const accessToken = isAuthorized(req);
 
     // 토큰이 없었을 때
     try {
@@ -64,14 +64,19 @@ module.exports = {
     }
 
     try {
-      console.log(req.files);
-      console.log(req.body);
-      await guide_card.create(insertValue).then((result) => {
-        resObject['code'] = 200;
-        resObject['message'] = '가이드 카드를 작성하였습니다';
-      });
+      const guideCard = await guide_card.create(insertValue);
 
+      if(req.files.length > 0){
+        const guideImages = [];
+        for(let guideImage of req.files){
+          guideImages.push({guideId: guideCard.dataValues.guideId, image: guideImage.location});
+        }
 
+        guide_image.bulkCreate(guideImages);
+      }
+
+      resObject['code'] = 200;
+      resObject['message'] = '가이드 카드를 작성하였습니다';
     } catch (error) {
       console.log(error);
       resObject['code'] = 400;
@@ -282,8 +287,10 @@ module.exports = {
 
       return resObject;
     } catch (error) {
-      resObject['code'] = 400;
+      resObject['code'] = 200;
       resObject['message'] = error;
+      resObject['guideData'] = {};
+      resObject['applicant'] = [];
 
       return resObject;
     }

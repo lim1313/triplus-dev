@@ -31,7 +31,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       field: 'room_id'
     },
-    userId: DataTypes.STRING
+    userId: {
+      type: DataTypes.STRING,
+      field: 'user_id'
+    }
   }, {
     sequelize,
     modelName: 'chat_member',
