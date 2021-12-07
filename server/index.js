@@ -83,26 +83,21 @@ const io = new Server(httpServer, {
 io.on('connection', (socket) => {
   console.log(`connect with id: ${socket.id}`);
 
-  socket.onAny((event) => {
-    console.log(`Socket Event : ${event}`);
-    console.log(io.sockets.adapter.rooms);
-  });
+  // socket.onAny((event) => {
+  //   console.log(`Socket Event : ${event}`);
+  //   console.log(io.sockets.adapter.rooms);
+  // });
 
-  socket.on('enterRoom', (selectedRoom) => {
+  socket.on('joinRoom', (selectedRoom) => {
     socket.join(selectedRoom);
+    // GET / chat / rooms;
   });
 
-  socket.on('sendMessage', (DBform, selectedRoom, callback) => {
-    callback();
+  socket.on('sendMessage', (DBform, selectedRoom) => {
     console.log(DBform);
     console.log(socket.id);
-    const { date, user_id, content } = DBform;
-
-    io.to(selectedRoom).emit('getMessage', {
-      date,
-      userId: user_id,
-      content,
-    });
+    // const { date, user_id, content } = DBform;
+    io.to(selectedRoom).emit('getMessage', DBform);
   });
 });
 
@@ -123,7 +118,7 @@ sequelize
 /**
  * * 1. 채팅 페이지 접근
  * > 로그인을 한다
- * > axios.get 요청 토큰을 보낸다
+ * > axios.get 요청 토큰을 보낸다 GET /chat/rooms
  * > 토큰을 확인하고, 요청자 userId 정보를 가져온다
  * > 가져온 정보를 바탕으로 roomId, room에 속한 다른 유저의 userId를 가져온다
  * > 클라이언트에 roomId, roomId 와 연결된 상대 userId 도 보내준다.

@@ -105,6 +105,7 @@ export default function ChatRoom({ sendMessageHandler, userId, chatBubble, selec
       chatBoard.current.scrollTop = chatBoard.current.scrollHeight;
     }
   };
+
   useEffect(() => {
     scrollToBottom();
   }, [chatBubble]);

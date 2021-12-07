@@ -19,68 +19,62 @@ export default function ChattingPage() {
 
   const dateConversion = (date) => {
     const day = dayjs(date).format('YYYY년 M월 D일');
-    const time = dayjs(date).format('A hh시 mm분');
+    const time = dayjs(date).add('12', 'hour').format('a hh시 mm분');
 
     return { day, time };
   };
 
   // ? send, getMessage 함수 목록
   const myChatBubble = (data) => {
+    // console.log('useIt');
     const { day, time } = dateConversion(data.date);
-    const { userId, content } = data;
+    const { user_id, content } = data;
     const upState = {
       day,
       time,
-      userId,
+      userId: user_id,
       content,
     };
     console.log('1', chatBubble);
-    console.log('2', [...chatBubble]);
-    console.log('3', [...chatBubble, upState]);
 
-    setChatBubble([...chatBubble, upState]);
+    setChatBubble((chatBubble) => [...chatBubble, upState]);
   };
 
   //* 채팅 페이지 초기 렌더링
-  // TODO 1. Socket 연결하기
+  // TODO 1. Socket 연결하고 해당 유저의 정보 가져오기
   useEffect(() => {
     socketRef.current = io.connect(`${process.env.REACT_APP_HTTPSURL}`, {
       transports: ['websocket'],
     });
-    console.log(socketRef.current);
   }, []);
 
   // TODO 2. getMessage
   useEffect(() => {
     socketRef.current.on('getMessage', (data) => {
       console.log('get');
+      console.log(chatBubble);
       myChatBubble(data);
     });
   }, []);
 
-  // * 방에 입장
+  // TODO 3. 룸에 입장
   const selectRoomHandler = (selectedRoom) => {
     console.log(selectedRoom);
     setSelectedRoom(selectedRoom);
-    socketRef.current.emit('enterRoom', selectedRoom);
+    socketRef.current.emit('joinRoom', selectedRoom);
   };
 
-  // * 문자 보내기
+  // TODO 4. 문자 보내기
   // ? socket 이벤트
   const sendMessageHandler = (e, msg, userId, selectedRoom) => {
     e.preventDefault();
-    console.log(userId);
     const date = dayjs().format('YYYY.MM.DD hh:mm:ss:SSS');
     const DBform = {
       date,
       user_id: userId,
       content: msg,
     };
-
-    socketRef.current.emit('sendMessage', DBform, selectedRoom, () => {
-      console.log(DBform);
-      myChatBubble(DBform);
-    });
+    socketRef.current.emit('sendMessage', DBform, selectedRoom);
   };
 
   return isLoading ? (
