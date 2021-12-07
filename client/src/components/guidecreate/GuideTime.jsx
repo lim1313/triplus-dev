@@ -30,15 +30,15 @@ export default function GuideTime() {
       <TimeCtn>
         <div>
           <label htmlFor='start'>시작시간</label>
-          <StartTime placeholder='00:00' id='start' />
+          <StartTime placeholder='00:00' id='start' type='time' />
         </div>
         <div>
           <label htmlFor='end'>종료시간</label>
-          <EndTime placeholder='00:00' id='end' />
+          <EndTime placeholder='00:00' id='end' type='time' />
         </div>
         <div>
           <label htmlFor='count'>인원입력</label>
-          <Count placeholder='00명' id='count' />
+          <Count placeholder='00명' id='count' type='number' />
         </div>
       </TimeCtn>
     </ContentsCtn>
