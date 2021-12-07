@@ -55,10 +55,16 @@ export default function MyProfile({ image }) {
   const [isChange, setIsChange] = useState(false);
   const [fileImg, setFileImg] = useState(null); //파일
   const [previewImg, setPreviewImg] = useState(null); //미리보기
+  const [imguuid, setImguuid] = useState(image); // 새로운 파일명
 
   const imgRef = useRef();
 
-  const delImage = async () => {
+  const delSaveImg = async (state) => {
+    if (!state && !fileImg) {
+      console.log('파일을 선택하세요');
+      return;
+    }
+
     const config = {
       bucketName: process.env.REACT_APP_S3_BUCKET_NAME,
       dirName: 'asset/profile',
@@ -66,68 +72,45 @@ export default function MyProfile({ image }) {
       accessKeyId: process.env.REACT_APP_S3_ACCESS_KEY,
       secretAccessKey: process.env.REACT_APP_S3_SECRET_ACCESS_KEY,
     };
-
     const ReactS3Client = new S3(config);
 
-    if (!image) return;
-    //* 삭제 확인 모달 필요
-    const oldImg = image;
-    await ReactS3Client.deleteFile(oldImg)
-      .then(() => {
-        //TODO DELETE /mypage/profile
-        // deleteProfile()
-        //   .then(() => {
-        //     console.log('success');
-        //   })
-        //   .catch((err) => console.error(err));
-        console.log('success');
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
-  const saveImage = async () => {
-    const config = {
-      bucketName: process.env.REACT_APP_S3_BUCKET_NAME,
-      dirName: 'asset/profile',
-      region: process.env.REACT_APP_S3_REGION,
-      accessKeyId: process.env.REACT_APP_S3_ACCESS_KEY,
-      secretAccessKey: process.env.REACT_APP_S3_SECRET_ACCESS_KEY,
-    };
-
-    const ReactS3Client = new S3(config);
-
-    //* 이미지가 존재하는 경우 해당 이미지는 s3에서 제거
-    if (image) {
-      const oldImg = image;
+    //* 이미지가 존재하는 경우 or 삭제하는 경우 해당 이미지는 s3에서 제거
+    if (imguuid) {
+      const oldImg = imguuid;
       await ReactS3Client.deleteFile(oldImg)
-        .then(() => {
+        .then((res) => {
           //TODO DELETE /mypage/profile
           // deleteProfile()
           //   .then(() => {
           //     console.log('success');
+          //     if (state === 'del') setImguuid('/asset/else/userBlank.png')
           //   })
           //   .catch((err) => console.error(err));
-          console.log('success');
+          console.log('success', res);
+          if (state === 'del') setImguuid('/asset/else/userBlank.png');
         })
         .catch((err) => {
-          console.log('this is err');
           console.error(err);
         });
     }
 
-    const newFileName = uuid4();
+    if (state === 'del') return;
 
+    const newFileName = uuid4();
     //* 이미지 s3에 저장
-    ReactS3Client.uploadFile(fileImg, newFileName)
+    await ReactS3Client.uploadFile(fileImg, newFileName)
       .then((data) => {
         // TODO POST /mypage/image
         // postProfile(data.location).then(() => {
         //   setIsChange(!isChange);
-        // });
-        // console.log(data);
-        console.log('location', data.location);
+        //   setImguuid(newFileName+fileImg.name.split('.')[1])
+        //   setFileImg(null);
+        // }).catch(err => console.error(err))
+
+        setIsChange(!isChange);
+        setImguuid(newFileName + fileImg.name.split('.')[1]);
+        setFileImg(null);
+        console.log('location', data);
       })
       .catch((err) => {
         console.error(err);
@@ -144,7 +127,7 @@ export default function MyProfile({ image }) {
   return (
     <ProfileWrapper>
       <ImgWrapper
-        src={previewImg || image}
+        src={previewImg || imguuid}
         alt='프로필'
         ref={imgRef}
         onError={() => {
@@ -161,14 +144,14 @@ export default function MyProfile({ image }) {
         <input type='file' id='upload' onChange={selectImage} accept='.png, .jpg, .jpeg' />
         {isChange ? (
           <LabelBtnColor htmlFor='upload' palette='blue'>
-            파일선택
+            {(fileImg && fileImg.name) || '파일선택'}
           </LabelBtnColor>
         ) : (
           <BtnColor onClick={() => setIsChange(!isChange)} palette='blue'>
             수정
           </BtnColor>
         )}
-        <BtnBorder onClick={isChange ? saveImage : delImage}>
+        <BtnBorder onClick={isChange ? delSaveImg : () => delSaveImg('del')}>
           {isChange ? '저장' : '삭제'}
         </BtnBorder>
       </BtnWrapper>
