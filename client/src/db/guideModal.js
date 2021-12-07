@@ -85,5 +85,5 @@ export const userInfodb = {
   email: 'sss@naver.com',
   nickName: 'nicnik',
   reigion: '서울특별시 강남구 ',
-  image: '/asset/logo/logo.png',
+  image: '',
 };
