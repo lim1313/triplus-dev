@@ -85,6 +85,5 @@ export const userInfodb = {
   email: 'sss@naver.com',
   nickName: 'nicnik',
   reigion: '서울특별시 강남구 ',
-  image:
-    'https://triplus-deploy.s3-ap-northeast-2.amazonaws.com/asset/profile/e9309240-7c84-4d1d-be96-c4b496d85a8f.png',
+  image: '',
 };

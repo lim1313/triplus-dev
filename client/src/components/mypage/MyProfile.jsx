@@ -1,11 +1,12 @@
 /*eslint-disable no-unused-vars*/
 
 import React, { useRef, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { BorderBtn, ColorBtn } from '../../styles/common';
 import { v4 as uuid4 } from 'uuid';
 import S3 from 'react-aws-s3';
 import { deleteProfile, postProfile } from '../../network/my/http';
+import SpinLoading from '../common/SpinLoading';
 
 const ProfileWrapper = styled.div`
   margin-right: 2rem;
@@ -39,16 +40,45 @@ const LabelBtnColor = styled(ColorBtn).attrs({ as: 'label' })`
   text-align: center;
   padding: 0.1em 1.1em;
   margin-bottom: 0.5rem;
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      &:hover {
+        cursor: not-allowed;
+        background-color: ${({ theme }) => theme.color.blue};
+        color: #fff;
+      }
+    `}
 `;
 
 const BtnColor = styled(ColorBtn)`
   text-align: center;
   padding: 0.1em 1.1em;
   margin-bottom: 0.5rem;
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      &:hover {
+        cursor: not-allowed;
+        background-color: ${({ theme }) => theme.color.blue};
+        color: #fff;
+      }
+    `}
 `;
 
 const BtnBorder = styled(BorderBtn)`
   padding: 0.1em 1.1em;
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      &:hover {
+        cursor: not-allowed;
+        background-color: unset;
+      }
+    `}
 `;
 
 export default function MyProfile({ image }) {
@@ -56,12 +86,18 @@ export default function MyProfile({ image }) {
   const [fileImg, setFileImg] = useState(null); //파일
   const [previewImg, setPreviewImg] = useState(null); //미리보기
   const [imguuid, setImguuid] = useState(image); // 새로운 파일명
+  const [isLoading, setIsLoading] = useState(false);
 
   const imgRef = useRef();
 
   const delSaveImg = async (state) => {
-    if (!state && !fileImg) {
+    if (state === 'save' && !fileImg) {
       console.log('파일을 선택하세요');
+      return;
+    }
+
+    if (state === 'del' && !imguuid) {
+      console.log('삭제할 파일이 없습니다.');
       return;
     }
 
@@ -74,6 +110,7 @@ export default function MyProfile({ image }) {
     };
     const ReactS3Client = new S3(config);
 
+    setIsLoading(true);
     //* 이미지가 존재하는 경우 or 삭제하는 경우 해당 이미지는 s3에서 제거
     if (imguuid) {
       const oldImg = imguuid;
@@ -83,11 +120,20 @@ export default function MyProfile({ image }) {
           // deleteProfile()
           //   .then(() => {
           //     console.log('success');
-          //     if (state === 'del') setImguuid('/asset/else/userBlank.png')
+          //     if (state === 'del') {
+          //     setImguuid('/asset/else/userBlank.png')
+          //     setIsLoading(false);
+          //     }
           //   })
           //   .catch((err) => console.error(err));
           console.log('success', res);
-          if (state === 'del') setImguuid('/asset/else/userBlank.png');
+          setTimeout(() => {
+            if (state === 'del') {
+              setPreviewImg(null);
+              setImguuid('/asset/else/userBlank.png');
+              setIsLoading(false);
+            }
+          }, 1000);
         })
         .catch((err) => {
           console.error(err);
@@ -105,12 +151,16 @@ export default function MyProfile({ image }) {
         //   setIsChange(!isChange);
         //   setImguuid(newFileName+fileImg.name.split('.')[1])
         //   setFileImg(null);
+        //   setIsLoading(false);
         // }).catch(err => console.error(err))
 
-        setIsChange(!isChange);
-        setImguuid(newFileName + fileImg.name.split('.')[1]);
-        setFileImg(null);
         console.log('location', data);
+        setTimeout(() => {
+          setIsChange(!isChange);
+          setImguuid(newFileName + fileImg.name.split('.')[1]);
+          setFileImg(null);
+          setIsLoading(false);
+        }, 1000);
       })
       .catch((err) => {
         console.error(err);
@@ -120,8 +170,9 @@ export default function MyProfile({ image }) {
   const selectImage = (e) => {
     //* 만약 취소를 누를 경우 return
     if (!e.target.files[0]) return;
-    setFileImg(e.target.files[0]);
-    setPreviewImg(URL.createObjectURL(e.target.files[0]));
+    let imgFile = e.target.files[0];
+    setFileImg(imgFile);
+    setPreviewImg(URL.createObjectURL(imgFile));
   };
 
   return (
@@ -141,18 +192,28 @@ export default function MyProfile({ image }) {
         </>
       )}
       <BtnWrapper>
-        <input type='file' id='upload' onChange={selectImage} accept='.png, .jpg, .jpeg' />
+        <input
+          type='file'
+          id='upload'
+          onChange={selectImage}
+          accept='.png, .jpg, .jpeg'
+          disabled={isLoading}
+        />
+
         {isChange ? (
-          <LabelBtnColor htmlFor='upload' palette='blue'>
+          <LabelBtnColor htmlFor='upload' palette='blue' disabled={isLoading}>
             {(fileImg && fileImg.name) || '파일선택'}
           </LabelBtnColor>
         ) : (
-          <BtnColor onClick={() => setIsChange(!isChange)} palette='blue'>
+          <BtnColor onClick={() => setIsChange(!isChange)} palette='blue' disabled={isLoading}>
             수정
           </BtnColor>
         )}
-        <BtnBorder onClick={isChange ? delSaveImg : () => delSaveImg('del')}>
-          {isChange ? '저장' : '삭제'}
+        <BtnBorder
+          onClick={isChange ? () => delSaveImg('save') : () => delSaveImg('del')}
+          disabled={isLoading}
+        >
+          {isLoading ? <SpinLoading /> : isChange ? '저장' : '삭제'}
         </BtnBorder>
       </BtnWrapper>
     </ProfileWrapper>
