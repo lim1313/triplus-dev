@@ -1,11 +1,12 @@
 /*eslint-disable no-unused-vars*/
 
 import React, { useRef, useState } from 'react';
-import styled from 'styled-components';
-import { BorderBtn, ColorBtn } from '../../styles/common';
+import styled, { css } from 'styled-components';
+import { ColorBtn } from '../../styles/common';
 import { v4 as uuid4 } from 'uuid';
 import S3 from 'react-aws-s3';
 import { deleteProfile, postProfile } from '../../network/my/http';
+import DeleteSave from './MyProfile/DeleteSave';
 
 const ProfileWrapper = styled.div`
   margin-right: 2rem;
@@ -39,26 +40,44 @@ const LabelBtnColor = styled(ColorBtn).attrs({ as: 'label' })`
   text-align: center;
   padding: 0.1em 1.1em;
   margin-bottom: 0.5rem;
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      &:hover {
+        cursor: not-allowed;
+        background-color: ${({ theme }) => theme.color.blue};
+        color: #fff;
+      }
+    `}
 `;
 
 const BtnColor = styled(ColorBtn)`
   text-align: center;
   padding: 0.1em 1.1em;
   margin-bottom: 0.5rem;
-`;
 
-const BtnBorder = styled(BorderBtn)`
-  padding: 0.1em 1.1em;
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      &:hover {
+        cursor: not-allowed;
+        background-color: ${({ theme }) => theme.color.blue};
+        color: #fff;
+      }
+    `}
 `;
 
 export default function MyProfile({ image }) {
   const [isChange, setIsChange] = useState(false);
   const [fileImg, setFileImg] = useState(null); //파일
   const [previewImg, setPreviewImg] = useState(null); //미리보기
+  const [imguuid, setImguuid] = useState(image); // 새로운 파일명
+  const [isLoading, setIsLoading] = useState(false);
 
   const imgRef = useRef();
 
-  const delImage = async () => {
+  const delSaveImg = async (state) => {
     const config = {
       bucketName: process.env.REACT_APP_S3_BUCKET_NAME,
       dirName: 'asset/profile',
@@ -66,85 +85,79 @@ export default function MyProfile({ image }) {
       accessKeyId: process.env.REACT_APP_S3_ACCESS_KEY,
       secretAccessKey: process.env.REACT_APP_S3_SECRET_ACCESS_KEY,
     };
-
     const ReactS3Client = new S3(config);
 
-    if (!image) return;
-    //* 삭제 확인 모달 필요
-    const oldImg = image;
-    await ReactS3Client.deleteFile(oldImg)
-      .then(() => {
-        //TODO DELETE /mypage/profile
-        // deleteProfile()
-        //   .then(() => {
-        //     console.log('success');
-        //   })
-        //   .catch((err) => console.error(err));
-        console.log('success');
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
-  const saveImage = async () => {
-    const config = {
-      bucketName: process.env.REACT_APP_S3_BUCKET_NAME,
-      dirName: 'asset/profile',
-      region: process.env.REACT_APP_S3_REGION,
-      accessKeyId: process.env.REACT_APP_S3_ACCESS_KEY,
-      secretAccessKey: process.env.REACT_APP_S3_SECRET_ACCESS_KEY,
-    };
-
-    const ReactS3Client = new S3(config);
-
-    //* 이미지가 존재하는 경우 해당 이미지는 s3에서 제거
-    if (image) {
-      const oldImg = image;
+    setIsLoading(true);
+    //* 이미지가 존재하는 경우 or 삭제하는 경우 해당 이미지는 s3에서 제거
+    if (imguuid) {
+      const oldImg = imguuid;
       await ReactS3Client.deleteFile(oldImg)
-        .then(() => {
+        .then((res) => {
           //TODO DELETE /mypage/profile
           // deleteProfile()
           //   .then(() => {
           //     console.log('success');
+          //     if (state === 'del') {
+          //     setImguuid('/asset/else/userBlank.png')
+          //     setIsLoading(false);
+          //     }
           //   })
           //   .catch((err) => console.error(err));
-          console.log('success');
+          console.log('success', res);
+          setTimeout(() => {
+            if (state === 'del') {
+              setPreviewImg(null);
+              setImguuid(null);
+              setIsLoading(false);
+            }
+          }, 1000);
         })
         .catch((err) => {
-          console.log('this is err');
           console.error(err);
         });
     }
 
-    const newFileName = uuid4();
+    if (state === 'del') return;
 
+    const newFileName = uuid4();
     //* 이미지 s3에 저장
-    ReactS3Client.uploadFile(fileImg, newFileName)
+    await ReactS3Client.uploadFile(fileImg, newFileName)
       .then((data) => {
         // TODO POST /mypage/image
         // postProfile(data.location).then(() => {
         //   setIsChange(!isChange);
-        // });
-        // console.log(data);
-        console.log('location', data.location);
+        //   setImguuid(newFileName+fileImg.name.split('.')[1])
+        //   setFileImg(null);
+        //   setIsLoading(false);
+        // }).catch(err => console.error(err))
+
+        console.log('location', data);
+        setTimeout(() => {
+          setIsChange(!isChange);
+          setImguuid(newFileName + fileImg.name.split('.')[1]);
+          // setFileImg(null);
+          setIsLoading(false);
+        }, 1000);
       })
       .catch((err) => {
         console.error(err);
       });
+    console.log('end');
   };
 
   const selectImage = (e) => {
     //* 만약 취소를 누를 경우 return
     if (!e.target.files[0]) return;
-    setFileImg(e.target.files[0]);
-    setPreviewImg(URL.createObjectURL(e.target.files[0]));
+    let imgFile = e.target.files[0];
+    setFileImg(imgFile);
+    setPreviewImg(URL.createObjectURL(imgFile));
   };
 
   return (
     <ProfileWrapper>
+      {/* {isModal && <Modal content='정말 삭제하시겠습니까?' />} */}
       <ImgWrapper
-        src={previewImg || image}
+        src={previewImg || imguuid || '/asset/else/userBlank.png'}
         alt='프로필'
         ref={imgRef}
         onError={() => {
@@ -158,19 +171,30 @@ export default function MyProfile({ image }) {
         </>
       )}
       <BtnWrapper>
-        <input type='file' id='upload' onChange={selectImage} accept='.png, .jpg, .jpeg' />
+        <input
+          type='file'
+          id='upload'
+          onChange={selectImage}
+          accept='.png, .jpg, .jpeg'
+          disabled={isLoading}
+        />
+
         {isChange ? (
-          <LabelBtnColor htmlFor='upload' palette='blue'>
-            파일선택
+          <LabelBtnColor htmlFor='upload' palette='blue' disabled={isLoading}>
+            {(fileImg && fileImg.name) || '파일선택'}
           </LabelBtnColor>
         ) : (
-          <BtnColor onClick={() => setIsChange(!isChange)} palette='blue'>
+          <BtnColor onClick={() => setIsChange(!isChange)} palette='blue' disabled={isLoading}>
             수정
           </BtnColor>
         )}
-        <BtnBorder onClick={isChange ? saveImage : delImage}>
-          {isChange ? '저장' : '삭제'}
-        </BtnBorder>
+        <DeleteSave
+          isChange={isChange}
+          isLoading={isLoading}
+          delSaveImg={delSaveImg}
+          fileImg={fileImg}
+          imguuid={imguuid}
+        />
       </BtnWrapper>
     </ProfileWrapper>
   );
