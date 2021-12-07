@@ -13,11 +13,22 @@ const ReopenDate = styled(Input)`
   margin-top: 0.2rem;
 `;
 
-export default function GuideContent() {
+export default function GuideContent(props) {
+  const { handleInputChange, value } = props;
   return (
     <ContentCtn>
-      <Content placeholder='가이드 설명' />
-      <ReopenDate placeholder='모집 예정일' />
+      <Content
+        placeholder='가이드 설명'
+        id='content'
+        value={value.content}
+        onChange={handleInputChange}
+      />
+      <ReopenDate
+        placeholder='모집 예정일'
+        id='openDate'
+        value={value.openDate}
+        onChange={handleInputChange}
+      />
     </ContentCtn>
   );
 }

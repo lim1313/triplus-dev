@@ -1,4 +1,4 @@
-const {guide_card, user} = require('./../../models');
+const {guide_card, user, guide_user_participate, guide_image} = require('./../../models');
 const {Op} = require('sequelize');
 const GLOBAL_VARIABLE = require('./global_variable');
 const date_fns = require('date-fns');
@@ -64,10 +64,14 @@ module.exports = {
     }
 
     try {
+      console.log(req.files);
+      console.log(req.body);
       await guide_card.create(insertValue).then((result) => {
         resObject['code'] = 200;
         resObject['message'] = '가이드 카드를 작성하였습니다';
       });
+
+
     } catch (error) {
       console.log(error);
       resObject['code'] = 400;
@@ -208,5 +212,80 @@ module.exports = {
     });
 
     return resObject;
-  }
+  },
+
+  selectGuideCardByUserId: async (req) => {
+    const resObject = {};
+    const accessToken = isAuthorized(req);
+
+    // 토큰이 없었을 때
+    try {
+      if(!accessToken){
+        throw 'accessToken이 없습니다';
+      }
+    } catch (error) {
+      console.log(`ERROR: ${error}`);
+      resObject['code'] = 400;
+      resObject['message'] = error;
+      return resObject;
+    }
+
+    try {
+      const guideCard = await guide_card.findOne({
+        raw: true,
+        where : {
+          userId: accessToken.userId,
+          state: GLOBAL_VARIABLE.APPROVED,
+        },
+        order: [['createdAt', 'DESC']]
+      });
+
+      if(!guideCard){
+        throw '진행 중인 가이드가 없습니다'
+      }
+
+      const guideData = {
+        guideId: guideCard.guideId,
+        title: guideCard.title,
+        guideDate: date_fns.format(guideCard['guideDate'], 'yyyy.MM.dd')
+      };
+
+      resObject['guideData'] = guideData;
+
+      const guideUserParticipate = await guide_user_participate.findAll({
+        raw: true,
+        where: {guideId: guideCard.guideId},
+        include: [
+          {
+            model: user,
+            attributes: ['nickName', 'region']
+          }
+        ],
+        order: [['createdAt', 'ASC']]
+      });
+
+      const applicant = [];
+      if(guideUserParticipate.length > 0){
+        for(let userInfo of guideUserParticipate){
+          const userInfoItem = {};
+          userInfoItem['userId'] = userInfo.userId;
+          userInfoItem['nickname'] = userInfo['user.nickName'];
+          userInfoItem['region'] = userInfo['user.region'];
+          userInfoItem['createAt'] = date_fns.format(userInfo['createdAt'], 'yyyy.MM.dd');
+
+          applicant.push(userInfoItem);
+        }
+      }
+
+      resObject['applicant'] = applicant;
+      resObject['code'] = 200;
+
+      return resObject;
+    } catch (error) {
+      resObject['code'] = 400;
+      resObject['message'] = error;
+
+      return resObject;
+    }
+  },
 }

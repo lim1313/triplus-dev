@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class guide_user_participate extends Model {
+  class chat_room extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,29 +11,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      guide_user_participate.hasOne(
-        models.user,
-        {
-          sourceKey: 'userId',
-          foreignKey: 'userId',
-        }
-      );
     }
   };
-  guide_user_participate.init({
-    guideId: {
+  chat_room.init({
+    roomId: {
       type: DataTypes.INTEGER,
-      field: 'guide_id'
+      field: 'room_id'
     },
-    userId: {
-      type: DataTypes.STRING,
-      field: 'user_id'
-    },
-    state: DataTypes.STRING
+    message: DataTypes.TEXT('long'),
   }, {
     sequelize,
-    modelName: 'guide_user_participate',
+    modelName: 'chat_room',
     freezeTableName: true
   });
-  return guide_user_participate;
+  return chat_room;
 };

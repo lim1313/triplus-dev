@@ -40,19 +40,23 @@ export default function GuideTable(props) {
         </tr>
       </Thead>
       <tbody>
-        {data.map(({ date, title }) => {
-          return (
-            <tr key={date + title}>
-              <td className='datetd'>{date}</td>
-              <td>{title}</td>
-              <td>&emsp;</td>
-              <td>&emsp;&ensp;</td>
-              <td>
-                <NoBorderBtn palette='red'>수정</NoBorderBtn>
-              </td>
-            </tr>
-          );
-        })}
+        {data.length !== 0 ? (
+          data.map(({ date, title }) => {
+            return (
+              <tr key={date + title}>
+                <td className='datetd'>{date}</td>
+                <td>{title}</td>
+                <td>&emsp;</td>
+                <td>&emsp;&ensp;</td>
+                <td>
+                  <NoBorderBtn palette='red'>수정</NoBorderBtn>
+                </td>
+              </tr>
+            );
+          })
+        ) : (
+          <td colSpan='2'>조회된 가이드 정보가 없습니다.</td>
+        )}
       </tbody>
     </Table>
   );

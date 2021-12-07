@@ -46,7 +46,9 @@ export default function ManagementPage() {
 
   return (
     <>
-      {isOpen ? <CreateModal handleCloseCreate={handleCloseCreate} /> : null}
+      {isOpen ? (
+        <CreateModal handleCloseCreate={handleCloseCreate} handleCreateClick={handleCreateClick} />
+      ) : null}
       <Background pathName={location.pathname}>
         <ManageNav pathName={location.pathname} />
         <Outlet />

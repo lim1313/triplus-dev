@@ -64,7 +64,7 @@ export default function MyPage() {
     setTimeout(() => {
       setUserInfo({ ...userInfodb });
       setIsLoading(false);
-    }, 2000);
+    }, 1000);
   }, []);
 
   return (
