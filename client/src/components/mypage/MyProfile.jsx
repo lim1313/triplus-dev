@@ -15,6 +15,12 @@ const ProfileWrapper = styled.div`
     text-align: center;
     font-size: 0.7rem;
   }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    margin-right: 0;
+    text-align: center;
+    margin-bottom: 3rem;
+  }
 `;
 
 const ImgWrapper = styled.img`

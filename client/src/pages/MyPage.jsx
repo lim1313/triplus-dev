@@ -35,6 +35,14 @@ const MyWrapper = styled.div`
     border: 1px solid;
     color: ${({ theme }) => theme.color.blue};
   }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1rem;
+    flex-direction: column;
+    padding: 4rem 2rem;
+    height: 100%;
+    overflow-y: auto;
+  }
 `;
 
 const BackgroundImg = styled.div`
