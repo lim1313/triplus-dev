@@ -14,14 +14,14 @@ export const Background = styled.div`
 `;
 
 export const ModalWrapper = styled.div`
+  position: relative;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.5);
+  background: white;
   width: ${({ width }) => width || '26vw'};
   min-width: ${({ minWidth }) => minWidth || '18rem'};
-  background: white;
   min-height: 20vh;
-  border-radius: 2rem;
-  padding: 1.5rem;
-  position: relative;
-  box-shadow: 8px 10px 5px rgba(0, 0, 0, 0.2);
 `;
 
 export const ModalTitle = styled.div`

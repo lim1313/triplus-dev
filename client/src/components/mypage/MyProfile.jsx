@@ -2,11 +2,11 @@
 
 import React, { useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { BorderBtn, ColorBtn } from '../../styles/common';
+import { ColorBtn } from '../../styles/common';
 import { v4 as uuid4 } from 'uuid';
 import S3 from 'react-aws-s3';
 import { deleteProfile, postProfile } from '../../network/my/http';
-import SpinLoading from '../common/SpinLoading';
+import DeleteSave from './MyProfile/DeleteSave';
 
 const ProfileWrapper = styled.div`
   margin-right: 2rem;
@@ -68,19 +68,6 @@ const BtnColor = styled(ColorBtn)`
     `}
 `;
 
-const BtnBorder = styled(BorderBtn)`
-  padding: 0.1em 1.1em;
-
-  ${({ disabled }) =>
-    disabled &&
-    css`
-      &:hover {
-        cursor: not-allowed;
-        background-color: unset;
-      }
-    `}
-`;
-
 export default function MyProfile({ image }) {
   const [isChange, setIsChange] = useState(false);
   const [fileImg, setFileImg] = useState(null); //파일
@@ -91,16 +78,6 @@ export default function MyProfile({ image }) {
   const imgRef = useRef();
 
   const delSaveImg = async (state) => {
-    if (state === 'save' && !fileImg) {
-      console.log('파일을 선택하세요');
-      return;
-    }
-
-    if (state === 'del' && !imguuid) {
-      console.log('삭제할 파일이 없습니다.');
-      return;
-    }
-
     const config = {
       bucketName: process.env.REACT_APP_S3_BUCKET_NAME,
       dirName: 'asset/profile',
@@ -130,7 +107,7 @@ export default function MyProfile({ image }) {
           setTimeout(() => {
             if (state === 'del') {
               setPreviewImg(null);
-              setImguuid('/asset/else/userBlank.png');
+              setImguuid(null);
               setIsLoading(false);
             }
           }, 1000);
@@ -158,13 +135,14 @@ export default function MyProfile({ image }) {
         setTimeout(() => {
           setIsChange(!isChange);
           setImguuid(newFileName + fileImg.name.split('.')[1]);
-          setFileImg(null);
+          // setFileImg(null);
           setIsLoading(false);
         }, 1000);
       })
       .catch((err) => {
         console.error(err);
       });
+    console.log('end');
   };
 
   const selectImage = (e) => {
@@ -177,8 +155,9 @@ export default function MyProfile({ image }) {
 
   return (
     <ProfileWrapper>
+      {/* {isModal && <Modal content='정말 삭제하시겠습니까?' />} */}
       <ImgWrapper
-        src={previewImg || imguuid}
+        src={previewImg || imguuid || '/asset/else/userBlank.png'}
         alt='프로필'
         ref={imgRef}
         onError={() => {
@@ -209,12 +188,13 @@ export default function MyProfile({ image }) {
             수정
           </BtnColor>
         )}
-        <BtnBorder
-          onClick={isChange ? () => delSaveImg('save') : () => delSaveImg('del')}
-          disabled={isLoading}
-        >
-          {isLoading ? <SpinLoading /> : isChange ? '저장' : '삭제'}
-        </BtnBorder>
+        <DeleteSave
+          isChange={isChange}
+          isLoading={isLoading}
+          delSaveImg={delSaveImg}
+          fileImg={fileImg}
+          imguuid={imguuid}
+        />
       </BtnWrapper>
     </ProfileWrapper>
   );

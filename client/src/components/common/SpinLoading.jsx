@@ -16,7 +16,6 @@ const Spin = styled.div`
   border-radius: 50%;
   margin: 0 auto;
   border: 3px solid ${({ theme }) => theme.color.gray};
-  /* border-top: 3px solid ${({ theme }) => theme.color.lightBlue}; */
   border-top: 3px solid pink;
   animation: ${spinLoad} 2s ease-in infinite;
 `;
