@@ -96,8 +96,13 @@ io.on('connection', (socket) => {
     callback();
     console.log(DBform);
     console.log(socket.id);
+    const { date, user_id, content } = DBform;
 
-    socket.to(selectedRoom).emit('getMessage', DBform);
+    io.to(selectedRoom).emit('getMessage', {
+      date,
+      userId: user_id,
+      content,
+    });
   });
 });
 
