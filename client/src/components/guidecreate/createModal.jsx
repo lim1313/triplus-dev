@@ -44,7 +44,7 @@ export default function CreateModal(props) {
     endTime: '',
     count: '',
     content: '',
-    reOpen: '',
+    reOpen: 'true',
   });
 
   // const handleInputChange = () => {};
