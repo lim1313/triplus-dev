@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Background, ModalTitle, ModalWrapper } from '../../styles/common/modal';
 import { ColorBtn } from '../../styles/common/index';
 import styled from 'styled-components';
@@ -12,7 +12,9 @@ import { ImCancelCircle } from 'react-icons/im';
 
 const DatePlaceCtn = styled.div`
   display: flex;
+  justify-content: space-between;
   margin-top: 1rem;
+  margin-bottom: 1rem;
   height: 13rem;
 `;
 const SubmitCtn = styled.div`
@@ -34,10 +36,22 @@ const DeleteBtn = styled.button`
 `;
 
 export default function CreateModal(props) {
+  const [inputs, setInputs] = useState({
+    title: '',
+    date: '',
+    region: '',
+    startTime: '',
+    endTime: '',
+    count: '',
+    content: '',
+    reOpen: '',
+  });
+
+  // const handleInputChange = () => {};
   const { handleCloseCreate } = props;
   return (
     <Background onClick={handleCloseCreate} name='Background'>
-      <ModalWrapper minWidth='23rem'>
+      <ModalWrapper width='25rem' minWidth='23rem'>
         <DeleteBtn>
           <ImCancelCircle className='cancel' onClick={handleCloseCreate} />
         </DeleteBtn>
@@ -45,7 +59,7 @@ export default function CreateModal(props) {
         <GuideTitle />
         <GuideImgs />
         <DatePlaceCtn>
-          <GuideDate />
+          <GuideDate setInputs={setInputs} inputs={inputs} />
           <GuidePlace />
         </DatePlaceCtn>
         <GuideTime />
