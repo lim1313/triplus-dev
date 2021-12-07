@@ -1,4 +1,4 @@
-const {guide_card, user, guide_user_participate} = require('./../../models');
+const {guide_card, user, guide_user_participate, guide_image} = require('./../../models');
 const {Op} = require('sequelize');
 const GLOBAL_VARIABLE = require('./global_variable');
 const date_fns = require('date-fns');
@@ -64,10 +64,14 @@ module.exports = {
     }
 
     try {
+      console.log(req.files);
+      console.log(req.body);
       await guide_card.create(insertValue).then((result) => {
         resObject['code'] = 200;
         resObject['message'] = '가이드 카드를 작성하였습니다';
       });
+
+
     } catch (error) {
       console.log(error);
       resObject['code'] = 400;
