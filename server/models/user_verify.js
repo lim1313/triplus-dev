@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 0,
       },
       verify_key: DataTypes.STRING,
+      email: DataTypes.STRING,
     },
     {
       sequelize,

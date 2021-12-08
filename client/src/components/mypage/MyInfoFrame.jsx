@@ -1,10 +1,13 @@
 /*eslint-disable no-unused-vars*/
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useInput } from '../../hooks/useInput';
-import { postInfo } from '../../network/my/http';
+import { postEmailCheck, postEmailUnCheck, postInfo } from '../../network/my/http';
 import { ColorBtn } from '../../styles/common';
+import { useDispatch } from 'react-redux';
+import { exit } from '../../redux/login/action';
+import { useNavigate } from 'react-router-dom';
 
 export const LiWrapper = styled.li`
   z-index: 2;
@@ -32,13 +35,13 @@ const NameWrapper = styled.div`
 `;
 
 const ChangeInput = styled.input.attrs({ type: 'text' })`
-  width: ${({ user }) => (user ? '70%' : '80%')};
+  width: ${({ user }) => (user ? '60%' : '70%')};
   font-size: 1.2rem;
   &:focus {
     outline: none;
   }
   @media ${({ theme }) => theme.device.mobile} {
-    font-size: 1rem;
+    font-size: 0.9rem;
     width: ${({ user }) => (user ? '60%' : '70%')};
   }
 `;
@@ -46,6 +49,10 @@ const ChangeInput = styled.input.attrs({ type: 'text' })`
 const BtnColor = styled(ColorBtn)`
   padding: 0.1em 0.7em;
   flex-shrink: 0;
+  margin-left: 0.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin-bottom: ${({ twoBtn }) => twoBtn && '0.5rem'};
+  }
 `;
 
 const AlertMsg = styled.div`
@@ -61,38 +68,78 @@ const AlertMsg = styled.div`
   }
 `;
 
+const BtnWrapper = styled.div`
+  display: flex;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    flex-direction: column;
+  }
+`;
+
 export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
   const [isChange, setIsChange] = useState(false);
   const [inputValue, inputChange] = useInput(content);
-  const [isAlert, setIsAlert] = useState(false);
-  const [checkedEmail, setCheckedEmail] = useState(false);
+  const [isAlert, setIsAlert] = useState(null);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    return () => {
+      // TODO POST /my/email-unCheck
+      postEmailUnCheck().then((res) => {
+        if (res === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해 주세요');
+          dispatch(exit());
+          navigate('/login', { replace: true });
+        } else {
+          console.log(res);
+        }
+      });
+    };
+  }, []);
 
   const changeContent = (e) => {
     if (isChange) {
       if ((title === 'nickname' || title === 'e-mail') && !inputValue.length) {
-        return setIsAlert(true);
+        return setIsAlert('*필수 입력 사항');
       }
-      console.log(content);
       // TODO POST /개인정보 변경
       postInfo(inputValue, title).then((res) => {
-        console.log(res);
-        setIsAlert(false);
-        setIsChange(!isChange);
+        if (res === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해 주세요');
+          dispatch(exit());
+          navigate('/login', { replace: true });
+        } else if (title === 'e-mail' && res === 403) {
+          setIsAlert('*이메일 인증을 완료해 주세요');
+        } else if (res >= 200 && res < 300) {
+          setIsAlert(null);
+          setIsChange(!isChange);
+        } else {
+          console.log(res);
+          setIsChange(!isChange);
+        }
       });
-
-      // setIsAlert(false);
-      // setIsChange(!isChange);
     } else {
       setIsChange(!isChange);
     }
   };
 
-  const changeEmail = () => {
-    //인증 이메일 전송 완료
-    // => 인증 메일을 확인해 주세요.
-    //인증 이메일 전송 실패
-    // => 인증 이메일 전송이 실패되었습니다. 다시 시도해 주세요.
-    setIsChange(!isChange);
+  const sendEmail = () => {
+    // TODO POST /my/email-check 이메일 인증 전송
+    postEmailCheck(inputValue).then((res) => {
+      if (res === 401) {
+        alert('로그인이 만료되었습니다. 다시 로그인해 주세요');
+        dispatch(exit());
+        navigate('/login', { replace: true });
+      } else if (res === 400) {
+        alert('인증메일 발송이 실패했습니다. 다시 시도해주세요');
+      } else if (res >= 200 && res < 300) {
+        setIsAlert('*인증 이메일이 발송되었습니다. 이메일을 확인해 주세요');
+      } else {
+        console.log(res);
+      }
+    });
   };
 
   return (
@@ -112,15 +159,26 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
         )}
         {noBtn ||
           (title === 'e-mail' ? (
-            <BtnColor palette='blue' onClick={changeEmail}>
-              {isChange ? (checkedEmail ? '완료' : '인증') : '수정'}
-            </BtnColor>
+            isChange ? (
+              <BtnWrapper>
+                <BtnColor twoBtn palette='blue' onClick={sendEmail}>
+                  인증
+                </BtnColor>
+                <BtnColor palette='blue' onClick={changeContent}>
+                  완료
+                </BtnColor>
+              </BtnWrapper>
+            ) : (
+              <BtnColor palette='blue' onClick={changeContent}>
+                수정
+              </BtnColor>
+            )
           ) : (
             <BtnColor palette='blue' onClick={changeContent}>
               {isChange ? '완료' : '수정'}
             </BtnColor>
           ))}
-        {isAlert && <AlertMsg>*필수 입력 사항</AlertMsg>}
+        {isAlert && <AlertMsg>{isAlert}</AlertMsg>}
       </NameWrapper>
     </LiWrapper>
   );
