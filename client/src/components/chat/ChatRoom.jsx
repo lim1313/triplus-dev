@@ -14,9 +14,11 @@ const RoomContainer = styled.div`
 
 const ChatBoard = styled.div`
   width: 100%;
-  height: 85.5vh;
+  height: 86.5vh;
   background-color: #e9ebf6;
   padding: 3rem;
+  border: 1px solid #aeb8c2;
+
   overflow: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -54,6 +56,8 @@ const ChatMessageBox = styled.div`
   height: 6.5vh;
   background-color: #fff;
   padding: 0.6rem 1.3em;
+  border-left: 1px solid #aeb8c2;
+  border-right: 1px solid #aeb8c2;
 `;
 
 const ChatMessage = styled.input`
@@ -79,11 +83,12 @@ const ChatButton = styled(ColorBtn)`
 
 const NoSelectRoom = styled.div`
   display: flex;
-  height: 92vh;
+  height: 93vh;
   justify-content: center;
   align-items: center;
   background-color: #e9ebf6;
   font-size: 3vw;
+  border: 1px solid #aeb8c2;
 `;
 
 export default function ChatRoom({ sendMessageHandler }) {

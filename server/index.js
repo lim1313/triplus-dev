@@ -101,11 +101,7 @@ io.on('connection', async (socket) => {
   let userInfo;
   let userChatInfos;
   if (!socket.handshake.headers.cookie) {
-    userChatInfos = {
-      userId: '',
-      nickname: '',
-      chatRooms: [],
-    };
+    return socket.emit('shouldLogin');
   } else {
     userInfo = isSocketAuthorized(socket.handshake.headers.cookie.replace('accessToken=', ''));
     // console.log(userInfo);
@@ -142,6 +138,10 @@ io.on('connection', async (socket) => {
     const data = { date, user_id, content };
     console.log(data);
     io.to(selectedRoom).emit('getMessage', [data]);
+  });
+
+  socket.on('disconnectng', () => {
+    console.log('disconnecting');
   });
 
   socket.on('disconnect', () => {

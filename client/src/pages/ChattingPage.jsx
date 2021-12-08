@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars*/
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
+import { logOut } from '../network/login/http';
 
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
@@ -13,6 +15,7 @@ import {
   getChatList,
   resetChatList,
 } from '../redux/chat/action';
+import { logoutUser } from '../redux/login/action';
 
 import Loading from '../components/common/Loading';
 import ChatContainer from '../components/chat/ChatContainer';
@@ -22,11 +25,10 @@ dayjs.locale('ko');
 export default function ChattingPage() {
   const socketRef = useRef();
 
-  const chatList = useSelector((state) => state.chatListReducer.chatList);
   const currentRoom = useSelector((state) => state.currentRoomReducer.currentRoom);
   const dispatch = useDispatch();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const dateConversion = (date) => {
     const day = dayjs(date).format('YYYY년 M월 D일');
@@ -65,6 +67,12 @@ export default function ChattingPage() {
       transports: ['websocket'],
     });
 
+    socketRef.current.on('shouldLogin', async () => {
+      logOut();
+      dispatch(logoutUser());
+      navigate('/login');
+    });
+
     socketRef.current.on('getRooms', (data) => {
       // TODO userId 가 빈문자열로 왔을 때 로그인하게끔 유도
       dispatch(getUserChatInfo(data));
@@ -87,6 +95,7 @@ export default function ChattingPage() {
     socketRef.current.on('getMessage', (data) => {
       console.log('get');
       const newChat = editChat(data);
+      // console.log(chatList);
       dispatch(getChatList(newChat));
     });
   }, []);
@@ -114,9 +123,7 @@ export default function ChattingPage() {
     socketRef.current.emit('sendMessage', DBform, selectedRoom);
   };
 
-  return isLoading ? (
-    <Loading></Loading>
-  ) : (
+  return (
     <ChatContainer
       sendMessageHandler={sendMessageHandler}
       selectRoomHandler={selectRoomHandler}
