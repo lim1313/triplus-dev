@@ -86,11 +86,11 @@ const NoSelectRoom = styled.div`
   font-size: 3vw;
 `;
 
-export default function ChatRoom({ sendMessageHandler, userId, selectedRoom }) {
+export default function ChatRoom({ sendMessageHandler, selectedRoom }) {
   const [msg, setMsg] = useState('');
 
   const chatBubble = useSelector((state) => state.chatListReducer);
-
+  const userId = useSelector((state) => state.chatUserInfoReducer.userId);
   const msgInputHandler = (e) => {
     setMsg(e.target.value);
   };
