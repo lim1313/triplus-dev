@@ -27,6 +27,10 @@ const fileManagement = require('./router/fileManagement');
 const logout = require('./controller/logout');
 const confirmEmail = require('./controller/functions/confirmEmail');
 
+// 필요한 함수
+// const getUserChatInfo = require('./controller/functions/getUserChatInfo');
+const { isSocketAuthorized, getUserChatInfo } = require('./controller/functions/getUserChatInfo');
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
@@ -46,7 +50,7 @@ app.use(
 app.use(cookieParser());
 
 app.use('/admin', adminPage);
-app.use('/chatting', chattingPage);
+app.use('/chat', chattingPage);
 app.use('/login', loginPage);
 app.use('/main', mainPage);
 app.use('/management', managementPage);
@@ -57,6 +61,7 @@ app.use('/oauth', authPage);
 app.use('/file-management', fileManagement);
 app.get('/logout', logout.logout);
 app.get('/confirmEmail', confirmEmail.confirmEmail);
+app.get('/changeEmail', confirmEmail.changeEmail);
 
 app.get('/hello-triplus', (req, res) => {
   res.status(200).send('Hello triplus');
@@ -80,29 +85,33 @@ const io = new Server(httpServer, {
   },
 });
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
   console.log(`connect with id: ${socket.id}`);
 
-  socket.onAny((event) => {
-    console.log(`Socket Event : ${event}`);
-    console.log(io.sockets.adapter.rooms);
-  });
+  // socket.onAny((event) => {
+  //   console.log(`Socket Event : ${event}`);
+  //   console.log(io.sockets.adapter.rooms);
+  // });
 
-  socket.on('enterRoom', (selectedRoom) => {
+  // const userChatInfo = isSocketAuthorized(socket.handshake.headers.cookie['accessToken']);
+  const userInfo = isSocketAuthorized(socket.handshake.headers.cookie.replace('accessToken=', ''));
+  console.log(userInfo);
+  const userChatInfos = await getUserChatInfo(userInfo);
+  console.log(userChatInfos);
+
+  socket.emit('getRooms', userChatInfos);
+
+  socket.on('joinRoom', (selectedRoom) => {
     socket.join(selectedRoom);
+    // GET / chat / rooms;
   });
 
-  socket.on('sendMessage', (DBform, selectedRoom, callback) => {
-    callback();
+  socket.on('sendMessage', (DBform, selectedRoom) => {
     console.log(DBform);
     console.log(socket.id);
-    const { date, user_id, content } = DBform;
-
-    io.to(selectedRoom).emit('getMessage', {
-      date,
-      userId: user_id,
-      content,
-    });
+    const { DBdate, date, user_id, content } = DBform;
+    const data = { date, user_id, content };
+    io.to(selectedRoom).emit('getMessage', data);
   });
 });
 
@@ -123,7 +132,7 @@ sequelize
 /**
  * * 1. 채팅 페이지 접근
  * > 로그인을 한다
- * > axios.get 요청 토큰을 보낸다
+ * > axios.get 요청 토큰을 보낸다 GET /chat/rooms
  * > 토큰을 확인하고, 요청자 userId 정보를 가져온다
  * > 가져온 정보를 바탕으로 roomId, room에 속한 다른 유저의 userId를 가져온다
  * > 클라이언트에 roomId, roomId 와 연결된 상대 userId 도 보내준다.

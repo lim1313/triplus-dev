@@ -10,6 +10,12 @@ const SectionCtn = styled.section`
   background-color: white;
   height: 80vh;
   padding: 0 1.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100vw;
+    padding: 0.5rem;
+    border-radius: 0;
+    margin-top: 2rem;
+  }
 `;
 
 export default function ManageSection(props) {

@@ -1,12 +1,12 @@
 /*eslint-disable no-unused-vars*/
 
 import React, { useRef, useState } from 'react';
-import styled, { css } from 'styled-components';
-import { ColorBtn } from '../../styles/common';
+import styled from 'styled-components';
 import { v4 as uuid4 } from 'uuid';
 import S3 from 'react-aws-s3';
 import { deleteProfile, postProfile } from '../../network/my/http';
 import DeleteSave from './MyProfile/DeleteSave';
+import FileChange from './MyProfile/FileChange';
 
 const ProfileWrapper = styled.div`
   margin-right: 2rem;
@@ -14,6 +14,12 @@ const ProfileWrapper = styled.div`
   & .info {
     text-align: center;
     font-size: 0.7rem;
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    margin-right: 0;
+    text-align: center;
+    margin-bottom: 3rem;
   }
 `;
 
@@ -36,44 +42,14 @@ const BtnWrapper = styled.div`
   }
 `;
 
-const LabelBtnColor = styled(ColorBtn).attrs({ as: 'label' })`
-  text-align: center;
-  padding: 0.1em 1.1em;
-  margin-bottom: 0.5rem;
-
-  ${({ disabled }) =>
-    disabled &&
-    css`
-      &:hover {
-        cursor: not-allowed;
-        background-color: ${({ theme }) => theme.color.blue};
-        color: #fff;
-      }
-    `}
-`;
-
-const BtnColor = styled(ColorBtn)`
-  text-align: center;
-  padding: 0.1em 1.1em;
-  margin-bottom: 0.5rem;
-
-  ${({ disabled }) =>
-    disabled &&
-    css`
-      &:hover {
-        cursor: not-allowed;
-        background-color: ${({ theme }) => theme.color.blue};
-        color: #fff;
-      }
-    `}
-`;
-
 export default function MyProfile({ image }) {
   const [isChange, setIsChange] = useState(false);
-  const [fileImg, setFileImg] = useState(null); //파일
+  const [fileImg, setFileImg] = useState(null); //업로드 파일
   const [previewImg, setPreviewImg] = useState(null); //미리보기
-  const [imguuid, setImguuid] = useState(image); // 새로운 파일명
+  const [imguuid, setImguuid] = useState(image); // 새로운 파일
+
   const [isLoading, setIsLoading] = useState(false);
+  const [alertMsg, setAlertMsg] = useState(null);
 
   const imgRef = useRef();
 
@@ -87,23 +63,22 @@ export default function MyProfile({ image }) {
     };
     const ReactS3Client = new S3(config);
 
-    setIsLoading(true);
     //* 이미지가 존재하는 경우 or 삭제하는 경우 해당 이미지는 s3에서 제거
+    setIsLoading(true);
     if (imguuid) {
-      const oldImg = imguuid;
+      const oldImg = imguuid.split('/')[5];
       await ReactS3Client.deleteFile(oldImg)
         .then((res) => {
           //TODO DELETE /mypage/profile
           // deleteProfile()
           //   .then(() => {
-          //     console.log('success');
-          //     if (state === 'del') {
-          //     setImguuid('/asset/else/userBlank.png')
-          //     setIsLoading(false);
-          //     }
+          // if (state === 'del') {
+          //   setPreviewImg(null);
+          //   setImguuid(null);
+          //   setIsLoading(false);
+          // }
           //   })
           //   .catch((err) => console.error(err));
-          console.log('success', res);
           setTimeout(() => {
             if (state === 'del') {
               setPreviewImg(null);
@@ -116,26 +91,26 @@ export default function MyProfile({ image }) {
           console.error(err);
         });
     }
-
     if (state === 'del') return;
 
-    const newFileName = uuid4();
     //* 이미지 s3에 저장
+    const newFileName = uuid4();
     await ReactS3Client.uploadFile(fileImg, newFileName)
       .then((data) => {
         // TODO POST /mypage/image
         // postProfile(data.location).then(() => {
-        //   setIsChange(!isChange);
-        //   setImguuid(newFileName+fileImg.name.split('.')[1])
-        //   setFileImg(null);
-        //   setIsLoading(false);
+        // setIsChange(!isChange);
+        // setImguuid(data.location);
+        // setFileImg(null);
+        // setPreviewImg(null);
+        // setIsLoading(false);
         // }).catch(err => console.error(err))
 
-        console.log('location', data);
         setTimeout(() => {
           setIsChange(!isChange);
-          setImguuid(newFileName + fileImg.name.split('.')[1]);
-          // setFileImg(null);
+          setImguuid(data.location);
+          setFileImg(null);
+          setPreviewImg(null);
           setIsLoading(false);
         }, 1000);
       })
@@ -151,18 +126,16 @@ export default function MyProfile({ image }) {
     let imgFile = e.target.files[0];
     setFileImg(imgFile);
     setPreviewImg(URL.createObjectURL(imgFile));
+    e.target.value = null;
   };
 
   return (
     <ProfileWrapper>
-      {/* {isModal && <Modal content='정말 삭제하시겠습니까?' />} */}
       <ImgWrapper
         src={previewImg || imguuid || '/asset/else/userBlank.png'}
         alt='프로필'
         ref={imgRef}
-        onError={() => {
-          return (imgRef.current.src = '/asset/else/userBlank.png');
-        }}
+        onError={() => setImguuid(null)}
       />
       {isChange && (
         <>
@@ -171,29 +144,32 @@ export default function MyProfile({ image }) {
         </>
       )}
       <BtnWrapper>
-        <input
-          type='file'
-          id='upload'
-          onChange={selectImage}
-          accept='.png, .jpg, .jpeg'
-          disabled={isLoading}
+        <FileChange
+          selectImage={selectImage}
+          isLoading={isLoading}
+          isChange={isChange}
+          fileImg={fileImg}
+          clickChange={() => {
+            setIsChange(!isChange);
+            setAlertMsg(null);
+          }}
         />
-
-        {isChange ? (
-          <LabelBtnColor htmlFor='upload' palette='blue' disabled={isLoading}>
-            {(fileImg && fileImg.name) || '파일선택'}
-          </LabelBtnColor>
-        ) : (
-          <BtnColor onClick={() => setIsChange(!isChange)} palette='blue' disabled={isLoading}>
-            수정
-          </BtnColor>
-        )}
         <DeleteSave
           isChange={isChange}
           isLoading={isLoading}
           delSaveImg={delSaveImg}
           fileImg={fileImg}
           imguuid={imguuid}
+          clickChange={() => {
+            setIsChange(!isChange);
+            setPreviewImg(null);
+            setFileImg(null);
+            setAlertMsg(null);
+          }}
+          alertMsg={alertMsg}
+          clickSubmit={(msg) => {
+            setAlertMsg(msg);
+          }}
         />
       </BtnWrapper>
     </ProfileWrapper>

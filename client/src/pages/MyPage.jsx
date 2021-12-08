@@ -19,7 +19,7 @@ const MyWrapper = styled.div`
   position: relative;
   overflow: hidden;
   border-radius: 1rem;
-  width: calc(${({ theme }) => theme.size.maxWidth} - 350px);
+  width: calc(${({ theme }) => theme.size.maxWidth} - 300px);
   background-color: ${({ theme }) => theme.color.lightGray};
   padding: 6rem 4rem;
   padding-top: 6.5rem;
@@ -35,6 +35,14 @@ const MyWrapper = styled.div`
     border: 1px solid;
     color: ${({ theme }) => theme.color.blue};
   }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1rem;
+    flex-direction: column;
+    padding: 4rem 2rem;
+    height: 100%;
+    overflow-y: auto;
+  }
 `;
 
 const BackgroundImg = styled.div`
@@ -49,7 +57,6 @@ const BackgroundImg = styled.div`
 
 export default function MyPage() {
   const [userInfo, setUserInfo] = useState();
-
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
