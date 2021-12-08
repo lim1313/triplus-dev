@@ -19,7 +19,7 @@ const MyWrapper = styled.div`
   position: relative;
   overflow: hidden;
   border-radius: 1rem;
-  width: calc(${({ theme }) => theme.size.maxWidth} - 350px);
+  width: calc(${({ theme }) => theme.size.maxWidth} - 300px);
   background-color: ${({ theme }) => theme.color.lightGray};
   padding: 6rem 4rem;
   padding-top: 6.5rem;
