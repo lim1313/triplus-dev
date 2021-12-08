@@ -11,7 +11,7 @@ export const getGuideInfo = async () => {
 
 export const createGudie = async (data) => {
   console.log(data);
-  return axios.post(`${http}/file-management/guide-image`, data, {
+  return axios.post(`${http}/management/guide-card`, data, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 };

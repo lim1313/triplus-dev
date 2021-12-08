@@ -18,6 +18,13 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: 'userId',
         }
       );
+      guide_card.hasMany(
+        models.guide_image,
+        {
+          sourceKey: 'guideId',
+          foreignKey: 'guideId',
+        }
+      )
     }
   };
   guide_card.init({

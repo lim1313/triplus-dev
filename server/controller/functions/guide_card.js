@@ -146,7 +146,35 @@ module.exports = {
       return resObject;
     }
 
-    await guide_card.findAll({
+    try {
+      const guideCards = await guide_card.findAll({
+        include: [
+          {
+            model: user,
+            attributes: ['nickName', 'gender'],
+            where: whereUser,
+          }, {
+            model: guide_image,
+          }
+        ],
+        where: whereGuideCard
+      });
+
+      if(guideCards.length <= 0){
+        throw '현재 지역의 가이드 카드가 없습니다'
+      }
+
+      for(let guideCard of guideCards){
+        console.log(guideCard.dataValues);
+      }
+    } catch (error) {
+      console.log(error);
+      resObject['code'] = 200;
+      resObject['message'] = error;
+      resObject['guideCardList'] = [];
+    }
+
+    const guideCards = await guide_card.findAll({
       raw: true,
       include: [
         {
