@@ -34,10 +34,13 @@ module.exports = {
   signup: async (req, res) => {
     const { userId, password, email } = req.body;
     const hashPw = await hashPassword(password);
+    const key1 = crypto.randomBytes(256).toString('hex').substr(100, 5);
+    const randomNum = parseInt(key1, 16);
+    const nickname = '여행자' + randomNum;
     user
       .findOrCreate({
         where: { userId },
-        defaults: { userId, password: hashPw, email, role: 'general' },
+        defaults: { userId, password: hashPw, email, role: 'general', nickName: nickname },
       })
       .then(([data, created]) => {
         if (created) {
