@@ -16,6 +16,13 @@ const InputCtn = styled.div`
     position: absolute;
     left: -50%;
   }
+  @media screen and (max-width: 400px) {
+    margin-left: 1rem;
+    & .popup {
+      position: absolute;
+      left: -100%;
+    }
+  }
 `;
 const PlaceInput = styled(Input)`
   margin-bottom: 0.2rem;

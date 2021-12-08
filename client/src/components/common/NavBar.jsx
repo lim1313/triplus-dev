@@ -116,10 +116,10 @@ export default function NavBar() {
   const isToggled = useSelector((state) => state.toggleReducer.isToggled);
 
   useEffect(() => {
-    const path = pathname.slice(1);
+    const path = pathname.split('/');
     setRouted({
       ...initialRouted,
-      [path]: true,
+      [path[1]]: true,
     });
   }, [pathname]);
 
@@ -151,8 +151,10 @@ export default function NavBar() {
         </Link>
         <Link to='management'>
           <MaxBtn
-            active={routed.management}
-            palette={pathname === '/management' ? 'black' : 'gray'}
+            active={routed.management || routed.management}
+            palette={
+              pathname === '/management' || pathname === '/management/tourlist' ? 'black' : 'gray'
+            }
           >
             여행 관리
           </MaxBtn>

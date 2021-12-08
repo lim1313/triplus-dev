@@ -8,7 +8,7 @@ const GlobalStyle = createGlobalStyle`
     background-color: #fff;
     cursor: default;
     -ms-overflow-style: none; 
-    scrollbar-width: none; 
+    scrollbar-width: none;
   }
 
   body::-webkit-scrollbar {
