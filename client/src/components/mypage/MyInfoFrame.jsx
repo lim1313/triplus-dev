@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useInput } from '../../hooks/useInput';
-import { postNickName } from '../../network/my/http';
+import { postInfo } from '../../network/my/http';
 import { ColorBtn } from '../../styles/common';
 
 export const LiWrapper = styled.li`
@@ -68,19 +68,18 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
 
   const changeContent = (e) => {
     if (isChange) {
-      if (title === 'nickname' || title === 'e-mail') {
-        setIsAlert(true);
-        if (!inputValue.length) return;
+      if ((title === 'nickname' || title === 'e-mail') && !inputValue.length) {
+        return setIsAlert(true);
       }
-
+      console.log(content);
       // TODO POST /개인정보 변경
-      // postNickName(inputValue,title).then(() => {
-      //   setIsAlert(false);
-      //   setIsChange(!isChange);
-      // });
+      postInfo(inputValue, title).then(() => {
+        setIsAlert(false);
+        setIsChange(!isChange);
+      });
 
-      setIsAlert(false);
-      setIsChange(!isChange);
+      // setIsAlert(false);
+      // setIsChange(!isChange);
     } else {
       setIsChange(!isChange);
     }
