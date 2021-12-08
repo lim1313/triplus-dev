@@ -17,4 +17,7 @@ export const ManageCtn = styled.div`
   padding: 1.5em;
   margin: 0 auto;
   flex-direction: column;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 0;
+  }
 `;

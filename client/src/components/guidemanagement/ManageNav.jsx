@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { NoBorderBtn } from '../../styles/common/index';
@@ -51,23 +51,17 @@ const LinkBtn = styled(NoBorderBtn)`
   }
 `;
 
-export default function ManageNav() {
-  const [clicked, setClick] = useState({ guide: true, tourist: false });
-  const handleGuideClick = () => {
-    setClick({ guide: true, tourist: false });
-  };
-  const handleTourClick = () => {
-    setClick({ guide: false, tourist: true });
-  };
+export default function ManageNav(props) {
+  const { clicked } = props;
   return (
     <NavCtn>
       <Link to='/management'>
-        <LinkBtn className='guideBtn' onClick={handleGuideClick} active={clicked.guide}>
+        <LinkBtn className='guideBtn' active={clicked.management}>
           <span>가이드 모드</span>
         </LinkBtn>
       </Link>
       <Link to='/management/tourlist'>
-        <LinkBtn className='touristBtn' onClick={handleTourClick} active={clicked.tourist}>
+        <LinkBtn className='touristBtn' active={clicked.managementtourlist}>
           <span>여행자 모드</span>
         </LinkBtn>
       </Link>

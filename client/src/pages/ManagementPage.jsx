@@ -25,10 +25,14 @@ const Background = styled(PageContainer)`
   margin: 0 auto;
 `;
 export default function ManagementPage() {
-  const location = useLocation();
+  const { pathname } = useLocation();
   const [isOpen, setOpen] = useState(false);
   const [guideInfo, setGuideInfo] = useState([]);
   const [applicantInfo, setApplicantInfo] = useState([]);
+  const [clicked, setClick] = useState({
+    management: true,
+    managementtourlist: false,
+  });
   const handleCreateClick = () => {
     setOpen(!isOpen);
   };
@@ -38,19 +42,26 @@ export default function ManagementPage() {
     }
   };
   useEffect(() => {
+    const path = pathname.split('/').join('');
+    console.log(path);
+    if (path === 'management') {
+      setClick({ management: true, managementtourlist: false });
+    } else {
+      setClick({ management: false, managementtourlist: true });
+    }
     getGuideInfo().then((res) => {
       setGuideInfo(res.data.guideData);
       setApplicantInfo(res.data.applicant);
     });
-  });
+  }, [pathname]);
 
   return (
     <>
       {isOpen ? (
         <CreateModal handleCloseCreate={handleCloseCreate} handleCreateClick={handleCreateClick} />
       ) : null}
-      <Background pathName={location.pathname}>
-        <ManageNav pathName={location.pathname} />
+      <Background pathName={pathname}>
+        <ManageNav pathName={pathname.pathname} clicked={clicked} />
         <Outlet />
         <ManageCtn>
           <ManageSection

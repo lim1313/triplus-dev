@@ -1,4 +1,4 @@
-import { LOGIN_USER, LOGOUT_USER, OAUTH_LOGIN, SET_MESSAGE } from './type';
+import { EXIT_USER, LOGIN_USER, LOGOUT_USER, OAUTH_LOGIN, SET_MESSAGE } from './type';
 
 export default function loginReducer(state = {}, action) {
   switch (action.type) {
@@ -23,6 +23,12 @@ export default function loginReducer(state = {}, action) {
       return {
         ...state,
         isLogin: true,
+      };
+    case EXIT_USER:
+      return {
+        ...state,
+        isLogin: false,
+        message: '',
       };
     default:
       return state;

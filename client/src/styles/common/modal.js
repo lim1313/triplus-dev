@@ -21,10 +21,12 @@ export const ModalWrapper = styled.div`
   background: white;
   width: ${({ width }) => width || '26vw'};
   min-width: ${({ minWidth }) => minWidth || '18rem'};
-  max-width: ${({ maxWidth }) => maxWidth || '25rem'};
+  max-width: ${({ maxWidth }) => maxWidth || '26rem'};
   min-height: 20vh;
 `;
 
 export const ModalTitle = styled.div`
   text-align: center;
+  @media ${({ theme }) => theme.device.mobile} {
+  }
 `;
