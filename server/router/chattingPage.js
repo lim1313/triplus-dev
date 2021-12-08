@@ -3,6 +3,6 @@ const router = express.Router();
 const controller = require('./../controller/chatting');
 
 router.get('/', controller.example);
-router.get('/rooms'); // > roomId, 상대의 user_id 가져오기
+router.get('/rooms', controller.findChatRoomByUserId);
 
 module.exports = router;

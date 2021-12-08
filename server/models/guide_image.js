@@ -14,7 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   guide_image.init({
-    guide_id: DataTypes.INTEGER,
+    guideId: {
+      type: DataTypes.INTEGER,
+      field: 'guide_id'
+    },
     image: DataTypes.STRING
   }, {
     sequelize,
