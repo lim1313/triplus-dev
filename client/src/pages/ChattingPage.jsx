@@ -55,6 +55,11 @@ export default function ChattingPage() {
     socketRef.current = io.connect(`${process.env.REACT_APP_HTTPSURL}`, {
       transports: ['websocket'],
     });
+
+    socketRef.current.on('getRooms', (data) => {
+      console.log(data);
+      dispatch(getUserChatInfo(data));
+    });
   }, []);
 
   // TODO 2. getMessage

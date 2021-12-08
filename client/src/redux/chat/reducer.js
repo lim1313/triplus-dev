@@ -3,7 +3,7 @@ import { USER_CHAT_INFO, CHAT_LIST } from './type';
 const chatUserInitialState = {
   userId: '',
   nickname: '',
-  chatPartner: [],
+  chatRooms: [],
 };
 
 const chatListInitialState = [];
