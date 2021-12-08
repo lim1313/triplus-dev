@@ -11,7 +11,7 @@ const httpServer = createServer(app);
 const { Server } = require('socket.io');
 
 // port 80으로 변경
-const port = process.env.HTTP_PORT || 4000;
+const port = process.env.HTTP_PORT || 80;
 
 // Router 연결
 const adminPage = require('./router/adminPage');

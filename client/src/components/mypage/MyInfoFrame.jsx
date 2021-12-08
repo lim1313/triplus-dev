@@ -65,6 +65,7 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
   const [isChange, setIsChange] = useState(false);
   const [inputValue, inputChange] = useInput(content);
   const [isAlert, setIsAlert] = useState(false);
+  const [checkedEmail, setCheckedEmail] = useState(false);
 
   const changeContent = (e) => {
     if (isChange) {
@@ -73,7 +74,8 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
       }
       console.log(content);
       // TODO POST /개인정보 변경
-      postInfo(inputValue, title).then(() => {
+      postInfo(inputValue, title).then((res) => {
+        console.log(res);
         setIsAlert(false);
         setIsChange(!isChange);
       });
@@ -83,6 +85,14 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
     } else {
       setIsChange(!isChange);
     }
+  };
+
+  const changeEmail = () => {
+    //인증 이메일 전송 완료
+    // => 인증 메일을 확인해 주세요.
+    //인증 이메일 전송 실패
+    // => 인증 이메일 전송이 실패되었습니다. 다시 시도해 주세요.
+    setIsChange(!isChange);
   };
 
   return (
@@ -100,11 +110,16 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
         ) : (
           <div>{inputValue}</div>
         )}
-        {noBtn || (
-          <BtnColor palette='blue' onClick={changeContent}>
-            {isChange ? '완료' : '수정'}
-          </BtnColor>
-        )}
+        {noBtn ||
+          (title === 'e-mail' ? (
+            <BtnColor palette='blue' onClick={changeEmail}>
+              {isChange ? (checkedEmail ? '완료' : '인증') : '수정'}
+            </BtnColor>
+          ) : (
+            <BtnColor palette='blue' onClick={changeContent}>
+              {isChange ? '완료' : '수정'}
+            </BtnColor>
+          ))}
         {isAlert && <AlertMsg>*필수 입력 사항</AlertMsg>}
       </NameWrapper>
     </LiWrapper>

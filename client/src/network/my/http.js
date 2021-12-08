@@ -13,9 +13,17 @@ export const getUserInfo = () => {
 //TODO POST 정보 변경
 export const postInfo = (data, path) => {
   if (path === 'nickname') path = 'nick-name';
-  if (path === 'e-mail') path = 'emailCheck';
+  if (path === 'e-mail') path = 'email';
   return axios.post(`${http}/my/${path}`, { data });
 };
+
+//TODO POST 이메일 변경
+export const postEmailCheck = (data) => {
+  return axios.post(`${http}/my/emailCheck`, { data });
+};
+
+//* 401 => 토큰 만료 => redux 관리
+//*
 
 //TODO POST 프로필 변경
 // 기본의 프로필 url은 삭제하고 새로운 url로 갱신
