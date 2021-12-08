@@ -13,6 +13,8 @@ import { createGudie } from '../../network/management/http';
 import dayjs from 'dayjs';
 import GuideGender from './GuideGender';
 
+const { kakao } = window;
+
 const DatePlaceCtn = styled.div`
   display: flex;
   justify-content: space-between;
@@ -39,16 +41,20 @@ const DeleteBtn = styled.button`
 `;
 
 export default function CreateModal(props) {
+  //props와 state
   const { handleCloseCreate, handleCreateClick } = props;
   const [inputs, setInputs] = useState({
     title: '',
     date: '',
-    region: '',
+    address: '',
+    gender: false,
     startTime: '',
     endTime: '',
     count: '',
     content: '',
     openDate: '',
+    latitude: '',
+    longitude: '',
   });
   const [fileUrl, setFileUrl] = useState({
     file: null,
@@ -57,16 +63,39 @@ export default function CreateModal(props) {
   });
   const [startDate, setStartDate] = useState(new Date());
   const [fileArray, setFileArray] = useState([]);
+  const [isGender, setIsGender] = useState(false);
+  const [address, setAddress] = useState('');
+  const [extraAddress, setExtraAddress] = useState('');
+
+  //이벤트핸들러 함수
+
+  let geocoder = new kakao.maps.services.Geocoder();
+
+  let callback = (result, status) => {
+    const data = result[0].road_address;
+    setInputs({ ...inputs, latitude: data.x, longitude: data.y });
+    if (status === kakao.maps.services.Status.Ok) {
+      console.log('Ok');
+    }
+  };
+  const handlePlaceBlur = () => {
+    geocoder.addressSearch(address, callback);
+  };
   const handleInputChange = (e) => {
     const id = e.target.getAttribute('id');
-    setInputs({ ...inputs, [id]: e.target.value });
-    console.log(inputs);
+    if (id === 'address') {
+      setInputs({ ...inputs, address: address + ' ' + e.target.value });
+      setExtraAddress(e.target.value);
+    } else {
+      setInputs({ ...inputs, [id]: e.target.value });
+    }
   };
   const handleDateChange = (date) => {
     console.log(date);
     setStartDate(date);
     setInputs({ ...inputs, date: dayjs(date).format('YYYY.MM.DD') });
   };
+
   const handleImgChange = (e) => {
     if (e.target.files) {
       console.log(e.target.files);
@@ -91,15 +120,25 @@ export default function CreateModal(props) {
     }
     createGudie(formData).then((res) => console.log(res));
   };
+
+  const handleAddressChange = (data) => {
+    setAddress(data);
+  };
+
+  const handleGenderClick = () => {
+    setIsGender(!isGender);
+    setInputs({ ...inputs, gender: !isGender });
+    console.log(inputs);
+  };
   return (
     <Background onClick={handleCloseCreate} name='Background'>
-      <ModalWrapper width='25rem' minWidth='23rem'>
+      <ModalWrapper width='27rem' minWidth='23rem'>
         <DeleteBtn>
           <ImCancelCircle className='cancel' onClick={handleCreateClick} />
         </DeleteBtn>
         <ModalTitle>가이드 카드 만들기</ModalTitle>
         <GuideTitle handleInputChange={handleInputChange} value={inputs.title} />
-        <GuideGender />
+        <GuideGender handleGenderClick={handleGenderClick} isGender={isGender} />
         <GuideImgs handleImgChange={handleImgChange} fileUrl={fileUrl} />
         <DatePlaceCtn>
           <GuideDate
@@ -109,7 +148,14 @@ export default function CreateModal(props) {
             value={inputs.date}
             startDate={startDate}
           />
-          <GuidePlace handleInputChange={handleInputChange} value={inputs.region} />
+          <GuidePlace
+            handleInputChange={handleInputChange}
+            handleAddressChange={handleAddressChange}
+            value={inputs.address}
+            address={address}
+            extraAddress={extraAddress}
+            handlePlaceBlur={handlePlaceBlur}
+          />
         </DatePlaceCtn>
         <GuideTime handleInputChange={handleInputChange} value={inputs} />
         <GuideContent handleInputChange={handleInputChange} value={inputs} />

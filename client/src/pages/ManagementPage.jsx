@@ -39,8 +39,8 @@ export default function ManagementPage() {
   };
   useEffect(() => {
     getGuideInfo().then((res) => {
-      setGuideInfo(res.guideData);
-      setApplicantInfo(res.applicant);
+      setGuideInfo(res.data.guideData);
+      setApplicantInfo(res.data.applicant);
     });
   });
 

@@ -10,7 +10,11 @@ const InputCtn = styled.div`
   justify-content: center;
   position: relative;
   & label {
-    font-size: 0.6rem;
+    font-size: 1rem;
+  }
+  & .popup {
+    position: absolute;
+    left: -50%;
   }
 `;
 const PlaceInput = styled(Input)`
@@ -23,37 +27,45 @@ const PlaceInput = styled(Input)`
 `;
 
 export default function GuidePlace(props) {
-  const { handleInputChange, value } = props;
+  const { handleInputChange, handleAddressChange, address, extraAddress, handlePlaceBlur } = props;
   const [isPopupOpen, setPopupOpen] = useState(false);
-  const [address, setAddress] = useState('');
 
   const openPostCode = () => {
     console.log('open');
-    setPopupOpen(true);
-  };
-  const closePostCode = () => {
-    console.log('close');
-    setPopupOpen(false);
+    setPopupOpen(!isPopupOpen);
   };
 
   const onCompletePost = (data) => {
-    setAddress(data.address);
+    setPopupOpen(false);
+    handleAddressChange(data.address);
   };
 
   const postCodeStyle = {
     position: 'absolute',
+    height: '300px',
   };
 
   return (
     <InputCtn>
-      <div id='popupDom'>
-        {isPopupOpen && (
-          <DaumPostcode onClick={closePostCode} onComplete={onCompletePost} style={postCodeStyle} />
-        )}
-      </div>
+      {isPopupOpen === true ? (
+        <div id='popupDom' className='popup'>
+          <DaumPostcode onComplete={onCompletePost} style={postCodeStyle} />
+        </div>
+      ) : null}
       <label htmlFor='place'>장소입력</label>
-      <PlaceInput id='place' placeholder='도로명주소' onClick={openPostCode} value={address} />
-      <PlaceInput placeholder='상세주소' onChange={handleInputChange} value={value} />
+      <PlaceInput
+        autoComplete='off'
+        placeholder='도로명주소'
+        onClick={openPostCode}
+        value={address}
+      />
+      <PlaceInput
+        placeholder='상세주소'
+        onChange={handleInputChange}
+        onBlur={handlePlaceBlur}
+        value={extraAddress}
+        id='address'
+      />
     </InputCtn>
   );
 }
