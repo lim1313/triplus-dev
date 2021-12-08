@@ -86,11 +86,13 @@ const NoSelectRoom = styled.div`
   font-size: 3vw;
 `;
 
-export default function ChatRoom({ sendMessageHandler, selectedRoom }) {
+export default function ChatRoom({ sendMessageHandler }) {
   const [msg, setMsg] = useState('');
 
-  const chatBubble = useSelector((state) => state.chatListReducer);
+  const chatBubble = useSelector((state) => state.chatListReducer.chatList);
   const userId = useSelector((state) => state.chatUserInfoReducer.userId);
+  const currentRoom = useSelector((state) => state.currentRoomReducer.currentRoom);
+
   const msgInputHandler = (e) => {
     setMsg(e.target.value);
   };
@@ -98,7 +100,7 @@ export default function ChatRoom({ sendMessageHandler, selectedRoom }) {
   const submitHandler = (e) => {
     console.log('msg', msg);
     if (msg !== '') {
-      sendMessageHandler(e, msg, userId, selectedRoom);
+      sendMessageHandler(e, msg, userId, currentRoom);
       setMsg('');
     }
   };
@@ -117,9 +119,9 @@ export default function ChatRoom({ sendMessageHandler, selectedRoom }) {
 
   return (
     <RoomContainer>
-      {selectedRoom ? (
+      {currentRoom ? (
         <>
-          <ChatBoard ref={chatBoard}>
+          <ChatBoard id={currentRoom} ref={chatBoard}>
             {chatBubble.map((el) => {
               return (
                 <>

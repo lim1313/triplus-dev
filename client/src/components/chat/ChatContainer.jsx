@@ -18,12 +18,12 @@ const ChatBox = styled.div`
   max-width: ${({ theme }) => theme.size.maxWidth};
   border: 3px solid red;
 `;
-export default function ChatContainer({ sendMessageHandler, selectedRoom, selectRoomHandler }) {
+export default function ChatContainer({ sendMessageHandler, selectRoomHandler }) {
   return (
     <Container>
       <ChatBox>
         <SideContainer selectRoomHandler={selectRoomHandler}></SideContainer>
-        <ChatRoom sendMessageHandler={sendMessageHandler} selectedRoom={selectedRoom}></ChatRoom>
+        <ChatRoom sendMessageHandler={sendMessageHandler}></ChatRoom>
       </ChatBox>
     </Container>
   );

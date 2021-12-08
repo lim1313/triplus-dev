@@ -1,4 +1,4 @@
-import { USER_CHAT_INFO, CHAT_LIST } from './type';
+import { USER_CHAT_INFO, CURRENT_ROOM, CHAT_LIST, CHAT_RESET } from './type';
 
 export const getUserChatInfo = (data) => {
   return {
@@ -11,9 +11,27 @@ export const getUserChatInfo = (data) => {
   };
 };
 
+export const changeCurrentRoom = (selectedRoom) => {
+  return {
+    type: CURRENT_ROOM,
+    payload: {
+      currentRoom: selectedRoom,
+    },
+  };
+};
+
 export const getChatList = (chatList) => {
   return {
     type: CHAT_LIST,
+    payload: {
+      chatList: chatList,
+    },
+  };
+};
+
+export const resetChatList = (chatList) => {
+  return {
+    type: CHAT_RESET,
     payload: {
       chatList: chatList,
     },

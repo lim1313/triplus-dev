@@ -27,6 +27,7 @@ const RoomName = styled(BorderBtn)`
 
 export default function SideBar({ selectRoomHandler }) {
   const roomList = useSelector((state) => state.chatUserInfoReducer.chatRooms);
+
   const clickRoomHandler = (e) => {
     selectRoomHandler(e.target.id);
   };

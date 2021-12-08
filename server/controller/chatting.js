@@ -1,69 +1,48 @@
-const {isAuthorized} = require('./functions/user');
-const {chat_member, user} = require('./../models');
-const {Op} = require('sequelize');
+const { isAuthorized } = require('./functions/user');
+const { chat_member, chat_room } = require('./../models');
+const { Op } = require('sequelize');
 
 module.exports = {
-  example: (req, res) => {
-    res.status(200).send('this is example for chatting');
-  },
+  createChatRoom: async (req, res) => {
+    const { userId } = req.body;
+    const verifed = isAuthorized(req);
+    const myId = verifed.userId;
 
-  findChatRoomByUserId: async (req, res) => {
-    let resObject = {chatRoom: []};
-    const accessToken = isAuthorized(req);
-    // 토큰이 없었을 때
+    let roomAlready = 0;
+
     try {
-      if(!accessToken){
-        throw 'accessToken이 없습니다';
+      const myRooms = await chat_member.findAll({ raw: true, where: { userId: myId } });
+      const partnerRooms = await chat_member.findAll({ raw: true, where: { userId: userId } });
+
+      for (let myRoom of myRooms) {
+        for (let partnerRoom of partnerRooms) {
+          if (myRoom.roomId === partnerRoom.roomId) {
+            roomAlready = myRoom.roomId;
+            break;
+          }
+        }
       }
-    } catch (error) {
-      console.log(`ERROR: ${error}`);
-      resObject['code'] = 400;
-      resObject['message'] = error;
-      return resObject;
+      if (roomAlready) {
+        return res.status(200).json({ data: roomAlready, message: '이미 방이 존재합니다' });
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).send('잠시 후에 다시 시도해주시기 바랍니다');
     }
 
-    // 로그인한 유저가 속한 채팅방 조회
-    const chatMembers = await chat_member.findAll({
-      raw: true,
-      where: {
-        userId: accessToken.userId,
-      }
-    });
+    let createdRoomId;
 
-    const myChatRoomCondition = {};
-    
-    if(chatMembers.length > 0){
-      myChatRoomCondition[Op.or] = [];
-
-      for(let chatMember of chatMembers){
-        myChatRoomCondition[Op.or].push({roomId: chatMember.roomId});
-      }
-
-      const chatRoomAndMembers = await chat_member({
-        raw: true,
-        attributes: ['roomId'],
-        include: [
-          {
-            model: user,
-            attributes: ['userId', 'nickName'],
-            where: {[Op.ne]: {userId: accessToken.userId}}
-          },
-        ],
-        where: myChatRoomCondition
-      });
-
-      const chatRooms = [];
-      for(let chatRoomAndMember of chatRoomAndMembers){
-        chatRooms.push({
-          roomId: chatRoomAndMember.roomId,
-          userId: chatRoomAndMember['user.userId'],
-          nickName: chatRoomAndMember['user.nickName'],
-        });
-      }
-
-      resObject['chatRoom'] = chatRooms;
+    try {
+      const createdRoom = await chat_room.create({ message: JSON.stringify([]) });
+      const joinRoom = await chat_member.bulkCreate([
+        { userId: userId, roomId: createdRoom.dataValues.roomId },
+        { userId: myId, roomId: createdRoom.dataValues.roomId },
+      ]);
+      createdRoomId = createdRoom.dataValues.roomId;
+    } catch (err) {
+      console.log(err);
+      res.status(500).send('방을 생성하지 못했습니다');
     }
-
-    return resObject;
+    res.status(201).json({ data: createdRoomId, message: '방이 성공적으로 생성되었습니다' });
   },
-}
+};

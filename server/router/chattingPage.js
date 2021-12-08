@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const controller = require('./../controller/chatting');
 
-router.get('/', controller.example);
-router.get('/rooms', controller.findChatRoomByUserId);
+router.post('/rooms', controller.createChatRoom);
 
 module.exports = router;

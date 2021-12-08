@@ -29,7 +29,12 @@ const confirmEmail = require('./controller/functions/confirmEmail');
 
 // 필요한 함수
 // const getUserChatInfo = require('./controller/functions/getUserChatInfo');
-const { isSocketAuthorized, getUserChatInfo } = require('./controller/functions/getUserChatInfo');
+const {
+  isSocketAuthorized,
+  getUserChatInfo,
+  getChatContents,
+  updateMessage,
+} = require('./controller/functions/getUserChatInfo');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -88,30 +93,59 @@ const io = new Server(httpServer, {
 io.on('connection', async (socket) => {
   console.log(`connect with id: ${socket.id}`);
 
-  // socket.onAny((event) => {
-  //   console.log(`Socket Event : ${event}`);
-  //   console.log(io.sockets.adapter.rooms);
-  // });
+  socket.onAny((event) => {
+    console.log(socket.id);
+  });
 
   // const userChatInfo = isSocketAuthorized(socket.handshake.headers.cookie['accessToken']);
-  const userInfo = isSocketAuthorized(socket.handshake.headers.cookie.replace('accessToken=', ''));
-  console.log(userInfo);
-  const userChatInfos = await getUserChatInfo(userInfo);
-  console.log(userChatInfos);
+  let userInfo;
+  let userChatInfos;
+  if (!socket.handshake.headers.cookie) {
+    userChatInfos = {
+      userId: '',
+      nickname: '',
+      chatRooms: [],
+    };
+  } else {
+    userInfo = isSocketAuthorized(socket.handshake.headers.cookie.replace('accessToken=', ''));
+    // console.log(userInfo);
+    userChatInfos = await getUserChatInfo(userInfo);
+    // console.log(userChatInfos);
+  }
 
+  if (userChatInfos.chatRooms.length > 0) {
+    for (let chatRoom of userChatInfos.chatRooms) {
+      socket.join(String(chatRoom.roomId));
+    }
+  }
+  console.log(io.sockets.adapter.rooms);
   socket.emit('getRooms', userChatInfos);
 
-  socket.on('joinRoom', (selectedRoom) => {
-    socket.join(selectedRoom);
-    // GET / chat / rooms;
+  socket.on('joinRoom', async (selectedRoom) => {
+    console.log(selectedRoom);
+    const messages = await getChatContents(selectedRoom);
+    const initialChat = JSON.parse(messages);
+    console.log(initialChat);
+    console.log('hey', selectedRoom);
+    socket.emit('initialChat', initialChat);
   });
 
   socket.on('sendMessage', (DBform, selectedRoom) => {
     console.log(DBform);
-    console.log(socket.id);
-    const { DBdate, date, user_id, content } = DBform;
+    const { date, user_id, content } = DBform;
+    const messageUpdate = {
+      date,
+      user_id,
+      content,
+    };
+    updateMessage(messageUpdate, selectedRoom);
     const data = { date, user_id, content };
-    io.to(selectedRoom).emit('getMessage', data);
+    console.log(data);
+    io.to(selectedRoom).emit('getMessage', [data]);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('disconnected');
   });
 });
 

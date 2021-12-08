@@ -1,4 +1,4 @@
-import { USER_CHAT_INFO, CHAT_LIST } from './type';
+import { USER_CHAT_INFO, CURRENT_ROOM, CHAT_LIST, CHAT_RESET } from './type';
 
 const chatUserInitialState = {
   userId: '',
@@ -6,7 +6,13 @@ const chatUserInitialState = {
   chatRooms: [],
 };
 
-const chatListInitialState = [];
+const currentRoomInitialState = {
+  currentRoom: '',
+};
+
+const chatListInitialState = {
+  chatList: [],
+};
 
 export const chatUserInfoReducer = (state = chatUserInitialState, action) => {
   switch (action.type) {
@@ -20,10 +26,27 @@ export const chatUserInfoReducer = (state = chatUserInitialState, action) => {
   }
 };
 
+export const currentRoomReducer = (state = currentRoomInitialState, action) => {
+  switch (action.type) {
+    case CURRENT_ROOM:
+      return {
+        currentRoom: action.payload.currentRoom,
+      };
+    default:
+      return state;
+  }
+};
+
 export const chatListReducer = (state = chatListInitialState, action) => {
   switch (action.type) {
     case CHAT_LIST:
-      return [...state, action.payload.chatList];
+      return {
+        chatList: [...state.chatList, ...action.payload.chatList],
+      };
+    case CHAT_RESET:
+      return {
+        chatList: [...action.payload.chatList],
+      };
     default:
       return state;
   }
