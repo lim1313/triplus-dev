@@ -2,15 +2,15 @@
 
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useInput } from '../../hooks/useInput';
-import { postEmailCheck, postEmailUnCheck, postInfo } from '../../network/my/http';
-import { ColorBtn } from '../../styles/common';
+import { useInput } from '../../../hooks/useInput';
+import { postEmailCheck, postEmailUnCheck, postInfo } from '../../../network/my/http';
+import { ColorBtn } from '../../../styles/common';
 import { useDispatch } from 'react-redux';
-import { exit } from '../../redux/login/action';
+import { exit } from '../../../redux/login/action';
 import { useNavigate } from 'react-router-dom';
+import UserEmail from './UserEmail';
 
 export const LiWrapper = styled.li`
-  z-index: 2;
   flex-grow: 1;
   flex-basis: ${({ user }) => user && '50%'};
 
@@ -80,6 +80,7 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
   const [isChange, setIsChange] = useState(false);
   const [inputValue, inputChange] = useInput(content);
   const [isAlert, setIsAlert] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -87,15 +88,16 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
   useEffect(() => {
     return () => {
       // TODO POST /my/email-unCheck
-      postEmailUnCheck().then((res) => {
-        if (res === 401) {
-          alert('로그인이 만료되었습니다. 다시 로그인해 주세요');
-          dispatch(exit());
-          navigate('/login', { replace: true });
-        } else {
-          console.log(res);
-        }
-      });
+      //   postEmailUnCheck().then((res) => {
+      //     if (res === 401) {
+      //       alert('로그인이 만료되었습니다. 다시 로그인해 주세요');
+      //       dispatch(exit());
+      //       navigate('/login', { replace: true });
+      //     } else {
+      //       console.log(res);
+      //     }
+      //   });
+      // };
     };
   }, []);
 
@@ -110,8 +112,6 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
           alert('로그인이 만료되었습니다. 다시 로그인해 주세요');
           dispatch(exit());
           navigate('/login', { replace: true });
-        } else if (title === 'e-mail' && res === 403) {
-          setIsAlert('*이메일 인증을 완료해 주세요');
         } else if (res >= 200 && res < 300) {
           setIsAlert(null);
           setIsChange(!isChange);
@@ -125,22 +125,22 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
     }
   };
 
-  const sendEmail = () => {
-    // TODO POST /my/email-check 이메일 인증 전송
-    postEmailCheck(inputValue).then((res) => {
-      if (res === 401) {
-        alert('로그인이 만료되었습니다. 다시 로그인해 주세요');
-        dispatch(exit());
-        navigate('/login', { replace: true });
-      } else if (res === 400) {
-        alert('인증메일 발송이 실패했습니다. 다시 시도해주세요');
-      } else if (res >= 200 && res < 300) {
-        setIsAlert('*인증 이메일이 발송되었습니다. 이메일을 확인해 주세요');
-      } else {
-        console.log(res);
-      }
-    });
-  };
+  // const sendEmail = () => {
+  //   // TODO POST /my/email-check 이메일 인증 전송
+  //   postEmailCheck(inputValue).then((res) => {
+  //     if (res === 401) {
+  //       alert('로그인이 만료되었습니다. 다시 로그인해 주세요');
+  //       dispatch(exit());
+  //       navigate('/login', { replace: true });
+  //     } else if (res === 400) {
+  //       alert('인증메일 발송이 실패했습니다. 다시 시도해주세요');
+  //     } else if (res >= 200 && res < 300) {
+  //       setIsAlert('*인증 이메일이 발송되었습니다. 이메일을 확인해 주세요');
+  //     } else {
+  //       console.log(res);
+  //     }
+  //   });
+  // };
 
   return (
     <LiWrapper marginRight={marginRight} user={user}>
@@ -157,29 +157,17 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
         ) : (
           <div>{inputValue}</div>
         )}
-        {noBtn ||
-          (title === 'e-mail' ? (
-            isChange ? (
-              <BtnWrapper>
-                <BtnColor twoBtn palette='blue' onClick={sendEmail}>
-                  인증
-                </BtnColor>
-                <BtnColor palette='blue' onClick={changeContent}>
-                  완료
-                </BtnColor>
-              </BtnWrapper>
-            ) : (
-              <BtnColor palette='blue' onClick={changeContent}>
-                수정
-              </BtnColor>
-            )
-          ) : (
-            <BtnColor palette='blue' onClick={changeContent}>
-              {isChange ? '완료' : '수정'}
-            </BtnColor>
-          ))}
+        {noBtn || (
+          <BtnColor
+            palette='blue'
+            onClick={title === 'e-mail' ? () => setOpenModal(true) : changeContent}
+          >
+            {isChange ? '완료' : '수정'}
+          </BtnColor>
+        )}
         {isAlert && <AlertMsg>{isAlert}</AlertMsg>}
       </NameWrapper>
+      {openModal && <UserEmail clickModal={() => setOpenModal(false)} />}
     </LiWrapper>
   );
 };

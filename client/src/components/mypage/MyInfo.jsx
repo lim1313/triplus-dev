@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ColorBtn, BorderBtn } from '../../styles/common';
-import { UserInfo } from './MyInfoFrame';
+import { UserInfo } from './MyInfo/UserInfo';
 
 const Wrapper = styled.ul`
   flex-grow: 1;
