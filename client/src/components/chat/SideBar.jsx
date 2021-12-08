@@ -1,5 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+
+import { useSelector } from 'react-redux';
+
 import { BorderBtn } from '../../styles/common/index';
 
 const SideContainer = styled.div`
@@ -11,7 +14,7 @@ const SideContainer = styled.div`
   padding: 2rem;
 `;
 
-const ChatList = styled(BorderBtn)`
+const RoomName = styled(BorderBtn)`
   font-size: 1rem;
   border-radius: 15px;
   margin-bottom: 1rem;
@@ -22,27 +25,21 @@ const ChatList = styled(BorderBtn)`
   }
 `;
 
-export default function SideBar({ selectRoomHandler, setUserId }) {
+export default function SideBar({ selectRoomHandler }) {
+  const roomList = useSelector((state) => state.chatUserInfoReducer.chatRooms);
   const clickRoomHandler = (e) => {
     selectRoomHandler(e.target.id);
   };
 
-  const dummyHandler = (e) => {
-    selectRoomHandler(e.target.id);
-    setUserId('Jortier');
-  };
-
   return (
     <SideContainer>
-      <ChatList id='gogo' onClick={clickRoomHandler} palette='gray'>
-        gogo
-      </ChatList>
-      <ChatList id='gogo' onClick={dummyHandler} palette='gray'>
-        toto
-      </ChatList>
-      <ChatList id='lala' onClick={clickRoomHandler} palette='gray'>
-        lala
-      </ChatList>
+      {roomList.map((el) => {
+        return (
+          <RoomName id={el.roomId} onClick={clickRoomHandler} key={el.chatPartnerId} palette='gray'>
+            {el.chatPartnerNickName}
+          </RoomName>
+        );
+      })}
     </SideContainer>
   );
 }

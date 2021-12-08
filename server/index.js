@@ -27,6 +27,10 @@ const fileManagement = require('./router/fileManagement');
 const logout = require('./controller/logout');
 const confirmEmail = require('./controller/functions/confirmEmail');
 
+// 필요한 함수
+// const getUserChatInfo = require('./controller/functions/getUserChatInfo');
+const { isSocketAuthorized, getUserChatInfo } = require('./controller/functions/getUserChatInfo');
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
@@ -80,13 +84,21 @@ const io = new Server(httpServer, {
   },
 });
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
   console.log(`connect with id: ${socket.id}`);
 
   // socket.onAny((event) => {
   //   console.log(`Socket Event : ${event}`);
   //   console.log(io.sockets.adapter.rooms);
   // });
+
+  // const userChatInfo = isSocketAuthorized(socket.handshake.headers.cookie['accessToken']);
+  const userInfo = isSocketAuthorized(socket.handshake.headers.cookie.replace('accessToken=', ''));
+  console.log(userInfo);
+  const userChatInfos = await getUserChatInfo(userInfo);
+  console.log(userChatInfos);
+
+  socket.emit('getRooms', userChatInfos);
 
   socket.on('joinRoom', (selectedRoom) => {
     socket.join(selectedRoom);

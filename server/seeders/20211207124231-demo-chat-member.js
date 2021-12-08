@@ -14,31 +14,31 @@ module.exports = {
     return queryInterface.bulkInsert('chat_member', [
       {
         room_id: 1,
-        user_id: 'Je-chan',
+        user_id: 'jechan',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         room_id: 1,
-        user_id: 'Joriter',
+        user_id: 'jortier',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         room_id: 2,
-        user_id: 'Je-chan',
+        user_id: 'jechan',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         room_id: 2,
-        user_id: 'Song-code',
+        user_id: 'songcode',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         room_id: 3,
-        user_id: 'Je-chan',
+        user_id: 'jechan',
         createdAt: new Date(),
         updatedAt: new Date(),
       },

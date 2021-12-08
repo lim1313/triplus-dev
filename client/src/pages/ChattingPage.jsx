@@ -20,7 +20,6 @@ export default function ChattingPage() {
   const dispatch = useDispatch();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [userId, setUserId] = useState('Je-chan');
   const [selectedRoom, setSelectedRoom] = useState(null);
   // const [chatBubble, setChatBubble] = useState([]);
 
@@ -33,7 +32,6 @@ export default function ChattingPage() {
 
   // ? send, getMessage 함수 목록
   const myChatBubble = (data) => {
-    // console.log('useIt');
     const { day, time } = dateConversion(data.date);
     const { user_id, content } = data;
     const upState = {
@@ -42,10 +40,6 @@ export default function ChattingPage() {
       userId: user_id,
       content,
     };
-    // console.log('1', chatBubble);
-
-    // setChatBubble((chatBubble) => [...chatBubble, upState]);
-
     dispatch(getChatList(upState));
   };
 
@@ -55,13 +49,17 @@ export default function ChattingPage() {
     socketRef.current = io.connect(`${process.env.REACT_APP_HTTPSURL}`, {
       transports: ['websocket'],
     });
+
+    socketRef.current.on('getRooms', (data) => {
+      console.log(data);
+      dispatch(getUserChatInfo(data));
+    });
   }, []);
 
   // TODO 2. getMessage
   useEffect(() => {
     socketRef.current.on('getMessage', (data) => {
       console.log('get');
-      // console.log(chatBubble);
       myChatBubble(data);
     });
   }, []);
@@ -95,12 +93,8 @@ export default function ChattingPage() {
   ) : (
     <ChatContainer
       sendMessageHandler={sendMessageHandler}
-      userId={userId}
-      // chatBubble={chatBubble}
       selectedRoom={selectedRoom}
       selectRoomHandler={selectRoomHandler}
-      // setUserId 는 없어져야 함
-      setUserId={setUserId}
     ></ChatContainer>
   );
 }
