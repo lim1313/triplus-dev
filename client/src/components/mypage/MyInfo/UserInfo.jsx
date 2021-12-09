@@ -1,13 +1,16 @@
 /*eslint-disable no-unused-vars*/
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useInput } from '../../hooks/useInput';
-import { postInfo } from '../../network/my/http';
-import { ColorBtn } from '../../styles/common';
+import { useInput } from '../../../hooks/useInput';
+import { postEmailCheck, postEmailUnCheck, postInfo } from '../../../network/my/http';
+import { ColorBtn } from '../../../styles/common';
+import { useDispatch } from 'react-redux';
+import { exit } from '../../../redux/login/action';
+import { useNavigate } from 'react-router-dom';
+import EmailModal from './EmailModal';
 
 export const LiWrapper = styled.li`
-  z-index: 2;
   flex-grow: 1;
   flex-basis: ${({ user }) => user && '50%'};
 
@@ -32,13 +35,13 @@ const NameWrapper = styled.div`
 `;
 
 const ChangeInput = styled.input.attrs({ type: 'text' })`
-  width: ${({ user }) => (user ? '70%' : '80%')};
+  width: ${({ user }) => (user ? '60%' : '70%')};
   font-size: 1.2rem;
   &:focus {
     outline: none;
   }
   @media ${({ theme }) => theme.device.mobile} {
-    font-size: 1rem;
+    font-size: 0.9rem;
     width: ${({ user }) => (user ? '60%' : '70%')};
   }
 `;
@@ -46,6 +49,10 @@ const ChangeInput = styled.input.attrs({ type: 'text' })`
 const BtnColor = styled(ColorBtn)`
   padding: 0.1em 0.7em;
   flex-shrink: 0;
+  margin-left: 0.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin-bottom: ${({ twoBtn }) => twoBtn && '0.5rem'};
+  }
 `;
 
 const AlertMsg = styled.div`
@@ -61,38 +68,45 @@ const AlertMsg = styled.div`
   }
 `;
 
+const BtnWrapper = styled.div`
+  display: flex;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    flex-direction: column;
+  }
+`;
+
 export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
   const [isChange, setIsChange] = useState(false);
   const [inputValue, inputChange] = useInput(content);
-  const [isAlert, setIsAlert] = useState(false);
-  const [checkedEmail, setCheckedEmail] = useState(false);
+  const [isAlert, setIsAlert] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const changeContent = (e) => {
     if (isChange) {
       if ((title === 'nickname' || title === 'e-mail') && !inputValue.length) {
-        return setIsAlert(true);
+        return setIsAlert('*필수 입력 사항');
       }
-      console.log(content);
       // TODO POST /개인정보 변경
       postInfo(inputValue, title).then((res) => {
-        console.log(res);
-        setIsAlert(false);
-        setIsChange(!isChange);
+        if (res === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해 주세요');
+          dispatch(exit());
+          navigate('/login', { replace: true });
+        } else if (res >= 200 && res < 300) {
+          setIsAlert(null);
+          setIsChange(!isChange);
+        } else {
+          console.log(res);
+          setIsChange(!isChange);
+        }
       });
-
-      // setIsAlert(false);
-      // setIsChange(!isChange);
     } else {
       setIsChange(!isChange);
     }
-  };
-
-  const changeEmail = () => {
-    //인증 이메일 전송 완료
-    // => 인증 메일을 확인해 주세요.
-    //인증 이메일 전송 실패
-    // => 인증 이메일 전송이 실패되었습니다. 다시 시도해 주세요.
-    setIsChange(!isChange);
   };
 
   return (
@@ -110,18 +124,17 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
         ) : (
           <div>{inputValue}</div>
         )}
-        {noBtn ||
-          (title === 'e-mail' ? (
-            <BtnColor palette='blue' onClick={changeEmail}>
-              {isChange ? (checkedEmail ? '완료' : '인증') : '수정'}
-            </BtnColor>
-          ) : (
-            <BtnColor palette='blue' onClick={changeContent}>
-              {isChange ? '완료' : '수정'}
-            </BtnColor>
-          ))}
-        {isAlert && <AlertMsg>*필수 입력 사항</AlertMsg>}
+        {noBtn || (
+          <BtnColor
+            palette='blue'
+            onClick={title === 'e-mail' ? () => setOpenModal(true) : changeContent}
+          >
+            {isChange ? '완료' : '수정'}
+          </BtnColor>
+        )}
+        {isAlert && <AlertMsg>{isAlert}</AlertMsg>}
       </NameWrapper>
+      {openModal && <EmailModal clickModal={() => setOpenModal(false)} />}
     </LiWrapper>
   );
 };

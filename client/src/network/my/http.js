@@ -13,26 +13,50 @@ export const getUserInfo = () => {
 //TODO POST 정보 변경
 export const postInfo = (data, path) => {
   if (path === 'nickname') path = 'nick-name';
-  if (path === 'e-mail') path = 'email';
-  return axios.post(`${http}/my/${path}`, { data });
+  return axios
+    .post(`${http}/my/${path}`, { data })
+    .then((res) => res.state)
+    .catch((err) => err.response.status);
 };
 
-//TODO POST 이메일 변경
+//TODO DELETE 탈퇴
+export const deleteUser = (data) => {
+  return axios
+    .post(`${http}/my/withdraw`, { data })
+    .then((res) => res.state)
+    .catch((err) => err.response.status);
+};
+
+//TODO POST 이메일 인증 발송
 export const postEmailCheck = (data) => {
-  return axios.post(`${http}/my/emailCheck`, { data });
+  return axios
+    .post(`${http}/my/email-check`, { data })
+    .then((res) => res.state)
+    .catch((err) => err.response.status);
 };
 
-//* 401 => 토큰 만료 => redux 관리
-//*
+// //TODO POST 이메일 인증 해제
+// export const postEmailUnCheck = () => {
+//   return axios
+//     .post(`${http}/my/email-unCheck`)
+//     .then((res) => res.state)
+//     .catch((err) => err.response.status);
+// };
 
 //TODO POST 프로필 변경
 // 기본의 프로필 url은 삭제하고 새로운 url로 갱신
 export const postProfile = (data) => {
-  return axios.post(`${http}/my/profile`, { data });
+  return axios
+    .post(`${http}/my/profile`, { data })
+    .then((res) => res.state)
+    .catch((err) => err.response.status);
 };
 
 //TODO DELETE 프로필 삭제
 // 기본의 프로필 url 삭제
 export const deleteProfile = () => {
-  return axios.delete(`${http}/my/profile`);
+  return axios
+    .delete(`${http}/my/profile`)
+    .then((res) => res.state)
+    .catch((err) => err.response.status);
 };

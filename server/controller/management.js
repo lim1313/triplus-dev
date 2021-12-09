@@ -1,14 +1,18 @@
-const {createGuideCard, updateGuideCard, selectGuideCardByUserId} = require('./functions/guide_card');
+const {
+  createGuideCard,
+  updateGuideCard,
+  selectGuideCardByUserId,
+} = require('./functions/guide_card');
 const GLOBAL_VARIABLE = require('./functions/global_variable');
 
 module.exports = {
   example: (req, res) => {
     res.status(200).send('this is example for management');
   },
-  
+
   createGuideCard: async (req, res) => {
     const resObject = await createGuideCard(req);
-
+    console.log(resObject);
     res.status(resObject.code).send(resObject.message);
   },
 
@@ -54,5 +58,5 @@ module.exports = {
       applicant: resObject.applicant,
       message: resObject.message,
     });
-  }
-}
+  },
+};

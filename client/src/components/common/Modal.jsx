@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import { ColorBtn } from '../../styles/common';
 import { Background, ModalTitle, ModalWrapper } from '../../styles/common/modal';
 
-const BtnWrapper = styled.div`
+export const BtnWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin-top: 3.5rem;
 `;
 
-const SelectBtn = styled(ColorBtn)`
+export const SelectBtn = styled(ColorBtn)`
   width: 50%;
   color: ${({ theme }) => theme.color.black};
   background: ${({ theme }) => theme.color.lightGray};
@@ -23,15 +23,19 @@ const SelectBtn = styled(ColorBtn)`
   }
 `;
 
-export default function Modal({ content, yesClick, noClick }) {
+export default function Modal({ content, yesClick, noClick, children, width }) {
   return (
     <Background>
-      <ModalWrapper>
-        <ModalTitle>{content}</ModalTitle>
-        <BtnWrapper>
-          <SelectBtn onClick={yesClick}>확인</SelectBtn>
-          <SelectBtn onClick={noClick}>취소</SelectBtn>
-        </BtnWrapper>
+      <ModalWrapper width={width}>
+        {children || (
+          <>
+            <ModalTitle>{content}</ModalTitle>
+            <BtnWrapper>
+              <SelectBtn onClick={yesClick}>확인</SelectBtn>
+              <SelectBtn onClick={noClick}>취소</SelectBtn>
+            </BtnWrapper>
+          </>
+        )}
       </ModalWrapper>
     </Background>
   );
