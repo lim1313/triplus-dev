@@ -34,7 +34,7 @@ module.exports = {
   signup: async (req, res) => {
     const { userId, password, email } = req.body;
     const hashPw = await hashPassword(password);
-    const key1 = crypto.randomBytes(256).toString('hex').substr(100, 5);
+    const key1 = crypto.randomBytes(256).toString('hex').substr(100, 4);
     const randomNum = parseInt(key1, 16);
     const nickname = '여행자' + randomNum;
     user
@@ -49,7 +49,12 @@ module.exports = {
           let key_for_verify = key_one + key_two;
           user_verify.create({ user_id: userId, verify_key: key_for_verify });
 
-          let url = 'http://' + req.get('host') + '/confirmEmail' + '?key=' + key_for_verify;
+          let url =
+            'http://' +
+            req.get('host') +
+            '/confirmEmail' +
+            '?key=' +
+            encodeURIComponent(key_for_verify);
           let mailOpt = {
             from: process.env.AUTH_EMAIL,
             to: email,
