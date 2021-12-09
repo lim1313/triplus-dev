@@ -49,7 +49,12 @@ module.exports = {
           let key_for_verify = key_one + key_two;
           user_verify.create({ user_id: userId, verify_key: key_for_verify });
 
-          let url = 'http://' + req.get('host') + '/confirmEmail' + '?key=' + key_for_verify;
+          let url =
+            'http://' +
+            req.get('host') +
+            '/confirmEmail' +
+            '?key=' +
+            encodeURIComponent(key_for_verify);
           let mailOpt = {
             from: process.env.AUTH_EMAIL,
             to: email,

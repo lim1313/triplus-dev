@@ -3,6 +3,7 @@ const { user, user_verify } = require('../../models');
 
 module.exports = {
   confirmEmail: async (req, res) => {
+    console.log(req.query.key);
     const user = await user_verify.findOne({ where: { verify_key: req.query.key } });
     if (user) {
       user_verify.update({ email_verified: 1 }, { where: { user_id: user.dataValues.user_id } });
