@@ -7,6 +7,7 @@ const Container = styled.div`
   align-items: flex-start;
   padding: ${({ main }) => (main === 'main' ? '6rem 5rem 6rem' : '1.3rem 2rem')};
   width: 100vw;
+  min-height: 10rem;
   height: ${({ main }) => (main === 'main' ? '35vh' : '22vh')};
   background-color: ${({ main, theme }) => (main === 'main' ? '#fff' : `${theme.color.darkGray}`)};
   @media ${({ theme }) => theme.device.mobile} {

@@ -14,7 +14,7 @@ const RoomContainer = styled.div`
 
 const ChatBoard = styled.div`
   width: 100%;
-  height: 86.5vh;
+  height: calc(100vh - ${({ theme }) => theme.size.navHeight} - 6.5vh);
   background-color: #e9ebf6;
   padding: 3rem;
   border: 1px solid #aeb8c2;
@@ -32,21 +32,34 @@ const BubbleBox = styled.div`
   display: flex;
   flex-direction: column;
   padding: 1rem 0;
-  align-items: ${({ me }) => (me ? 'flex-end' : 'flex-start')};
+  align-items: ${({ isUser }) => (isUser ? 'flex-end' : 'flex-start')};
+`;
+
+const BubbleWrapper = styled.div`
+  display: flex;
+  align-items: flex-end;
 `;
 
 const ChatBubble = styled.div`
-  width: 20vw;
-  padding: 1.5rem 2rem;
+  max-width: 30vw;
+  padding: 1rem 1.5rem;
   border-radius: 1rem;
   background-color: #fff;
   word-break: break-word;
-  ${({ me }) =>
-    me &&
+  ${({ isUser }) =>
+    isUser &&
     css`
       background-color: ${({ theme }) => theme.color.blue};
       color: #fff;
     `}
+`;
+
+const TimeSpan = styled.p`
+  margin: 0;
+  font-size: 0.6rem;
+  color: ${({ theme }) => theme.color.gray};
+  margin-right: ${({ isUser }) => (isUser ? '0.5rem' : 'none')};
+  margin-left: ${({ isUser }) => (isUser ? 'none' : '0.5rem')};
 `;
 
 const ChatMessageBox = styled.div`
@@ -64,6 +77,7 @@ const ChatMessage = styled.input`
   width: 90%;
   border-radius: 15px;
   border: 1px solid ${({ theme }) => theme.color.gray};
+  min-height: 1.2rem;
   height: 100%;
   margin: 0 1rem;
   padding: 0 1rem;
@@ -76,6 +90,8 @@ const ChatMessage = styled.input`
 
 const ChatButton = styled(ColorBtn)`
   font-size: 0.85rem;
+  min-height: 1.2rem;
+  min-width: 2rem;
   width: 4rem;
   text-align: center;
   border-radius: 5px;
@@ -83,21 +99,34 @@ const ChatButton = styled(ColorBtn)`
 
 const NoSelectRoom = styled.div`
   display: flex;
+  flex-direction: column;
   height: 93vh;
   justify-content: center;
   align-items: center;
   background-color: #e9ebf6;
-  font-size: 3vw;
+  font-size: 2.5vw;
   border: 1px solid #aeb8c2;
+`;
+
+const Img = styled.img`
+  width: 35vw;
 `;
 
 export default function ChatRoom({ sendMessageHandler }) {
   const [msg, setMsg] = useState('');
 
   const chatBubble = useSelector((state) => state.chatListReducer.chatList);
-  const userId = useSelector((state) => state.chatUserInfoReducer.userId);
+  const { userId, nickname } = useSelector((state) => state.chatUserInfoReducer);
+  const chatRooms = useSelector((state) => state.chatUserInfoReducer.chatRooms);
   const currentRoom = useSelector((state) => state.currentRoomReducer.currentRoom);
-
+  let partnerNickName;
+  for (let chatRoom of chatRooms) {
+    if (String(chatRoom.roomId) === currentRoom) {
+      partnerNickName = chatRoom.chatPartnerNickName;
+      break;
+    }
+  }
+  console.log(userId);
   const msgInputHandler = (e) => {
     setMsg(e.target.value);
   };
@@ -122,22 +151,35 @@ export default function ChatRoom({ sendMessageHandler }) {
     scrollToBottom();
   }, [chatBubble]);
 
+  // <span style={{ marginBottom: '10px', marginRight: '5px', fontSize: '0.8rem' }}>
+  //   {el.userId === userId ? nickname : partnerNickName}
+  // </span>;
+
   return (
     <RoomContainer>
       {currentRoom ? (
         <>
           <ChatBoard id={currentRoom} ref={chatBoard}>
             {chatBubble.map((el) => {
+              const isUser = el.userId === userId;
               return (
                 <>
-                  <BubbleBox key={uuidV4()} me={el.userId === userId}>
-                    <span style={{ marginBottom: '10px', marginRight: '5px', fontSize: '0.8rem' }}>
-                      {el.userId}
-                    </span>
-                    <ChatBubble me={el.userId === userId}>{el.content}</ChatBubble>
-                    <span style={{ marginBottom: '10px', marginRight: '5px', fontSize: '0.8rem' }}>
-                      {el.time}
-                    </span>
+                  <BubbleBox key={uuidV4()} isUser={isUser}>
+                    <BubbleWrapper>
+                      {isUser ? (
+                        <TimeSpan key={uuidV4()} isUser={isUser}>
+                          {el.time}
+                        </TimeSpan>
+                      ) : null}
+                      <ChatBubble key={uuidV4()} isUser={isUser}>
+                        {el.content}
+                      </ChatBubble>
+                      {isUser ? null : (
+                        <TimeSpan key={uuidV4()} isUser={isUser}>
+                          {el.time}
+                        </TimeSpan>
+                      )}
+                    </BubbleWrapper>
                   </BubbleBox>
                 </>
               );
@@ -156,7 +198,10 @@ export default function ChatRoom({ sendMessageHandler }) {
           </ChatMessageBox>
         </>
       ) : (
-        <NoSelectRoom>방을 선택해주세요!</NoSelectRoom>
+        <NoSelectRoom>
+          <Img src='./asset/else/roomSelect.svg' alt='방 선택' />
+          <p>방을 선택해주세요</p>
+        </NoSelectRoom>
       )}
     </RoomContainer>
   );

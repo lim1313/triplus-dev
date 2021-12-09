@@ -6,7 +6,7 @@ import SideContainer from './SideBar';
 
 const Container = styled.div`
   display: flex;
-  height: 93vh;
+  height: calc(100vh - ${({ theme }) => theme.size.navHeight});
   justify-content: center;
 `;
 
