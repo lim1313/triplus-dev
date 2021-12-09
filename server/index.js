@@ -66,7 +66,6 @@ app.use('/oauth', authPage);
 app.use('/file-management', fileManagement);
 app.get('/logout', logout.logout);
 app.get('/confirmEmail', confirmEmail.confirmEmail);
-app.get('/changeEmail', confirmEmail.changeEmail);
 
 app.get('/hello-triplus', (req, res) => {
   res.status(200).send('Hello triplus');

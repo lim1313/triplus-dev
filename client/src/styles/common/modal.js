@@ -27,6 +27,7 @@ export const ModalWrapper = styled.div`
 
 export const ModalTitle = styled.div`
   text-align: center;
+  font-size: ${({ fontSize }) => fontSize};
   @media ${({ theme }) => theme.device.mobile} {
   }
 `;
