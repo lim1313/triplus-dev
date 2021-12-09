@@ -34,7 +34,7 @@ module.exports = {
   signup: async (req, res) => {
     const { userId, password, email } = req.body;
     const hashPw = await hashPassword(password);
-    const key1 = crypto.randomBytes(256).toString('hex').substr(100, 5);
+    const key1 = crypto.randomBytes(256).toString('hex').substr(100, 4);
     const randomNum = parseInt(key1, 16);
     const nickname = '여행자' + randomNum;
     user
