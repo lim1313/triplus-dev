@@ -6,7 +6,7 @@ import { Background, ModalTitle, ModalWrapper } from '../../styles/common/modal'
 export const BtnWrapper = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 3.5rem;
+  margin-top: 2rem;
 `;
 
 export const SelectBtn = styled(ColorBtn)`

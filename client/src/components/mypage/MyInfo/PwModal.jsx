@@ -1,9 +1,12 @@
 /*eslint-disable no-unused-vars*/
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import { useInput } from '../../../hooks/useInput';
 import { putPassword } from '../../../network/my/http';
+import { exit } from '../../../redux/login/action';
 import { ModalTitle } from '../../../styles/common/modal';
 import Modal, { BtnWrapper, SelectBtn } from '../../common/Modal';
 import PwInput from './PwInput';
@@ -25,6 +28,9 @@ export default function PwModal({ closeModal }) {
   const [checkPw, checkChange] = useInput('');
   const [alertMsg, setAlertMsg] = useState(null);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const submitPw = () => {
     if (!currentPw || !newPw || !checkPw) {
       setAlertMsg('*모든 입력창을 기입해 주세요');
@@ -34,6 +40,22 @@ export default function PwModal({ closeModal }) {
       setAlertMsg(null);
       //TODO 새로운 비밀번호 갱신
       putPassword({ oldPassword: currentPw, password: newPw }).then((res) => {
+        // dispatch(exit());
+        // navigate('/login', {
+        //   state: { logout: '비밀번호가 변경되어, 로그아웃되었습니다' },
+        //   replace: true,
+        // });
+        if (res === 201) {
+          // 201 성공적으로 수행
+          dispatch(exit());
+          navigate('/login', {
+            state: { logout: '비밀번호가 변경되어, 로그아웃되었습니다' },
+            replace: true,
+          });
+        } else if (res === 400) {
+          // 현재 비밀번호를 잘못 작성
+          setAlertMsg('*현재 비밀번호가 일치하지 않습니다');
+        }
         console.log(res);
       });
     }
