@@ -1,6 +1,19 @@
 import React from 'react';
-import { ImGoogle3 } from 'react-icons/im';
+import styled from 'styled-components';
 import { ButtonBlock, OauthBtn } from '../../styles/login/OauthBtn';
+
+const GoogleBtn = styled(OauthBtn)`
+  box-shadow: 3px 3px 5px ${({ theme }) => theme.color.lightGray},
+    -3px -3px 5px ${({ theme }) => theme.color.lightGray};
+  /* border: 0.2px solid ${({ theme }) => theme.color.lightGray}; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & img {
+    width: 3rem;
+    /* margin: auto; */
+  }
+`;
 
 export default function GoogleLoginBtn() {
   const handleSignGoogle = () => {
@@ -10,9 +23,9 @@ export default function GoogleLoginBtn() {
   };
   return (
     <ButtonBlock>
-      <OauthBtn onClick={handleSignGoogle}>
-        <ImGoogle3 className='oauth-btn'></ImGoogle3>
-      </OauthBtn>
+      <GoogleBtn onClick={handleSignGoogle}>
+        <img src='asset/logo/g-logo.png' alt='구글로그인버튼' className='oauth-btn' />
+      </GoogleBtn>
       <span>
         구글
         <br />

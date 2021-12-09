@@ -143,6 +143,7 @@ export default function CreateModal(props) {
 
   //img input 상태관리 함수+미리보기 구현
   const handleImgChange = (e) => {
+    if (!e.target.files[0]) return;
     if (e.target.files) {
       console.log(e.target.files);
       const targetId = e.target.getAttribute('id');

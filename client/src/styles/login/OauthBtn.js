@@ -12,13 +12,13 @@ export const ButtonBlock = styled.div`
 export const OauthBtn = styled.button`
   background: none;
   border: none;
-  font-size: 3rem;
+  font-size: 2.5rem;
   cursor: pointer;
+  border-radius: 50%;
+  height: 3.5rem;
+  width: 3.5rem;
   color: ${({ theme }) => theme.color.gray};
   & .oauth-btn {
     border-radius: 50%;
-  }
-  & :hover {
-    color: ${({ theme }) => theme.color.blue};
   }
 `;
