@@ -10,13 +10,17 @@ import { ColorBtn } from '../../styles/common/index';
 const RoomContainer = styled.div`
   width: 60vw;
   height: inherit;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100vw;
+    height: calc(90vh - ${({ theme }) => theme.size.navHeight});
+  }
 `;
 
 const ChatBoard = styled.div`
   width: 100%;
   height: calc(100vh - ${({ theme }) => theme.size.navHeight} - 6.5vh);
   background-color: #e9ebf6;
-  padding: 3rem;
+  padding: 1rem 2rem;
   border: 1px solid #aeb8c2;
 
   overflow: auto;
@@ -26,13 +30,20 @@ const ChatBoard = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+  @media ${({ theme }) => theme.device.mobile} {
+    height: calc(90vh - ${({ theme }) => theme.size.navHeight} - 6.5vh);
+    padding: 0 0.5rem;
+  }
 `;
 
 const BubbleBox = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 1rem 0;
+  padding: 0.8rem 0;
   align-items: ${({ isUser }) => (isUser ? 'flex-end' : 'flex-start')};
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 0.6rem 0;
+  }
 `;
 
 const BubbleWrapper = styled.div`
@@ -52,6 +63,10 @@ const ChatBubble = styled.div`
       background-color: ${({ theme }) => theme.color.blue};
       color: #fff;
     `}
+  @media ${({ theme }) => theme.device.mobile} {
+    max-width: 45vw;
+    font-size: 0.8rem;
+  }
 `;
 
 const TimeSpan = styled.p`
@@ -60,6 +75,9 @@ const TimeSpan = styled.p`
   color: ${({ theme }) => theme.color.gray};
   margin-right: ${({ isUser }) => (isUser ? '0.5rem' : 'none')};
   margin-left: ${({ isUser }) => (isUser ? 'none' : '0.5rem')};
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 0.2rem;
+  }
 `;
 
 const ChatMessageBox = styled.div`
@@ -68,9 +86,12 @@ const ChatMessageBox = styled.div`
   width: 100%;
   height: 6.5vh;
   background-color: #fff;
-  padding: 0.6rem 1.3em;
+  padding: 0.6rem 1.3rem;
   border-left: 1px solid #aeb8c2;
   border-right: 1px solid #aeb8c2;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 0.5rem;
+  }
 `;
 
 const ChatMessage = styled.input`
@@ -85,6 +106,9 @@ const ChatMessage = styled.input`
   &:focus {
     outline: 2px solid ${({ theme }) => theme.color.lightBlue};
     border: 1px solid #fff;
+    @media ${({ theme }) => theme.device.mobile} {
+      font-size: 0.8rem;
+    }
   }
 `;
 
@@ -95,6 +119,9 @@ const ChatButton = styled(ColorBtn)`
   width: 4rem;
   text-align: center;
   border-radius: 5px;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 0.65rem;
+  }
 `;
 
 const NoSelectRoom = styled.div`
@@ -104,12 +131,19 @@ const NoSelectRoom = styled.div`
   justify-content: center;
   align-items: center;
   background-color: #e9ebf6;
-  font-size: 2.5vw;
+  font-size: 1.5rem;
+  color: ${({ theme }) => theme.color.darkGray};
   border: 1px solid #aeb8c2;
+  @media ${({ theme }) => theme.device.mobile} {
+    height: calc(90vh - ${({ theme }) => theme.size.navHeight});
+  }
 `;
 
 const Img = styled.img`
-  width: 35vw;
+  width: 25rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 60vw;
+  }
 `;
 
 export default function ChatRoom({ sendMessageHandler }) {
