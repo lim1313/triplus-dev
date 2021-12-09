@@ -98,22 +98,20 @@ io.on('connection', async (socket) => {
   });
 
   // const userChatInfo = isSocketAuthorized(socket.handshake.headers.cookie['accessToken']);
-  let userInfo;
-  let userChatInfos;
-  if (!socket.handshake.headers.cookie) {
-    return socket.emit('shouldLogin');
-  } else {
-    userInfo = isSocketAuthorized(socket.handshake.headers.cookie.replace('accessToken=', ''));
-    // console.log(userInfo);
-    userChatInfos = await getUserChatInfo(userInfo);
-    // console.log(userChatInfos);
-  }
+  if (!socket.handshake.headers.cookie) return socket.emit('shouldLogin');
+  const userInfo = isSocketAuthorized(socket.handshake.headers.cookie.replace('accessToken=', ''));
+  // console.log(userInfo);
+  if (!userInfo) return socket.emit('shouldLogin');
+
+  const userChatInfos = await getUserChatInfo(userInfo);
+  // console.log(userChatInfos);
 
   if (userChatInfos.chatRooms.length > 0) {
     for (let chatRoom of userChatInfos.chatRooms) {
       socket.join(String(chatRoom.roomId));
     }
   }
+  console.log(userChatInfos);
   console.log(io.sockets.adapter.rooms);
   socket.emit('getRooms', userChatInfos);
 

@@ -22,6 +22,7 @@ const RoomName = styled(BorderBtn)`
     selected &&
     css`
       background-color: ${({ theme }) => theme.color.blue};
+      border-color: ${({ theme }) => theme.color.blue};
       color: #fff;
     `}
   &:hover {

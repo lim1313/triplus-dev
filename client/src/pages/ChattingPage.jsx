@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars*/
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { logOut } from '../network/login/http';
 
@@ -25,10 +25,9 @@ dayjs.locale('ko');
 export default function ChattingPage() {
   const socketRef = useRef();
 
-  const currentRoom = useSelector((state) => state.currentRoomReducer.currentRoom);
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const dateConversion = (date) => {
     const day = dayjs(date).format('YYYY년 M월 D일');
@@ -68,6 +67,7 @@ export default function ChattingPage() {
     });
 
     socketRef.current.on('shouldLogin', async () => {
+      await alert('로그인을 해야지만 채팅 서비스를 이용할 수 있습니다');
       logOut();
       dispatch(logoutUser());
       navigate('/login');
@@ -75,9 +75,10 @@ export default function ChattingPage() {
 
     socketRef.current.on('getRooms', (data) => {
       // TODO userId 가 빈문자열로 왔을 때 로그인하게끔 유도
+      console.log(data);
       dispatch(getUserChatInfo(data));
     });
-  }, []);
+  }, [pathname]);
 
   // TODO 2. 룸 입장 후 채팅 데이터 받아오기
 
@@ -86,6 +87,7 @@ export default function ChattingPage() {
       console.log('야');
       console.log(initialChat);
       const newChat = editChat(initialChat);
+      console.log(newChat);
       dispatch(resetChatList(newChat));
     });
   }, []);
@@ -111,10 +113,7 @@ export default function ChattingPage() {
   // ? socket 이벤트
   const sendMessageHandler = (e, msg, userId, selectedRoom) => {
     e.preventDefault();
-    // firefox 를 위해서 date와 DBdate 로 분기
     const date = dayjs();
-    const DBdate = dayjs().format('YYYY.MM.DD hh:mm:ss:SSS');
-
     const DBform = {
       date,
       user_id: userId,
