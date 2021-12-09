@@ -23,6 +23,13 @@ const InputCtn = styled.div`
       left: -100%;
     }
   }
+  @media screen and (min-width: 401px) and (max-width: 500px) {
+    margin-left: 1rem;
+    & .popup {
+      position: absolute;
+      left: -80%;
+    }
+  }
 `;
 const PlaceInput = styled(Input)`
   margin-bottom: 0.2rem;

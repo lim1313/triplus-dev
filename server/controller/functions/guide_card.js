@@ -1,37 +1,37 @@
-const {guide_card, user, guide_user_participate, guide_image} = require('./../../models');
-const {Op} = require('sequelize');
+const { guide_card, user, guide_user_participate, guide_image } = require('./../../models');
+const { Op } = require('sequelize');
 const GLOBAL_VARIABLE = require('./global_variable');
 const date_fns = require('date-fns');
-const {isAuthorized} = require('./user');
+const { isAuthorized } = require('./user');
 
 const checkParams = (params) => {
   const setParams = {};
 
   try {
-    for(let param in params){
-      if(params[param]){
-        if(param === 'title'){
+    for (let param in params) {
+      if (params[param]) {
+        if (param === 'title') {
           setParams[`title`] = params[param];
-        }else if(param === 'content'){
+        } else if (param === 'content') {
           setParams[`content`] = params[param];
-        }else if(param === 'guideDate'){
+        } else if (param === 'guideDate') {
           const guideDate = new Date(params[param]);
           setParams[`guideDate`] = guideDate;
-        }else if(param === 'startTime'){
+        } else if (param === 'startTime') {
           setParams[`startTime`] = params[param];
-        }else if(param === 'endTime'){
+        } else if (param === 'endTime') {
           setParams[`endTime`] = params[param];
-        }else if(param === 'numPeople'){
+        } else if (param === 'numPeople') {
           setParams[`numPeople`] = params[param];
-        }else if(param === 'address'){
+        } else if (param === 'address') {
           setParams[`address`] = params[param];
-        }else if(param === 'latitude'){
+        } else if (param === 'latitude') {
           setParams[`latitude`] = params[param];
-        }else if(param === 'longitude'){
+        } else if (param === 'longitude') {
           setParams[`longitude`] = params[param];
-        }else if(param === 'openDate'){
+        } else if (param === 'openDate') {
           setParams[`openDate`] = params[param];
-        }else if(param === 'state'){
+        } else if (param === 'state') {
           setParams[`state`] = params[param];
         }
       }
@@ -51,7 +51,7 @@ module.exports = {
 
     // 토큰이 없었을 때
     try {
-      if(!accessToken){
+      if (!accessToken) {
         throw 'accessToken이 없습니다';
       }
       insertValue['userId'] = accessToken.userId;
@@ -66,10 +66,10 @@ module.exports = {
     try {
       const guideCard = await guide_card.create(insertValue);
 
-      if(req.files.length > 0){
+      if (req.files.length > 0) {
         const guideImages = [];
-        for(let guideImage of req.files){
-          guideImages.push({guideId: guideCard.dataValues.guideId, image: guideImage.location});
+        for (let guideImage of req.files) {
+          guideImages.push({ guideId: guideCard.dataValues.guideId, image: guideImage.location });
         }
 
         guide_image.bulkCreate(guideImages);
@@ -110,31 +110,31 @@ module.exports = {
 
   selectGuideCard: async (params) => {
     const resObject = {};
-    const whereGuideCard = {[Op.and]: []};
+    const whereGuideCard = { [Op.and]: [] };
     const whereUser = {};
 
     try {
-      if(params['swLat']){
-        whereGuideCard[Op.and].push({latitude: {[Op.gte]: params['swLat']}});
+      if (params['swLat']) {
+        whereGuideCard[Op.and].push({ latitude: { [Op.gte]: params['swLat'] } });
       }
-      if(params['neLat']){
-        whereGuideCard[Op.and].push({latitude: {[Op.lte]: params['neLat']}});
+      if (params['neLat']) {
+        whereGuideCard[Op.and].push({ latitude: { [Op.lte]: params['neLat'] } });
       }
-      if(params['swLng']){
-        whereGuideCard[Op.and].push({longitude: {[Op.gte]: params['swLng']}});
+      if (params['swLng']) {
+        whereGuideCard[Op.and].push({ longitude: { [Op.gte]: params['swLng'] } });
       }
-      if(params['neLng']){
-        whereGuideCard[Op.and].push({longitude: {[Op.lte]: params['neLng']}});
+      if (params['neLng']) {
+        whereGuideCard[Op.and].push({ longitude: { [Op.lte]: params['neLng'] } });
       }
-      if(params['startDate']){
-        whereGuideCard[Op.and].push({guide_date: {[Op.gte]: new Date(params['startDate'])}});
+      if (params['startDate']) {
+        whereGuideCard[Op.and].push({ guide_date: { [Op.gte]: new Date(params['startDate']) } });
       }
-      if(params['endDate']){
-        whereGuideCard[Op.and].push({guide_date: {[Op.lte]: new Date(params['endDate'])}});
+      if (params['endDate']) {
+        whereGuideCard[Op.and].push({ guide_date: { [Op.lte]: new Date(params['endDate']) } });
       }
-      if(params['gender'] === '0'){
+      if (params['gender'] === '0') {
         whereUser['gender'] = false;
-      }else if(params['gender'] === '1'){
+      } else if (params['gender'] === '1') {
         whereUser['gender'] = true;
       }
     } catch (error) {
@@ -153,16 +153,17 @@ module.exports = {
             model: user,
             attributes: ['nickName', 'gender'],
             where: whereUser,
-          }, {
+          },
+          {
             model: guide_image,
             order: ['id', 'ASC']
           }
         ],
-        where: whereGuideCard
+        where: whereGuideCard,
       });
 
-      if(guideCards.length <= 0){
-        throw '현재 지역의 가이드 카드가 없습니다'
+      if (guideCards.length <= 0) {
+        throw '현재 지역의 가이드 카드가 없습니다';
       }
 
       const guideCardList = [];
@@ -203,42 +204,44 @@ module.exports = {
       resObject['message'] = error;
       resObject['guideCardList'] = [];
     }
-
     return resObject;
   },
 
   selectGuideCardById: async (guideId) => {
     const resObject = {};
-    
-    await guide_card.findOne({
-      raw: true,
-      include: [
-        {
-          model: user,
-          attributes: ['nickName', 'gender'],
-        }
-      ],
-      where: {guideId}
-    }).then(result => {
-      result['guideDate'] = date_fns.format(result['guideDate'], 'yyyy.MM.dd');
-      result['createdAt'] = date_fns.format(result['createdAt'], 'yyyy.MM.dd');
-      result['updatedAt'] = date_fns.format(result['updatedAt'], 'yyyy.MM.dd');
 
-      result['nickName'] = result['user.nickName'];
-      delete result['user.nickName'];
+    await guide_card
+      .findOne({
+        raw: true,
+        include: [
+          {
+            model: user,
+            attributes: ['nickName', 'gender'],
+          },
+        ],
+        where: { guideId },
+      })
+      .then((result) => {
+        result['guideDate'] = date_fns.format(result['guideDate'], 'yyyy.MM.dd');
+        result['createdAt'] = date_fns.format(result['createdAt'], 'yyyy.MM.dd');
+        result['updatedAt'] = date_fns.format(result['updatedAt'], 'yyyy.MM.dd');
 
-      result['gender'] = result['user.gender'];
-      delete result['user.gender'];
+        result['nickName'] = result['user.nickName'];
+        delete result['user.nickName'];
 
-      resObject['code'] = 200;
-      resObject['message'] = '가이드 카드를 조회했습니다';
-      resObject['guideCard'] = result;
-    }).catch(error => {
-      console.log(error);
-      resObject['code'] = 400;
-      resObject['message'] = '가이드 카드를 조회하지 못하였습니다';
-      resObject['guideCard'] = {};
-    });
+        result['gender'] = result['user.gender'];
+        delete result['user.gender'];
+
+        resObject['code'] = 200;
+        resObject['message'] = '가이드 카드를 조회했습니다';
+        resObject['guideCard'] = result;
+      })
+      .catch((error) => {
+        console.log(error);
+        resObject['code'] = 400;
+        resObject['message'] = '가이드 카드를 조회하지 못하였습니다';
+        resObject['guideCard'] = {};
+      });
 
     return resObject;
   },
@@ -249,7 +252,7 @@ module.exports = {
 
     // 토큰이 없었을 때
     try {
-      if(!accessToken){
+      if (!accessToken) {
         throw 'accessToken이 없습니다';
       }
     } catch (error) {
@@ -262,40 +265,40 @@ module.exports = {
     try {
       const guideCard = await guide_card.findOne({
         raw: true,
-        where : {
+        where: {
           userId: accessToken.userId,
           state: GLOBAL_VARIABLE.APPROVED,
         },
-        order: [['createdAt', 'DESC']]
+        order: [['createdAt', 'DESC']],
       });
 
-      if(!guideCard){
-        throw '진행 중인 가이드가 없습니다'
+      if (!guideCard) {
+        throw '진행 중인 가이드가 없습니다';
       }
 
       const guideData = {
         guideId: guideCard.guideId,
         title: guideCard.title,
-        guideDate: date_fns.format(guideCard['guideDate'], 'yyyy.MM.dd')
+        guideDate: date_fns.format(guideCard['guideDate'], 'yyyy.MM.dd'),
       };
 
       resObject['guideData'] = guideData;
 
       const guideUserParticipate = await guide_user_participate.findAll({
         raw: true,
-        where: {guideId: guideCard.guideId},
+        where: { guideId: guideCard.guideId },
         include: [
           {
             model: user,
-            attributes: ['nickName', 'region']
-          }
+            attributes: ['nickName', 'region'],
+          },
         ],
-        order: [['createdAt', 'ASC']]
+        order: [['createdAt', 'ASC']],
       });
 
       const applicant = [];
-      if(guideUserParticipate.length > 0){
-        for(let userInfo of guideUserParticipate){
+      if (guideUserParticipate.length > 0) {
+        for (let userInfo of guideUserParticipate) {
           const userInfoItem = {};
           userInfoItem['userId'] = userInfo.userId;
           userInfoItem['nickname'] = userInfo['user.nickName'];
@@ -319,4 +322,4 @@ module.exports = {
       return resObject;
     }
   },
-}
+};
