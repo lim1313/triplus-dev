@@ -63,13 +63,15 @@ export default function ManagementPage() {
       <Background pathName={pathname}>
         <ManageNav pathName={pathname.pathname} clicked={clicked} />
         <Outlet />
-        <ManageCtn>
-          <ManageSection
-            handleCreateClick={handleCreateClick}
-            guideInfo={guideInfo}
-            applicantInfo={applicantInfo}
-          />
-        </ManageCtn>
+        {pathname === '/management' && (
+          <ManageCtn>
+            <ManageSection
+              handleCreateClick={handleCreateClick}
+              guideInfo={guideInfo}
+              applicantInfo={applicantInfo}
+            />
+          </ManageCtn>
+        )}
       </Background>
     </>
   );
