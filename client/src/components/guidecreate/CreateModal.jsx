@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Loading from '../common/Loading';
 import { exit } from '../../redux/login/action';
+import AlertMsgModal from './AlertMsgModal';
 
 const { kakao } = window;
 
@@ -100,6 +101,7 @@ export default function CreateModal(props) {
   const [address, setAddress] = useState('');
   const [extraAddress, setExtraAddress] = useState('');
   const [isCompleted, setIsCompleted] = useState(false);
+  const [unCompleteMsgOpen, setUnCompleteMsgOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   //이벤트핸들러 함수
@@ -165,35 +167,49 @@ export default function CreateModal(props) {
     console.log(inputs);
   };
 
+  const inputCheck = (checkData) => {
+    for (let key in checkData) {
+      if (key === 'gender') continue;
+      if (!checkData[key]) return false;
+    }
+    return true;
+  };
+
   //가이드 생성 버튼 클릭시 이벤트 핸들러 함수
   const handleSubmitClick = () => {
-    setIsLoading(true);
-    console.log(fileArray);
-    const formData = new FormData();
-    for (let key in inputs) {
-      formData.append(key, inputs[key]);
+    if (inputCheck(inputs)) {
+      setIsLoading(true);
+      console.log(fileArray);
+      const formData = new FormData();
+      for (let key in inputs) {
+        formData.append(key, inputs[key]);
+      }
+      for (let el of fileArray) {
+        formData.append('file', el);
+      }
+      createGudie(formData)
+        .then((res) => {
+          console.log(res);
+          if (res.status === 200) {
+            // setIsLoading(false);
+            setIsCompleted(true);
+            navigate('/management');
+          }
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          dispatch(exit());
+          navigate('/login');
+        });
+    } else {
+      setTimeout(() => setUnCompleteMsgOpen(true), 0);
+      setTimeout(() => setUnCompleteMsgOpen(false), 1000);
     }
-    for (let el of fileArray) {
-      formData.append('file', el);
-    }
-    createGudie(formData)
-      .then((res) => {
-        console.log(res);
-        if (res.status === 200) {
-          // setIsLoading(false);
-          setIsCompleted(true);
-          navigate('/management');
-        }
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        dispatch(exit());
-        navigate('/login');
-      });
   };
 
   return (
     <Background onClick={handleCloseCreate} name='Background'>
+      {unCompleteMsgOpen ? <AlertMsgModal /> : null}
       <CreateModalWrapper width='26rem' minWidth='23rem'>
         <DeleteBtn>
           <ImCancelCircle className='cancel' onClick={handleCreateClick} />
