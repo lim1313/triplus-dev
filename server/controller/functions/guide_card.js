@@ -221,40 +221,61 @@ module.exports = {
   },
 
   selectGuideCardById: async (guideId) => {
-    const resObject = {};
+    const resObject = {code: 200};
 
-    await guide_card
-      .findOne({
-        raw: true,
-        include: [
-          {
-            model: user,
-            attributes: ['nickName', 'gender'],
-          },
-        ],
-        where: { guideId },
-      })
-      .then((result) => {
-        result['guideDate'] = date_fns.format(result['guideDate'], 'yyyy.MM.dd');
-        result['createdAt'] = date_fns.format(result['createdAt'], 'yyyy.MM.dd');
-        result['updatedAt'] = date_fns.format(result['updatedAt'], 'yyyy.MM.dd');
+    const selectGuideCard = await guide_card.findOne({
+      include: [
+        {
+          model: user,
+          attributes: ['nickName', 'gender'],
+        }, {
+          model: guide_image,
+          order: ['id', 'ASC']
+        }
+      ],
+      where: { guideId },
+    });
 
-        result['nickName'] = result['user.nickName'];
-        delete result['user.nickName'];
+    const selectGuideUserParticipate = await guide_user_participate.findAll({
+      raw: true,
+      where: {guideId},
+    })
 
-        result['gender'] = result['user.gender'];
-        delete result['user.gender'];
+    const guideCardData = selectGuideCard.dataValues;
+    const guideUserData = guideCardData.user.dataValues;
+    const guideImageData = guideCardData.guide_images;
 
-        resObject['code'] = 200;
-        resObject['message'] = '가이드 카드를 조회했습니다';
-        resObject['guideCard'] = result;
-      })
-      .catch((error) => {
-        console.log(error);
-        resObject['code'] = 400;
-        resObject['message'] = '가이드 카드를 조회하지 못하였습니다';
-        resObject['guideCard'] = {};
-      });
+    const guideCard = {};
+    guideCard['guideId'] = guideCardData['guideId'];
+    guideCard['title'] = guideCardData['title'];
+    guideCard['content'] = guideCardData['content'];
+    guideCard['guideDate'] = date_fns.format(guideCardData['guideDate'], 'yyyy.MM.dd');
+    guideCard['startTime'] = guideCardData['startTime'];
+    guideCard['endTime'] = guideCardData['endTime'];
+    guideCard['numPeople'] = guideCardData['numPeople'];
+    guideCard['state'] = guideCardData['state'];
+    guideCard['address'] = guideCardData['address'];
+    guideCard['latitude'] = guideCardData['latitude'];
+    guideCard['longitude'] = guideCardData['longitude'];
+    guideCard['openDate'] = guideCardData['openDate'];
+    guideCard['userId'] = guideCardData['userId'];
+    guideCard['nickName'] = guideUserData['nickName'];
+    guideCard['gender'] = guideUserData['gender'];
+    guideCard['userImage'] = guideUserData['image'];
+    guideCard['createdAt'] = date_fns.format(guideCardData['createdAt'], 'yyyy.MM.dd');
+    guideCard['updatedAt'] = date_fns.format(guideCardData['updatedAt'], 'yyyy.MM.dd');
+    guideCard['userParticipate'] = selectGuideUserParticipate.length;
+
+    const tourImage = []
+    if(guideImageData.length > 0){
+      for(let guideImageDataItem of guideImageData){
+        tourImage.push(guideImageDataItem.dataValues.image);
+      }
+    }
+
+    guideCard['tourImage'] = tourImage;
+
+    resObject['guideCard'] = guideCard;
 
     return resObject;
   },
