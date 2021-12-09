@@ -37,6 +37,9 @@ module.exports = {
       expired_datetime: {
         type: Sequelize.DATE,
       },
+      image: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
