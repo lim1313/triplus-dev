@@ -58,7 +58,7 @@ module.exports = {
       insertValue['state'] = GLOBAL_VARIABLE.REQUESTED;
     } catch (error) {
       console.log(`ERROR: ${error}`);
-      resObject['code'] = 401;
+      resObject['code'] = 400;
       resObject['message'] = error;
       return resObject;
     }
@@ -92,7 +92,7 @@ module.exports = {
 
     try {
       await guide_card.update(updateValue, {
-        where: {guide_id: params.guideId}
+        where: {guideId: params.guideId}
       }).then(() => {
         resObject['code'] = 200;
         resObject['message'] = '가이드 카드를 수정 했습니다';
@@ -155,6 +155,7 @@ module.exports = {
             where: whereUser,
           }, {
             model: guide_image,
+            order: ['id', 'ASC']
           }
         ],
         where: whereGuideCard
@@ -164,49 +165,44 @@ module.exports = {
         throw '현재 지역의 가이드 카드가 없습니다'
       }
 
+      const guideCardList = [];
       for(let guideCard of guideCards){
-        console.log(guideCard.dataValues);
+        const guideCardData = guideCard.dataValues;
+        const userData = guideCardData.user.dataValues;
+        const guideImageData = guideCardData.guide_images;
+        const guideCardItem = {};
+        guideCardItem['guideId'] = guideCardData['guideId'];
+        guideCardItem['title'] = guideCardData['title'];
+        guideCardItem['content'] = guideCardData['content'];
+        guideCardItem['guideDate'] = date_fns.format(guideCardData['guideDate'], 'yyyy.MM.dd');
+        guideCardItem['startTime'] = guideCardData['startTime'];
+        guideCardItem['endTime'] = guideCardData['endTime'];
+        guideCardItem['numPeople'] = guideCardData['numPeople'];
+        guideCardItem['state'] = guideCardData['state'];
+        guideCardItem['address'] = guideCardData['address'];
+        guideCardItem['latitude'] = guideCardData['latitude'];
+        guideCardItem['longitude'] = guideCardData['longitude'];
+        guideCardItem['openDate'] = guideCardData['openDate'];
+        guideCardItem['userId'] = guideCardData['userId'];
+        guideCardItem['nickName'] = userData['nickName'];
+        guideCardItem['gender'] = userData['gender'];
+        guideCardItem['createdAt'] = date_fns.format(guideCardData['createdAt'], 'yyyy.MM.dd');
+        guideCardItem['updatedAt'] = date_fns.format(guideCardData['updatedAt'], 'yyyy.MM.dd');
+
+        if(guideImageData.length > 0){
+          guideCardItem['tourImage'] = guideImageData[guideImageData.length - 1].dataValues.image;
+        }
+        guideCardList.push(guideCardItem);
       }
+      resObject['code'] = 200;
+      resObject['message'] = '가이드 카드를 조회했습니다'
+      resObject['guideCardList'] = guideCardList;
     } catch (error) {
       console.log(error);
       resObject['code'] = 200;
       resObject['message'] = error;
       resObject['guideCardList'] = [];
     }
-
-    const guideCards = await guide_card.findAll({
-      raw: true,
-      include: [
-        {
-          model: user,
-          attributes: ['nickName', 'gender'],
-          where: whereUser,
-        }
-      ],
-      where: whereGuideCard
-    }).then(result => {
-      for(let item of result){
-        item['guideDate'] = date_fns.format(item['guideDate'], 'yyyy.MM.dd');
-        item['createdAt'] = date_fns.format(item['createdAt'], 'yyyy.MM.dd');
-        item['updatedAt'] = date_fns.format(item['updatedAt'], 'yyyy.MM.dd');
-        item['tourImage'] = '/asset/main/trip5.png';
-
-        item['nickName'] = item['user.nickName'];
-        delete item['user.nickName'];
-
-        item['gender'] = item['user.gender'];
-        delete item['user.gender'];
-      }
-
-      resObject['code'] = 200;
-      resObject['message'] = '가이드 카드를 조회했습니다'
-      resObject['guideCardList'] = result;
-    }).catch(error => {
-      console.log(error);
-      resObject['code'] = 400;
-      resObject['message'] = '가이드 카드를 조회하지 못하였습니다'
-      resObject['guideCardList'] = [];
-    });
 
     return resObject;
   },
