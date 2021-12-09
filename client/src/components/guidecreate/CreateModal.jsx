@@ -176,18 +176,20 @@ export default function CreateModal(props) {
     for (let el of fileArray) {
       formData.append('file', el);
     }
-    createGudie(formData).then((res) => {
-      console.log(res.status);
-      if (res.status === 200) {
-        // setIsLoading(false);
-        setIsCompleted(true);
-        // navigate('/map');
-      } else if (res.status === 401) {
+    createGudie(formData)
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          // setIsLoading(false);
+          setIsCompleted(true);
+          navigate('/management');
+        }
+      })
+      .catch((error) => {
         setIsLoading(false);
         dispatch(exit());
         navigate('/login');
-      }
-    });
+      });
   };
 
   return (
@@ -202,7 +204,6 @@ export default function CreateModal(props) {
               <CompleteMessage>
                 업로드가 완료되었습니다!
                 <br />
-                관리자의 승인이 완료되면 이메일을 전송해드립니다.
               </CompleteMessage>
             ) : (
               <>
