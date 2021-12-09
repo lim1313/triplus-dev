@@ -13,14 +13,13 @@ export const getUserInfo = () => {
 //TODO POST 정보 변경
 export const postInfo = (data, path) => {
   if (path === 'nickname') path = 'nick-name';
-  if (path === 'e-mail') path = 'email';
   return axios
     .post(`${http}/my/${path}`, { data })
     .then((res) => res.state)
     .catch((err) => err.response.status);
 };
 
-//TODO POST 이메일 인증
+//TODO POST 이메일 인증 발송
 export const postEmailCheck = (data) => {
   return axios
     .post(`${http}/my/email-check`, { data })
@@ -28,13 +27,13 @@ export const postEmailCheck = (data) => {
     .catch((err) => err.response.status);
 };
 
-//TODO POST 이메일 인증 해제
-export const postEmailUnCheck = () => {
-  return axios
-    .post(`${http}/my/email-unCheck`)
-    .then((res) => res.state)
-    .catch((err) => err.response.status);
-};
+// //TODO POST 이메일 인증 해제
+// export const postEmailUnCheck = () => {
+//   return axios
+//     .post(`${http}/my/email-unCheck`)
+//     .then((res) => res.state)
+//     .catch((err) => err.response.status);
+// };
 
 //TODO POST 프로필 변경
 // 기본의 프로필 url은 삭제하고 새로운 url로 갱신

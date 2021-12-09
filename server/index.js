@@ -11,7 +11,7 @@ const httpServer = createServer(app);
 const { Server } = require('socket.io');
 
 // port 80으로 변경
-const port = process.env.HTTP_PORT || 80;
+const port = process.env.HTTP_PORT || 4000;
 
 // Router 연결
 const adminPage = require('./router/adminPage');
@@ -66,7 +66,6 @@ app.use('/oauth', authPage);
 app.use('/file-management', fileManagement);
 app.get('/logout', logout.logout);
 app.get('/confirmEmail', confirmEmail.confirmEmail);
-app.get('/changeEmail', confirmEmail.changeEmail);
 
 app.get('/hello-triplus', (req, res) => {
   res.status(200).send('Hello triplus');
