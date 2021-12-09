@@ -19,6 +19,14 @@ export const postInfo = (data, path) => {
     .catch((err) => err.response.status);
 };
 
+//TODO DELETE 탈퇴
+export const deleteUser = (data) => {
+  return axios
+    .post(`${http}/my/withdraw`, { data })
+    .then((res) => res.state)
+    .catch((err) => err.response.status);
+};
+
 //TODO POST 이메일 인증 발송
 export const postEmailCheck = (data) => {
   return axios

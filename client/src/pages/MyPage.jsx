@@ -1,10 +1,12 @@
+/*eslint-disable no-unused-vars*/
+
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import MyInfo from '../components/mypage/MyInfo';
 import MyProfile from '../components/mypage/MyProfile';
 import { userInfodb } from '../db/guideModal';
 import Loading from '../components/common/Loading';
-// import { getUserInfo } from '../network/my/http';
+import { getUserInfo } from '../network/my/http';
 
 const Wrapper = styled.div`
   display: flex;
