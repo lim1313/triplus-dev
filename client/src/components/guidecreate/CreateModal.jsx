@@ -171,6 +171,7 @@ export default function CreateModal(props) {
   const inputCheck = (checkData) => {
     for (let key in checkData) {
       if (key === 'gender') continue;
+      if (key === 'openDate') continue;
       if (!checkData[key]) return false;
     }
     return true;

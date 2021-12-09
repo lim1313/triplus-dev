@@ -50,6 +50,7 @@ export default function ManagementPage() {
       setClick({ management: false, managementtourlist: true });
     }
     getGuideInfo().then((res) => {
+      console.log(res.data);
       setGuideInfo(res.data.guideData);
       setApplicantInfo(res.data.applicant);
     });
