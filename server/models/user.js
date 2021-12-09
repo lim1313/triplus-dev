@@ -38,7 +38,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         field: 'expired_datetime'
       },
-      image: DataTypes.STRING,
     },
     {
       sequelize,
