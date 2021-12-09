@@ -6,7 +6,7 @@ import SignupEmail from './SignupEmail';
 import styled from 'styled-components';
 import { idValidation, emailValidation, pwValidaton } from '../../utils/validation';
 import { checkId, emailCheck, signUp } from '../../network/signup/http';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 const SectionBlock = styled.div`
   max-width: 100%;
@@ -15,8 +15,9 @@ const SectionBlock = styled.div`
   }
 `;
 
-export default function SignupSection() {
-  const navigate = useNavigate();
+export default function SignupSection(props) {
+  const { handleModalClick } = props.props;
+  // const navigate = useNavigate();
   const [message, setMessage] = useState({
     userId: '',
     password: '',
@@ -101,8 +102,7 @@ export default function SignupSection() {
       };
       signUp(body).then((res) => {
         if (res.data.success) {
-          alert('회원가입이 완료되었습니다.');
-          navigate('/login');
+          handleModalClick();
         }
       });
     } else {
