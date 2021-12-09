@@ -23,15 +23,19 @@ const SelectBtn = styled(ColorBtn)`
   }
 `;
 
-export default function Modal({ content, yesClick, noClick }) {
+export default function Modal({ content, yesClick, noClick, children, width }) {
   return (
     <Background>
-      <ModalWrapper>
-        <ModalTitle>{content}</ModalTitle>
-        <BtnWrapper>
-          <SelectBtn onClick={yesClick}>확인</SelectBtn>
-          <SelectBtn onClick={noClick}>취소</SelectBtn>
-        </BtnWrapper>
+      <ModalWrapper width={width}>
+        {children || (
+          <>
+            <ModalTitle>{content}</ModalTitle>
+            <BtnWrapper>
+              <SelectBtn onClick={yesClick}>확인</SelectBtn>
+              <SelectBtn onClick={noClick}>취소</SelectBtn>
+            </BtnWrapper>
+          </>
+        )}
       </ModalWrapper>
     </Background>
   );

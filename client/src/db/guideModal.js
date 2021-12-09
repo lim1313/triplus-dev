@@ -82,7 +82,7 @@ export const dbModal = {
 
 export const userInfodb = {
   userId: 'useruser',
-  email: 'shfks1212@naver.com',
+  email: 'sss2@naver.com',
   nickName: 'nicnik',
   reigion: '서울특별시 강남구 ',
   image:
