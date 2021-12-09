@@ -8,6 +8,7 @@ import { NoBorderBtn, BorderBtn } from '../../styles/common';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../../redux/login/action';
 import { toggleOpen, toggleClose } from '../../redux/toggle/action';
+import { changeCurrentRoom } from '../../redux/chat/action';
 
 const NavContainer = styled.div`
   position: sticky;
@@ -123,6 +124,10 @@ export default function NavBar() {
     });
   }, [pathname]);
 
+  const roomReset = () => {
+    dispatch(changeCurrentRoom(0));
+  };
+
   const handleLogoutClick = () => {
     dispatch(logoutUser());
     navigate('/');
@@ -155,18 +160,27 @@ export default function NavBar() {
             palette={
               pathname === '/management' || pathname === '/management/tourlist' ? 'black' : 'gray'
             }
+            onClick={roomReset}
           >
             여행 관리
           </MaxBtn>
         </Link>
         <Link to='chat'>
-          <MaxBtn active={routed.chat} palette={pathname === '/chat' ? 'black' : 'gray'}>
+          <MaxBtn
+            active={routed.chat}
+            palette={pathname === '/chat' ? 'black' : 'gray'}
+            onClick={roomReset}
+          >
             채팅
           </MaxBtn>
         </Link>
         {isLogin ? (
           <Link to='mypage'>
-            <MaxBtn active={routed.mypage} palette={pathname === '/mypage' ? 'black' : 'gray'}>
+            <MaxBtn
+              active={routed.mypage}
+              palette={pathname === '/mypage' ? 'black' : 'gray'}
+              onClick={roomReset}
+            >
               마이 페이지
             </MaxBtn>
           </Link>

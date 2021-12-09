@@ -1,4 +1,4 @@
-const { chat_member, user } = require('../../models');
+const { chat_room, chat_member, user } = require('../../models');
 const { Op } = require('sequelize');
 const { verify } = require('jsonwebtoken');
 
@@ -82,5 +82,37 @@ module.exports = {
     }
 
     return resObject;
+  },
+
+  getChatContents: async (selectedRoom) => {
+    const messages = await chat_room.findOne({
+      raw: true,
+      attributes: ['message'],
+      where: { roomId: selectedRoom },
+    });
+    console.log(messages.message);
+    return messages.message;
+  },
+
+  updateMessage: async (messageUpdate, selectedRoom) => {
+    const currentRoomInfo = await chat_room.findOne({ raw: true, where: { roomId: selectedRoom } });
+    const parsedMessage = JSON.parse(currentRoomInfo.message);
+    parsedMessage.push(messageUpdate);
+    const stringifiedNewMessage = JSON.stringify(parsedMessage);
+
+    await chat_room.update(
+      {
+        message: stringifiedNewMessage,
+      },
+      { where: { roomId: selectedRoom } }
+    );
+  },
+
+  deleteRoom: async (userId, currentRoom) => {
+    const destroy = await chat_member.destroy({ where: { roomId: currentRoom, userId: userId } });
+    const remainedRoom = await chat_member.findAll({ raw: true, where: { roomId: currentRoom } });
+    if (remainedRoom.length === 0) {
+      chat_room.destry({ where: { roomId: currentRoom } });
+    }
   },
 };

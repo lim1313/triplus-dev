@@ -1,13 +1,21 @@
 /* eslint-disable no-unused-vars*/
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
+import { logOut } from '../network/login/http';
 
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 
-import { useDispatch } from 'react-redux';
-import { getUserChatInfo, getChatList } from '../redux/chat/action';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  getUserChatInfo,
+  changeCurrentRoom,
+  getChatList,
+  resetChatList,
+} from '../redux/chat/action';
+import { logoutUser } from '../redux/login/action';
 
 import Loading from '../components/common/Loading';
 import ChatContainer from '../components/chat/ChatContainer';
@@ -17,30 +25,39 @@ dayjs.locale('ko');
 export default function ChattingPage() {
   const socketRef = useRef();
 
+  const currentRoom = useSelector((state) => state.currentRoomReducer.currentRoom);
   const dispatch = useDispatch();
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedRoom, setSelectedRoom] = useState(null);
-  // const [chatBubble, setChatBubble] = useState([]);
+  const navigate = useNavigate();
 
   const dateConversion = (date) => {
     const day = dayjs(date).format('YYYY년 M월 D일');
     const time = dayjs(date).format('a hh시 mm분');
-
     return { day, time };
   };
 
   // ? send, getMessage 함수 목록
-  const myChatBubble = (data) => {
-    const { day, time } = dateConversion(data.date);
-    const { user_id, content } = data;
-    const upState = {
-      day,
-      time,
-      userId: user_id,
-      content,
-    };
-    dispatch(getChatList(upState));
+  const editChat = (data) => {
+    // const { day, time } = dateConversion(data.date);
+    // const { user_id, content } = data;
+    // const upState = {
+    //   day,
+    //   time,
+    //   userId: user_id,
+    //   content,
+    // };
+
+    return data.map((el) => {
+      const { day, time } = dateConversion(el.date);
+      delete el.date;
+      const newData = {
+        day: day,
+        time: time,
+        userId: el.user_id,
+        content: el.content,
+      };
+      return newData;
+    });
   };
 
   //* 채팅 페이지 초기 렌더링
@@ -50,28 +67,47 @@ export default function ChattingPage() {
       transports: ['websocket'],
     });
 
+    socketRef.current.on('shouldLogin', async () => {
+      logOut();
+      dispatch(logoutUser());
+      navigate('/login');
+    });
+
     socketRef.current.on('getRooms', (data) => {
-      console.log(data);
+      // TODO userId 가 빈문자열로 왔을 때 로그인하게끔 유도
       dispatch(getUserChatInfo(data));
     });
   }, []);
 
-  // TODO 2. getMessage
+  // TODO 2. 룸 입장 후 채팅 데이터 받아오기
+
   useEffect(() => {
-    socketRef.current.on('getMessage', (data) => {
-      console.log('get');
-      myChatBubble(data);
+    socketRef.current.on('initialChat', (initialChat) => {
+      console.log('야');
+      console.log(initialChat);
+      const newChat = editChat(initialChat);
+      dispatch(resetChatList(newChat));
     });
   }, []);
 
-  // TODO 3. 룸에 입장
+  // TODO 3. 송신한 메세지 수신하기
+  useEffect(() => {
+    socketRef.current.on('getMessage', (data) => {
+      console.log('get');
+      const newChat = editChat(data);
+      // console.log(chatList);
+      dispatch(getChatList(newChat));
+    });
+  }, []);
+
+  // TODO 4. 룸에 입장
   const selectRoomHandler = (selectedRoom) => {
     console.log(selectedRoom);
-    setSelectedRoom(selectedRoom);
+    dispatch(changeCurrentRoom(selectedRoom));
     socketRef.current.emit('joinRoom', selectedRoom);
   };
 
-  // TODO 4. 문자 보내기
+  // TODO 5. 문자 송신하기
   // ? socket 이벤트
   const sendMessageHandler = (e, msg, userId, selectedRoom) => {
     e.preventDefault();
@@ -80,7 +116,6 @@ export default function ChattingPage() {
     const DBdate = dayjs().format('YYYY.MM.DD hh:mm:ss:SSS');
 
     const DBform = {
-      DBdate,
       date,
       user_id: userId,
       content: msg,
@@ -88,12 +123,9 @@ export default function ChattingPage() {
     socketRef.current.emit('sendMessage', DBform, selectedRoom);
   };
 
-  return isLoading ? (
-    <Loading></Loading>
-  ) : (
+  return (
     <ChatContainer
       sendMessageHandler={sendMessageHandler}
-      selectedRoom={selectedRoom}
       selectRoomHandler={selectRoomHandler}
     ></ChatContainer>
   );
