@@ -9,34 +9,41 @@ const checkParams = (params) => {
 
   try {
     for (let param in params) {
-      if (params[param]) {
-        if (param === 'title') {
-          setParams[`title`] = params[param];
-        } else if (param === 'content') {
-          setParams[`content`] = params[param];
-        } else if (param === 'guideDate') {
-          const guideDate = new Date(params[param]);
-          setParams[`guideDate`] = guideDate;
-        } else if (param === 'startTime') {
-          setParams[`startTime`] = params[param];
-        } else if (param === 'endTime') {
-          setParams[`endTime`] = params[param];
-        } else if (param === 'numPeople') {
-          setParams[`numPeople`] = params[param];
-        } else if (param === 'address') {
-          setParams[`address`] = params[param];
-        } else if (param === 'latitude') {
-          setParams[`latitude`] = params[param];
-        } else if (param === 'longitude') {
-          setParams[`longitude`] = params[param];
-        } else if (param === 'openDate') {
-          setParams[`openDate`] = params[param];
-        } else if (param === 'state') {
-          setParams[`state`] = params[param];
+      if (param === 'title') {
+        setParams[`title`] = params[param];
+      } else if (param === 'content') {
+        setParams[`content`] = params[param];
+      } else if (param === 'date') {
+        let guideDate;
+        if(!params[param]){
+          guideDate = new Date();
+        }else{
+          guideDate = new Date(params[param]);
         }
+        setParams[`guideDate`] = guideDate;
+      } else if (param === 'startTime') {
+        setParams[`startTime`] = params[param];
+      } else if (param === 'endTime') {
+        setParams[`endTime`] = params[param];
+      } else if (param === 'numPeople') {
+        setParams[`numPeople`] = params[param];
+      } else if (param === 'address') {
+        setParams[`address`] = params[param];
+      } else if (param === 'latitude') {
+        if(params[param]){
+          setParams[`latitude`] = params[param];  
+        }
+      } else if (param === 'longitude') {
+        if(params[param]){
+          setParams[`longitude`] = params[param];
+        }
+      } else if (param === 'openDate') {
+        setParams[`openDate`] = params[param];
+      } else if (param === 'state') {
+        setParams[`state`] = params[param];
       }
     }
-
+    console.log(setParams);
     return setParams;
   } catch (error) {
     console.log(error);
@@ -46,6 +53,7 @@ const checkParams = (params) => {
 module.exports = {
   createGuideCard: async (req) => {
     let resObject = {};
+    console.log(req.body);
     const insertValue = checkParams(req.body);
     const accessToken = isAuthorized(req);
 
@@ -55,7 +63,7 @@ module.exports = {
         throw 'accessToken이 없습니다';
       }
       insertValue['userId'] = accessToken.userId;
-      insertValue['state'] = GLOBAL_VARIABLE.REQUESTED;
+      insertValue['state'] = GLOBAL_VARIABLE.APPROVED;
     } catch (error) {
       console.log(`ERROR: ${error}`);
       resObject['code'] = 400;
@@ -151,7 +159,7 @@ module.exports = {
         include: [
           {
             model: user,
-            attributes: ['nickName', 'gender'],
+            attributes: ['nickName', 'gender', 'image'],
             where: whereUser,
           },
           {
@@ -187,11 +195,16 @@ module.exports = {
         guideCardItem['userId'] = guideCardData['userId'];
         guideCardItem['nickName'] = userData['nickName'];
         guideCardItem['gender'] = userData['gender'];
+        guideCardItem['userImage'] = userData['image'];
         guideCardItem['createdAt'] = date_fns.format(guideCardData['createdAt'], 'yyyy.MM.dd');
         guideCardItem['updatedAt'] = date_fns.format(guideCardData['updatedAt'], 'yyyy.MM.dd');
 
+        const tourImage = []
         if(guideImageData.length > 0){
-          guideCardItem['tourImage'] = guideImageData[guideImageData.length - 1].dataValues.image;
+          for(let guideImageDataItem of guideImageData){
+            tourImage.push(guideImageDataItem.dataValues.image);
+          }
+          guideCardItem['tourImage'] = tourImage;
         }
         guideCardList.push(guideCardItem);
       }
@@ -267,7 +280,6 @@ module.exports = {
         raw: true,
         where: {
           userId: accessToken.userId,
-          state: GLOBAL_VARIABLE.APPROVED,
         },
         order: [['createdAt', 'DESC']],
       });
