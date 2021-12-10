@@ -36,8 +36,10 @@ export const getGuideCards = async (params) => {
 
 //TODO GET 범위 내의 카드 모달
 export const getCardModal = async (params) => {
-  const res = await axios.get(`${http}/map/guide-card`, { params: { 'guide-id': params } });
-  return res.data.guideCardList;
+  return axios
+    .get(`${http}/map/guide-card`, { params: { guideId: params } })
+    .then((res) => res.data.guideCard)
+    .catch((err) => console.log(err));
 };
 
 // TODO POST 가이드 신청하기

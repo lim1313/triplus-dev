@@ -69,17 +69,20 @@ export default function GuideImgs({ tourImage }) {
       <Wrapper>
         <ImgWrapper>
           <ImgUL fromLeft={fromLeft}>
-            {tourImage.map((img, i) => (
-              <GuideImg key={i} img={img} index={i} />
-            ))}
+            {tourImage && tourImage.map((img, i) => <GuideImg key={i} img={img} index={i} />)}
           </ImgUL>
         </ImgWrapper>
-        <MoveBtn left onClick={() => moveImg('l')}>
-          <FaAngleLeft />
-        </MoveBtn>
-        <MoveBtn onClick={() => moveImg('r')}>
-          <FaAngleRight />
-        </MoveBtn>
+        {/*! 이미지가 없는 경우 default 이미지 넣기 */}
+        {tourImage && (
+          <>
+            <MoveBtn left onClick={() => moveImg('l')}>
+              <FaAngleLeft />
+            </MoveBtn>
+            <MoveBtn onClick={() => moveImg('r')}>
+              <FaAngleRight />
+            </MoveBtn>
+          </>
+        )}
       </Wrapper>
     </div>
   );

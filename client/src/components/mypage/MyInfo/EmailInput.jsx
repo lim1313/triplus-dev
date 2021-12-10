@@ -45,7 +45,7 @@ const AlertMsg = styled.div`
   }
 `;
 
-export default function ModalInput({
+export default function EmailInput({
   email,
   onClick,
   title,

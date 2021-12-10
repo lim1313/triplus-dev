@@ -41,10 +41,10 @@ export default function CardBar() {
 
   const modalClick = (cardId) => {
     // TODO GET /map/guide-card?guide-id=cardId
-    // getCardModal(cardId).then(res => {
-    //  dispatch(openGuideModal({ isOpen: true, modalInfo:res }));
-    // })
-    dispatch(openGuideModal({ isOpen: true, modalInfo: { ...dbModal, guideId: cardId } }));
+    getCardModal(cardId).then((res) => {
+      dispatch(openGuideModal({ isOpen: true, modalInfo: res }));
+    });
+    // dispatch(openGuideModal({ isOpen: true, modalInfo: { ...dbModal, guideId: cardId } }));
   };
 
   return (
