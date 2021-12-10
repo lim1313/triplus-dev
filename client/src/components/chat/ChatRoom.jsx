@@ -76,7 +76,7 @@ const TimeSpan = styled.p`
   margin-right: ${({ isUser }) => (isUser ? '0.5rem' : 'none')};
   margin-left: ${({ isUser }) => (isUser ? 'none' : '0.5rem')};
   @media ${({ theme }) => theme.device.mobile} {
-    font-size: 0.2rem;
+    font-size: 0.5rem;
   }
 `;
 
@@ -160,13 +160,11 @@ export default function ChatRoom({ sendMessageHandler }) {
       break;
     }
   }
-  console.log(userId);
   const msgInputHandler = (e) => {
     setMsg(e.target.value);
   };
 
   const submitHandler = (e) => {
-    console.log('msg', msg);
     if (msg !== '') {
       sendMessageHandler(e, msg, userId, currentRoom);
       setMsg('');
@@ -194,25 +192,15 @@ export default function ChatRoom({ sendMessageHandler }) {
       {currentRoom ? (
         <>
           <ChatBoard id={currentRoom} ref={chatBoard}>
-            {chatBubble.map((el) => {
+            {chatBubble.map((el, i) => {
               const isUser = el.userId === userId;
               return (
                 <>
-                  <BubbleBox key={uuidV4()} isUser={isUser}>
+                  <BubbleBox key={i} isUser={isUser}>
                     <BubbleWrapper>
-                      {isUser ? (
-                        <TimeSpan key={uuidV4()} isUser={isUser}>
-                          {el.time}
-                        </TimeSpan>
-                      ) : null}
-                      <ChatBubble key={uuidV4()} isUser={isUser}>
-                        {el.content}
-                      </ChatBubble>
-                      {isUser ? null : (
-                        <TimeSpan key={uuidV4()} isUser={isUser}>
-                          {el.time}
-                        </TimeSpan>
-                      )}
+                      {isUser ? <TimeSpan isUser={isUser}>{el.time}</TimeSpan> : null}
+                      <ChatBubble isUser={isUser}>{el.content}</ChatBubble>
+                      {isUser ? null : <TimeSpan isUser={isUser}>{el.time}</TimeSpan>}
                     </BubbleWrapper>
                   </BubbleBox>
                 </>

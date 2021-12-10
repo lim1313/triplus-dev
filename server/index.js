@@ -92,10 +92,6 @@ const io = new Server(httpServer, {
 io.on('connection', async (socket) => {
   console.log(`connect with id: ${socket.id}`);
 
-  socket.onAny((event) => {
-    console.log(socket.id);
-  });
-
   // const userChatInfo = isSocketAuthorized(socket.handshake.headers.cookie['accessToken']);
   if (!socket.handshake.headers.cookie) return socket.emit('shouldLogin');
   const userInfo = isSocketAuthorized(socket.handshake.headers.cookie.replace('accessToken=', ''));
@@ -105,23 +101,21 @@ io.on('connection', async (socket) => {
   const userChatInfos = await getUserChatInfo(userInfo);
   // console.log(userChatInfos);
 
-  if (userChatInfos.chatRooms.length > 0) {
-    for (let chatRoom of userChatInfos.chatRooms) {
-      socket.join(String(chatRoom.roomId));
-    }
-  }
-  console.log(userChatInfos);
-  console.log(io.sockets.adapter.rooms);
   socket.emit('getRooms', userChatInfos);
 
   socket.on('joinRoom', async (currentRoom, selectedRoom) => {
+    if (!!currentRoom) {
+      socket.leave(currentRoom);
+    }
+    socket.join(selectedRoom);
+    console.log('joinRoom', io.sockets.adapter.rooms);
     const messages = await getChatContents(selectedRoom);
     const initialChat = JSON.parse(messages);
-    console.log('hey', selectedRoom);
     socket.emit('initialChat', initialChat);
   });
 
   socket.on('sendMessage', (DBform, selectedRoom) => {
+    console.log('socket-id는 ', socket.id);
     const { date, user_id, content } = DBform;
     const messageUpdate = {
       date,
@@ -130,8 +124,7 @@ io.on('connection', async (socket) => {
     };
     updateMessage(messageUpdate, selectedRoom);
     const data = { date, user_id, content };
-    console.log('data', data);
-    console.log(selectedRoom);
+    console.log(data);
     io.to(selectedRoom).emit('getMessage', [data]);
   });
 
@@ -140,7 +133,8 @@ io.on('connection', async (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log('disconnected');
+    console.log('disconnected -------------------------------------------------');
+    console.log('disconnect', io.sockets.adapter.rooms);
   });
 });
 
@@ -222,4 +216,114 @@ sequelize
  * > 프론트엔드 쪽에서 '/chat'
  * > subRouting 은 따로 구현하지 않는다.
  * > 그 만들어진 roomId 자체를 select 하는 걸로
- */
+//  */
+//  import React from 'react';
+//  import styled, { css } from 'styled-components';
+
+//  import { GiCancel } from 'react-icons/gi';
+//  import { useSelector } from 'react-redux';
+
+//  import { BorderBtn } from '../../styles/common/index';
+
+//  const SideContainer = styled.div`
+//    position: relative;
+//    display: flex;
+//    flex-direction: column;
+//    width: 13rem;
+//    height: inherit;
+//    padding: 2rem;
+//    border-left: 1px solid #aeb8c2;
+//    @media ${({ theme }) => theme.device.mobile} {
+//      width: 100vw;
+//      flex-direction: row;
+//      height: 10vh;
+//      padding: 0.5rem 0.5rem;
+//      overflow: auto;
+//      -ms-overflow-style: none;
+//      scrollbar-width: none;
+
+//      &::-webkit-scrollbar {
+//        display: none;
+//      }
+//    }
+//  `;
+
+//  const RoomName = styled(BorderBtn)`
+//    position: relative;
+//    font-size: 0.9rem;
+//    border-radius: 15px;
+//    margin-bottom: 1rem;
+//    word-break: break-word;
+//    padding: 1rem;
+//    ${({ selected }) =>
+//      selected &&
+//      css`
+//        background-color: ${({ theme }) => theme.color.blue};
+//        border-color: ${({ theme }) => theme.color.blue};
+//        color: #fff;
+//      `}
+//    &:hover {
+//      background-color: ${({ theme }) => theme.color.lightBlue};
+//      color: #fff;
+//      border-color: ${({ theme }) => theme.color.lightBlue};
+//      ${({ selected }) =>
+//        selected &&
+//        css`
+//          background-color: ${({ theme }) => theme.color.blue};
+//          color: #fff;
+//          border-color: ${({ theme }) => theme.color.blue};
+//        `}
+//    }
+
+//    @media ${({ theme }) => theme.device.mobile} {
+//      width: 9rem;
+//      font-size: 0.8rem;
+//      padding: 0.7rem;
+//      margin: 0 0.5rem;
+//      word-break: keep-all;
+//    }
+//  `;
+
+//  const IconWrapper = styled.div`
+//    position: absolute;
+//    font-size: 1rem;
+//    top: 0;
+//    left: 3px;
+//    &:hover {
+//      color: ${({ theme }) => theme.color.darkGray};
+//    }
+//    @media ${({ theme }) => theme.device.mobile} {
+//      font-size: 0.9rem;
+//    }
+//  `;
+
+//  export default function SideBar({ selectRoomHandler, leaveRoomHandler }) {
+//    const roomList = useSelector((state) => state.chatUserInfoReducer.chatRooms);
+//    const currentRoom = useSelector((state) => state.currentRoomReducer.currentRoom);
+
+//    const clickRoomHandler = (e) => {
+//      console.log(e.target.id);
+//      selectRoomHandler(currentRoom, e.target.id);
+//    };
+
+//    return (
+//      <SideContainer>
+//        {roomList.map((el) => {
+//          return (
+//            <RoomName
+//              id={el.roomId}
+//              selected={String(el.roomId) === currentRoom}
+//              onClick={clickRoomHandler}
+//              key={el.chatPartnerId}
+//              palette='gray'
+//            >
+//              <IconWrapper onClick={leaveRoomHandler}>
+//                <GiCancel id={el.roomId} />
+//              </IconWrapper>
+//              <span>{el.chatPartnerNickName}</span>
+//            </RoomName>
+//          );
+//        })}
+//      </SideContainer>
+//    );
+//  }
