@@ -1,6 +1,7 @@
 /*eslint-disable no-unused-vars*/
 
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { rezGuide } from '../../../network/map/http';
 import { ColorBtn } from '../../../styles/common';
@@ -53,9 +54,20 @@ export const ModalBtn = styled(ColorBtn)`
     `}
 `;
 
-export default function GuideBtn({ guideId, userId, userParticipate, state, closeModal, compoleteModal }) {
+export default function GuideBtn({
+  guideId,
+  userId,
+  userParticipate,
+  state,
+  closeModal,
+  compoleteModal,
+}) {
+  const isLogin = useSelector((state) => state.loginReducer.isLogin);
+
   const clickGuide = (id) => {
+    if (!isLogin) return compoleteModal('login');
     if (state === 'COMPLETED') return;
+
     //TODO POST 가이드 신청
     rezGuide(id).then((res) => {
       if (res === 401) {

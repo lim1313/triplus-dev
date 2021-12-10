@@ -1,6 +1,6 @@
 /*eslint-disable no-unused-vars*/
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import GuideContent from './cardModal/GuideContent';
 import GuideImgs from './cardModal/GuideImgs';
@@ -47,15 +47,17 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.h1`
-  margin: 1rem 0;
+  margin: 0;
+  padding: 2rem 0 1rem 0;
   font-size: 1.7rem;
   text-align: center;
   color: ${({ theme }) => theme.color.darkGray};
+  word-break: keep-all;
 `;
 
-const BtnWrapper = styled.div`
+const BtnWrapper = styled.span`
   text-align: right;
-  position: sticky;
+  position: fixed;
   top: 0;
   right: 0;
 `;
@@ -93,6 +95,11 @@ export default function CardModal({ modalInfo }) {
 
   const dispatch = useDispatch();
 
+  const modalRef = useRef();
+  useEffect(() => {
+    modalRef.current.scrollIntoView({ behavior: 'smooth' });
+  }, [modalInfo]);
+
   const closeModal = () => {
     dispatch(openGuideModal({ isOpen: false }));
   };
@@ -104,7 +111,7 @@ export default function CardModal({ modalInfo }) {
             <FaTimes />
           </CloseBtn>
         </BtnWrapper>
-        <Wrapper>
+        <Wrapper ref={modalRef}>
           <Title>{title}</Title>
           <UserInfo nickName={nickName} gender={gender} userImage={userImage} />
           <GuideImgs tourImage={tourImage} title={title} />
@@ -124,7 +131,7 @@ export default function CardModal({ modalInfo }) {
           compoleteModal={(result) => setOpenModal(result)}
         />
       </ModalWrapper>
-      {openModal && <CheckModal openMsg={openModal} />}
+      {openModal && <CheckModal openMsg={openModal} closeCheckModal={() => setOpenModal(false)} />}
     </>
   );
 }

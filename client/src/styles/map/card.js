@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FaFemale, FaMale } from 'react-icons/fa';
+import { ImMan, ImWoman } from 'react-icons/im';
 
 export const Profile = styled.div`
   background: url(${({ userImg }) => userImg}) no-repeat center;
@@ -66,7 +66,7 @@ export const UserNick = ({ gender, nickName, card, margin }) => {
       <div>
         <span className='nick'>{card || '가이드'} 닉네임</span>
         <span className='gender'>
-          {+gender ? <FaFemale className='icon' /> : <FaMale className='icon' />}
+          {+gender ? <ImWoman className='icon' /> : <ImMan className='icon' />}
         </span>
       </div>
       <div className='userNick'>{nickName}</div>

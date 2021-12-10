@@ -76,7 +76,7 @@ const TitleWrapper = styled.div`
     color: #fff;
     text-align: right;
     margin: 0;
-    text-shadow: 0 0 3px black;
+    text-shadow: 0 0 5px black;
     word-break: keep-all;
   }
 
@@ -90,7 +90,7 @@ const TitleWrapper = styled.div`
     }
 
     & .title {
-      flex: 1;
+      flex-grow: 1;
       font-size: 1.4rem;
       text-align: center;
     }
