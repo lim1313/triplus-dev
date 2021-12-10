@@ -39,7 +39,8 @@ const ChatBtn = styled(ColorBtn)`
   bottom: 10px;
 `;
 
-export default function ApplicantCard() {
+export default function ApplicantCard(props) {
+  const { applicantInfo } = props;
   return (
     <CardCtn>
       <GuideInfo>
@@ -51,7 +52,7 @@ export default function ApplicantCard() {
           mHeight='70px'
           marginRight='1rem'
         ></UserProfile>
-        <Nick>닉네임: 여행러버</Nick>
+        <Nick>닉네임: {applicantInfo && applicantInfo.nickname}안뇽안뇽</Nick>
       </GuideInfo>
       <ChatBtn palette='red'>채팅</ChatBtn>
     </CardCtn>

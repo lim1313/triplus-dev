@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import ApplicantCard from './ApplicantCard';
@@ -41,21 +41,48 @@ const CardsWarpper = styled.div`
   height: 100%;
   align-items: center;
 `;
+const CardUl = styled.ul`
+  display: flex;
+  flex-wrap: nowrap;
+  transition: all 0.5s;
+  transform: translateX(${({ fromLeft }) => fromLeft + 'px'});
+`;
 
-export default function ApplicantCards() {
+export default function ApplicantCards({ appicantInfo }) {
+  const [fromLeft, setFromLeft] = useState(0);
+  // const [last, setLast] = useState(0);
+
+  const moveImg = (direct) => {
+    console.log(fromLeft);
+    if (direct === 'l' && fromLeft >= 0) {
+      return;
+    } else if (direct === 'r' && fromLeft === -1148 + 861) {
+      return;
+    }
+
+    if (direct === 'l') {
+      let plusLeft = fromLeft + 287;
+      setFromLeft(plusLeft);
+    } else {
+      let minusLeft = fromLeft - 287;
+      setFromLeft(minusLeft);
+    }
+  };
   return (
     <CardsCtn>
-      <MoveBtn left>
+      <MoveBtn left onClick={() => moveImg('l')}>
         <FaAngleLeft />
       </MoveBtn>
-      <MoveBtn>
+      <MoveBtn onClick={() => moveImg('r')}>
         <FaAngleRight />
       </MoveBtn>
       <CardsWarpper>
-        <ApplicantCard />
-        <ApplicantCard />
-        <ApplicantCard />
-        <ApplicantCard />
+        <CardUl fromLeft={fromLeft}>
+          <ApplicantCard appicantInfo={appicantInfo} />
+          <ApplicantCard />
+          <ApplicantCard />
+          <ApplicantCard />
+        </CardUl>
       </CardsWarpper>
     </CardsCtn>
   );

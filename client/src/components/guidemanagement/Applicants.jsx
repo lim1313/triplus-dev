@@ -4,14 +4,16 @@ import ApplicantCards from './ApplicantCards';
 // import { ColorBtn } from '../../styles/common/index';
 // import ApplicantTable from './ApplicantTable';
 
-const ListCtn = styled.div``;
+const ListCtn = styled.div`
+  margin: 0;
+`;
 
 const H3Ctn = styled.div`
   display: flex;
   height: 2rem;
   align-items: center;
   justify-content: space-between;
-  margin-top: 5rem;
+  margin-top: 2rem;
   margin-bottom: 0.2rem;
 `;
 
@@ -23,7 +25,7 @@ export default function Applicants({ applicantInfo }) {
       <H3Ctn>
         <H3>가이드 신청자</H3>
       </H3Ctn>
-      <ApplicantCards />
+      <ApplicantCards applicantInfo={applicantInfo} />
     </ListCtn>
   );
 }
