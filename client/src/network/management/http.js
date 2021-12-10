@@ -15,3 +15,13 @@ export const createGudie = async (data) => {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 };
+
+export const deleteGuideCard = async (guideId) => {
+  return axios.put(`${http}/management/guide`, { guideId });
+};
+
+export const editGuideCard = async (data) => {
+  return axios.put(`${http}/management/guide-card`, data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+};

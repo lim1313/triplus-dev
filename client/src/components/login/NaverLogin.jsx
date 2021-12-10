@@ -1,13 +1,24 @@
 import React from 'react';
+import styled from 'styled-components';
 import { SiNaver } from 'react-icons/si';
 import { ButtonBlock, OauthBtn } from '../../styles/login/OauthBtn';
+
+const NaverBtn = styled(OauthBtn)`
+  /* background-color: #1dc612; */
+  color: #1dc612;
+  font-size: 3.5rem;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 export default function KakaoLogin() {
   return (
     <ButtonBlock>
-      <OauthBtn>
+      <NaverBtn>
         <SiNaver className='oauth-btn' />
-      </OauthBtn>
+      </NaverBtn>
       <span>
         네이버
         <br />

@@ -12,12 +12,28 @@ const SideContainer = styled.div`
   height: inherit;
   padding: 2rem;
   border-left: 1px solid #aeb8c2;
+  @media ${({ theme }) => theme.device.mobile} {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 10vh;
+    padding: 0.5rem 0.5rem;
+    overflow: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 `;
 
 const RoomName = styled(BorderBtn)`
   font-size: 1rem;
   border-radius: 15px;
   margin-bottom: 1rem;
+  word-break: break-word;
+
   ${({ selected }) =>
     selected &&
     css`
@@ -37,6 +53,12 @@ const RoomName = styled(BorderBtn)`
         border-color: ${({ theme }) => theme.color.blue};
       `}
   }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: inherit;
+    font-size: 0.8rem;
+    margin: 0 0.5rem;
+    word-break: keep-all;
+  }
 `;
 
 export default function SideBar({ selectRoomHandler }) {
@@ -44,7 +66,7 @@ export default function SideBar({ selectRoomHandler }) {
   const currentRoom = useSelector((state) => state.currentRoomReducer.currentRoom);
   const clickRoomHandler = (e) => {
     console.log(e.target.selected);
-    selectRoomHandler(e.target.id);
+    selectRoomHandler(currentRoom, e.target.id);
   };
 
   return (

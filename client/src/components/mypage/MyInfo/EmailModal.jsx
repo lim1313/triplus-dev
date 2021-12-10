@@ -9,7 +9,7 @@ import { BorderBtn, ColorBtn } from '../../../styles/common';
 import { ModalTitle } from '../../../styles/common/modal';
 import { emailValidation } from '../../../utils/validation';
 import Modal, { BtnWrapper, SelectBtn } from '../../common/Modal';
-import ModalInput from './ModalInput';
+import EmailInput from './EmailInput';
 
 const ModalHeader = styled.header`
   text-align: center;
@@ -51,8 +51,8 @@ const BtnBorder = styled(BorderBtn)`
     `}
 `;
 
-export default function UserEmail({ clickModal }) {
-  const [inputValue, inputChange] = useInput('');
+export default function EmailModal({ clickModal }) {
+  const [newEmail, emailChange] = useInput('');
   const [inputValue2, inputChange2] = useInput('');
   const [alertMsg, setAlertMsg] = useState(null);
   const [alertMsg2, setAlertMsg2] = useState(null);
@@ -79,11 +79,11 @@ export default function UserEmail({ clickModal }) {
   }, []);
 
   const sendEmail = () => {
-    if (!emailValidation(inputValue)) {
+    if (!emailValidation(newEmail)) {
       setAlertMsg('*올바른 이메일 형식으로 작성해 주세요');
     } else {
       //TODO /my/email-check
-      postEmailCheck(inputValue).then((res) => {
+      postEmailCheck(newEmail).then((res) => {
         if (res === 401) {
           alert('로그인이 만료되었습니다. 다시 로그인해 주세요');
           dispatch(exit());
@@ -100,14 +100,14 @@ export default function UserEmail({ clickModal }) {
   };
 
   const submitClick = () => {
-    if (!emailValidation(inputValue)) {
+    if (!emailValidation(newEmail)) {
       setAlertMsg('*올바른 이메일 형식으로 작성해 주세요');
     } else if (!inputValue2) {
       setAlertMsg2('*올바른 인증번호를 입력하세요');
     } else {
       //TODO /my/email
       setIsLoading(true);
-      postInfo({ email: inputValue, verifyKey: inputValue2 }, 'email').then((res) => {
+      postInfo({ email: newEmail, verifyKey: inputValue2 }, 'email').then((res) => {
         if (res === 401) {
           alert('로그인이 만료되었습니다. 다시 로그인해 주세요');
           dispatch(exit());
@@ -136,17 +136,17 @@ export default function UserEmail({ clickModal }) {
       <Modal onlyWrapper width='28rem'>
         <ModalHeader>이메일 변경</ModalHeader>
         <section>
-          <ModalInput
+          <EmailInput
             email
             onClick={sendEmail}
             title='새로운 이메일'
             placeText='이메일 입력'
-            value={inputValue}
-            onChange={inputChange}
+            value={newEmail}
+            onChange={emailChange}
             disabled={isLoading}
             alertMsg={alertMsg}
           />
-          <ModalInput
+          <EmailInput
             title='인증번호'
             placeText='인증번호'
             value={inputValue2}

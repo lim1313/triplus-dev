@@ -114,17 +114,14 @@ io.on('connection', async (socket) => {
   console.log(io.sockets.adapter.rooms);
   socket.emit('getRooms', userChatInfos);
 
-  socket.on('joinRoom', async (selectedRoom) => {
-    console.log(selectedRoom);
+  socket.on('joinRoom', async (currentRoom, selectedRoom) => {
     const messages = await getChatContents(selectedRoom);
     const initialChat = JSON.parse(messages);
-    console.log(initialChat);
     console.log('hey', selectedRoom);
     socket.emit('initialChat', initialChat);
   });
 
   socket.on('sendMessage', (DBform, selectedRoom) => {
-    console.log(DBform);
     const { date, user_id, content } = DBform;
     const messageUpdate = {
       date,
@@ -133,7 +130,8 @@ io.on('connection', async (socket) => {
     };
     updateMessage(messageUpdate, selectedRoom);
     const data = { date, user_id, content };
-    console.log(data);
+    console.log('data', data);
+    console.log(selectedRoom);
     io.to(selectedRoom).emit('getMessage', [data]);
   });
 

@@ -52,7 +52,6 @@ module.exports = {
 
   selectGuideCardByUserId: async (req, res) => {
     const resObject = await selectGuideCardByUserId(req);
-    console.log(resObject);
     res.status(resObject.code).json({
       guideData: resObject.guideData,
       applicant: resObject.applicant,

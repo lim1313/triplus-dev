@@ -29,6 +29,7 @@ export default function ManagementPage() {
   const [isOpen, setOpen] = useState(false);
   const [guideInfo, setGuideInfo] = useState([]);
   const [applicantInfo, setApplicantInfo] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [clicked, setClick] = useState({
     management: true,
     managementtourlist: false,
@@ -42,6 +43,7 @@ export default function ManagementPage() {
     }
   };
   useEffect(() => {
+    setIsLoading(true);
     const path = pathname.split('/').join('');
     console.log(path);
     if (path === 'management') {
@@ -50,8 +52,10 @@ export default function ManagementPage() {
       setClick({ management: false, managementtourlist: true });
     }
     getGuideInfo().then((res) => {
+      console.log(res.data);
       setGuideInfo(res.data.guideData);
       setApplicantInfo(res.data.applicant);
+      setIsLoading(false);
     });
   }, [pathname]);
 
@@ -69,6 +73,7 @@ export default function ManagementPage() {
               handleCreateClick={handleCreateClick}
               guideInfo={guideInfo}
               applicantInfo={applicantInfo}
+              isLoading={isLoading}
             />
           </ManageCtn>
         )}

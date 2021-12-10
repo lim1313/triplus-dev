@@ -25,7 +25,6 @@ export default function MapPage() {
   const filterSubmit = (...args) => {
     let [gen, start, end] = args;
     let { gender, startDate, endDate } = filterInfo;
-    // setFilterInfo({ gender: gen, startDate: start, endDate: end });
     if (gen !== gender || start !== startDate || end !== endDate) {
       let cardFilter = { gender: gen, startDate: start, endDate: end };
       setFilterInfo(cardFilter);

@@ -110,7 +110,7 @@ export default function CreateModal(props) {
   const geocoder = new kakao.maps.services.Geocoder();
   const callback = (result, status) => {
     const data = result[0].road_address;
-    setInputs({ ...inputs, latitude: data.x, longitude: data.y });
+    setInputs({ ...inputs, latitude: data.y, longitude: data.x });
     if (status === kakao.maps.services.Status.Ok) {
       console.log('Ok');
     }
@@ -126,6 +126,7 @@ export default function CreateModal(props) {
   // input상태관리 함수
   const handleInputChange = (e) => {
     const id = e.target.getAttribute('id');
+    if (id === 'title' && e.target.value.length > 20) return;
     if (id === 'address') {
       setInputs({ ...inputs, address: address + ' ' + e.target.value });
       setExtraAddress(e.target.value);
@@ -143,6 +144,7 @@ export default function CreateModal(props) {
 
   //img input 상태관리 함수+미리보기 구현
   const handleImgChange = (e) => {
+    if (!e.target.files[0]) return;
     if (e.target.files) {
       console.log(e.target.files);
       const targetId = e.target.getAttribute('id');
@@ -170,6 +172,7 @@ export default function CreateModal(props) {
   const inputCheck = (checkData) => {
     for (let key in checkData) {
       if (key === 'gender') continue;
+      if (key === 'openDate') continue;
       if (!checkData[key]) return false;
     }
     return true;
