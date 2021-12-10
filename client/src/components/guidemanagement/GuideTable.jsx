@@ -1,6 +1,7 @@
 import React from 'react';
 import { NoBorderBtn } from '../../styles/common';
 import styled from 'styled-components';
+import { deleteGuideCard } from '../../network/management/http';
 
 const Table = styled.table`
   width: 100%;
@@ -12,6 +13,10 @@ const Table = styled.table`
     & td {
       text-align: center;
       padding: 0.5rem 1rem;
+      table-layout: fixed;
+    }
+    .edit-btns {
+      text-align: end;
     }
   }
 `;
@@ -29,6 +34,9 @@ const Thead = styled.thead`
 
 export default function GuideTable(props) {
   const { columns, data } = props;
+  const handleDeleteClick = () => {
+    deleteGuideCard();
+  };
 
   return (
     <Table>
@@ -45,11 +53,14 @@ export default function GuideTable(props) {
             return (
               <tr key={date + title}>
                 <td className='datetd'>{date}</td>
-                <td>{title}</td>
-                <td>&emsp;</td>
-                <td>&emsp;&ensp;</td>
-                <td>
+                <td colSpan='3'>{title}</td>
+                {/* <td>&emsp;</td>
+                <td>&emsp;&ensp;</td> */}
+                <td className='edit-btns'>
                   <NoBorderBtn palette='red'>수정</NoBorderBtn>
+                  <NoBorderBtn palette='red' onClick={handleDeleteClick}>
+                    삭제
+                  </NoBorderBtn>
                 </td>
               </tr>
             );

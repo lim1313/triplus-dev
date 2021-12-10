@@ -110,7 +110,7 @@ export default function CreateModal(props) {
   const geocoder = new kakao.maps.services.Geocoder();
   const callback = (result, status) => {
     const data = result[0].road_address;
-    setInputs({ ...inputs, latitude: data.x, longitude: data.y });
+    setInputs({ ...inputs, latitude: data.y, longitude: data.x });
     if (status === kakao.maps.services.Status.Ok) {
       console.log('Ok');
     }
@@ -126,6 +126,7 @@ export default function CreateModal(props) {
   // input상태관리 함수
   const handleInputChange = (e) => {
     const id = e.target.getAttribute('id');
+    if (id === 'title' && e.target.value.length > 20) return;
     if (id === 'address') {
       setInputs({ ...inputs, address: address + ' ' + e.target.value });
       setExtraAddress(e.target.value);

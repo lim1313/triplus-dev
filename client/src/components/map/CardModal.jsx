@@ -87,6 +87,7 @@ export default function CardModal({ modalInfo }) {
     content,
     userParticipate,
     state,
+    userId,
   } = modalInfo;
   const [openModal, setOpenModal] = useState('');
 
@@ -116,6 +117,7 @@ export default function CardModal({ modalInfo }) {
         </Wrapper>
         <GuideBtn
           guideId={guideId}
+          userId={userId}
           userParticipate={userParticipate}
           state={state}
           closeModal={closeModal}

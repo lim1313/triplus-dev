@@ -25,7 +25,7 @@ const checkParams = (params) => {
         setParams[`startTime`] = params[param];
       } else if (param === 'endTime') {
         setParams[`endTime`] = params[param];
-      } else if (param === 'numPeople') {
+      } else if (param === 'count') {
         setParams[`numPeople`] = params[param];
       } else if (param === 'address') {
         setParams[`address`] = params[param];
@@ -195,17 +195,25 @@ module.exports = {
         guideCardItem['userId'] = guideCardData['userId'];
         guideCardItem['nickName'] = userData['nickName'];
         guideCardItem['gender'] = userData['gender'];
-        guideCardItem['userImage'] = userData['image'];
+        if(userData['image']){
+          guideCardItem['userImage'] = userData['image'];
+        }else{
+          guideCardItem['userImage'] = './../../asset/main/stamp.png';
+        }
         guideCardItem['createdAt'] = date_fns.format(guideCardData['createdAt'], 'yyyy.MM.dd');
         guideCardItem['updatedAt'] = date_fns.format(guideCardData['updatedAt'], 'yyyy.MM.dd');
-
-        const tourImage = []
-        if(guideImageData.length > 0){
-          for(let guideImageDataItem of guideImageData){
-            tourImage.push(guideImageDataItem.dataValues.image);
-          }
-          guideCardItem['tourImage'] = tourImage;
+        if(userData['image']){
+          guideCardItem['userImage'] = userData['image'];
+        }else{
+          guideCardItem['userImage'] = './../../asset/main/stamp.png';
         }
+        if(guideImageData.length > 0){
+          guideCardItem['tourImage'] = guideImageData[0].dataValues.image;
+        }else{
+          guideCardItem['tourImage'] = './../../asset/logo/logo.png';
+        }
+        
+
         guideCardList.push(guideCardItem);
       }
       resObject['code'] = 200;
@@ -261,7 +269,11 @@ module.exports = {
     guideCard['userId'] = guideCardData['userId'];
     guideCard['nickName'] = guideUserData['nickName'];
     guideCard['gender'] = guideUserData['gender'];
-    guideCard['userImage'] = guideUserData['image'];
+    if(guideUserData['image']){
+      guideCard['userImage'] = guideUserData['image'];
+    }else{
+      guideCard['userImage'] = './../../asset/main/stamp.png';
+    }
     guideCard['createdAt'] = date_fns.format(guideCardData['createdAt'], 'yyyy.MM.dd');
     guideCard['updatedAt'] = date_fns.format(guideCardData['updatedAt'], 'yyyy.MM.dd');
     guideCard['userParticipate'] = selectGuideUserParticipate.length;
@@ -271,6 +283,10 @@ module.exports = {
       for(let guideImageDataItem of guideImageData){
         tourImage.push(guideImageDataItem.dataValues.image);
       }
+    }else{
+      tourImage.push('./../../asset/logo/logo.png');
+      tourImage.push('./../../asset/logo/logo.png');
+      tourImage.push('./../../asset/logo/logo.png');
     }
 
     guideCard['tourImage'] = tourImage;
@@ -309,10 +325,30 @@ module.exports = {
         throw '진행 중인 가이드가 없습니다';
       }
 
+      const guideImages = await guide_image.findAll({
+        raw: true,
+        where: {guideId: guideCard.guideId},
+        order: [['guideId', 'ASC']],
+      });
+
+      const tourImage = [];
+      for(let guideImage of guideImages){
+        tourImage.push(guideImage.image);
+      }
+
       const guideData = {
         guideId: guideCard.guideId,
         title: guideCard.title,
+        content: guideCard.content,
         guideDate: date_fns.format(guideCard['guideDate'], 'yyyy.MM.dd'),
+        startTime: guideCard.startTime,
+        endTime: guideCard.endDate,
+        count: guideCard.numPeople,
+        state: guideCard.state,
+        address: guideCard.address,
+        openDate: guideCard.openDate,
+        userId: guideCard.userId,
+        tourImage: tourImage
       };
 
       resObject['guideData'] = guideData;
@@ -334,7 +370,7 @@ module.exports = {
         for (let userInfo of guideUserParticipate) {
           const userInfoItem = {};
           userInfoItem['userId'] = userInfo.userId;
-          userInfoItem['nickname'] = userInfo['user.nickName'];
+          userInfoItem['nickName'] = userInfo['user.nickName'];
           userInfoItem['region'] = userInfo['user.region'];
           userInfoItem['createAt'] = date_fns.format(userInfo['createdAt'], 'yyyy.MM.dd');
 
