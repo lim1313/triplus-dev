@@ -12,8 +12,17 @@ export const BackWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
   transform: translateX(100%);
+  z-index: 999;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    top: unset;
+    bottom: 0;
+    width: 100vw;
+    height: calc(100vh - ${({ theme }) => theme.size.navHeight});
+    transform: translateX(0);
+    z-index: 10;
+  }
 `;
 
 const ImgWrapper = styled.img`
@@ -29,19 +38,31 @@ const TitleWrapper = styled(ModalWrapper)`
 
 const Content = styled.div`
   margin-top: 1rem;
-  color: ${({ theme }) => theme.color.blue};
+  color: ${({ theme, end }) => (end ? theme.color.red : theme.color.blue)};
   font-weight: 500;
 `;
 
-export default function CheckModal() {
-  const scrollEvent = (e) => {};
-
+export default function CheckModal({ openMsg }) {
   return (
-    <BackWrapper onScroll={scrollEvent}>
+    <BackWrapper>
       <TitleWrapper>
         <ImgWrapper src='/asset/logo/logo.png' alt='triplus 로고' />
-        <Content>예약이 완료되었습니다</Content>
-        <Content>즐거운 여행되세요</Content>
+        {openMsg === 'success' ? (
+          <>
+            <Content>예약이 완료되었습니다</Content>
+            <Content>즐거운 여행되세요</Content>
+          </>
+        ) : openMsg === 'end' ? (
+          <>
+            <Content end>예약이 이미 마감되었습니다</Content>
+            <Content end>다음에 이용해 주세요</Content>
+          </>
+        ) : (
+          <>
+            <Content end>예약 중 서버문제가 발생했습니다</Content>
+            <Content end>다음에 이용해 주세요</Content>
+          </>
+        )}
       </TitleWrapper>
     </BackWrapper>
   );

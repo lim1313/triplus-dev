@@ -25,10 +25,10 @@ const ModalWrapper = styled.section`
   background-color: #fff;
   overflow: auto;
 
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
+    display: none;
   }
 
   @media ${({ theme }) => theme.device.mobile} {
@@ -88,7 +88,7 @@ export default function CardModal({ modalInfo }) {
     userParticipate,
     state,
   } = modalInfo;
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState('');
 
   const dispatch = useDispatch();
 
@@ -119,10 +119,10 @@ export default function CardModal({ modalInfo }) {
           userParticipate={userParticipate}
           state={state}
           closeModal={closeModal}
-          compoleteModal={() => setOpenModal(true)}
+          compoleteModal={(result) => setOpenModal(result)}
         />
       </ModalWrapper>
-      {openModal && <CheckModal />}
+      {openModal && <CheckModal openMsg={openModal} />}
     </>
   );
 }

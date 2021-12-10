@@ -40,11 +40,6 @@ export default function PwModal({ closeModal }) {
       setAlertMsg(null);
       //TODO 새로운 비밀번호 갱신
       putPassword({ oldPassword: currentPw, password: newPw }).then((res) => {
-        // dispatch(exit());
-        // navigate('/login', {
-        //   state: { logout: '비밀번호가 변경되어, 로그아웃되었습니다' },
-        //   replace: true,
-        // });
         if (res === 201) {
           // 201 성공적으로 수행
           dispatch(exit());

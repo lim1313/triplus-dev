@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { guideCardInfo, openGuideModal } from '../../../redux/map/action';
 import { createMarker, getInfo } from '../../../utils/kakao';
 import styled from 'styled-components';
-import { dbModal } from '../../../db/guideModal';
 
 const { kakao } = window;
 let map;
@@ -60,12 +59,9 @@ export default function KakaoMap({ filterInfo, loading }) {
   //! 리렌더링 발생. 개선 필요
   const clickMarker = (id) => {
     //TODO GET /map 모달
-    // getCardModal(id).then((res) => {
-    //   dispatch(openGuideModal({ isOpen: true, modalInfo:res }));
-    // });
-
-    //! dummy db
-    dispatch(openGuideModal({ isOpen: true, modalInfo: { ...dbModal, guideId: id } }));
+    getCardModal(id).then((res) => {
+      dispatch(openGuideModal({ isOpen: true, modalInfo: res }));
+    });
   };
 
   const kakaoEvent = () => {

@@ -60,20 +60,17 @@ export default function GuideBtn({ guideId, userParticipate, state, closeModal, 
     rezGuide(id).then((res) => {
       if (res === 401) {
         console.log('토큰 만료 로그아웃 필요');
+        return;
       } else if (res === 204) {
-        console.log('예약 완료');
-        compoleteModal();
-        setTimeout(() => {
-          closeModal();
-        }, 2000);
+        compoleteModal('success');
       } else if (res === 201) {
-        console.log('예약 마감');
-        closeModal();
+        compoleteModal('end');
       } else if (res >= 500) {
-        console.log('서버 에러');
-      } else {
-        console.log('else');
+        compoleteModal('error');
       }
+      setTimeout(() => {
+        closeModal();
+      }, 2000);
     });
   };
 
