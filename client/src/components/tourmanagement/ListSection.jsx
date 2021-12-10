@@ -3,9 +3,10 @@ import ListItem from './ListItem';
 import styled from 'styled-components';
 
 const ListSectionCtn = styled.ul`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  column-gap: 1rem;
+  width: 100%;
+  display: flex;
+  /* grid-template-columns: repeat(3, 200px);
+  column-gap: 1rem; */
 `;
 
 export default function ListSection() {

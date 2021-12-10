@@ -6,7 +6,6 @@ import OrderFilter from '../components/tourmanagement/OrderFilter';
 import ListSection from '../components/tourmanagement/ListSection';
 
 const SectionCtn = styled.section`
-  margin: 0 auto;
   width: 70vw;
   border-radius: 0.5rem;
   background-color: white;
