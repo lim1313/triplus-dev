@@ -43,7 +43,7 @@ module.exports = {
       }
     } catch (error) {
       console.log(error);
-      resObject['code'] = 401;
+      resObject['code'] = 204;
       resObject['message'] = error;
       
       return resObject;
