@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars*/
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { logOut } from '../network/login/http';
 
@@ -27,11 +27,10 @@ export default function ChattingPage() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { pathname } = useLocation();
 
   const dateConversion = (date) => {
     const day = dayjs(date).format('YYYY년 M월 D일');
-    const time = dayjs(date).format('a hh시 mm분');
+    const time = dayjs(date).format('a hh:mm');
     return { day, time };
   };
 
@@ -78,41 +77,34 @@ export default function ChattingPage() {
       console.log(data);
       dispatch(getUserChatInfo(data));
     });
-  }, [pathname]);
-
-  // TODO 2. 룸 입장 후 채팅 데이터 받아오기
-
-  useEffect(() => {
-    socketRef.current.on('initialChat', (initialChat) => {
-      console.log('야');
-      console.log(initialChat);
-      const newChat = editChat(initialChat);
-      console.log(newChat);
-      dispatch(resetChatList(newChat));
-    });
   }, []);
 
-  // TODO 3. 송신한 메세지 수신하기
   useEffect(() => {
+    // TODO 2. 룸 입장 후 채팅 데이터 받아오기
+    socketRef.current.on('initialChat', (initialChat) => {
+      const newChat = editChat(initialChat);
+      dispatch(resetChatList(newChat));
+    });
+    // TODO 3. 송신한 메세지 수신하기
+
     socketRef.current.on('getMessage', (data) => {
-      console.log('get');
       const newChat = editChat(data);
-      // console.log(chatList);
       dispatch(getChatList(newChat));
     });
   }, []);
 
   // TODO 4. 룸에 입장
-  const selectRoomHandler = (selectedRoom) => {
+  const selectRoomHandler = (currentRoom, selectedRoom) => {
     console.log(selectedRoom);
     dispatch(changeCurrentRoom(selectedRoom));
-    socketRef.current.emit('joinRoom', selectedRoom);
+    socketRef.current.emit('joinRoom', currentRoom, selectedRoom);
   };
 
   // TODO 5. 문자 송신하기
   // ? socket 이벤트
   const sendMessageHandler = (e, msg, userId, selectedRoom) => {
     e.preventDefault();
+    console.log(socketRef.current);
     const date = dayjs();
     const DBform = {
       date,
