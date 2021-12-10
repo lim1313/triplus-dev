@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { Profile, UserNick } from '../../../styles/map/card';

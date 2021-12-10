@@ -21,7 +21,7 @@ const BtnsWrapper = styled.div`
 `;
 
 export default function MyInfo({ userInfo }) {
-  const { userId, email, nickName, reigion } = userInfo;
+  const { userId, email, nickName, region } = userInfo;
 
   return (
     <Wrapper>
@@ -30,7 +30,7 @@ export default function MyInfo({ userInfo }) {
         <UserInfo user title='nickname' content={nickName} />
       </NameWrapper>
       <UserInfo title='e-mail' content={email} />
-      <UserInfo title='address' content={reigion} />
+      <UserInfo title='address' content={region} />
       <BtnsWrapper>
         <Password />
         <Withdraw />
