@@ -84,9 +84,6 @@ export default function SideBar({ selectRoomHandler }) {
           </RoomName>
         );
       })}
-      <RoomName>dummydummydummy</RoomName>
-      <RoomName>dummy-dummy-dummy</RoomName>
-      <RoomName>dummy</RoomName>
     </SideContainer>
   );
 }

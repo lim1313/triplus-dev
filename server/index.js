@@ -93,7 +93,7 @@ io.on('connection', async (socket) => {
   console.log(`connect with id: ${socket.id}`);
 
   socket.onAny((event) => {
-    console.log(io.sockets.adapter.rooms);
+    console.log(socket.id);
   });
 
   // const userChatInfo = isSocketAuthorized(socket.handshake.headers.cookie['accessToken']);
@@ -105,20 +105,23 @@ io.on('connection', async (socket) => {
   const userChatInfos = await getUserChatInfo(userInfo);
   // console.log(userChatInfos);
 
+  if (userChatInfos.chatRooms.length > 0) {
+    for (let chatRoom of userChatInfos.chatRooms) {
+      socket.join(String(chatRoom.roomId));
+    }
+  }
+  console.log(userChatInfos);
+  console.log(io.sockets.adapter.rooms);
   socket.emit('getRooms', userChatInfos);
 
   socket.on('joinRoom', async (currentRoom, selectedRoom) => {
-    if (!!currentRoom) {
-      socket.leave(currentRoom);
-    }
-    socket.join(selectedRoom);
     const messages = await getChatContents(selectedRoom);
     const initialChat = JSON.parse(messages);
+    console.log('hey', selectedRoom);
     socket.emit('initialChat', initialChat);
   });
 
   socket.on('sendMessage', (DBform, selectedRoom) => {
-    console.log('socket-id는 ', socket.id);
     const { date, user_id, content } = DBform;
     const messageUpdate = {
       date,
@@ -127,7 +130,8 @@ io.on('connection', async (socket) => {
     };
     updateMessage(messageUpdate, selectedRoom);
     const data = { date, user_id, content };
-    console.log(data);
+    console.log('data', data);
+    console.log(selectedRoom);
     io.to(selectedRoom).emit('getMessage', [data]);
   });
 

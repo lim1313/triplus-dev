@@ -42,7 +42,7 @@ export const ModalBtn = styled(ColorBtn)`
     `}
 `;
 
-export default function GuideBtn({ guideId, userParticipate, state }) {
+export default function GuideBtn({ guideId, userId, userParticipate, state }) {
   const clickGuide = (id) => {
     if (state === 'COMPLETED') return;
     //TODO POST 가이드 신청
@@ -62,7 +62,7 @@ export default function GuideBtn({ guideId, userParticipate, state }) {
           {state === 'COMPLETED' ? '예약마감' : '신청하기'}
         </ModalBtn>
       )}
-      <Chatting guideId={guideId} state={state} />
+      <Chatting userId={userId} state={state} />
     </ModalBottomBtn>
   );
 }
