@@ -10,7 +10,7 @@ axios.defaults.headers.common['Content-Type'] = 'application/json';
 export const postProfile = (data) => {
   return axios
     .post(`${http}/my/profile`, { data })
-    .then((res) => res.state)
+    .then((res) => res.status)
     .catch((err) => err.response.status);
 };
 
@@ -19,7 +19,7 @@ export const postProfile = (data) => {
 export const deleteProfile = () => {
   return axios
     .delete(`${http}/my/profile`)
-    .then((res) => res.state)
+    .then((res) => res.status)
     .catch((err) => err.response.status);
 };
 
@@ -33,7 +33,7 @@ export const postInfo = (data, path) => {
   if (path === 'nickname') path = 'nick-name';
   return axios
     .post(`${http}/my/${path}`, { data })
-    .then((res) => res.state)
+    .then((res) => res.status)
     .catch((err) => err.response.status);
 };
 
@@ -41,7 +41,7 @@ export const postInfo = (data, path) => {
 export const postEmailCheck = (data) => {
   return axios
     .post(`${http}/my/email-check`, { data })
-    .then((res) => res.state)
+    .then((res) => res.status)
     .catch((err) => err.response.status);
 };
 
@@ -49,7 +49,7 @@ export const postEmailCheck = (data) => {
 // export const postEmailUnCheck = () => {
 //   return axios
 //     .post(`${http}/my/email-unCheck`)
-//     .then((res) => res.state)
+//     .then((res) => res.status)
 //     .catch((err) => err.response.status);
 // };
 
@@ -57,7 +57,7 @@ export const postEmailCheck = (data) => {
 export const putPassword = (data) => {
   return axios
     .put(`${http}/my/password`, { data })
-    .then((res) => res.state)
+    .then((res) => res.status)
     .catch((err) => err.response.status);
 };
 
@@ -65,6 +65,6 @@ export const putPassword = (data) => {
 export const deleteUser = (data) => {
   return axios
     .post(`${http}/my/withdraw`, { data })
-    .then((res) => res.state)
+    .then((res) => res.status)
     .catch((err) => err.response.status);
 };

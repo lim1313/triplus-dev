@@ -1,6 +1,6 @@
 /*eslint-disable no-unused-vars*/
 
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import GuideContent from './cardModal/GuideContent';
 import GuideImgs from './cardModal/GuideImgs';
@@ -9,6 +9,7 @@ import GuideBtn from './cardModal/GuideBtn';
 import { FaTimes } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { openGuideModal } from '../../redux/map/action';
+import CheckModal from './cardModal/CheckModal';
 
 const ModalWrapper = styled.section`
   position: absolute;
@@ -87,6 +88,7 @@ export default function CardModal({ modalInfo }) {
     userParticipate,
     state,
   } = modalInfo;
+  const [openModal, setOpenModal] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -94,24 +96,33 @@ export default function CardModal({ modalInfo }) {
     dispatch(openGuideModal({ isOpen: false }));
   };
   return (
-    <ModalWrapper>
-      <BtnWrapper onClick={closeModal}>
-        <CloseBtn>
-          <FaTimes />
-        </CloseBtn>
-      </BtnWrapper>
-      <Wrapper>
-        <Title>{title}</Title>
-        <UserInfo nickName={nickName} gender={gender} userImage={userImage} />
-        <GuideImgs tourImage={tourImage} title={title} />
-        <GuideContent
-          address={address}
-          guideDate={guideDate}
-          content={content}
-          openDate={openDate}
+    <>
+      <ModalWrapper>
+        <BtnWrapper onClick={closeModal}>
+          <CloseBtn>
+            <FaTimes />
+          </CloseBtn>
+        </BtnWrapper>
+        <Wrapper>
+          <Title>{title}</Title>
+          <UserInfo nickName={nickName} gender={gender} userImage={userImage} />
+          <GuideImgs tourImage={tourImage} title={title} />
+          <GuideContent
+            address={address}
+            guideDate={guideDate}
+            content={content}
+            openDate={openDate}
+          />
+        </Wrapper>
+        <GuideBtn
+          guideId={guideId}
+          userParticipate={userParticipate}
+          state={state}
+          closeModal={closeModal}
+          compoleteModal={() => setOpenModal(true)}
         />
-      </Wrapper>
-      <GuideBtn guideId={guideId} userParticipate={userParticipate} state={state} />
-    </ModalWrapper>
+      </ModalWrapper>
+      {openModal && <CheckModal />}
+    </>
   );
 }
