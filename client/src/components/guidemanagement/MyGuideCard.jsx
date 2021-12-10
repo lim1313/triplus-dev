@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { NoBorderBtn } from '../../styles/common';
+import { useDispatch } from 'react-redux';
+import { guideDelete } from '../../redux/management/action';
 
 const CardCtn = styled.div`
   margin-top: 2rem;
@@ -20,7 +22,7 @@ const CardWrapper = styled.div`
 const GuideImg = styled.div`
   width: 150px;
   height: 150px;
-  background: url('/asset/logo/logo.png') no-repeat center;
+  background: url(${({ guideInfo }) => guideInfo.guideImage}) no-repeat center;
   background-size: contain;
   border: 3px solid ${({ theme }) => theme.color.lightGray};
   border-radius: 75%;
@@ -30,6 +32,7 @@ const GuideInfo = styled.div`
   flex-direction: column;
   color: ${({ theme }) => theme.color.darkGray};
   & h1 {
+    margin-top: 0;
   }
   & span {
     font-size: 1rem;
@@ -40,21 +43,35 @@ const Count = styled.div``;
 const BtnCtn = styled.div``;
 
 export default function MyGuideCard(props) {
-  const { guideInfo } = props;
+  const { guideInfo, applicantInfo } = props;
+  const dispatch = useDispatch();
+  const handleDeleteClick = () => {
+    dispatch(guideDelete());
+  };
   return (
     <CardCtn>
       <CardWrapper>
-        <GuideImg />
-        <GuideInfo>
-          <h1>{guideInfo && guideInfo.title}</h1>
-          <span>날짜: {guideInfo && guideInfo.guideDate}</span>
-          <span>대표장소: {guideInfo && guideInfo.address} 경복궁체험</span>
-        </GuideInfo>
-        <Count>3/{guideInfo && guideInfo.numPeople}5</Count>
-        <BtnCtn>
-          <NoBorderBtn palette='red'>수정</NoBorderBtn>
-          <NoBorderBtn palette='red'>삭제</NoBorderBtn>
-        </BtnCtn>
+        {guideInfo.title ? (
+          <>
+            <GuideImg guideInfo={guideInfo} />
+            <GuideInfo>
+              <h1>{guideInfo && guideInfo.title}</h1>
+              <span>날짜: {guideInfo && guideInfo.guideDate}</span>
+              <span>대표장소: {guideInfo && guideInfo.address} 경복궁체험</span>
+            </GuideInfo>
+            <Count>
+              {applicantInfo.length === 0 ? 0 : applicantInfo.length}/
+              {guideInfo && guideInfo.numPeople}5
+            </Count>
+            <BtnCtn>
+              <NoBorderBtn palette='red' onClick={handleDeleteClick}>
+                취소
+              </NoBorderBtn>
+            </BtnCtn>
+          </>
+        ) : (
+          <div>진행중인 가이드가 없습니다</div>
+        )}
       </CardWrapper>
     </CardCtn>
   );
