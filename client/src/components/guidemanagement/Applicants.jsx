@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import ApplicantCards from './ApplicantCards';
 // import { ColorBtn } from '../../styles/common/index';
-import ApplicantTable from './ApplicantTable';
+// import ApplicantTable from './ApplicantTable';
 
 const ListCtn = styled.div``;
 
@@ -22,21 +23,7 @@ export default function Applicants({ applicantInfo }) {
       <H3Ctn>
         <H3>가이드 신청자</H3>
       </H3Ctn>
-      <ApplicantTable
-        columns={['신청자', '지역', '가이드 명', '신청일자', '']}
-        data={
-          applicantInfo.length !== 0
-            ? [
-                {
-                  nickName: applicantInfo.nickName,
-                  region: applicantInfo.region,
-                  title: applicantInfo.title,
-                  date: applicantInfo.date,
-                },
-              ]
-            : []
-        }
-      />
+      <ApplicantCards />
     </ListCtn>
   );
 }

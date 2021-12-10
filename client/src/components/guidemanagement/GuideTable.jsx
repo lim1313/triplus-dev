@@ -12,6 +12,10 @@ const Table = styled.table`
     & td {
       text-align: center;
       padding: 0.5rem 1rem;
+      table-layout: fixed;
+    }
+    .edit-btns {
+      text-align: end;
     }
   }
 `;
@@ -45,11 +49,12 @@ export default function GuideTable(props) {
             return (
               <tr key={date + title}>
                 <td className='datetd'>{date}</td>
-                <td>{title}</td>
-                <td>&emsp;</td>
-                <td>&emsp;&ensp;</td>
-                <td>
+                <td colSpan='3'>{title}</td>
+                {/* <td>&emsp;</td>
+                <td>&emsp;&ensp;</td> */}
+                <td className='edit-btns'>
                   <NoBorderBtn palette='red'>수정</NoBorderBtn>
+                  <NoBorderBtn palette='red'>삭제</NoBorderBtn>
                 </td>
               </tr>
             );
