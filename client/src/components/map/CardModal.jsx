@@ -42,24 +42,26 @@ const ModalWrapper = styled.section`
 `;
 
 const Wrapper = styled.div`
-  padding: 1.5rem;
-  padding-top: 0;
+  position: relative;
+  top: -3rem;
+  padding: 0 1.5rem;
 `;
 
 const Title = styled.h1`
   margin: 0;
-  padding: 2rem 0 1rem 0;
+  padding: 1rem 0;
   font-size: 1.7rem;
   text-align: center;
   color: ${({ theme }) => theme.color.darkGray};
   word-break: keep-all;
 `;
 
-const BtnWrapper = styled.span`
+const BtnWrapper = styled.div`
   text-align: right;
-  position: fixed;
+  position: sticky;
   top: 0;
   right: 0;
+  z-index: 4;
 `;
 
 const CloseBtn = styled.button`

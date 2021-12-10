@@ -3,6 +3,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
+import { useError } from '../../../hooks/useError';
 import { rezGuide } from '../../../network/map/http';
 import { ColorBtn } from '../../../styles/common';
 import Chatting from './Chatting';
@@ -63,6 +64,7 @@ export default function GuideBtn({
   compoleteModal,
 }) {
   const isLogin = useSelector((state) => state.loginReducer.isLogin);
+  const [isError] = useError();
 
   const clickGuide = (id) => {
     if (!isLogin) return compoleteModal('login');
@@ -71,8 +73,7 @@ export default function GuideBtn({
     //TODO POST 가이드 신청
     rezGuide(id).then((res) => {
       if (res === 401) {
-        console.log('토큰 만료 로그아웃 필요');
-        return;
+        return isError();
       } else if (res === 204) {
         compoleteModal('success');
       } else if (res === 201) {

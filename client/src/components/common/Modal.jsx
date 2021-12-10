@@ -10,7 +10,7 @@ export const BtnWrapper = styled.div`
 `;
 
 export const SelectBtn = styled(ColorBtn)`
-  width: 50%;
+  width: ${({ width }) => width || '50%'};
   color: ${({ theme }) => theme.color.black};
   background: ${({ theme }) => theme.color.lightGray};
   border: 1px solid ${({ theme }) => theme.color.lightGray};

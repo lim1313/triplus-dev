@@ -3,12 +3,11 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useInput } from '../../../hooks/useInput';
-import { postEmailCheck, postEmailUnCheck, postInfo } from '../../../network/my/http';
+import { postEmailCheck, postInfo } from '../../../network/my/http';
 import { ColorBtn } from '../../../styles/common';
-import { useDispatch } from 'react-redux';
-import { exit } from '../../../redux/login/action';
-import { useNavigate } from 'react-router-dom';
 import EmailModal from './EmailModal';
+import { nickValidation } from '../../../utils/validation';
+import { useError } from '../../../hooks/useError';
 
 export const LiWrapper = styled.li`
   flex-grow: 1;
@@ -81,26 +80,22 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
   const [inputValue, inputChange] = useInput(content);
   const [isAlert, setIsAlert] = useState(null);
   const [openModal, setOpenModal] = useState(false);
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [isError] = useError();
 
   const changeContent = (e) => {
     if (isChange) {
-      if ((title === 'nickname' || title === 'e-mail') && !inputValue.length) {
-        return setIsAlert('*필수 입력 사항');
-      }
+      if (title === 'e-mail' && !inputValue.length) return setIsAlert('*필수 입력 사항');
+      if (title === 'nickname' && !nickValidation(inputValue))
+        return setIsAlert('*3~8자리의 영문, 숫자만 가능합니다.');
+
       // TODO POST /개인정보 변경
       postInfo(inputValue, title).then((res) => {
         if (res === 401) {
-          alert('로그인이 만료되었습니다. 다시 로그인해 주세요');
-          dispatch(exit());
-          navigate('/login', { replace: true });
+          isError();
         } else if (res >= 200 && res < 300) {
           setIsAlert(null);
           setIsChange(!isChange);
         } else {
-          console.log(res);
           setIsChange(!isChange);
         }
       });

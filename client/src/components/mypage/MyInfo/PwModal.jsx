@@ -8,6 +8,7 @@ import { useInput } from '../../../hooks/useInput';
 import { putPassword } from '../../../network/my/http';
 import { exit } from '../../../redux/login/action';
 import { ModalTitle } from '../../../styles/common/modal';
+import { pwValidaton } from '../../../utils/validation';
 import Modal, { BtnWrapper, SelectBtn } from '../../common/Modal';
 import PwInput from './PwInput';
 
@@ -34,6 +35,8 @@ export default function PwModal({ closeModal }) {
   const submitPw = () => {
     if (!currentPw || !newPw || !checkPw) {
       setAlertMsg('*모든 입력창을 기입해 주세요');
+    } else if (!pwValidaton(newPw)) {
+      setAlertMsg('*8~16자, 최소 하나의 숫자와 특수문자가 필요합니다');
     } else if (newPw !== checkPw) {
       setAlertMsg('*새로운 비밀번호와 일치하지 않습니다');
     } else {
@@ -51,7 +54,6 @@ export default function PwModal({ closeModal }) {
           // 현재 비밀번호를 잘못 작성
           setAlertMsg('*현재 비밀번호가 일치하지 않습니다');
         }
-        console.log(res);
       });
     }
   };
