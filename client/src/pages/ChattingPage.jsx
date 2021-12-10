@@ -28,6 +28,9 @@ export default function ChattingPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const userId = useSelector((state) => state.chatUserInfoReducer.userId);
+  const currentRoom = useSelector((state) => state.currentRoomReducer.currentRoom);
+
   const dateConversion = (date) => {
     const day = dayjs(date).format('YYYY년 M월 D일');
     const time = dayjs(date).format('a hh:mm');
@@ -73,7 +76,6 @@ export default function ChattingPage() {
     });
 
     socketRef.current.on('getRooms', (data) => {
-      // TODO userId 가 빈문자열로 왔을 때 로그인하게끔 유도
       console.log(data);
       dispatch(getUserChatInfo(data));
     });
@@ -85,17 +87,20 @@ export default function ChattingPage() {
       const newChat = editChat(initialChat);
       dispatch(resetChatList(newChat));
     });
-    // TODO 3. 송신한 메세지 수신하기
+  }, []);
 
+  useEffect(() => {
+    // TODO 3. 송신한 메세지 수신하기
     socketRef.current.on('getMessage', (data) => {
       const newChat = editChat(data);
+      console.log(socketRef.current);
       dispatch(getChatList(newChat));
     });
   }, []);
 
   // TODO 4. 룸에 입장
   const selectRoomHandler = (currentRoom, selectedRoom) => {
-    console.log(selectedRoom);
+    console.log('야야야야야');
     dispatch(changeCurrentRoom(selectedRoom));
     socketRef.current.emit('joinRoom', currentRoom, selectedRoom);
   };
