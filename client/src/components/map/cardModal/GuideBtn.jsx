@@ -1,3 +1,5 @@
+/*eslint-disable no-unused-vars*/
+
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { rezGuide } from '../../../network/map/http';
@@ -18,12 +20,21 @@ export const ModalBtn = styled(ColorBtn)`
   color: ${({ chatting, theme }) => chatting && theme.color.blue};
 
   &:hover {
+    background-color: white;
+    color: ${({ theme }) => theme.color.blue};
+    border: 1px solid ${({ theme }) => theme.color.blue};
+  }
+
+  &:hover {
     ${({ completed }) =>
       completed &&
       css`
         cursor: unset;
         background: ${({ theme }) => theme.color.red};
         border: 1px solid ${({ theme }) => theme.color.red};
+        &:hover {
+          color: #fff;
+        }
       `}
   }
 
@@ -42,15 +53,27 @@ export const ModalBtn = styled(ColorBtn)`
     `}
 `;
 
-export default function GuideBtn({ guideId, userId, userParticipate, state }) {
+export default function GuideBtn({ guideId, userId, userParticipate, state, closeModal, compoleteModal }) {
   const clickGuide = (id) => {
     if (state === 'COMPLETED') return;
     //TODO POST 가이드 신청
-    // 마감된 경우, 서버 에러
-    rezGuide(id);
+    rezGuide(id).then((res) => {
+      if (res === 401) {
+        console.log('토큰 만료 로그아웃 필요');
+        return;
+      } else if (res === 204) {
+        compoleteModal('success');
+      } else if (res === 201) {
+        compoleteModal('end');
+      } else if (res >= 500) {
+        compoleteModal('error');
+      }
+      setTimeout(() => {
+        closeModal();
+      }, 2000);
+    });
   };
 
-  //TODO 로그인한 경우만 가능
   return (
     <ModalBottomBtn>
       {userParticipate ? (

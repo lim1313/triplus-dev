@@ -47,6 +47,8 @@ export const getCardModal = async (params) => {
 // - 예약 이미 마감 => 201 {state: "COMPLETED"}
 // - 서버에러 => 500번대
 export const rezGuide = async (guideId) => {
-  const res = await axios.post(`${http}/map`, { guideId });
-  return res;
+  return axios
+    .post(`${http}/map`, { guideId })
+    .then((res) => res.status)
+    .catch((res) => res.response.state);
 };

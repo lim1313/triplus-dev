@@ -4,7 +4,6 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import GuideCard from './GuideCard';
-import { dbModal } from '../../../db/guideModal';
 import { getCardModal } from '../../../network/map/http';
 import { openGuideModal } from '../../../redux/map/action';
 
@@ -20,8 +19,8 @@ const SideCardWrapper = styled.ul`
   }
   @media ${({ theme }) => theme.device.mobile} {
     display: flex;
+    height: auto;
     padding: 0;
-    height: 100%;
   }
 `;
 
@@ -44,7 +43,6 @@ export default function CardBar() {
     getCardModal(cardId).then((res) => {
       dispatch(openGuideModal({ isOpen: true, modalInfo: res }));
     });
-    // dispatch(openGuideModal({ isOpen: true, modalInfo: { ...dbModal, guideId: cardId } }));
   };
 
   return (
