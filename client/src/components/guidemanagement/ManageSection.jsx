@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import Loading from '../common/Loading';
 import Applicants from './Applicants';
 import GuideLists from './GuideLists';
 import SectionHeader from './SectionHeader';
@@ -8,7 +9,7 @@ const SectionCtn = styled.section`
   width: 70vw;
   border-radius: 0.5rem;
   background-color: white;
-  height: 80vh;
+  height: auto;
   padding: 0 1.5rem;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100vw;
@@ -19,12 +20,19 @@ const SectionCtn = styled.section`
 `;
 
 export default function ManageSection(props) {
-  const { handleCreateClick, guideInfo, applicantInfo } = props;
+  const { handleCreateClick, guideInfo, applicantInfo, isLoading } = props;
   return (
     <SectionCtn>
-      <SectionHeader />
-      <GuideLists handleCreateClick={handleCreateClick} guideInfo={guideInfo} />
-      <Applicants applicantInfo={applicantInfo} />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          {' '}
+          <SectionHeader />
+          <GuideLists handleCreateClick={handleCreateClick} guideInfo={guideInfo} />
+          <Applicants applicantInfo={applicantInfo} />
+        </>
+      )}
     </SectionCtn>
   );
 }

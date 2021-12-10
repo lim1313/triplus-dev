@@ -11,7 +11,7 @@ export default function GuideTitle(props) {
   const { handleInputChange, value } = props;
   return (
     <TitleInput
-      placeholder='제목'
+      placeholder='제목(20글자미만)'
       onChange={handleInputChange}
       value={value}
       id='title'
