@@ -30,7 +30,6 @@ export default function ManageSection(props) {
         <Loading />
       ) : (
         <>
-          {' '}
           <SectionHeader />
           <GuideLists
             handleCreateClick={handleCreateClick}

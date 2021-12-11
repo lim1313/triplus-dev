@@ -9,6 +9,9 @@ const CardsCtn = styled.div`
   display: flex;
   justify-content: center;
   position: relative;
+  & .no-applicant {
+    padding-top: 2rem;
+  }
   @media ${({ theme }) => theme.device.mobile} {
     display: flex;
     padding: 0;
@@ -49,7 +52,7 @@ const CardUl = styled.ul`
   transform: translateX(${({ fromLeft }) => fromLeft + 'px'});
 `;
 
-export default function ApplicantCards({ appicantInfo }) {
+export default function ApplicantCards({ applicantInfo }) {
   const [fromLeft, setFromLeft] = useState(0);
   // const [last, setLast] = useState(0);
   const cardRef = useRef();
@@ -75,20 +78,30 @@ export default function ApplicantCards({ appicantInfo }) {
   };
   return (
     <CardsCtn>
-      <MoveBtn left onClick={() => moveImg('l')}>
-        <FaAngleLeft />
-      </MoveBtn>
-      <MoveBtn onClick={() => moveImg('r')}>
-        <FaAngleRight />
-      </MoveBtn>
-      <CardsWarpper>
-        <CardUl fromLeft={fromLeft}>
-          <ApplicantCard appicantInfo={appicantInfo} cardRef={cardRef} />
-          <ApplicantCard />
-          <ApplicantCard />
-          <ApplicantCard />
-        </CardUl>
-      </CardsWarpper>
+      {applicantInfo.length > 0 ? (
+        <>
+          <MoveBtn left onClick={() => moveImg('l')}>
+            <FaAngleLeft />
+          </MoveBtn>
+          <MoveBtn onClick={() => moveImg('r')}>
+            <FaAngleRight />
+          </MoveBtn>
+          <CardsWarpper>
+            <CardUl fromLeft={fromLeft}>
+              {applicantInfo.length > 0 &&
+                applicantInfo.map((applicant) => (
+                  <ApplicantCard applicant={applicant} key={applicant.nickName} cardRef={cardRef} />
+                ))}
+              {/* <ApplicantCard applicantInfo={applicantInfo} cardRef={cardRef} />
+          <ApplicantCard cardRef={cardRef} />
+          <ApplicantCard cardRef={cardRef} />
+          <ApplicantCard cardRef={cardRef} /> */}
+            </CardUl>
+          </CardsWarpper>
+        </>
+      ) : (
+        <div className='no-applicant'>신청자 정보가 없습니다.</div>
+      )}
     </CardsCtn>
   );
 }
