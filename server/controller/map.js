@@ -18,7 +18,7 @@ module.exports = {
   },
 
   selectGuideCardById: async (req, res) => {
-    const resObject = await selectGuideCardById(req.query.guideId);
+    const resObject = await selectGuideCardById(req);
 
     res.status(resObject.code).json({
       message: resObject.message,

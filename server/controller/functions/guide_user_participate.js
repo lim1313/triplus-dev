@@ -7,8 +7,7 @@ module.exports = {
   createGuideUserParticipate: async (req) => {
     const resObject = {};
     const accessToken = isAuthorized(req);
-    const {guideCard} = await selectGuideCardById(req.body.guideId);
-
+    
     // 토큰이 없었을 때
     try {
       if(!accessToken){
@@ -20,6 +19,8 @@ module.exports = {
       resObject['message'] = error;
       return resObject;
     }
+
+    const {guideCard} = await selectGuideCardById(req.body.guideId);
 
     // 참가인원이 다 찼을 때
     if(guideCard.state === GLOBAL_VARIABLE.COMPLETED){
@@ -66,5 +67,30 @@ module.exports = {
 
       return resObject;
     }
-  }
+  },
+
+  selectGuideUserParticipateByUserId: async (req, res) => {
+    const resObject = {};
+    const accessToken = isAuthorized(req);
+    
+    try {
+      if(!accessToken){
+        resObject['code'] = 401;
+        throw 'accessToken이 없습니다';
+      }
+
+      await guide_user_participate.findAll({
+        where: {userId: accessToken.userId},
+        include: [
+          {
+            model: guide_card,
+          }
+        ]
+      })
+    } catch (error) {
+      console.log(`ERROR: ${error}`);
+      resObject['message'] = error;
+      return resObject;
+    }
+  },
 }

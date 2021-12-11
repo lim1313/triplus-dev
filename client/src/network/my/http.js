@@ -9,7 +9,7 @@ axios.defaults.headers.common['Content-Type'] = 'application/json';
 // 기본의 프로필 url은 삭제하고 새로운 url로 갱신
 export const postProfile = (data) => {
   return axios
-    .post(`${http}/my/profile`, { data })
+    .post(`${http}/my/profile`, { image: data })
     .then((res) => res.status)
     .catch((err) => err.response.status);
 };
@@ -18,7 +18,7 @@ export const postProfile = (data) => {
 // 기본의 프로필 url 삭제
 export const deleteProfile = () => {
   return axios
-    .delete(`${http}/my/profile`)
+    .delete(`${http}/my/profile`, {data: {image: null}})
     .then((res) => res.status)
     .catch((err) => err.response.status);
 };
@@ -30,9 +30,19 @@ export const getUserInfo = () => {
 
 //TODO POST 정보 변경
 export const postInfo = (data, path) => {
-  if (path === 'nickname') path = 'nick-name';
+  let param = {};
+  if (path === 'nickname') {
+    path = 'nick-name';
+    param['nickName'] = data;
+  }else if(path === 'address'){
+    path = 'region'
+    param['region'] = data;
+  }else if(path === 'email'){
+    path = 'email'
+    param = data;
+  }
   return axios
-    .post(`${http}/my/${path}`, { data })
+    .post(`${http}/my/${path}`, param)
     .then((res) => res.status)
     .catch((err) => err.response.status);
 };
@@ -56,7 +66,7 @@ export const postEmailCheck = (data) => {
 //TODO PUT 비밀번호 변경
 export const putPassword = (data) => {
   return axios
-    .put(`${http}/my/password`, { data })
+    .put(`${http}/my/password`, data)
     .then((res) => res.status)
     .catch((err) => err.response.status);
 };
@@ -64,7 +74,7 @@ export const putPassword = (data) => {
 //TODO DELETE 탈퇴
 export const deleteUser = (data) => {
   return axios
-    .post(`${http}/my/withdraw`, { data })
+    .post(`${http}/my/withdraw`, { password: data })
     .then((res) => res.status)
     .catch((err) => err.response.status);
 };

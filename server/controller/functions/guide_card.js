@@ -205,12 +205,12 @@ module.exports = {
         if(userData['image']){
           guideCardItem['userImage'] = userData['image'];
         }else{
-          guideCardItem['userImage'] = './../../asset/main/stamp.png';
+          guideCardItem['userImage'] = '/asset/main/stamp.png';
         }
         if(guideImageData.length > 0){
           guideCardItem['tourImage'] = guideImageData[0].dataValues.image;
         }else{
-          guideCardItem['tourImage'] = './../../asset/logo/logo.png';
+          guideCardItem['tourImage'] = '/asset/else/trip.jpg';
         }
         
 
@@ -228,7 +228,7 @@ module.exports = {
     return resObject;
   },
 
-  selectGuideCardById: async (guideId) => {
+  selectGuideCardById: async (req) => {
     const resObject = {code: 200};
 
     const selectGuideCard = await guide_card.findOne({
@@ -241,13 +241,8 @@ module.exports = {
           order: ['id', 'ASC']
         }
       ],
-      where: { guideId },
+      where: { guideId: req.query.guideId },
     });
-
-    const selectGuideUserParticipate = await guide_user_participate.findAll({
-      raw: true,
-      where: {guideId},
-    })
 
     const guideCardData = selectGuideCard.dataValues;
     const guideUserData = guideCardData.user.dataValues;
@@ -276,7 +271,23 @@ module.exports = {
     }
     guideCard['createdAt'] = date_fns.format(guideCardData['createdAt'], 'yyyy.MM.dd');
     guideCard['updatedAt'] = date_fns.format(guideCardData['updatedAt'], 'yyyy.MM.dd');
-    guideCard['userParticipate'] = selectGuideUserParticipate.length;
+
+    const accessToken = isAuthorized(req);
+    if(!accessToken){
+      guideCard['userParticipate'] = 0;
+    }else{
+      const selectGuideUserParticipate = await guide_user_participate.findAll({
+        raw: true,
+        where: {guideId: req.query.guideId, userId: accessToken.userId},
+      });
+
+      if(selectGuideUserParticipate){
+        guideCard['userParticipate'] = 1;
+      }else{
+        guideCard['userParticipate'] = 0;
+      }
+    }
+    
 
     const tourImage = []
     if(guideImageData.length > 0){
@@ -284,8 +295,6 @@ module.exports = {
         tourImage.push(guideImageDataItem.dataValues.image);
       }
     }else{
-      tourImage.push('./../../asset/logo/logo.png');
-      tourImage.push('./../../asset/logo/logo.png');
       tourImage.push('./../../asset/logo/logo.png');
     }
 
@@ -321,7 +330,7 @@ module.exports = {
         order: [['createdAt', 'DESC']],
       });
 
-      if (!guideCard) {
+      if (!guideCard || guideCard.state === 'CANCELED') {
         throw '진행 중인 가이드가 없습니다';
       }
 
