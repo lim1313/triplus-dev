@@ -1,4 +1,4 @@
-const { isAuthorized } = require('./functions/user');
+const { isAuthorized, updateUser, expiredUser, changePassword } = require('./functions/user');
 const crypto = require('crypto');
 const { user, user_verify } = require('../models');
 const { stmpTransport } = require('../config/email');
@@ -62,5 +62,35 @@ module.exports = {
     } catch (err) {
       console.error(err);
     }
+  },
+
+  myInfo: (req, res) => {
+    try {
+      const accessToken = isAuthorized(req);
+      
+      if(!accessToken){
+        throw '다시 로그인하여 주세요'
+      }else{
+        res.status(200);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(401).send(error);
+    }
+  },
+
+  updateUser: async (req, res) => {
+    const resObject = await updateUser(req);
+    res.status(resObject['code']).send(resObject['message']);
+  },
+
+  expiredUser: async (req, res) => {
+    const resObject = await expiredUser(req);
+    res.status(resObject.code).send(resObject.message);
+  },
+
+  changePassword: async (req, res) => {
+    const resObject = await changePassword(req);
+    res.status(resObject.code).send(resObject.message);
   },
 };

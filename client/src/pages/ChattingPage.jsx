@@ -30,6 +30,7 @@ export default function ChattingPage() {
 
   const userId = useSelector((state) => state.chatUserInfoReducer.userId);
   const currentRoom = useSelector((state) => state.currentRoomReducer.currentRoom);
+  const isLogin = useSelector((state) => state.loginReducer.isLogin);
 
   const dateConversion = (date) => {
     const day = dayjs(date).format('YYYY년 M월 D일');
@@ -63,44 +64,61 @@ export default function ChattingPage() {
 
   //* 채팅 페이지 초기 렌더링
   // TODO 1. Socket 연결하고 해당 유저의 정보 가져오기
-  useEffect(() => {
+  useEffect(async () => {
+    console.log(socketRef.current);
+
     socketRef.current = io.connect(`${process.env.REACT_APP_HTTPSURL}`, {
       transports: ['websocket'],
     });
 
     socketRef.current.on('shouldLogin', async () => {
+      console.log('shouldLogin');
       await alert('로그인을 해야지만 채팅 서비스를 이용할 수 있습니다');
       logOut();
       dispatch(logoutUser());
       navigate('/login');
     });
+    return () => {
+      socketRef.current.disconnect();
+    };
+  }, []);
 
+  useEffect(() => {
     socketRef.current.on('getRooms', (data) => {
-      console.log(data);
+      console.log('getRooms');
       dispatch(getUserChatInfo(data));
     });
+    return () => {
+      socketRef.current.disconnect();
+    };
   }, []);
 
   useEffect(() => {
     // TODO 2. 룸 입장 후 채팅 데이터 받아오기
     socketRef.current.on('initialChat', (initialChat) => {
+      console.log('initialChat');
       const newChat = editChat(initialChat);
       dispatch(resetChatList(newChat));
     });
+    return () => {
+      socketRef.current.disconnect();
+    };
   }, []);
 
   useEffect(() => {
     // TODO 3. 송신한 메세지 수신하기
     socketRef.current.on('getMessage', (data) => {
+      console.log('getMessage');
       const newChat = editChat(data);
-      console.log(socketRef.current);
       dispatch(getChatList(newChat));
     });
+    return () => {
+      socketRef.current.disconnect();
+    };
   }, []);
 
   // TODO 4. 룸에 입장
   const selectRoomHandler = (currentRoom, selectedRoom) => {
-    console.log('야야야야야');
     dispatch(changeCurrentRoom(selectedRoom));
     socketRef.current.emit('joinRoom', currentRoom, selectedRoom);
   };
@@ -109,7 +127,6 @@ export default function ChattingPage() {
   // ? socket 이벤트
   const sendMessageHandler = (e, msg, userId, selectedRoom) => {
     e.preventDefault();
-    console.log(socketRef.current);
     const date = dayjs();
     const DBform = {
       date,
