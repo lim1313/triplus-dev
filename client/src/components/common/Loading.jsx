@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps*/
+/* eslint-disable no-unused-vars */
+
 import React, { useEffect, useRef } from 'react';
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
 const Wrapper = styled.div`
   position: relative;
@@ -18,40 +20,42 @@ const Wrapper = styled.div`
   }
 `;
 
-export const LoadingImg = styled.img`
+const boxFade = keyframes`
+  0% {
+  background-image: url('/asset/loading/loading1.png');
+  }
+  25% {
+  background-image: url("/asset/loading/loading2.png");
+  }
+  50% {
+  background-image: url("/asset/loading/loading3.png");
+  }
+  75% {
+  background-image: url("/asset/loading/loading4.png");
+  }
+  100% {
+  background-image: url("/asset/loading/loading1.png");
+  }
+`;
+
+export const LoadingImg = styled.span`
   width: 6rem;
   height: 6rem;
   border-radius: 50%;
   border: 5px solid #fff;
-  transition: opaicty 0;
+  background-size: contain;
+  animation: ${boxFade} 4s infinite;
+  animation-timing-function: step-end;
 `;
 
 export default function Loading({ isMap }) {
-  let image = useRef(null);
-  let src = [];
-  let imgCount = 4;
-
-  for (let i = 1; i <= imgCount; i++) {
-    src.push(`/asset/loading/loading${i}.png`);
-  }
-
-  let count = 0;
-  useEffect(() => {
-    const imgChange = setInterval(() => {
-      image.current.src = src[count % imgCount];
-      count++;
-    }, 500);
-    return () => {
-      clearInterval(imgChange);
-    };
-  }, []);
-
   return (
     <Wrapper isMap={isMap}>
-      <LoadingImg ref={image} src='/asset/loading/loading1.png' alt='로딩 이미지' />
-      {/* <LoadingImg2 src='/asset/loading/loading2.png' alt='로딩 이미지2' />
-      <LoadingImg3 src='/asset/loading/loading3.png' alt='로딩 이미지3' />
-      <LoadingImg4 src='/asset/loading/loading4.png' alt='로딩 이미지4' /> */}
+      <LoadingImg
+        loading1='/asset/loading/loading1.png'
+        loading2='/asset/loading/loading2.png'
+        loading3='/asset/loading/loading3.png'
+      />
     </Wrapper>
   );
 }
