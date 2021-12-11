@@ -15,9 +15,9 @@ const checkParams = (params) => {
         setParams[`content`] = params[param];
       } else if (param === 'date') {
         let guideDate;
-        if(!params[param]){
+        if (!params[param]) {
           guideDate = new Date();
-        }else{
+        } else {
           guideDate = new Date(params[param]);
         }
         setParams[`guideDate`] = guideDate;
@@ -30,11 +30,11 @@ const checkParams = (params) => {
       } else if (param === 'address') {
         setParams[`address`] = params[param];
       } else if (param === 'latitude') {
-        if(params[param]){
-          setParams[`latitude`] = params[param];  
+        if (params[param]) {
+          setParams[`latitude`] = params[param];
         }
       } else if (param === 'longitude') {
-        if(params[param]){
+        if (params[param]) {
           setParams[`longitude`] = params[param];
         }
       } else if (param === 'openDate') {
@@ -97,16 +97,20 @@ module.exports = {
   updateGuideCard: async (params) => {
     const resObject = {};
     const updateValue = checkParams(params);
+    console.log(params);
 
     try {
-      await guide_card.update(updateValue, {
-        where: {guideId: params.guideId}
-      }).then(() => {
-        resObject['code'] = 200;
-        resObject['message'] = '가이드 카드를 수정 했습니다';
-      }).catch(error => {
-        console.log(error);
-      });
+      await guide_card
+        .update(updateValue, {
+          where: { guideId: params.guideId },
+        })
+        .then(() => {
+          resObject['code'] = 200;
+          resObject['message'] = '가이드 카드를 수정 했습니다';
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } catch (error) {
       console.log(error);
       resObject['code'] = 400;
@@ -164,8 +168,8 @@ module.exports = {
           },
           {
             model: guide_image,
-            order: ['id', 'ASC']
-          }
+            order: ['id', 'ASC'],
+          },
         ],
         where: whereGuideCard,
       });
@@ -175,7 +179,7 @@ module.exports = {
       }
 
       const guideCardList = [];
-      for(let guideCard of guideCards){
+      for (let guideCard of guideCards) {
         const guideCardData = guideCard.dataValues;
         const userData = guideCardData.user.dataValues;
         const guideImageData = guideCardData.guide_images;
@@ -195,29 +199,28 @@ module.exports = {
         guideCardItem['userId'] = guideCardData['userId'];
         guideCardItem['nickName'] = userData['nickName'];
         guideCardItem['gender'] = userData['gender'];
-        if(userData['image']){
+        if (userData['image']) {
           guideCardItem['userImage'] = userData['image'];
-        }else{
+        } else {
           guideCardItem['userImage'] = './../../asset/main/stamp.png';
         }
         guideCardItem['createdAt'] = date_fns.format(guideCardData['createdAt'], 'yyyy.MM.dd');
         guideCardItem['updatedAt'] = date_fns.format(guideCardData['updatedAt'], 'yyyy.MM.dd');
-        if(userData['image']){
+        if (userData['image']) {
           guideCardItem['userImage'] = userData['image'];
         }else{
           guideCardItem['userImage'] = '/asset/main/stamp.png';
         }
-        if(guideImageData.length > 0){
+        if (guideImageData.length > 0) {
           guideCardItem['tourImage'] = guideImageData[0].dataValues.image;
         }else{
           guideCardItem['tourImage'] = '/asset/else/trip.jpg';
         }
-        
 
         guideCardList.push(guideCardItem);
       }
       resObject['code'] = 200;
-      resObject['message'] = '가이드 카드를 조회했습니다'
+      resObject['message'] = '가이드 카드를 조회했습니다';
       resObject['guideCardList'] = guideCardList;
     } catch (error) {
       console.log(error);
@@ -236,10 +239,11 @@ module.exports = {
         {
           model: user,
           attributes: ['nickName', 'gender'],
-        }, {
+        },
+        {
           model: guide_image,
-          order: ['id', 'ASC']
-        }
+          order: ['id', 'ASC'],
+        },
       ],
       where: { guideId: req.query.guideId },
     });
@@ -264,9 +268,9 @@ module.exports = {
     guideCard['userId'] = guideCardData['userId'];
     guideCard['nickName'] = guideUserData['nickName'];
     guideCard['gender'] = guideUserData['gender'];
-    if(guideUserData['image']){
+    if (guideUserData['image']) {
       guideCard['userImage'] = guideUserData['image'];
-    }else{
+    } else {
       guideCard['userImage'] = './../../asset/main/stamp.png';
     }
     guideCard['createdAt'] = date_fns.format(guideCardData['createdAt'], 'yyyy.MM.dd');
@@ -289,12 +293,12 @@ module.exports = {
     }
     
 
-    const tourImage = []
-    if(guideImageData.length > 0){
-      for(let guideImageDataItem of guideImageData){
+    const tourImage = [];
+    if (guideImageData.length > 0) {
+      for (let guideImageDataItem of guideImageData) {
         tourImage.push(guideImageDataItem.dataValues.image);
       }
-    }else{
+    } else {
       tourImage.push('./../../asset/logo/logo.png');
     }
 
@@ -336,12 +340,12 @@ module.exports = {
 
       const guideImages = await guide_image.findAll({
         raw: true,
-        where: {guideId: guideCard.guideId},
+        where: { guideId: guideCard.guideId },
         order: [['guideId', 'ASC']],
       });
 
       const tourImage = [];
-      for(let guideImage of guideImages){
+      for (let guideImage of guideImages) {
         tourImage.push(guideImage.image);
       }
 
@@ -357,7 +361,7 @@ module.exports = {
         address: guideCard.address,
         openDate: guideCard.openDate,
         userId: guideCard.userId,
-        tourImage: tourImage
+        tourImage: tourImage,
       };
 
       resObject['guideData'] = guideData;

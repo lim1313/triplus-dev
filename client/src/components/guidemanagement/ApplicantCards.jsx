@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import ApplicantCard from './ApplicantCard';
@@ -9,6 +9,9 @@ const CardsCtn = styled.div`
   display: flex;
   justify-content: center;
   position: relative;
+  & .no-applicant {
+    padding-top: 2rem;
+  }
   @media ${({ theme }) => theme.device.mobile} {
     display: flex;
     padding: 0;
@@ -43,47 +46,62 @@ const CardsWarpper = styled.div`
 `;
 const CardUl = styled.ul`
   display: flex;
-  flex-wrap: nowrap;
+  /* flex-wrap: nowrap; */
   transition: all 0.5s;
+  width: 100%;
   transform: translateX(${({ fromLeft }) => fromLeft + 'px'});
 `;
 
-export default function ApplicantCards({ appicantInfo }) {
+export default function ApplicantCards({ applicantInfo }) {
   const [fromLeft, setFromLeft] = useState(0);
   // const [last, setLast] = useState(0);
+  const cardRef = useRef();
 
   const moveImg = (direct) => {
     console.log(fromLeft);
+    // console.log(cardRef.current.offsetWidth);
+    const cardWidth = cardRef.current.offsetWidth;
     if (direct === 'l' && fromLeft >= 0) {
       return;
-    } else if (direct === 'r' && fromLeft === -1148 + 861) {
+    } else if (direct === 'r' && fromLeft <= -((cardWidth + 12) * 4) + (cardWidth + 12) * 3) {
+      // width * 신청자 개수, width*3
       return;
     }
 
     if (direct === 'l') {
-      let plusLeft = fromLeft + 287;
+      let plusLeft = fromLeft + (cardWidth + 12);
       setFromLeft(plusLeft);
     } else {
-      let minusLeft = fromLeft - 287;
+      let minusLeft = fromLeft - (cardWidth + 12);
       setFromLeft(minusLeft);
     }
   };
   return (
     <CardsCtn>
-      <MoveBtn left onClick={() => moveImg('l')}>
-        <FaAngleLeft />
-      </MoveBtn>
-      <MoveBtn onClick={() => moveImg('r')}>
-        <FaAngleRight />
-      </MoveBtn>
-      <CardsWarpper>
-        <CardUl fromLeft={fromLeft}>
-          <ApplicantCard appicantInfo={appicantInfo} />
-          <ApplicantCard />
-          <ApplicantCard />
-          <ApplicantCard />
-        </CardUl>
-      </CardsWarpper>
+      {applicantInfo.length > 0 ? (
+        <>
+          <MoveBtn left onClick={() => moveImg('l')}>
+            <FaAngleLeft />
+          </MoveBtn>
+          <MoveBtn onClick={() => moveImg('r')}>
+            <FaAngleRight />
+          </MoveBtn>
+          <CardsWarpper>
+            <CardUl fromLeft={fromLeft}>
+              {applicantInfo.length > 0 &&
+                applicantInfo.map((applicant) => (
+                  <ApplicantCard applicant={applicant} key={applicant.nickName} cardRef={cardRef} />
+                ))}
+              {/* <ApplicantCard applicantInfo={applicantInfo} cardRef={cardRef} />
+          <ApplicantCard cardRef={cardRef} />
+          <ApplicantCard cardRef={cardRef} />
+          <ApplicantCard cardRef={cardRef} /> */}
+            </CardUl>
+          </CardsWarpper>
+        </>
+      ) : (
+        <div className='no-applicant'>신청자 정보가 없습니다.</div>
+      )}
     </CardsCtn>
   );
 }

@@ -17,7 +17,7 @@ export const createGudie = async (data) => {
 };
 
 export const deleteGuideCard = async (guideId) => {
-  return axios.put(`${http}/management/guide`, { guideId });
+  return axios.put(`${http}/management/change-state-canceled`, { guideId });
 };
 
 export const editGuideCard = async (data) => {
