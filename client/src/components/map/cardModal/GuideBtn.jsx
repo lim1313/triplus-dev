@@ -79,7 +79,7 @@ export default function GuideBtn({
       } else if (res === 201) {
         compoleteModal('end');
       } else if (res >= 500) {
-        compoleteModal('error');
+        alert('에러가 발생했습니다. 다시 시도해 주세요');
       }
       setTimeout(() => {
         closeModal();

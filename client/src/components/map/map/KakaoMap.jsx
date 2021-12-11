@@ -34,11 +34,10 @@ export default function KakaoMap({ filterInfo, loading }) {
   filterRef.current = filterInfo;
   const dispatch = useDispatch();
 
-  //* 지도 생성
+  //* 카카오 지도 생성
   useEffect(() => {
     let startLat = 37.518197895084874;
     let startLog = 126.98255734652028;
-
     let container = mapRef.current;
     let options = {
       center: new kakao.maps.LatLng(startLat, startLog),
@@ -52,10 +51,11 @@ export default function KakaoMap({ filterInfo, loading }) {
   }, []);
 
   useEffect(() => {
-    //* 첫 렌더링 & 가이드 필터를 했을 때 filter
+    //* 첫 렌더링 & 가이드 필터 변경 시 발생 함수
     kakaoEvent();
   }, [filterInfo]);
 
+  //* 마커 클릭 이벤트 함수
   //! 리렌더링 발생. 개선 필요
   const clickMarker = (id) => {
     //TODO GET /map 모달
@@ -64,6 +64,7 @@ export default function KakaoMap({ filterInfo, loading }) {
     });
   };
 
+  //* 지도 이동, 확대, 축소 이벤트 발생 함수
   const kakaoEvent = () => {
     loading(true);
     let latLngparams = getInfo(map);
@@ -72,7 +73,7 @@ export default function KakaoMap({ filterInfo, loading }) {
     // TODO GET 요청
     getGuideCards(latLngparams).then((res) => {
       dispatch(openGuideModal({ isOpen: false, modalInfo: {} }));
-      if (res >= 300 || res < 200) return alert('에러가 발생했습니다. 다시 시도해 주세요');
+      if (res >= 400) return alert('에러가 발생했습니다. 다시 시도해 주세요');
       dispatch(guideCardInfo(res));
       createMarker(res, map, clickMarker);
       loading(false);

@@ -27,8 +27,8 @@ export const createMarker = (positions, map, clickMarker) => {
       markers[i].setMap(null);
     }
 
+  // 새로운 마커 생성
   for (let i = 0; i < positions.length; i++) {
-    // 마커를 생성
     let marker = new kakao.maps.Marker({
       map, // 마커를 표시할 지도
       position: positionInfo[i].latlng, // 마커를 표시할 위치
@@ -48,3 +48,5 @@ export const createMarker = (positions, map, clickMarker) => {
     markers.push(marker);
   }
 };
+
+//yeji 20211205

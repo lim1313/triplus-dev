@@ -70,7 +70,7 @@ export default function EmailModal({ clickModal }) {
         } else if (res > 400) {
           setAlertMsg('*인증번호 발송에 실패했습니다. 다시 시도해 주세요');
         } else if (res >= 500) {
-          alert('서버 오류가 발생했습니다. 다음에 다시 시도해 주세요');
+          alert('오류가 발생했습니다. 다시 시도해 주세요');
         } else {
           setAlertMsg('*인증번호가 발송되었습니다');
           setIsClickVerify(true);
@@ -99,7 +99,7 @@ export default function EmailModal({ clickModal }) {
           setAlertMsg(null);
           setAlertMsg2('*인증번호가 틀립니다. 올바른 인증번호를 입력하세요');
         } else if (res >= 500) {
-          alert('서버 오류가 발생했습니다. 다음에 다시 시도해 주세요');
+          alert('오류가 발생했습니다. 다시 시도해 주세요');
         } else {
           setIsLoading(false);
           setCompleteModal(true);
