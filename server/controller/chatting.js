@@ -35,8 +35,8 @@ module.exports = {
     try {
       const createdRoom = await chat_room.create({ message: JSON.stringify([]) });
       const joinRoom = await chat_member.bulkCreate([
-        { userId: userId, roomId: createdRoom.dataValues.roomId },
-        { userId: myId, roomId: createdRoom.dataValues.roomId },
+        { userId: userId, roomId: createdRoom.dataValues.roomId, count: 0 },
+        { userId: myId, roomId: createdRoom.dataValues.roomId, count: 0 },
       ]);
       createdRoomId = createdRoom.dataValues.roomId;
     } catch (err) {

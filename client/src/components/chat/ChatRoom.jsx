@@ -146,6 +146,17 @@ const Img = styled.img`
   }
 `;
 
+const LeftMessage = styled.p`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 1rem;
+  font-size: 1rem;
+  color: ${({ theme }) => theme.color.darkgray};
+`;
+
 export default function ChatRoom({ sendMessageHandler }) {
   const [msg, setMsg] = useState('');
 
@@ -160,6 +171,7 @@ export default function ChatRoom({ sendMessageHandler }) {
       break;
     }
   }
+
   const msgInputHandler = (e) => {
     setMsg(e.target.value);
   };
@@ -194,17 +206,21 @@ export default function ChatRoom({ sendMessageHandler }) {
           <ChatBoard id={currentRoom} ref={chatBoard}>
             {chatBubble.map((el, i) => {
               const isUser = el.userId === userId;
-              return (
-                <>
-                  <BubbleBox key={i} isUser={isUser}>
-                    <BubbleWrapper>
-                      {isUser ? <TimeSpan isUser={isUser}>{el.time}</TimeSpan> : null}
-                      <ChatBubble isUser={isUser}>{el.content}</ChatBubble>
-                      {isUser ? null : <TimeSpan isUser={isUser}>{el.time}</TimeSpan>}
-                    </BubbleWrapper>
-                  </BubbleBox>
-                </>
-              );
+              if (el.day === 'expired') {
+                return <LeftMessage>{`${partnerNickName}님이 방에서 나가셨습니다`}</LeftMessage>;
+              } else {
+                return (
+                  <>
+                    <BubbleBox key={i} isUser={isUser}>
+                      <BubbleWrapper>
+                        {isUser ? <TimeSpan isUser={isUser}>{el.time}</TimeSpan> : null}
+                        <ChatBubble isUser={isUser}>{el.content}</ChatBubble>
+                        {isUser ? null : <TimeSpan isUser={isUser}>{el.time}</TimeSpan>}
+                      </BubbleWrapper>
+                    </BubbleBox>
+                  </>
+                );
+              }
             })}
           </ChatBoard>
           <ChatMessageBox>
