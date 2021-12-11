@@ -26,6 +26,7 @@ const GuideImg = styled.div`
   background-size: contain;
   border: 3px solid ${({ theme }) => theme.color.lightGray};
   border-radius: 75%;
+  flex-shrink: 0;
 `;
 const GuideInfo = styled.div`
   display: flex;
@@ -38,9 +39,17 @@ const GuideInfo = styled.div`
     font-size: 1rem;
   }
 `;
-const Count = styled.div``;
+const Count = styled.div`
+  text-align: center;
+  & h5 {
+    margin: 0 0 0.5rem 0;
+  }
+  flex-shrink: 0;
+`;
 
-const BtnCtn = styled.div``;
+const BtnCtn = styled.div`
+  flex: none;
+`;
 
 export default function MyGuideCard(props) {
   const { guideInfo, applicantInfo } = props;
@@ -60,6 +69,7 @@ export default function MyGuideCard(props) {
               <span>대표장소: {guideInfo && guideInfo.address} 경복궁체험</span>
             </GuideInfo>
             <Count>
+              <h5>신청인원</h5>
               {applicantInfo.length === 0 ? 0 : applicantInfo.length}/
               {guideInfo && guideInfo.numPeople}5
             </Count>

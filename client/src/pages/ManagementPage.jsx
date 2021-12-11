@@ -42,6 +42,7 @@ export default function ManagementPage() {
   const [applicantInfo, setApplicantInfo] = useState([]);
   const [isAreadySet, setAreaySet] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeleted, setIsdeleted] = useState(false);
   const [clicked, setClick] = useState({
     management: true,
     managementtourlist: false,
@@ -94,13 +95,23 @@ export default function ManagementPage() {
         <Modal
           content={'등록하신 가이드를 삭제하시겠습니까?'}
           yesClick={() => {
-            deleteGuideCard(guideInfo.guideId);
+            deleteGuideCard(guideInfo.guideId)
+              .then((res) => {
+                console.log(res);
+                if (res.status === 200) {
+                  dispatch(guideDelete());
+                  setTimeout(() => setIsdeleted(true), 0);
+                  setTimeout(() => setIsdeleted(false), 1000);
+                }
+              })
+              .catch((err) => dispatch(guideDelete()));
           }}
           noClick={() => {
             dispatch(guideDelete());
           }}
         />
       )}
+      {isDeleted && <AlertModal content={'삭제되었습니다.'} />}
       {isAreadySet && <AlertModal content={'이미 등록된 가이드가 있습니다.'} />}
       {OpenLoginModal && (
         <LoginModal

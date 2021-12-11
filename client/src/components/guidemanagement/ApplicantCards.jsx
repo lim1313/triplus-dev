@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import ApplicantCard from './ApplicantCard';
@@ -43,28 +43,33 @@ const CardsWarpper = styled.div`
 `;
 const CardUl = styled.ul`
   display: flex;
-  flex-wrap: nowrap;
+  /* flex-wrap: nowrap; */
   transition: all 0.5s;
+  width: 100%;
   transform: translateX(${({ fromLeft }) => fromLeft + 'px'});
 `;
 
 export default function ApplicantCards({ appicantInfo }) {
   const [fromLeft, setFromLeft] = useState(0);
   // const [last, setLast] = useState(0);
+  const cardRef = useRef();
 
   const moveImg = (direct) => {
     console.log(fromLeft);
+    // console.log(cardRef.current.offsetWidth);
+    const cardWidth = cardRef.current.offsetWidth;
     if (direct === 'l' && fromLeft >= 0) {
       return;
-    } else if (direct === 'r' && fromLeft === -1148 + 861) {
+    } else if (direct === 'r' && fromLeft <= -((cardWidth + 12) * 4) + (cardWidth + 12) * 3) {
+      // width * 신청자 개수, width*3
       return;
     }
 
     if (direct === 'l') {
-      let plusLeft = fromLeft + 287;
+      let plusLeft = fromLeft + (cardWidth + 12);
       setFromLeft(plusLeft);
     } else {
-      let minusLeft = fromLeft - 287;
+      let minusLeft = fromLeft - (cardWidth + 12);
       setFromLeft(minusLeft);
     }
   };
@@ -78,7 +83,7 @@ export default function ApplicantCards({ appicantInfo }) {
       </MoveBtn>
       <CardsWarpper>
         <CardUl fromLeft={fromLeft}>
-          <ApplicantCard appicantInfo={appicantInfo} />
+          <ApplicantCard appicantInfo={appicantInfo} cardRef={cardRef} />
           <ApplicantCard />
           <ApplicantCard />
           <ApplicantCard />
