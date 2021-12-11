@@ -67,5 +67,30 @@ module.exports = {
 
       return resObject;
     }
-  }
+  },
+
+  selectGuideUserParticipateByUserId: async (req, res) => {
+    const resObject = {};
+    const accessToken = isAuthorized(req);
+    
+    try {
+      if(!accessToken){
+        resObject['code'] = 401;
+        throw 'accessToken이 없습니다';
+      }
+
+      await guide_user_participate.findAll({
+        where: {userId: accessToken.userId},
+        include: [
+          {
+            model: guide_card,
+          }
+        ]
+      })
+    } catch (error) {
+      console.log(`ERROR: ${error}`);
+      resObject['message'] = error;
+      return resObject;
+    }
+  },
 }
