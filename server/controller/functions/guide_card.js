@@ -330,7 +330,7 @@ module.exports = {
         order: [['createdAt', 'DESC']],
       });
 
-      if (!guideCard) {
+      if (!guideCard || guideCard.state === 'CANCELED') {
         throw '진행 중인 가이드가 없습니다';
       }
 
