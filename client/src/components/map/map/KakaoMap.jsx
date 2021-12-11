@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import { getCardModal, getGuideCards } from '../../../network/map/http';
 import { useDispatch, useSelector } from 'react-redux';
 import { guideCardInfo, openGuideModal } from '../../../redux/map/action';
-import { createMarker, getInfo } from '../../../utils/kakao';
+import { createMarker, deleteMarker, getInfo } from '../../../utils/kakao';
 import styled from 'styled-components';
 
 const { kakao } = window;
@@ -16,7 +16,7 @@ const MapWrapper = styled.div`
   & .infowindow {
     display: inline-block;
     position: relative;
-    top: -70px;
+    /* top: -70px; */
     background: white;
     border-radius: 10px;
     word-break: break-word;
@@ -73,6 +73,7 @@ export default function KakaoMap({ filterInfo, loading }) {
     // TODO GET 요청
     getGuideCards(latLngparams).then((res) => {
       dispatch(openGuideModal({ isOpen: false, modalInfo: {} }));
+      deleteMarker();
       if (res >= 400) return alert('에러가 발생했습니다. 다시 시도해 주세요');
       dispatch(guideCardInfo(res));
       createMarker(res, map, clickMarker);
