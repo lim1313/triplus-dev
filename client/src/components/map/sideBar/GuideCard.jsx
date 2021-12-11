@@ -3,6 +3,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { Profile, UserNick } from '../../../styles/map/card';
+import { getDday } from '../../../utils/dDay';
 
 const CardLi = styled.li`
   width: 100%;
@@ -141,21 +142,13 @@ const GuideContent = styled.div`
 export default function GuideCard({ cardInfo, modalClick, modalId }) {
   const { title, gender, guideDate, tourImage, userImage, state, nickName, content, guideId } =
     cardInfo;
-
-  const getDday = () => {
-    const [year, month, day] = guideDate.split('.');
-    let today = new Date().getTime();
-    let guideDay = new Date(+year, month - 1, +day).getTime();
-    let gap = guideDay - today;
-    let result = Math.ceil(gap / (1000 * 60 * 60 * 24));
-    return result;
-  };
+  let dDay = getDday(guideDate);
 
   return (
     <CardLi onClick={() => modalClick(guideId)} isClicked={modalId && 1} state={state}>
       <ImageWrapper backImage={tourImage} />
-      <TitleWrapper dday={getDday()}>
-        <div className='date'>{state === 'COMPLETED' ? 'END' : `D - ${getDday()}`}</div>
+      <TitleWrapper dday={dDay}>
+        <div className='date'>{state === 'COMPLETED' ? 'END' : `D - ${dDay}`}</div>
         <h2 className='title'>{title}</h2>
       </TitleWrapper>
       <GuideWrapper>

@@ -12,19 +12,51 @@ let map;
 
 const MapWrapper = styled.div`
   height: 100%;
+  position: relative;
 
   & .infowindow {
     display: inline-block;
-    position: relative;
-    /* top: -70px; */
     background: white;
     border-radius: 10px;
     word-break: break-word;
     text-align: center;
-    padding: 10px 13px;
-    font-weight: 500;
-    box-shadow: 0px 0px 5px 2px rgba(46, 46, 46, 0.2);
-    border: 4px solid ${({ theme }) => theme.color.lightGray};
+
+    box-shadow: 0px 0px 5px 2px rgba(46, 46, 46, 0.4);
+    overflow: hidden;
+
+    & .wrapper {
+      padding: 0.7rem 1rem;
+      & .title {
+        position: relative;
+        font-weight: 600;
+        font-size: 0.8rem;
+        padding-bottom: 0.5rem;
+        color: ${({ theme }) => theme.color.blue};
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          display: inline-block;
+          width: 100%;
+          border-bottom: 1px solid ${({ theme }) => theme.color.blue};
+        }
+      }
+      & .content {
+        font-weight: 500;
+        font-size: 0.7rem;
+        padding-top: 0.5rem;
+      }
+    }
+
+    & .dday {
+      font-weight: 600;
+      padding: 0.2rem 0;
+      font-size: 0.7rem;
+      background: ${({ theme }) => theme.color.lightGray};
+      color: black;
+    }
   }
 `;
 

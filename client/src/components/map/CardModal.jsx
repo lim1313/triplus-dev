@@ -98,6 +98,7 @@ export default function CardModal({ modalInfo }) {
   const dispatch = useDispatch();
 
   const modalRef = useRef();
+
   useEffect(() => {
     modalRef.current.scrollIntoView({ behavior: 'smooth' });
   }, [modalInfo]);
