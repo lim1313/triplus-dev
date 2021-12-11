@@ -11,6 +11,7 @@ const MapContainer = styled.section`
   position: relative;
   width: 100vw;
   height: calc(100vh - ${({ theme }) => theme.size.navHeight});
+  min-height: 3rem;
   display: flex;
 
   @media ${({ theme }) => theme.device.mobile} {

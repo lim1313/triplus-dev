@@ -17,21 +17,24 @@ let cancel;
 
 export const getGuideCards = async (params) => {
   if (cancel !== undefined) cancel('cancel');
-  return axios
-    .get(`${http}/map`, {
-      cancelToken: new CancelToken((c) => {
-        cancel = c;
-      }),
-      params,
-    })
-    .then((res) => res.data.guideCardList)
-    .catch((err) => {
-      if (axios.isCancel(err)) {
-        // console.log('cancel', err);
-      } else {
-        console.log('err', err);
-      }
-    });
+  return (
+    axios
+      .get(`${http}/map`, {
+        cancelToken: new CancelToken((c) => {
+          cancel = c;
+        }),
+        params,
+      })
+      // .then((res) => res.data.guideCardList)
+      .then((res) => res.data.guideCardList)
+      .catch((err) => {
+        if (axios.isCancel(err)) {
+          // console.log('cancel', err);
+        } else {
+          console.log('err', err);
+        }
+      })
+  );
 };
 
 //TODO GET 범위 내의 카드 모달
@@ -39,7 +42,7 @@ export const getCardModal = async (params) => {
   return axios
     .get(`${http}/map/guide-card`, { params: { guideId: params } })
     .then((res) => res.data.guideCard)
-    .catch((err) => console.log(err));
+    .catch((err) => err.response.status);
 };
 
 // TODO POST 가이드 신청하기

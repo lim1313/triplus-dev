@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router';
 import styled from 'styled-components';
+import { useError } from '../../../hooks/useError';
 import { useInput } from '../../../hooks/useInput';
 import { deleteUser } from '../../../network/my/http';
-import { exit } from '../../../redux/login/action';
 import { ModalTitle } from '../../../styles/common/modal';
 import Modal, { BtnWrapper, SelectBtn } from '../../common/Modal';
 
@@ -54,22 +52,19 @@ const AlertMsg = styled.div`
 export default function WithdrawModal({ closeModal }) {
   const [inputValue, inputChange] = useInput('');
   const [alertMsg, setAlertMsg] = useState(null);
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [isError] = useError();
 
   const withdrawUser = () => {
-    if (!inputValue) {
-      return setAlertMsg('*비밀번호를 입력하세요');
-    }
+    if (!inputValue) return setAlertMsg('*비밀번호를 입력하세요');
+
     //TODO /my/withdraw
     deleteUser(inputValue).then((res) => {
       if (res === 204) {
         setAlertMsg('*비밀번호가 옳지 않습니다');
       } else if (res === 201) {
-        alert('회원탈퇴가 완료되었습니다.');
-        dispatch(exit());
-        navigate('/login', { replace: true });
+        isError('회원탈퇴가 완료되었습니다');
+      } else if (res === 401) {
+        isError();
       } else {
         console.log(res);
       }

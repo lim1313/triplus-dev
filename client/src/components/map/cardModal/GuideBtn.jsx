@@ -1,7 +1,9 @@
 /*eslint-disable no-unused-vars*/
 
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
+import { useError } from '../../../hooks/useError';
 import { rezGuide } from '../../../network/map/http';
 import { ColorBtn } from '../../../styles/common';
 import Chatting from './Chatting';
@@ -53,14 +55,25 @@ export const ModalBtn = styled(ColorBtn)`
     `}
 `;
 
-export default function GuideBtn({ guideId, userId, userParticipate, state, closeModal, compoleteModal }) {
+export default function GuideBtn({
+  guideId,
+  userId,
+  userParticipate,
+  state,
+  closeModal,
+  compoleteModal,
+}) {
+  const isLogin = useSelector((state) => state.loginReducer.isLogin);
+  const [isError] = useError();
+
   const clickGuide = (id) => {
+    if (!isLogin) return compoleteModal('login');
     if (state === 'COMPLETED') return;
+
     //TODO POST 가이드 신청
     rezGuide(id).then((res) => {
       if (res === 401) {
-        console.log('토큰 만료 로그아웃 필요');
-        return;
+        return isError();
       } else if (res === 204) {
         compoleteModal('success');
       } else if (res === 201) {

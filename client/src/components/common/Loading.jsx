@@ -51,11 +51,7 @@ export const LoadingImg = styled.span`
 export default function Loading({ isMap }) {
   return (
     <Wrapper isMap={isMap}>
-      <LoadingImg
-        loading1='/asset/loading/loading1.png'
-        loading2='/asset/loading/loading2.png'
-        loading3='/asset/loading/loading3.png'
-      />
+      <LoadingImg />
     </Wrapper>
   );
 }

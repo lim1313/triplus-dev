@@ -18,7 +18,7 @@ export default function GuideContent({ guideDate, content, openDate, address }) 
       </div>
       <div>
         <CardModalSubTitle>추후 오픈 예정 안내</CardModalSubTitle>
-        <div>{openDate}</div>
+        <div>{openDate || '없음'}</div>
       </div>
     </>
   );

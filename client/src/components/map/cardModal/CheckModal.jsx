@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import { ModalWrapper } from '../../../styles/common/modal';
+import { BtnWrapper, SelectBtn } from '../../common/Modal';
 
 export const BackWrapper = styled.div`
   position: absolute;
@@ -25,15 +27,15 @@ export const BackWrapper = styled.div`
   }
 `;
 
-const ImgWrapper = styled.img`
-  width: 60%;
-`;
-
 const TitleWrapper = styled(ModalWrapper)`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+const ImgWrapper = styled.img`
+  width: 60%;
 `;
 
 const Content = styled.div`
@@ -42,7 +44,13 @@ const Content = styled.div`
   font-weight: 500;
 `;
 
-export default function CheckModal({ openMsg }) {
+export default function CheckModal({ openMsg, closeCheckModal }) {
+  const navigate = useNavigate();
+
+  const yesClick = () => {
+    navigate('/login');
+  };
+
   return (
     <BackWrapper>
       <TitleWrapper>
@@ -57,11 +65,25 @@ export default function CheckModal({ openMsg }) {
             <Content end>예약이 이미 마감되었습니다</Content>
             <Content end>다음에 이용해 주세요</Content>
           </>
-        ) : (
+        ) : openMsg === 'error' ? (
           <>
             <Content end>예약 중 서버문제가 발생했습니다</Content>
             <Content end>다음에 이용해 주세요</Content>
           </>
+        ) : (
+          openMsg === 'login' && (
+            <>
+              <Content>로그인 후 이용해 주세요</Content>
+              <BtnWrapper>
+                <SelectBtn onClick={yesClick} width>
+                  로그인
+                </SelectBtn>
+                <SelectBtn onClick={closeCheckModal} width>
+                  취소
+                </SelectBtn>
+              </BtnWrapper>
+            </>
+          )
         )}
       </TitleWrapper>
     </BackWrapper>
