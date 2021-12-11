@@ -43,10 +43,11 @@ module.exports = {
     res.status(resObject.code).send(resObject.message);
   },
 
-  changeStateCanceled: (req, res) => {
+  changeStateCanceled: async (req, res) => {
     const params = req.body;
     params.state = GLOBAL_VARIABLE.CANCELED;
-    const resObject = updateGuideCard(params);
+    const resObject = await updateGuideCard(params);
+    console.log(resObject);
     res.status(resObject.code).send(resObject.message);
   },
 

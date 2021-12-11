@@ -10,6 +10,7 @@ import { cardFilterReducer } from '../redux/mapFilter/reducer';
 import scrollReducer from '../redux/scroll/reducer';
 import toggleReducer from '../redux/toggle/reducer';
 import { chatUserInfoReducer, chatListReducer, currentRoomReducer } from '../redux/chat/reducer';
+import { guideDeleteReducer } from './management/reducer';
 
 const persistConfig = {
   key: 'root',
@@ -22,6 +23,7 @@ const persistConfig = {
     'chatUserInfoReducer',
     'chatListReducer',
     'currentRoomReducer',
+    'guideDeleteReducer',
   ],
 };
 
@@ -38,6 +40,7 @@ const rootReducer = combineReducers({
   chatUserInfoReducer,
   chatListReducer,
   currentRoomReducer,
+  guideDeleteReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

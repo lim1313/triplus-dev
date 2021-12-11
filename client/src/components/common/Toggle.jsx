@@ -17,17 +17,6 @@ const slideLeft = keyframes`
   }
 `;
 
-// ! 이거 사용하려 했더니 MainPage 에 문제가 생김
-// const slideRight = keyframes`
-//   from {
-//     opacity: 1;
-//   }
-//   to {
-//     opacity: 0;
-//     transform: translateX(50vw);
-//   }
-// `;
-
 const Wrapper = styled.div`
   display: none;
   @media ${({ theme }) => theme.device.mobile} {

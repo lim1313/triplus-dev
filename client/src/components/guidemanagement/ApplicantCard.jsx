@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import { ColorBtn } from '../../styles/common';
 import { Profile } from '../../styles/map/card';
 
-const CardCtn = styled.div`
-  flex: 0 0 auto;
-  width: 275px;
+const CardCtn = styled.li`
+  /* flex: 0 0 auto; */
+  flex-shrink: 0;
+  width: 32%;
   height: 200px;
   margin: 0 0.4rem;
   background-color: white;
@@ -40,9 +41,10 @@ const ChatBtn = styled(ColorBtn)`
 `;
 
 export default function ApplicantCard(props) {
-  const { applicantInfo } = props;
+  const { applicantInfo, cardRef } = props;
+
   return (
-    <CardCtn>
+    <CardCtn ref={cardRef}>
       <GuideInfo>
         <UserProfile
           userImg={'/asset/logo/logo.png'}
