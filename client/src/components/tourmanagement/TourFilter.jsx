@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { ColorBtn } from '../../styles/common/index';
 
 const FilterCtn = styled.div`
@@ -17,14 +17,27 @@ const FilterBtn = styled(ColorBtn)`
     background-color: ${({ theme }) => theme.color.blue};
     color: ${({ theme }) => theme.color.lightGray};
   }
+  ${({ active }) =>
+    active &&
+    css`
+      background: ${({ theme }) => theme.color.blue};
+      color: ${({ theme }) => theme.color.lightGray};
+    `}
 `;
 
-export default function TourFilter() {
+export default function TourFilter(props) {
+  const { handleAllClick, handleApprovedClick, handleCompletedClick, isActive } = props;
   return (
     <FilterCtn>
-      <FilterBtn>내 여행</FilterBtn>
-      <FilterBtn>예정된 여행</FilterBtn>
-      <FilterBtn>지난 여행</FilterBtn>
+      <FilterBtn onClick={handleAllClick} active={isActive && isActive.all}>
+        내 여행
+      </FilterBtn>
+      <FilterBtn onClick={handleApprovedClick} active={isActive && isActive.approved}>
+        예정된 여행
+      </FilterBtn>
+      <FilterBtn onClick={handleCompletedClick} active={isActive && isActive.completed}>
+        지난 여행
+      </FilterBtn>
     </FilterCtn>
   );
 }

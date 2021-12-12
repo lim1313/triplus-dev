@@ -4,13 +4,13 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { Profile, UserNick } from '../../../styles/map/card';
 
-const CardLi = styled.li`
+export const CardLi = styled.li`
   width: 100%;
   height: 230px;
   border-radius: 8px;
   overflow: hidden;
   background-color: white;
-  filter: ${({ state }) => state === 'COMPLETED' && 'grayscale(100%)'};
+  filter: ${({ state }) => (state === 'COMPLETED' || state === 'CANCELED') && 'grayscale(100%)'};
 
   position: relative;
   box-shadow: 0px 0px 9px -1px rgba(46, 46, 46, 0.57);
@@ -43,7 +43,7 @@ const CardLi = styled.li`
   }
 `;
 
-const ImageWrapper = styled.div`
+export const ImageWrapper = styled.div`
   position: absolute;
   background: url(${({ backImage }) => backImage}) no-repeat center;
   background-size: cover;
@@ -52,7 +52,7 @@ const ImageWrapper = styled.div`
   width: 100%;
 `;
 
-const TitleWrapper = styled.div`
+export const TitleWrapper = styled.div`
   flex-basis: 40%;
   height: 100px;
   padding: 0.5rem;
@@ -97,7 +97,7 @@ const TitleWrapper = styled.div`
   }
 `;
 
-const GuideWrapper = styled.div`
+export const GuideWrapper = styled.div`
   position: absolute;
   top: 70px;
   padding: 1rem;
@@ -110,7 +110,7 @@ const GuideWrapper = styled.div`
   }
 `;
 
-const GuideInfo = styled.div`
+export const GuideInfo = styled.div`
   display: flex;
   align-items: flex-end;
   @media ${({ theme }) => theme.device.mobile} {
@@ -128,7 +128,7 @@ const GuideInfo = styled.div`
   }
 `;
 
-const GuideContent = styled.div`
+export const GuideContent = styled.div`
   font-size: 0.8rem;
   padding-top: 0.5rem;
   color: ${({ theme }) => theme.color.gray};
