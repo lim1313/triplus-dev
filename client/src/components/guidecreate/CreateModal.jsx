@@ -54,6 +54,8 @@ const DeleteBtn = styled.button`
 `;
 
 const CreateModalWrapper = styled(ModalWrapper)`
+  height: 95vh;
+  overflow-y: auto;
   @media ${({ theme }) => theme.device.mobile} {
     padding: 1.5rem;
   }
