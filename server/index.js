@@ -201,7 +201,7 @@ io.on('connection', async (socket) => {
 
     socket.emit('getRooms', userChatInfos, isLeft, false);
     if (leave) {
-      socket.to(selectedRoom).emit('getMessage', [DBform]);
+      socket.to(selectedRoom).emit('getMessage', [DBform], selectedRoom);
     }
   });
 

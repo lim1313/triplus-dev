@@ -144,8 +144,8 @@ export default function ChattingPage() {
   useEffect(() => {
     // TODO 3. 송신한 메세지 수신하기
     socketRef.current.on('getMessage', (data, selectedRoom) => {
-      console.log('getMessage');
-      console.log(currentRoomRef.current);
+      console.log(data);
+      console.log(selectedRoom);
       if (selectedRoom === currentRoomRef.current) {
         const newChat = editChat(data);
         dispatch(getChatList(newChat));

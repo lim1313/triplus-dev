@@ -49,6 +49,7 @@ const BubbleBox = styled.div`
 const BubbleWrapper = styled.div`
   display: flex;
   align-items: flex-end;
+  margin: 0;
 `;
 
 const ChatBubble = styled.div`
@@ -157,6 +158,17 @@ const LeftMessage = styled.p`
   color: ${({ theme }) => theme.color.darkgray};
 `;
 
+const DayWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem;
+  > p {
+    margin: 0;
+    font-size: 0.7rem;
+  }
+`;
+
 export default function ChatRoom({ sendMessageHandler }) {
   const [msg, setMsg] = useState('');
 
@@ -164,6 +176,8 @@ export default function ChatRoom({ sendMessageHandler }) {
   const { userId, nickname } = useSelector((state) => state.chatUserInfoReducer);
   const chatRooms = useSelector((state) => state.chatUserInfoReducer.chatRooms);
   const currentRoom = useSelector((state) => state.currentRoomReducer.currentRoom);
+  const [expired, setExpired] = useState(false);
+
   let partnerNickName;
   for (let chatRoom of chatRooms) {
     if (String(chatRoom.roomId) === currentRoom) {
@@ -198,7 +212,6 @@ export default function ChatRoom({ sendMessageHandler }) {
   // <span style={{ marginBottom: '10px', marginRight: '5px', fontSize: '0.8rem' }}>
   //   {el.userId === userId ? nickname : partnerNickName}
   // </span>;
-
   return (
     <RoomContainer>
       {currentRoom ? (
@@ -212,16 +225,23 @@ export default function ChatRoom({ sendMessageHandler }) {
               else if (el.userId !== origin[i + 1].userId) time = el.time;
               else if (el.time === origin[i + 1].time) time = '';
               else if (el.time !== origin[i + 1].time) time = el.time;
-              // let day;
-              // if (origin.length === 0) day = '';
-              // else if (origin.length === 1) day = el.day;
-              // else if (origin.length > 1 && origin[i - 1].day !== el.day) day = el.day;
-              // else if (origin.length > 1 && origin[i - 1].day === el.day) day = '';
-              if (el.date === 'expired') {
+              let day;
+              if (origin.length === 0) day = '';
+              else if (origin.length === 1) day = el.day;
+              else if (i === 0) day = el.day;
+              else if (i > 0 && origin[i - 1].day !== el.day) day = el.day;
+              else if (i > 0 && origin[i - 1].day === el.day) day = '';
+
+              if (el.day === 'expired') {
                 return <LeftMessage>{`${partnerNickName}님이 방에서 나가셨습니다`}</LeftMessage>;
               } else {
                 return (
                   <>
+                    {day && (
+                      <DayWrapper>
+                        <p>{day}</p>
+                      </DayWrapper>
+                    )}
                     <BubbleBox key={i} isUser={isUser}>
                       <BubbleWrapper>
                         {isUser ? <TimeSpan isUser={isUser}>{time}</TimeSpan> : null}
@@ -237,6 +257,7 @@ export default function ChatRoom({ sendMessageHandler }) {
           <ChatMessageBox>
             <ChatMessage
               placeholder='메세지를 입력하세요'
+              disalbled={expired}
               onChange={msgInputHandler}
               value={msg}
               onKeyPress={(e) => e.key === 'Enter' && submitHandler(e)}
