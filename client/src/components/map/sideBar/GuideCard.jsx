@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { getCardModal } from '../../../network/map/http';
@@ -148,9 +148,11 @@ export default function GuideCard({ cardInfo }) {
   const { title, gender, guideDate, tourImage, userImage, state, nickName, content, guideId } =
     cardInfo;
 
-  let dDay = getDday(guideDate);
   const { modalInfo } = useSelector((state) => state.guideModalReducer);
   const dispatch = useDispatch();
+  const cardRef = useRef();
+
+  let dDay = getDday(guideDate);
 
   const cardClick = (cardId) => {
     // TODO GET /map/guide-card?guide-id=cardId
@@ -159,8 +161,16 @@ export default function GuideCard({ cardInfo }) {
     });
   };
 
+  // useEffect(() => {
+  //   if (modalInfo && modalInfo.guideId === guideId) {
+  //     console.log(cardRef.current);
+  //     cardRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  //   }
+  // }, [modalInfo]);
+
   return (
     <CardLi
+      // ref={cardRef}
       onClick={() => cardClick(guideId)}
       isClicked={modalInfo && modalInfo.guideId === guideId}
       state={state}

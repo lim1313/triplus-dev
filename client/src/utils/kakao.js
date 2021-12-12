@@ -55,7 +55,7 @@ export const createMarker = (positions, map, clickMarker) => {
       `,
       position: marker.getPosition(),
       xAnchor: 0.5,
-      yAnchor: 1.4,
+      yAnchor: 0.02,
     });
 
     overlays[position.guideId] = overlay;
@@ -66,7 +66,6 @@ export const createMarker = (positions, map, clickMarker) => {
     kakao.maps.event.addListener(marker, 'click', () => clickMarker(positions[i].guideId));
     markers[position.guideId] = marker;
   }
-  console.log(overlays);
 };
 
 //yeji 20211212

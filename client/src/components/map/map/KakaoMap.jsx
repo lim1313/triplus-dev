@@ -92,6 +92,7 @@ export default function KakaoMap({ filterInfo, loading }) {
   const clickMarker = (id) => {
     //TODO GET /map 모달
     getCardModal(id).then((res) => {
+      if (res >= 400) return alert('에러가 발생했습니다. 다시 시도해 주세요');
       dispatch(openGuideModal({ isOpen: true, modalInfo: res }));
     });
   };
