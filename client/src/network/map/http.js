@@ -21,9 +21,10 @@ export const getGuideCards = async (params) => {
     .then((res) => res.data.guideCardList)
     .catch((err) => {
       if (axios.isCancel(err)) {
-        return err.response.status;
+        console.log(err);
       } else {
-        return err.response.status;
+        console.log(err);
+        return err.response;
       }
     });
 };

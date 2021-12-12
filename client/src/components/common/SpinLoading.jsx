@@ -20,6 +20,9 @@ const Spin = styled.div`
   animation: ${spinLoad} 2s ease-in infinite;
 `;
 
-export default function SpinLoading() {
+export default function SpinLoading({ width, height }) {
   return <Spin />;
 }
+
+// yeji 20211209
+// 기능 : 도넛형 로딩 스피너

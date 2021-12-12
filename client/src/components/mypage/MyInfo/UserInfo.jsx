@@ -1,9 +1,9 @@
 /*eslint-disable no-unused-vars*/
 
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useInput } from '../../../hooks/useInput';
-import { postEmailCheck, postInfo } from '../../../network/my/http';
+import { postInfo } from '../../../network/my/http';
 import { ColorBtn } from '../../../styles/common';
 import EmailModal from './EmailModal';
 import { nickValidation } from '../../../utils/validation';
@@ -67,37 +67,30 @@ const AlertMsg = styled.div`
   }
 `;
 
-const BtnWrapper = styled.div`
-  display: flex;
-
-  @media ${({ theme }) => theme.device.mobile} {
-    flex-direction: column;
-  }
-`;
-
 export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
   const [isChange, setIsChange] = useState(false);
   const [inputValue, inputChange] = useInput(content);
   const [isAlert, setIsAlert] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const inputRef = useRef();
   const [isError] = useError();
 
+  //* 변경된 유저 정보 POST 서버 요청
   const changeContent = (e) => {
     if (isChange) {
       if (title === 'e-mail' && !inputValue.length) return setIsAlert('*필수 입력 사항');
       if (title === 'nickname' && !nickValidation(inputValue))
-        return setIsAlert('*3~8자리의 영문, 숫자만 가능합니다.');
+        return setIsAlert('*3~8자리의 한글, 영문, 숫자만 가능합니다.');
 
       // TODO POST /개인정보 변경
       postInfo(inputValue, title).then((res) => {
-        if (res === 401) {
-          isError();
-        } else if (res >= 200 && res < 300) {
-          setIsAlert(null);
-          setIsChange(!isChange);
+        if (res === 401) return isError();
+        else if (res >= 400) {
+          alert('에러가 발생했습니다. 다시 시도해 주세요.');
         } else {
-          setIsChange(!isChange);
+          setIsAlert(null);
         }
+        setIsChange(!isChange);
       });
     } else {
       setIsChange(!isChange);
@@ -110,6 +103,7 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
       <NameWrapper>
         {isChange ? (
           <ChangeInput
+            ref={inputRef}
             user={user}
             value={inputValue}
             onChange={inputChange}

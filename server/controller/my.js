@@ -1,4 +1,10 @@
-const { isAuthorized, updateUser, expiredUser, changePassword } = require('./functions/user');
+const {
+  isAuthorized,
+  updateUser,
+  expiredUser,
+  changePassword,
+  selectUser,
+} = require('./functions/user');
 const crypto = require('crypto');
 const { user, user_verify } = require('../models');
 const { stmpTransport } = require('../config/email');
@@ -64,14 +70,15 @@ module.exports = {
     }
   },
 
-  myInfo: (req, res) => {
+  myInfo: async (req, res) => {
     try {
       const accessToken = isAuthorized(req);
-      
-      if(!accessToken){
-        throw '다시 로그인하여 주세요'
-      }else{
-        res.status(200);
+      const userInfo = await selectUser(accessToken.userId);
+
+      if (!accessToken) {
+        throw '다시 로그인하여 주세요';
+      } else {
+        res.status(200).json(userInfo);
       }
     } catch (error) {
       console.log(error);

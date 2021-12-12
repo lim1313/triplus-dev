@@ -47,7 +47,6 @@ export default function DeleteSave({
 
     delSaveImg(state).then(() => {
       clickSubmit(null);
-      console.log('end2');
     });
   };
 
@@ -72,7 +71,11 @@ export default function DeleteSave({
         >
           {isLoading ? <SpinLoading /> : isChange ? '저장' : '삭제'}
         </BtnBorder>
-        {isChange && <BtnBorder onClick={clickChange}>취소</BtnBorder>}
+        {isChange && (
+          <BtnBorder onClick={clickChange} disabled={isLoading}>
+            취소
+          </BtnBorder>
+        )}
       </BottomBtnWrapper>
       <AlertMsg alertMsg={alertMsg}>{alertMsg}</AlertMsg>
     </>
