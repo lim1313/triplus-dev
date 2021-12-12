@@ -125,6 +125,25 @@ const ChatButton = styled(ColorBtn)`
   }
 `;
 
+const DisableButton = styled(ColorBtn)`
+  font-size: 0.85rem;
+  min-height: 1.2rem;
+  min-width: 2rem;
+  width: 4rem;
+  text-align: center;
+  border-radius: 5px;
+  background-color: ${({ theme }) => theme.color.lightGray};
+  border: none;
+  color: ${({ theme }) => theme.color.darkGray};
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 0.65rem;
+  }
+  &:hover {
+    background-color: ${({ theme }) => theme.color.lightGray};
+    cursor: not-allowed;
+  }
+`;
+
 const NoSelectRoom = styled.div`
   display: flex;
   flex-direction: column;
@@ -176,7 +195,6 @@ export default function ChatRoom({ sendMessageHandler }) {
   const { userId, nickname } = useSelector((state) => state.chatUserInfoReducer);
   const chatRooms = useSelector((state) => state.chatUserInfoReducer.chatRooms);
   const currentRoom = useSelector((state) => state.currentRoomReducer.currentRoom);
-  const [expired, setExpired] = useState(false);
 
   let partnerNickName;
   for (let chatRoom of chatRooms) {
@@ -209,9 +227,6 @@ export default function ChatRoom({ sendMessageHandler }) {
     scrollToBottom();
   }, [chatBubble]);
 
-  // <span style={{ marginBottom: '10px', marginRight: '5px', fontSize: '0.8rem' }}>
-  //   {el.userId === userId ? nickname : partnerNickName}
-  // </span>;
   return (
     <RoomContainer>
       {currentRoom ? (
@@ -256,15 +271,25 @@ export default function ChatRoom({ sendMessageHandler }) {
           </ChatBoard>
           <ChatMessageBox>
             <ChatMessage
-              placeholder='메세지를 입력하세요'
-              disalbled={expired}
+              placeholder={
+                chatBubble.length > 0 && chatBubble[chatBubble.length - 1].day === 'expired'
+                  ? '메세지를 보낼 수 없어요'
+                  : '메세지를 입력하세요'
+              }
+              disabled={
+                chatBubble.length > 0 && chatBubble[chatBubble.length - 1].day === 'expired'
+              }
               onChange={msgInputHandler}
               value={msg}
               onKeyPress={(e) => e.key === 'Enter' && submitHandler(e)}
             ></ChatMessage>
-            <ChatButton palette='blue' onClick={submitHandler}>
-              전송
-            </ChatButton>
+            {chatBubble.length > 0 && chatBubble[chatBubble.length - 1].day === 'expired' ? (
+              <DisableButton>X</DisableButton>
+            ) : (
+              <ChatButton palette='blue' onClick={submitHandler}>
+                전송
+              </ChatButton>
+            )}
           </ChatMessageBox>
         </>
       ) : (
