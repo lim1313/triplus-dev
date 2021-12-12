@@ -43,6 +43,7 @@ export default function ManagementPage() {
   const [isAreadySet, setAreaySet] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleted, setIsdeleted] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
   const [clicked, setClick] = useState({
     management: true,
     managementtourlist: false,
@@ -51,6 +52,7 @@ export default function ManagementPage() {
   const handleCreateClick = (guideInfo) => {
     if (!isLogin) {
       setOpenLoginModal(true);
+      setIsCompleted(false);
       return;
     }
     if (guideInfo.title) {
@@ -60,15 +62,21 @@ export default function ManagementPage() {
       }, 1000);
     } else {
       setOpen(!isOpen);
+      setIsCompleted(false);
     }
   };
   const handleCloseCreate = (e) => {
     if (e.target === e.currentTarget) {
       setOpen(false);
+      setIsCompleted(false);
     }
+  };
+  const handleComplete = () => {
+    setIsCompleted(true);
   };
   useEffect(() => {
     setIsLoading(true);
+
     const path = pathname.split('/').join('');
     console.log(path);
     if (path === 'management') {
@@ -84,12 +92,17 @@ export default function ManagementPage() {
         setIsLoading(false);
       })
       .catch((err) => setIsLoading(false));
-  }, [pathname]);
+  }, [pathname, isDeleted, isCompleted]);
 
   return (
     <>
       {isOpen ? (
-        <CreateModal handleCloseCreate={handleCloseCreate} handleCreateClick={handleCreateClick} />
+        <CreateModal
+          handleCloseCreate={handleCloseCreate}
+          handleCreateClick={handleCreateClick}
+          handleComplete={handleComplete}
+          isCompleted={isCompleted}
+        />
       ) : null}
       {isDeleteClick && (
         <Modal

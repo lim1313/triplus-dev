@@ -11,11 +11,14 @@ module.exports = {
       room_id: {
         type: Sequelize.INTEGER,
       },
-      room_id: {
-        type: Sequelize.INTEGER
-      },
       user_id: {
         type: Sequelize.STRING,
+      },
+      left: {
+        type: Sequelize.STRING,
+      },
+      count: {
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,

@@ -23,6 +23,7 @@ module.exports = {
 
     const { guideCard } = await selectGuideCardById(req);
 
+
     // 참가인원이 다 찼을 때
     if (guideCard.state === GLOBAL_VARIABLE.COMPLETED) {
       resObject['code'] = 201;

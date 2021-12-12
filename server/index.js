@@ -32,8 +32,11 @@ const confirmEmail = require('./controller/functions/confirmEmail');
 const {
   isSocketAuthorized,
   getUserChatInfo,
+  getPartnerChatInfo,
   getChatContents,
+  resetNoticeCount,
   updateMessage,
+  deleteRoom,
 } = require('./controller/functions/getUserChatInfo');
 
 app.use(express.json());
@@ -92,44 +95,114 @@ const io = new Server(httpServer, {
 io.on('connection', async (socket) => {
   console.log(`connect with id: ${socket.id}`);
 
-  // const userChatInfo = isSocketAuthorized(socket.handshake.headers.cookie['accessToken']);
   if (!socket.handshake.headers.cookie) return socket.emit('shouldLogin');
   const userInfo = isSocketAuthorized(socket.handshake.headers.cookie.replace('accessToken=', ''));
-  // console.log(userInfo);
   if (!userInfo) return socket.emit('shouldLogin');
-
   const userChatInfos = await getUserChatInfo(userInfo);
-  // console.log(userChatInfos);
 
-  socket.emit('getRooms', userChatInfos);
+  if (userChatInfos.chatRooms.length > 0) {
+    for (let chatRoom of userChatInfos.chatRooms) {
+      socket.join(String(chatRoom.roomId));
+    }
+  }
+
+  socket.emit('getRooms', userChatInfos, false, false);
 
   socket.on('joinRoom', async (currentRoom, selectedRoom) => {
-    if (!!currentRoom) {
-      socket.leave(currentRoom);
-    }
-    socket.join(selectedRoom);
-    console.log('joinRoom', io.sockets.adapter.rooms);
+    if (!socket.handshake.headers.cookie) return socket.emit('shouldLogin');
+    const userInfo = isSocketAuthorized(
+      socket.handshake.headers.cookie.replace('accessToken=', '')
+    );
+    if (!userInfo) return socket.emit('shouldLogin');
+
+    const { userId } = userInfo;
+
+    if (selectedRoom === '') return;
+
     const messages = await getChatContents(selectedRoom);
     const initialChat = JSON.parse(messages);
+
     socket.emit('initialChat', initialChat);
+
+    const isReset = await resetNoticeCount(selectedRoom, userId);
+
+    if (isReset) {
+      const userChatInfos = await getUserChatInfo(userInfo);
+      socket.emit('getRooms', userChatInfos, false, 'reset');
+    } else {
+      socket.emit('getRooms', userChatInfos, false, '잠시 후에 다시 시도해주세요');
+    }
   });
 
-  socket.on('sendMessage', (DBform, selectedRoom) => {
-    console.log('socket-id는 ', socket.id);
-    const { date, user_id, content } = DBform;
-    const messageUpdate = {
-      date,
-      user_id,
-      content,
-    };
-    updateMessage(messageUpdate, selectedRoom);
-    const data = { date, user_id, content };
-    console.log(data);
-    io.to(selectedRoom).emit('getMessage', [data]);
+  socket.on('sendMessage', async (DBform, selectedRoom) => {
+    if (!socket.handshake.headers.cookie) return socket.emit('shouldLogin');
+    const userInfo = isSocketAuthorized(
+      socket.handshake.headers.cookie.replace('accessToken=', '')
+    );
+    if (!userInfo) return socket.emit('shouldLogin');
+
+    const { userId } = userInfo;
+
+    // const { date, user_id, content } = DBform;
+    // const messageUpdate = {
+    //   date,
+    //   user_id,
+    //   content,
+    // };
+    await updateMessage(DBform, selectedRoom, userId);
+
+    io.to(selectedRoom).emit('getMessage', [DBform], selectedRoom);
+
+    const partnerChatInfos = await getPartnerChatInfo(selectedRoom, userId);
+    socket.to(selectedRoom).emit('getRooms', partnerChatInfos, false, false);
   });
 
-  socket.on('disconnectng', () => {
-    console.log('disconnecting');
+  socket.on('countReset', async (currentRoom) => {
+    if (!socket.handshake.headers.cookie) return socket.emit('shouldLogin');
+    const userInfo = isSocketAuthorized(
+      socket.handshake.headers.cookie.replace('accessToken=', '')
+    );
+    if (!userInfo) return socket.emit('shouldLogin');
+    const { userId } = userInfo;
+
+    const isReset = await resetNoticeCount(currentRoom, userId);
+
+    if (isReset) {
+      const userChatInfos = await getUserChatInfo(userInfo);
+      socket.emit('resetRooms', userChatInfos, 'reset');
+    } else {
+      socket.emit('resetRooms', userChatInfos, '잠시 후에 다시 시도해주세요');
+    }
+  });
+
+  socket.on('leaveRoom', async (DBform, selectedRoom) => {
+    if (!socket.handshake.headers.cookie) return socket.emit('shouldLogin');
+    const userInfo = isSocketAuthorized(
+      socket.handshake.headers.cookie.replace('accessToken=', '')
+    );
+    if (!userInfo) return socket.emit('shouldLogin');
+
+    const { userId } = userInfo;
+
+    await updateMessage(DBform, selectedRoom, userId);
+
+    let isLeft;
+    let userChatInfos;
+
+    const leave = await deleteRoom(selectedRoom, userId);
+
+    if (leave) {
+      isLeft = 'success';
+      socket.leave(selectedRoom);
+      userChatInfos = await getUserChatInfo(userInfo);
+    } else {
+      isLeft = '잠시 후에 다시 시도해주세요';
+    }
+
+    socket.emit('getRooms', userChatInfos, isLeft, false);
+    if (leave) {
+      socket.to(selectedRoom).emit('getMessage', [DBform], selectedRoom);
+    }
   });
 
   socket.on('disconnect', () => {
@@ -217,3 +290,104 @@ sequelize
  * > subRouting 은 따로 구현하지 않는다.
  * > 그 만들어진 roomId 자체를 select 하는 걸로
  */
+
+// getPartnerChatInfo: async (userInfo) => {
+//     let resObject = {
+//       userId: '',
+//       nickname: '',
+//       chatRooms: [],
+//     };
+
+//     try {
+//       if (!userInfo) {
+//         throw '해당 유저가 없습니다';
+//       }
+//     } catch (error) {
+//       console.log(`ERROR: ${error}`);
+//       return resObject;
+//     }
+
+//     // > 로그인한 유저가 속한 채팅방 조회
+//     const chatMembers = await chat_member.findAll({
+//       // raw: true 는 chaMembers 내의 객체를 한 줄로 풀어주는 작업
+//       raw: true,
+//       where: {
+//         userId: userInfo.userId,
+//         left: { [Op.eq]: null },
+//       },
+//     });
+
+//     // > Room의 id 를 찾기 위한 조건
+//     const myChatRoomCondition = {};
+
+//     if (chatMembers.length > 0) {
+//       myChatRoomCondition[Op.or] = [];
+
+//       // > 지금 로그인한 사람이 들어가 있는 채팅방의 roomId를 다 Push 해준다.
+//       for (let chatMember of chatMembers) {
+//         myChatRoomCondition[Op.or].push({ roomId: chatMember.roomId });
+//       }
+
+//       const chatRoomAndMembers = await chat_member
+//         .findAll({
+//           raw: true,
+//           attributes: ['roomId'],
+//           include: [
+//             {
+//               model: user,
+//               attributes: ['userId', 'nickName'],
+//               // > [Op.ne] => no equal <>
+//               where: { userId: { [Op.ne]: userInfo.userId } },
+//             },
+//           ],
+//           where: myChatRoomCondition,
+//         })
+//         .catch((err) => console.log(err));
+
+//       if (chatRoomAndMembers === undefined) return resObject;
+
+//       // {
+//       //   id: 1,
+//       //   roomId: 1,
+//       //   userId: 'jechan',
+//       //   left: null,
+//       //   count: 0,
+//       //   createdAt: 2021-12-11T17:19:06.000Z,
+//       //   updatedAt: 2021-12-11T17:47:45.000Z
+//       // },
+//       const chatRooms = [];
+
+//       for (let chatRoomInfo of chatMembers) {
+//         for (let chatRoomAndMember of chatRoomAndMembers) {
+//           if (chatRoomInfo.roomId === chatRoomAndMember.roomId) {
+//             chatRooms.push({
+//               roomId: chatRoomAndMember.roomId,
+//               chatPartnerId: chatRoomAndMember['user.userId'],
+//               chatPartnerNickName: chatRoomAndMember['user.nickName'],
+//               count: chatRoomInfo.count,
+//             });
+//           }
+//         }
+//       }
+
+//       // for (let chatRoomAndMember of chatRoomAndMembers) {
+//       //   chatRooms.push({
+//       //     roomId: chatRoomAndMember.roomId,
+//       //     chatPartnerId: chatRoomAndMember['user.userId'],
+//       //     chatPartnerNickName: chatRoomAndMember['user.nickName'],
+//       //   });
+//       // }
+//       console.log('----------------------------------------------------------------------------');
+//       console.log('----------------------------------------------------------------------------');
+//       console.log('----------------------------------------------------------------------------');
+//       console.log('----------------------------------------------------------------------------');
+
+//       console.log(chatRooms);
+
+//       resObject['userId'] = userInfo.userId;
+//       resObject['nickname'] = userInfo.nickName;
+//       resObject['chatRooms'] = chatRooms;
+//     }
+
+//     return resObject;
+//   },

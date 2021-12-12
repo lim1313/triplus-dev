@@ -19,6 +19,7 @@ import { logoutUser } from '../redux/login/action';
 
 import Loading from '../components/common/Loading';
 import ChatContainer from '../components/chat/ChatContainer';
+import ChatModal from '../components/chat/ChatModal';
 
 dayjs.locale('ko');
 
@@ -32,9 +33,20 @@ export default function ChattingPage() {
   const currentRoom = useSelector((state) => state.currentRoomReducer.currentRoom);
   const isLogin = useSelector((state) => state.loginReducer.isLogin);
 
+  const [openModal, setOpenModal] = useState(false);
+  const [exitRoom, setExitRoom] = useState(null);
+
+  const currentRoomRef = useRef(currentRoom);
   const dateConversion = (date) => {
-    const day = dayjs(date).format('YYYY년 M월 D일');
-    const time = dayjs(date).format('a hh:mm');
+    let day;
+    let time;
+    if (date === 'expired') {
+      day = 'expired';
+      time = 'expired';
+    } else {
+      day = dayjs(date).format('YYYY년 M월 D일');
+      time = dayjs(date).format('a hh:mm');
+    }
     return { day, time };
   };
 
@@ -64,9 +76,15 @@ export default function ChattingPage() {
 
   //* 채팅 페이지 초기 렌더링
   // TODO 1. Socket 연결하고 해당 유저의 정보 가져오기
-  useEffect(async () => {
-    console.log(socketRef.current);
 
+  useEffect(() => {
+    currentRoomRef.current = currentRoom;
+    return () => {
+      currentRoomRef.current = null;
+    };
+  }, [currentRoom]);
+
+  useEffect(async () => {
     socketRef.current = io.connect(`${process.env.REACT_APP_HTTPSURL}`, {
       transports: ['websocket'],
     });
@@ -84,19 +102,37 @@ export default function ChattingPage() {
   }, []);
 
   useEffect(() => {
-    socketRef.current.on('getRooms', (data) => {
+    socketRef.current.on('getRooms', (data, isLeft, reset) => {
       console.log('getRooms');
+      if (isLeft === 'Internal Server Error' || reset === 'Internal Server Error')
+        alert('잠시 후에 다시 시도해주세요');
+      else if (isLeft === 'success') {
+        dispatch(changeCurrentRoom(''));
+      }
+
       dispatch(getUserChatInfo(data));
+      if (currentRoomRef.current) {
+        socketRef.current.emit('countReset', currentRoomRef.current);
+      }
     });
+
     return () => {
       socketRef.current.disconnect();
     };
   }, []);
 
   useEffect(() => {
+    socketRef.current.on('resetRooms', (data, reset) => {
+      if (reset === 'Internal Server Error') alert('잠시 후에 다시 시도해주세요');
+      dispatch(getUserChatInfo(data));
+    });
+  }, []);
+
+  useEffect(() => {
     // TODO 2. 룸 입장 후 채팅 데이터 받아오기
     socketRef.current.on('initialChat', (initialChat) => {
       console.log('initialChat');
+
       const newChat = editChat(initialChat);
       dispatch(resetChatList(newChat));
     });
@@ -107,10 +143,13 @@ export default function ChattingPage() {
 
   useEffect(() => {
     // TODO 3. 송신한 메세지 수신하기
-    socketRef.current.on('getMessage', (data) => {
-      console.log('getMessage');
-      const newChat = editChat(data);
-      dispatch(getChatList(newChat));
+    socketRef.current.on('getMessage', (data, selectedRoom) => {
+      console.log(data);
+      console.log(selectedRoom);
+      if (selectedRoom === currentRoomRef.current) {
+        const newChat = editChat(data);
+        dispatch(getChatList(newChat));
+      }
     });
     return () => {
       socketRef.current.disconnect();
@@ -119,6 +158,8 @@ export default function ChattingPage() {
 
   // TODO 4. 룸에 입장
   const selectRoomHandler = (currentRoom, selectedRoom) => {
+    if (selectedRoom === '') return;
+    console.log('enter');
     dispatch(changeCurrentRoom(selectedRoom));
     socketRef.current.emit('joinRoom', currentRoom, selectedRoom);
   };
@@ -136,10 +177,41 @@ export default function ChattingPage() {
     socketRef.current.emit('sendMessage', DBform, selectedRoom);
   };
 
+  const iconClickHandler = (selectedRoom) => {
+    console.log(selectedRoom);
+    setExitRoom(selectedRoom);
+    setOpenModal(true);
+  };
+
+  const leaveRoomHandler = (exitRoom) => {
+    setOpenModal(false);
+    const DBform = {
+      date: 'expired',
+      user_id: userId,
+      content: 'nothing',
+    };
+    setExitRoom('');
+    socketRef.current.emit('leaveRoom', DBform, exitRoom);
+  };
+
+  const stayRoomHandler = () => {
+    setOpenModal(false);
+  };
+
   return (
-    <ChatContainer
-      sendMessageHandler={sendMessageHandler}
-      selectRoomHandler={selectRoomHandler}
-    ></ChatContainer>
+    <>
+      <ChatContainer
+        sendMessageHandler={sendMessageHandler}
+        selectRoomHandler={selectRoomHandler}
+        iconClickHandler={iconClickHandler}
+      ></ChatContainer>
+      {openModal && (
+        <ChatModal
+          leaveRoomHandler={leaveRoomHandler}
+          stayRoomHandler={stayRoomHandler}
+          exitRoom={exitRoom}
+        ></ChatModal>
+      )}
+    </>
   );
 }

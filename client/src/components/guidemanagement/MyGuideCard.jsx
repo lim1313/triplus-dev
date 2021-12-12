@@ -22,8 +22,8 @@ const CardWrapper = styled.div`
 const GuideImg = styled.div`
   width: 150px;
   height: 150px;
-  background: url(${({ guideInfo }) => guideInfo.guideImage}) no-repeat center;
-  background-size: contain;
+  background: url(${({ guideInfo }) => guideInfo.tourImage[0]}) no-repeat center;
+  background-size: cover;
   border: 3px solid ${({ theme }) => theme.color.lightGray};
   border-radius: 75%;
   flex-shrink: 0;

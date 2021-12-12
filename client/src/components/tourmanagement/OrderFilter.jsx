@@ -8,6 +8,10 @@ const OrderCtn = styled.div`
 `;
 const OrderBy = styled.select`
   width: 20%;
+  & option {
+    background: white;
+    color: black;
+  }
 `;
 
 export default function OrderFilter() {

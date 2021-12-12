@@ -57,7 +57,7 @@ module.exports = {
       resObject['code'] = 201;
       resObject['message'] = '유저 정보를 수정하였습니다'
     }).catch(() => {
-      resObject['code'] = 401;
+      resObject['code'] = 400;
       resObject['message'] = '유저 정보를 수정하지 못하였습니다'
     });
     
@@ -95,7 +95,7 @@ module.exports = {
       });
     } catch (error) {
       console.log(error);
-      resObject['code'] = 401;
+      resObject['code'] = 400;
       resObject['message'] = error
     }
     return resObject;
@@ -134,7 +134,7 @@ module.exports = {
       });
     } catch (error) {
       console.log(error);
-      resObject['code'] = 401;
+      resObject['code'] = 400;
       resObject['message'] = error
     }
     return resObject;

@@ -35,6 +35,7 @@ module.exports = {
       raw: true,
       where: {
         userId: userInfo.userId,
+        left: { [Op.eq]: null },
       },
     });
 
@@ -68,16 +69,103 @@ module.exports = {
       if (chatRoomAndMembers === undefined) return resObject;
 
       const chatRooms = [];
-      for (let chatRoomAndMember of chatRoomAndMembers) {
-        chatRooms.push({
-          roomId: chatRoomAndMember.roomId,
-          chatPartnerId: chatRoomAndMember['user.userId'],
-          chatPartnerNickName: chatRoomAndMember['user.nickName'],
-        });
+      for (let chatRoomInfo of chatMembers) {
+        for (let chatRoomAndMember of chatRoomAndMembers) {
+          if (chatRoomInfo.roomId === chatRoomAndMember.roomId) {
+            chatRooms.push({
+              roomId: chatRoomAndMember.roomId,
+              chatPartnerId: chatRoomAndMember['user.userId'],
+              chatPartnerNickName: chatRoomAndMember['user.nickName'],
+              count: chatRoomInfo.count,
+            });
+          }
+        }
       }
 
       resObject['userId'] = userInfo.userId;
       resObject['nickname'] = userInfo.nickName;
+      resObject['chatRooms'] = chatRooms;
+    }
+
+    return resObject;
+  },
+
+  getPartnerChatInfo: async (selectedRoom, userId) => {
+    let resObject = {
+      userId: '',
+      nickname: '',
+      chatRooms: [],
+    };
+
+    const partnerInfos = await chat_member.findOne({
+      raw: true,
+      where: {
+        roomId: selectedRoom,
+        userId: { [Op.ne]: userId },
+      },
+    });
+    const partnerId = partnerInfos.userId;
+    const partnerUserInfo = await user.findOne({
+      raw: true,
+      where: { userId: partnerId },
+    });
+
+    // > 로그인한 유저가 속한 채팅방 조회
+    const partnerChatMembers = await chat_member.findAll({
+      // raw: true 는 chaMembers 내의 객체를 한 줄로 풀어주는 작업
+      raw: true,
+      where: {
+        userId: partnerUserInfo.userId,
+        left: { [Op.eq]: null },
+      },
+    });
+
+    // > Room의 id 를 찾기 위한 조건
+    const partnerChatRoomCondition = {};
+
+    if (partnerChatMembers.length > 0) {
+      partnerChatRoomCondition[Op.or] = [];
+
+      // > 지금 로그인한 사람이 들어가 있는 채팅방의 roomId를 다 Push 해준다.
+      for (let chatMember of partnerChatMembers) {
+        partnerChatRoomCondition[Op.or].push({ roomId: chatMember.roomId });
+      }
+
+      const chatRoomAndMembers = await chat_member
+        .findAll({
+          raw: true,
+          attributes: ['roomId'],
+          include: [
+            {
+              model: user,
+              attributes: ['userId', 'nickName'],
+              // > [Op.ne] => no equal <>
+              where: { userId: { [Op.ne]: partnerUserInfo.userId } },
+            },
+          ],
+          where: partnerChatRoomCondition,
+        })
+        .catch((err) => console.log(err));
+
+      if (chatRoomAndMembers === undefined) return resObject;
+
+      const chatRooms = [];
+
+      for (let chatRoomInfo of partnerChatMembers) {
+        for (let chatRoomAndMember of chatRoomAndMembers) {
+          if (chatRoomInfo.roomId === chatRoomAndMember.roomId) {
+            chatRooms.push({
+              roomId: chatRoomAndMember.roomId,
+              chatPartnerId: chatRoomAndMember['user.userId'],
+              chatPartnerNickName: chatRoomAndMember['user.nickName'],
+              count: chatRoomInfo.count,
+            });
+          }
+        }
+      }
+
+      resObject['userId'] = partnerUserInfo.userId;
+      resObject['nickname'] = partnerUserInfo.nickName;
       resObject['chatRooms'] = chatRooms;
     }
 
@@ -94,7 +182,16 @@ module.exports = {
     return messages.message;
   },
 
-  updateMessage: async (messageUpdate, selectedRoom) => {
+  resetNoticeCount: async (selectedRoom, userId) => {
+    const reset = await chat_member.update(
+      { count: 0 },
+      { where: { roomId: selectedRoom, userId: userId } }
+    );
+    if (reset.length > 0) return true;
+    return false;
+  },
+
+  updateMessage: async (messageUpdate, selectedRoom, userId) => {
     const currentRoomInfo = await chat_room.findOne({ raw: true, where: { roomId: selectedRoom } });
     const parsedMessage = JSON.parse(currentRoomInfo.message);
     parsedMessage.push(messageUpdate);
@@ -106,13 +203,36 @@ module.exports = {
       },
       { where: { roomId: selectedRoom } }
     );
+
+    const partnerInfo = await chat_member.findOne({
+      where: { roomId: selectedRoom, userId: { [Op.ne]: userId } },
+    });
+
+    await chat_member.update(
+      { count: partnerInfo.count + 1 },
+      { where: { roomId: selectedRoom, userId: partnerInfo.userId } }
+    );
   },
 
-  deleteRoom: async (userId, currentRoom) => {
-    const destroy = await chat_member.destroy({ where: { roomId: currentRoom, userId: userId } });
-    const remainedRoom = await chat_member.findAll({ raw: true, where: { roomId: currentRoom } });
-    if (remainedRoom.length === 0) {
-      chat_room.destry({ where: { roomId: currentRoom } });
+  deleteRoom: async (selectedRoom, userId) => {
+    const destroy = await chat_member.update(
+      { left: 'left' },
+      { where: { roomId: selectedRoom, userId: userId } }
+    );
+    const leftRooms = await chat_member.findAll({
+      raw: true,
+      where: { roomId: selectedRoom, left: 'left' },
+    });
+
+    if (leftRooms.length > 1) {
+      // join table 일 때, 1:N 의 경우, N 먼저 destroy
+      // N 을 먼저 지우면 무조건 에러가 뜬다. roomId 를 먼저 참조하고 있다며 에러가 뜰 것
+      const destroyAllMembers = await chat_member.destroy({ where: { roomId: selectedRoom } });
+      const destroyAllRoom = await chat_room.destroy({ where: { roomId: selectedRoom } });
+      if (!(destroyAllMembers && destroyAllRoom)) return false;
     }
+
+    if (!!destroy) return 'success';
+    return false;
   },
 };

@@ -159,6 +159,7 @@ module.exports = {
     }
 
     try {
+      console.log(guide_card);
       const guideCards = await guide_card.findAll({
         include: [
           {
@@ -173,10 +174,6 @@ module.exports = {
         ],
         where: whereGuideCard,
       });
-
-      if (guideCards.length <= 0) {
-        throw '현재 지역의 가이드 카드가 없습니다';
-      }
 
       const guideCardList = [];
       for (let guideCard of guideCards) {
@@ -202,7 +199,7 @@ module.exports = {
         if (userData['image']) {
           guideCardItem['userImage'] = userData['image'];
         } else {
-          guideCardItem['userImage'] = './../../asset/main/stamp.png';
+          guideCardItem['userImage'] = '/asset/main/stamp.png';
         }
         guideCardItem['createdAt'] = date_fns.format(guideCardData['createdAt'], 'yyyy.MM.dd');
         guideCardItem['updatedAt'] = date_fns.format(guideCardData['updatedAt'], 'yyyy.MM.dd');
@@ -224,7 +221,7 @@ module.exports = {
       resObject['guideCardList'] = guideCardList;
     } catch (error) {
       console.log(error);
-      resObject['code'] = 200;
+      resObject['code'] = 400;
       resObject['message'] = error;
       resObject['guideCardList'] = [];
     }
@@ -271,7 +268,7 @@ module.exports = {
     if (guideUserData['image']) {
       guideCard['userImage'] = guideUserData['image'];
     } else {
-      guideCard['userImage'] = './../../asset/main/stamp.png';
+      guideCard['userImage'] = '/asset/main/stamp.png';
     }
     guideCard['createdAt'] = date_fns.format(guideCardData['createdAt'], 'yyyy.MM.dd');
     guideCard['updatedAt'] = date_fns.format(guideCardData['updatedAt'], 'yyyy.MM.dd');
@@ -298,7 +295,7 @@ module.exports = {
         tourImage.push(guideImageDataItem.dataValues.image);
       }
     } else {
-      tourImage.push('./../../asset/logo/logo.png');
+      tourImage.push('/asset/logo/logo.png');
     }
 
     guideCard['tourImage'] = tourImage;
