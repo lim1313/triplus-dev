@@ -8,7 +8,7 @@ import { createMarker, deleteMarker, getInfo } from '../../../utils/kakao';
 import styled from 'styled-components';
 
 const { kakao } = window;
-let map;
+export let map;
 
 const MapWrapper = styled.div`
   height: 100%;

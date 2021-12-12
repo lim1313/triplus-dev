@@ -1,9 +1,14 @@
 /* eslint-disable no-unused-vars */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
+import { getCardModal } from '../../../network/map/http';
+import { openGuideModal } from '../../../redux/map/action';
 import { Profile, UserNick } from '../../../styles/map/card';
 import { getDday } from '../../../utils/dDay';
+import { overlays } from '../../../utils/kakao';
+import { map } from '../map/KakaoMap';
 
 const CardLi = styled.li`
   width: 100%;
@@ -139,13 +144,29 @@ const GuideContent = styled.div`
   }
 `;
 
-export default function GuideCard({ cardInfo, modalClick, modalId }) {
+export default function GuideCard({ cardInfo }) {
   const { title, gender, guideDate, tourImage, userImage, state, nickName, content, guideId } =
     cardInfo;
+
   let dDay = getDday(guideDate);
+  const { modalInfo } = useSelector((state) => state.guideModalReducer);
+  const dispatch = useDispatch();
+
+  const cardClick = (cardId) => {
+    // TODO GET /map/guide-card?guide-id=cardId
+    getCardModal(cardId).then((res) => {
+      dispatch(openGuideModal({ isOpen: true, modalInfo: res }));
+    });
+  };
 
   return (
-    <CardLi onClick={() => modalClick(guideId)} isClicked={modalId && 1} state={state}>
+    <CardLi
+      onClick={() => cardClick(guideId)}
+      isClicked={modalInfo && modalInfo.guideId === guideId}
+      state={state}
+      onMouseEnter={() => overlays[guideId].setMap(map)}
+      onMouseLeave={() => overlays[guideId].setMap(null)}
+    >
       <ImageWrapper backImage={tourImage} />
       <TitleWrapper dday={dDay}>
         <div className='date'>{state === 'COMPLETED' ? 'END' : `D - ${dDay}`}</div>
