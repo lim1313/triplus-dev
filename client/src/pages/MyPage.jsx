@@ -7,6 +7,8 @@ import MyProfile from '../components/mypage/MyProfile';
 import { userInfodb } from '../db/guideModal';
 import Loading from '../components/common/Loading';
 import { getUserInfo } from '../network/my/http';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 const Wrapper = styled.div`
   display: flex;
@@ -58,8 +60,12 @@ const BackgroundImg = styled.div`
 `;
 
 export default function MyPage() {
-  const [userInfo, setUserInfo] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+  const [userInfo, setUserInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const isLogin = useSelector((state) => state.loginReducer.isLogin);
+
+  let navigate = useNavigate();
+  if (!isLogin) navigate('/login');
 
   useEffect(() => {
     //TODO GET /mypage
@@ -78,7 +84,7 @@ export default function MyPage() {
 
   return (
     <Wrapper>
-      {isLoading ? (
+      {isLoading || !userInfo ? (
         <Loading />
       ) : (
         <MyWrapper>

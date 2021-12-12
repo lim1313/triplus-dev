@@ -6,6 +6,7 @@ import { NoBorderBtn } from '../../styles/common';
 import { logoutUser } from '../../redux/login/action';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleClose } from '../../redux/toggle/action';
+import { changeCurrentRoom } from '../../redux/chat/action';
 
 const slideLeft = keyframes`
   from {
@@ -16,17 +17,6 @@ const slideLeft = keyframes`
     transform: translateX(-50vw);
   }
 `;
-
-// ! 이거 사용하려 했더니 MainPage 에 문제가 생김
-// const slideRight = keyframes`
-//   from {
-//     opacity: 1;
-//   }
-//   to {
-//     opacity: 0;
-//     transform: translateX(50vw);
-//   }
-// `;
 
 const Wrapper = styled.div`
   display: none;
@@ -67,6 +57,7 @@ export default function Toggle() {
   };
 
   const toggleCloseHandler = () => {
+    dispatch(changeCurrentRoom(0));
     dispatch(toggleClose());
   };
 

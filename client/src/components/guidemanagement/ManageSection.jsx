@@ -17,6 +17,9 @@ const SectionCtn = styled.section`
     border-radius: 0;
     margin-top: 2rem;
   }
+  & .null-div {
+    height: 300px;
+  }
 `;
 
 export default function ManageSection(props) {
@@ -27,10 +30,17 @@ export default function ManageSection(props) {
         <Loading />
       ) : (
         <>
-          {' '}
           <SectionHeader />
-          <GuideLists handleCreateClick={handleCreateClick} guideInfo={guideInfo} />
-          <Applicants applicantInfo={applicantInfo} />
+          <GuideLists
+            handleCreateClick={handleCreateClick}
+            guideInfo={guideInfo}
+            applicantInfo={applicantInfo}
+          />
+          {guideInfo.title ? (
+            <Applicants applicantInfo={applicantInfo} />
+          ) : (
+            <div className='null-div'></div>
+          )}
         </>
       )}
     </SectionCtn>

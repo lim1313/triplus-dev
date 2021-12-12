@@ -70,15 +70,15 @@ export default function MyProfile({ image }) {
       await ReactS3Client.deleteFile(oldImg)
         .then((res) => {
           //TODO DELETE /mypage/profile
-          // deleteProfile()
-          //   .then(() => {
-          // if (state === 'del') {
-          //   setPreviewImg(null);
-          //   setImguuid(null);
-          //   setIsLoading(false);
-          // }
-          //   })
-          //   .catch((err) => console.error(err));
+          deleteProfile()
+            .then(() => {
+              if (state === 'del') {
+                setPreviewImg(null);
+                setImguuid(null);
+                setIsLoading(false);
+              }
+            })
+            .catch((err) => console.error(err));
           setTimeout(() => {
             if (state === 'del') {
               setPreviewImg(null);
@@ -98,13 +98,15 @@ export default function MyProfile({ image }) {
     await ReactS3Client.uploadFile(fileImg, newFileName)
       .then((data) => {
         // TODO POST /mypage/image
-        // postProfile(data.location).then(() => {
-        // setIsChange(!isChange);
-        // setImguuid(data.location);
-        // setFileImg(null);
-        // setPreviewImg(null);
-        // setIsLoading(false);
-        // }).catch(err => console.error(err))
+        postProfile(data.location)
+          .then(() => {
+            setIsChange(!isChange);
+            setImguuid(data.location);
+            setFileImg(null);
+            setPreviewImg(null);
+            setIsLoading(false);
+          })
+          .catch((err) => console.error(err));
 
         setTimeout(() => {
           setIsChange(!isChange);

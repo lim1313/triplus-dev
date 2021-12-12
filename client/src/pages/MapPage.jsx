@@ -5,12 +5,12 @@ import SideBar from '../components/map/SideBar';
 import styled from 'styled-components';
 import KakaoMap from '../components/map/map/KakaoMap';
 import CardFilter from '../components/map/sideBar/CardFilter';
-import Loading from '../components/common/Loading';
 
 const MapContainer = styled.section`
   position: relative;
   width: 100vw;
   height: calc(100vh - ${({ theme }) => theme.size.navHeight});
+  min-height: 3rem;
   display: flex;
 
   @media ${({ theme }) => theme.device.mobile} {
@@ -31,15 +31,11 @@ export default function MapPage() {
     }
   };
 
-  const loading = (bool) => {
-    setIsLoading(bool);
-  };
-
   return (
     <MapContainer>
       <CardFilter filterSubmit={filterSubmit} />
       <SideBar isLoading={isLoading} />
-      <KakaoMap filterInfo={filterInfo} loading={loading} />
+      <KakaoMap filterInfo={filterInfo} loading={(bool) => setIsLoading(bool)} />
     </MapContainer>
   );
 }

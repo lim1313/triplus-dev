@@ -10,7 +10,7 @@ export const BtnWrapper = styled.div`
 `;
 
 export const SelectBtn = styled(ColorBtn)`
-  width: ${({ width }) => width || '50%'};
+  width: 50%;
   color: ${({ theme }) => theme.color.black};
   background: ${({ theme }) => theme.color.lightGray};
   border: 1px solid ${({ theme }) => theme.color.lightGray};
@@ -23,16 +23,23 @@ export const SelectBtn = styled(ColorBtn)`
   }
 `;
 
-export default function Modal({ children, content, yesClick, noClick, width }) {
+export default function LoginModal({ yesClick, noClick, children, width }) {
+  const spanStyle = {
+    color: '#3386f7',
+    fontWeight: 'bold',
+  };
   return (
     <Background>
       <ModalWrapper width={width}>
         {children || (
           <>
-            <ModalTitle>{content}</ModalTitle>
+            <ModalTitle>
+              <span style={spanStyle}>로그인된 여행자님만</span> 이용이 가능합니다.
+              <br /> 로그인 하시겠습니까?
+            </ModalTitle>
             <BtnWrapper>
-              <SelectBtn onClick={yesClick}>확인</SelectBtn>
-              <SelectBtn onClick={noClick}>취소</SelectBtn>
+              <SelectBtn onClick={yesClick}>네, 로그인할래요!</SelectBtn>
+              <SelectBtn onClick={noClick}>괜찮아요!</SelectBtn>
             </BtnWrapper>
           </>
         )}
@@ -40,11 +47,3 @@ export default function Modal({ children, content, yesClick, noClick, width }) {
     </Background>
   );
 }
-
-// yeji 20211209
-// 기능 : modal의 기본 레이아웃 제공
-// props
-// 1) children : 모달 창 안에 custom한 레이아웃 작성
-// 2) content : 모달 창 안의 title
-// 3) yesClick, noClick : 확인, 취소 클릭 이벤트
-// 4) width : 모달창의 custom 넓이

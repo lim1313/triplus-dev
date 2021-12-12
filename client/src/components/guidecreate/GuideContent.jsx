@@ -8,7 +8,13 @@ const ContentCtn = styled.div`
   margin: 0.2rem 0;
 `;
 
-const Content = styled(Input)``;
+const Content = styled.textarea`
+  height: 5rem;
+  background: #e8ecf6;
+  border: none;
+  resize: none;
+  outline: none;
+`;
 const ReopenDate = styled(Input)`
   margin-top: 0.2rem;
 `;

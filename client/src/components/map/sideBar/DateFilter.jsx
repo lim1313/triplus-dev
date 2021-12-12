@@ -148,9 +148,9 @@ export default function DateFilter({ changeDate }) {
         minDate={new Date()}
         showDisabledMonthNavigation
         dateFormat='yyyy.MM.dd'
-        onChange={(update) => dateChange(update)}
         onChangeRaw={handleDateChangeRaw}
         isClearable
+        onChange={(update) => dateChange(update)}
         popperPlacement='bottom'
         renderCustomHeader={({
           date,

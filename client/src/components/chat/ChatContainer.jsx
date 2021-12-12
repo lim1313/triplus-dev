@@ -22,11 +22,14 @@ const ChatBox = styled.div`
     flex-direction: column;
   }
 `;
-export default function ChatContainer({ sendMessageHandler, selectRoomHandler }) {
+export default function ChatContainer({ sendMessageHandler, selectRoomHandler, iconClickHandler }) {
   return (
     <Container>
       <ChatBox>
-        <SideContainer selectRoomHandler={selectRoomHandler}></SideContainer>
+        <SideContainer
+          selectRoomHandler={selectRoomHandler}
+          iconClickHandler={iconClickHandler}
+        ></SideContainer>
         <ChatRoom sendMessageHandler={sendMessageHandler}></ChatRoom>
       </ChatBox>
     </Container>

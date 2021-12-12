@@ -1,17 +1,14 @@
-/* eslint-disable no-unused-vars */
-
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { memo } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import GuideCard from './GuideCard';
-import { getCardModal } from '../../../network/map/http';
-import { openGuideModal } from '../../../redux/map/action';
 
 const SideCardWrapper = styled.ul`
   padding: 1.5rem;
-  padding-top: 12.5rem;
-  height: 100%;
+  margin-top: 12.5rem;
+  height: calc(100% - 12.5rem);
   overflow: auto;
+
   -ms-overflow-style: none;
   scrollbar-width: none;
   &::-webkit-scrollbar {
@@ -20,6 +17,7 @@ const SideCardWrapper = styled.ul`
   @media ${({ theme }) => theme.device.mobile} {
     display: flex;
     height: auto;
+    margin-top: 0;
     padding: 0;
   }
 `;
@@ -33,29 +31,15 @@ const CardNone = styled.div`
     flex: 1 0 auto;
   }
 `;
-export default function CardBar() {
+export default memo(function CardBar() {
   const cards = useSelector((state) => state.guideCardsReducer);
-  const { modalInfo } = useSelector((state) => state.guideModalReducer);
-  const dispatch = useDispatch();
-
-  const modalClick = (cardId) => {
-    // TODO GET /map/guide-card?guide-id=cardId
-    getCardModal(cardId).then((res) => {
-      dispatch(openGuideModal({ isOpen: true, modalInfo: res }));
-    });
-  };
 
   return (
     <SideCardWrapper>
       {cards.length ? (
         <>
           {cards.map((cardInfo) => (
-            <GuideCard
-              key={cardInfo.guideId}
-              cardInfo={cardInfo}
-              modalClick={modalClick}
-              modalId={modalInfo && modalInfo.guideId === cardInfo.guideId && true}
-            />
+            <GuideCard key={cardInfo.guideId} cardInfo={cardInfo} />
           ))}
         </>
       ) : (
@@ -63,4 +47,4 @@ export default function CardBar() {
       )}
     </SideCardWrapper>
   );
-}
+});
