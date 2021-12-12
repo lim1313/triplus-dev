@@ -4,17 +4,17 @@ import styled from 'styled-components';
 
 const ListSectionCtn = styled.ul`
   width: 100%;
-  display: flex;
-  /* grid-template-columns: repeat(3, 200px);
-  column-gap: 1rem; */
+  display: grid;
+  grid-template-columns: repeat(3, 32%);
+  column-gap: 1rem;
 `;
 
-export default function ListSection() {
+export default function ListSection({ isFiltered }) {
   return (
     <ListSectionCtn>
-      <ListItem />
-      <ListItem />
-      <ListItem />
+      {isFiltered.map((el) => {
+        return <ListItem key={el.nickName} guideInfo={el} />;
+      })}
     </ListSectionCtn>
   );
 }
