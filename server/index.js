@@ -95,21 +95,16 @@ const io = new Server(httpServer, {
 io.on('connection', async (socket) => {
   console.log(`connect with id: ${socket.id}`);
 
-  // const userChatInfo = isSocketAuthorized(socket.handshake.headers.cookie['accessToken']);
   if (!socket.handshake.headers.cookie) return socket.emit('shouldLogin');
   const userInfo = isSocketAuthorized(socket.handshake.headers.cookie.replace('accessToken=', ''));
-  // console.log(userInfo);
   if (!userInfo) return socket.emit('shouldLogin');
-
   const userChatInfos = await getUserChatInfo(userInfo);
-  // console.log(userChatInfos);
+
   if (userChatInfos.chatRooms.length > 0) {
     for (let chatRoom of userChatInfos.chatRooms) {
       socket.join(String(chatRoom.roomId));
     }
   }
-  console.log('userChat', userChatInfos);
-  console.log(io.sockets.adapter.rooms);
 
   socket.emit('getRooms', userChatInfos, false, false);
 
@@ -118,24 +113,19 @@ io.on('connection', async (socket) => {
     const userInfo = isSocketAuthorized(
       socket.handshake.headers.cookie.replace('accessToken=', '')
     );
-    // console.log(userInfo);
     if (!userInfo) return socket.emit('shouldLogin');
 
     const { userId } = userInfo;
 
     if (selectedRoom === '') return;
 
-    // if (!!currentRoom) {
-    //   socket.leave(currentRoom);
-    // }
-
-    // socket.join(selectedRoom);
-    // console.log('joinRoom', io.sockets.adapter.rooms);
-    console.log(selectedRoom);
     const messages = await getChatContents(selectedRoom);
     const initialChat = JSON.parse(messages);
+
     socket.emit('initialChat', initialChat);
+
     const isReset = await resetNoticeCount(selectedRoom, userId);
+
     if (isReset) {
       const userChatInfos = await getUserChatInfo(userInfo);
       socket.emit('getRooms', userChatInfos, false, 'reset');
@@ -149,7 +139,6 @@ io.on('connection', async (socket) => {
     const userInfo = isSocketAuthorized(
       socket.handshake.headers.cookie.replace('accessToken=', '')
     );
-    // console.log(userInfo);
     if (!userInfo) return socket.emit('shouldLogin');
 
     const { userId } = userInfo;
@@ -161,10 +150,10 @@ io.on('connection', async (socket) => {
     //   content,
     // };
     await updateMessage(DBform, selectedRoom, userId);
-    // const data = { date, user_id, content };
+
     io.to(selectedRoom).emit('getMessage', [DBform], selectedRoom);
+
     const partnerChatInfos = await getPartnerChatInfo(selectedRoom, userId);
-    console.log(partnerChatInfos);
     socket.to(selectedRoom).emit('getRooms', partnerChatInfos, false, false);
   });
 
@@ -173,12 +162,11 @@ io.on('connection', async (socket) => {
     const userInfo = isSocketAuthorized(
       socket.handshake.headers.cookie.replace('accessToken=', '')
     );
-    // console.log(userInfo);
     if (!userInfo) return socket.emit('shouldLogin');
-
     const { userId } = userInfo;
 
     const isReset = await resetNoticeCount(currentRoom, userId);
+
     if (isReset) {
       const userChatInfos = await getUserChatInfo(userInfo);
       socket.emit('resetRooms', userChatInfos, 'reset');
@@ -192,10 +180,11 @@ io.on('connection', async (socket) => {
     const userInfo = isSocketAuthorized(
       socket.handshake.headers.cookie.replace('accessToken=', '')
     );
-    // console.log(userInfo);
     if (!userInfo) return socket.emit('shouldLogin');
+
     const { userId } = userInfo;
-    await updateMessage(DBform, selectedRoom);
+
+    await updateMessage(DBform, selectedRoom, userId);
 
     let isLeft;
     let userChatInfos;
@@ -214,14 +203,6 @@ io.on('connection', async (socket) => {
     if (leave) {
       socket.to(selectedRoom).emit('getMessage', [DBform]);
     }
-  });
-
-  socket.on('disconnectng', () => {
-    console.log('disconnecting -------------------------------------------------');
-    console.log('disconnecting -------------------------------------------------');
-    console.log('disconnecting -------------------------------------------------');
-
-    console.log('disconnecting');
   });
 
   socket.on('disconnect', () => {

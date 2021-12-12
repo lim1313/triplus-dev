@@ -204,18 +204,29 @@ export default function ChatRoom({ sendMessageHandler }) {
       {currentRoom ? (
         <>
           <ChatBoard id={currentRoom} ref={chatBoard}>
-            {chatBubble.map((el, i) => {
+            {chatBubble.map((el, i, origin) => {
               const isUser = el.userId === userId;
-              if (el.day === 'expired') {
+              let time;
+              if (origin.length === 0) time = '';
+              else if (i === origin.length - 1) time = origin[i].time;
+              else if (el.userId !== origin[i + 1].userId) time = el.time;
+              else if (el.time === origin[i + 1].time) time = '';
+              else if (el.time !== origin[i + 1].time) time = el.time;
+              // let day;
+              // if (origin.length === 0) day = '';
+              // else if (origin.length === 1) day = el.day;
+              // else if (origin.length > 1 && origin[i - 1].day !== el.day) day = el.day;
+              // else if (origin.length > 1 && origin[i - 1].day === el.day) day = '';
+              if (el.date === 'expired') {
                 return <LeftMessage>{`${partnerNickName}님이 방에서 나가셨습니다`}</LeftMessage>;
               } else {
                 return (
                   <>
                     <BubbleBox key={i} isUser={isUser}>
                       <BubbleWrapper>
-                        {isUser ? <TimeSpan isUser={isUser}>{el.time}</TimeSpan> : null}
+                        {isUser ? <TimeSpan isUser={isUser}>{time}</TimeSpan> : null}
                         <ChatBubble isUser={isUser}>{el.content}</ChatBubble>
-                        {isUser ? null : <TimeSpan isUser={isUser}>{el.time}</TimeSpan>}
+                        {isUser ? null : <TimeSpan isUser={isUser}>{time}</TimeSpan>}
                       </BubbleWrapper>
                     </BubbleBox>
                   </>
