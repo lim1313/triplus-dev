@@ -29,6 +29,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         field: 'user_id',
       },
+      left: DataTypes.STRING,
+      count: DataTypes.INTEGER,
     },
     {
       sequelize,
