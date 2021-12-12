@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
           sourceKey: 'guideId',
           foreignKey: 'guideId',
         }
-      )
+      );
     }
   };
   guide_card.init({

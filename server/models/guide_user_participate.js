@@ -18,6 +18,8 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: 'userId',
         }
       );
+
+      // guide_card.hasMany()
     }
   };
   guide_user_participate.init({
