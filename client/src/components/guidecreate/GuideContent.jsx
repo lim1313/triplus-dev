@@ -9,7 +9,7 @@ const ContentCtn = styled.div`
 `;
 
 const Content = styled.textarea`
-  height: 5rem;
+  height: 3rem;
   background: #e8ecf6;
   border: none;
   resize: none;
