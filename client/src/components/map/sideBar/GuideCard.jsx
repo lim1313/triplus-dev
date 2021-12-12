@@ -1,8 +1,14 @@
 /* eslint-disable no-unused-vars */
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
+import { getCardModal } from '../../../network/map/http';
+import { openGuideModal } from '../../../redux/map/action';
 import { Profile, UserNick } from '../../../styles/map/card';
+import { getDday } from '../../../utils/dDay';
+import { overlays } from '../../../utils/kakao';
+import { map } from '../map/KakaoMap';
 
 export const CardLi = styled.li`
   width: 100%;
@@ -138,24 +144,42 @@ export const GuideContent = styled.div`
   }
 `;
 
-export default function GuideCard({ cardInfo, modalClick, modalId }) {
+export default function GuideCard({ cardInfo }) {
   const { title, gender, guideDate, tourImage, userImage, state, nickName, content, guideId } =
     cardInfo;
 
-  const getDday = () => {
-    const [year, month, day] = guideDate.split('.');
-    let today = new Date().getTime();
-    let guideDay = new Date(+year, month - 1, +day).getTime();
-    let gap = guideDay - today;
-    let result = Math.ceil(gap / (1000 * 60 * 60 * 24));
-    return result;
+  const { modalInfo } = useSelector((state) => state.guideModalReducer);
+  const dispatch = useDispatch();
+  const cardRef = useRef();
+
+  let dDay = getDday(guideDate);
+
+  const cardClick = (cardId) => {
+    // TODO GET /map/guide-card?guide-id=cardId
+    getCardModal(cardId).then((res) => {
+      dispatch(openGuideModal({ isOpen: true, modalInfo: res }));
+    });
   };
 
+  // useEffect(() => {
+  //   if (modalInfo && modalInfo.guideId === guideId) {
+  //     console.log(cardRef.current);
+  //     cardRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  //   }
+  // }, [modalInfo]);
+
   return (
-    <CardLi onClick={() => modalClick(guideId)} isClicked={modalId && 1} state={state}>
+    <CardLi
+      // ref={cardRef}
+      onClick={() => cardClick(guideId)}
+      isClicked={modalInfo && modalInfo.guideId === guideId}
+      state={state}
+      onMouseEnter={() => overlays[guideId].setMap(map)}
+      onMouseLeave={() => overlays[guideId].setMap(null)}
+    >
       <ImageWrapper backImage={tourImage} />
-      <TitleWrapper dday={getDday()}>
-        <div className='date'>{state === 'COMPLETED' ? 'END' : `D - ${getDday()}`}</div>
+      <TitleWrapper dday={dDay}>
+        <div className='date'>{state === 'COMPLETED' ? 'END' : `D - ${dDay}`}</div>
         <h2 className='title'>{title}</h2>
       </TitleWrapper>
       <GuideWrapper>

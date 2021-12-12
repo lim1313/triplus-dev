@@ -47,12 +47,9 @@ export default function GuideImgs({ tourImage }) {
   const [fromLeft, setFromLeft] = useState(0);
 
   const moveImg = (direct) => {
-    console.log(direct);
-    if (direct === 'l' && fromLeft === 0) {
-      return;
-    } else if (direct === 'r' && fromLeft === -220 * (tourImage.length - 1)) {
-      return;
-    }
+    if (tourImage.length <= 1) return;
+    if (direct === 'l' && fromLeft === 0) return;
+    else if (direct === 'r' && fromLeft === -220 * (tourImage.length - 1)) return;
 
     if (direct === 'l') {
       let plusLeft = fromLeft + 220;
@@ -72,17 +69,12 @@ export default function GuideImgs({ tourImage }) {
             {tourImage && tourImage.map((img, i) => <GuideImg key={i} img={img} index={i} />)}
           </ImgUL>
         </ImgWrapper>
-        {/*! 이미지가 없는 경우 default 이미지 넣기 */}
-        {tourImage && (
-          <>
-            <MoveBtn left onClick={() => moveImg('l')}>
-              <FaAngleLeft />
-            </MoveBtn>
-            <MoveBtn onClick={() => moveImg('r')}>
-              <FaAngleRight />
-            </MoveBtn>
-          </>
-        )}
+        <MoveBtn left onClick={() => moveImg('l')}>
+          <FaAngleLeft />
+        </MoveBtn>
+        <MoveBtn onClick={() => moveImg('r')}>
+          <FaAngleRight />
+        </MoveBtn>
       </Wrapper>
     </div>
   );

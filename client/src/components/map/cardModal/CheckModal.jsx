@@ -42,6 +42,7 @@ const Content = styled.div`
   margin-top: 1rem;
   color: ${({ theme, end }) => (end ? theme.color.red : theme.color.blue)};
   font-weight: 500;
+  font-weight: 700;
 `;
 
 export default function CheckModal({ openMsg, closeCheckModal }) {
@@ -54,7 +55,7 @@ export default function CheckModal({ openMsg, closeCheckModal }) {
   return (
     <BackWrapper>
       <TitleWrapper>
-        <ImgWrapper src='/asset/logo/logo.png' alt='triplus 로고' />
+        {openMsg !== 'login' && <ImgWrapper src='/asset/logo/logo.png' alt='triplus 로고' />}
         {openMsg === 'success' ? (
           <>
             <Content>예약이 완료되었습니다</Content>
@@ -65,15 +66,10 @@ export default function CheckModal({ openMsg, closeCheckModal }) {
             <Content end>예약이 이미 마감되었습니다</Content>
             <Content end>다음에 이용해 주세요</Content>
           </>
-        ) : openMsg === 'error' ? (
-          <>
-            <Content end>예약 중 서버문제가 발생했습니다</Content>
-            <Content end>다음에 이용해 주세요</Content>
-          </>
         ) : (
           openMsg === 'login' && (
             <>
-              <Content>로그인 후 이용해 주세요</Content>
+              <Content>로그인 후 이용이 가능합니다</Content>
               <BtnWrapper>
                 <SelectBtn onClick={yesClick} width>
                   로그인

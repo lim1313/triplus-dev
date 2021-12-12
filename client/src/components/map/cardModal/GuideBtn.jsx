@@ -72,6 +72,7 @@ export default function GuideBtn({
 
     //TODO POST 가이드 신청
     rezGuide(id).then((res) => {
+      console.log(res);
       if (res === 401) {
         return isError();
       } else if (res === 204) {
@@ -79,7 +80,7 @@ export default function GuideBtn({
       } else if (res === 201) {
         compoleteModal('end');
       } else if (res >= 500) {
-        compoleteModal('error');
+        alert('에러가 발생했습니다. 다시 시도해 주세요');
       }
       setTimeout(() => {
         closeModal();

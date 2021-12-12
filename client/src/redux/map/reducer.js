@@ -10,7 +10,7 @@ export const guideCardsReducer = (state = [], action) => {
   }
 };
 
-//{isOpen : true, modalInfo :{}}
+// {isOpen : true, modalInfo :{}}
 export const guideModalReducer = (state = [], action) => {
   switch (action.type) {
     case GUIDE_MODAL:

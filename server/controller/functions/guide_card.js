@@ -205,12 +205,12 @@ module.exports = {
         guideCardItem['updatedAt'] = date_fns.format(guideCardData['updatedAt'], 'yyyy.MM.dd');
         if (userData['image']) {
           guideCardItem['userImage'] = userData['image'];
-        }else{
+        } else {
           guideCardItem['userImage'] = '/asset/main/stamp.png';
         }
         if (guideImageData.length > 0) {
           guideCardItem['tourImage'] = guideImageData[0].dataValues.image;
-        }else{
+        } else {
           guideCardItem['tourImage'] = '/asset/else/trip.jpg';
         }
 
@@ -229,7 +229,7 @@ module.exports = {
   },
 
   selectGuideCardById: async (req) => {
-    const resObject = {code: 200};
+    const resObject = { code: 200 };
 
     const selectGuideCard = await guide_card.findOne({
       include: [
@@ -274,21 +274,21 @@ module.exports = {
     guideCard['updatedAt'] = date_fns.format(guideCardData['updatedAt'], 'yyyy.MM.dd');
 
     const accessToken = isAuthorized(req);
-    if(!accessToken){
+    if (!accessToken) {
       guideCard['userParticipate'] = 0;
-    }else{
+    } else {
       const selectGuideUserParticipate = await guide_user_participate.findOne({
         raw: true,
-        where: {guideId: req.query.guideId, userId: accessToken.userId},
+        where: { guideId: req.query.guideId, userId: accessToken.userId },
       });
 
-      if(selectGuideUserParticipate){
+      if (selectGuideUserParticipate) {
         guideCard['userParticipate'] = 1;
-      }else{
+      } else {
         guideCard['userParticipate'] = 0;
       }
     }
-  
+
     const tourImage = [];
     if (guideImageData.length > 0) {
       for (let guideImageDataItem of guideImageData) {

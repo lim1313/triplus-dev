@@ -24,7 +24,6 @@ export const CardModalSubTitle = styled.div`
   font-size: 1.1rem;
   color: ${({ theme }) => theme.color.blue};
   margin: 2.5rem 0 1rem 0;
-  /* font-weight: 700; */
 
   @media ${({ theme }) => theme.device.mobile} {
   }
@@ -60,7 +59,6 @@ export const User = styled.div`
 `;
 
 export const UserNick = ({ gender, nickName, card, margin }) => {
-  console.log(typeof gender, gender);
   return (
     <User gender={gender} card={card} margin={margin}>
       <div>
