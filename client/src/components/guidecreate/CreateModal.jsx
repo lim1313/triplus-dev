@@ -77,7 +77,7 @@ const LoadingMessage = styled.div`
 
 export default function CreateModal(props) {
   //props와 state
-  const { handleCloseCreate, handleCreateClick } = props;
+  const { handleCloseCreate, handleCreateClick, handleComplete, isCompleted } = props;
   const [isLoading, setIsLoading] = useState(false);
   const [inputs, setInputs] = useState({
     title: '',
@@ -102,7 +102,7 @@ export default function CreateModal(props) {
   const [isGender, setIsGender] = useState(false);
   const [address, setAddress] = useState('');
   const [extraAddress, setExtraAddress] = useState('');
-  const [isCompleted, setIsCompleted] = useState(false);
+  // const [isCompleted, setIsCompleted] = useState(false);
   const [unCompleteMsgOpen, setUnCompleteMsgOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -197,18 +197,18 @@ export default function CreateModal(props) {
           console.log(res);
           if (res.status === 200) {
             // setIsLoading(false);
-            setIsCompleted(true);
+            handleComplete();
             navigate('/management');
           }
         })
         .catch((error) => {
           setIsLoading(false);
           dispatch(exit());
-          navigate('/login');
         });
     } else {
       setTimeout(() => setUnCompleteMsgOpen(true), 0);
       setTimeout(() => setUnCompleteMsgOpen(false), 1000);
+      navigate('/management');
     }
   };
 
