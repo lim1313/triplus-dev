@@ -16,6 +16,7 @@ const FilterWrapper = styled.div`
     margin-top: 0;
   }
   z-index: 10;
+
   @media ${({ theme }) => theme.device.mobile} {
     padding: 0.1rem;
     width: 100vw;
@@ -56,27 +57,19 @@ export default function CardFilter({ filterSubmit }) {
   const [date, setDate] = useState([]);
 
   const filterClick = () => {
-    let startDate = date[0];
+    let startDate = date[0] === 'Invalid Date' ? null : date[0];
     let endDate = date[1] === 'Invalid Date' ? null : date[1];
 
     filterSubmit(gender, startDate, endDate);
-  };
-
-  const changeGender = (data) => {
-    setGender(data);
-  };
-
-  const changeDate = (data) => {
-    setDate(data);
   };
 
   return (
     <FilterWrapper>
       <h3>가이드 찾기</h3>
       <Filter>
-        <DateFilter changeDate={changeDate} />
+        <DateFilter changeDate={(data) => setDate(data)} />
         <div className='genderWrapper'>
-          <GenderFilter changeGender={changeGender} />
+          <GenderFilter changeGender={(data) => setGender(data)} />
           <SearchBtn width='40px' color='red' onClick={filterClick}>
             <FaSearchLocation />
           </SearchBtn>

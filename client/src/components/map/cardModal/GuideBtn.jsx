@@ -72,6 +72,7 @@ export default function GuideBtn({
 
     //TODO POST 가이드 신청
     rezGuide(id).then((res) => {
+      console.log(res);
       if (res === 401) {
         return isError();
       } else if (res === 204) {

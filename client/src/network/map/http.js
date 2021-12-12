@@ -22,9 +22,9 @@ export const getGuideCards = async (params) => {
     .then((res) => res.data.guideCardList)
     .catch((err) => {
       if (axios.isCancel(err)) {
-        console.log('cancel', err);
+        return console.log('cancel', err);
       } else {
-        console.log('err', err);
+        return err.response.status;
       }
     });
 };
@@ -45,5 +45,5 @@ export const rezGuide = async (guideId) => {
   return axios
     .post(`${http}/map`, { guideId })
     .then((res) => res.status)
-    .catch((res) => res.response.state);
+    .catch((err) => err.response.status);
 };
