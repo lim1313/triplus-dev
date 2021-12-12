@@ -69,12 +69,17 @@ module.exports = {
       if (chatRoomAndMembers === undefined) return resObject;
 
       const chatRooms = [];
-      for (let chatRoomAndMember of chatRoomAndMembers) {
-        chatRooms.push({
-          roomId: chatRoomAndMember.roomId,
-          chatPartnerId: chatRoomAndMember['user.userId'],
-          chatPartnerNickName: chatRoomAndMember['user.nickName'],
-        });
+      for (let chatRoomInfo of chatMembers) {
+        for (let chatRoomAndMember of chatRoomAndMembers) {
+          if (chatRoomInfo.roomId === chatRoomAndMember.roomId) {
+            chatRooms.push({
+              roomId: chatRoomAndMember.roomId,
+              chatPartnerId: chatRoomAndMember['user.userId'],
+              chatPartnerNickName: chatRoomAndMember['user.nickName'],
+              count: chatRoomInfo.count,
+            });
+          }
+        }
       }
 
       resObject['userId'] = userInfo.userId;
@@ -144,15 +149,6 @@ module.exports = {
 
       if (chatRoomAndMembers === undefined) return resObject;
 
-      // {
-      //   id: 1,
-      //   roomId: 1,
-      //   userId: 'jechan',
-      //   left: null,
-      //   count: 0,
-      //   createdAt: 2021-12-11T17:19:06.000Z,
-      //   updatedAt: 2021-12-11T17:47:45.000Z
-      // },
       const chatRooms = [];
 
       for (let chatRoomInfo of partnerChatMembers) {
@@ -191,7 +187,7 @@ module.exports = {
       { count: 0 },
       { where: { roomId: selectedRoom, userId: userId } }
     );
-    if (reset.length > 0) return 0;
+    if (reset.length > 0) return true;
     return false;
   },
 
@@ -218,13 +214,7 @@ module.exports = {
     );
   },
 
-  // await User.update({ lastName: "Doe" }, {
-  //   where: {
-  //     lastName: null
-  //   }
-  // });
-
-  deleteRoom: async (userId, selectedRoom) => {
+  deleteRoom: async (selectedRoom, userId) => {
     const destroy = await chat_member.update(
       { left: 'left' },
       { where: { roomId: selectedRoom, userId: userId } }

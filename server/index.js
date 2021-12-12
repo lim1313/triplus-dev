@@ -103,8 +103,15 @@ io.on('connection', async (socket) => {
 
   const userChatInfos = await getUserChatInfo(userInfo);
   // console.log(userChatInfos);
+  if (userChatInfos.chatRooms.length > 0) {
+    for (let chatRoom of userChatInfos.chatRooms) {
+      socket.join(String(chatRoom.roomId));
+    }
+  }
+  console.log('userChat', userChatInfos);
+  console.log(io.sockets.adapter.rooms);
 
-  socket.emit('getRooms', userChatInfos, false);
+  socket.emit('getRooms', userChatInfos, false, false);
 
   socket.on('joinRoom', async (currentRoom, selectedRoom) => {
     if (!socket.handshake.headers.cookie) return socket.emit('shouldLogin');
@@ -118,16 +125,23 @@ io.on('connection', async (socket) => {
 
     if (selectedRoom === '') return;
 
-    if (!!currentRoom) {
-      socket.leave(currentRoom);
-    }
+    // if (!!currentRoom) {
+    //   socket.leave(currentRoom);
+    // }
 
-    socket.join(selectedRoom);
-    console.log('joinRoom', io.sockets.adapter.rooms);
-    const messages = await getChatContents(selectedRoom, userId);
+    // socket.join(selectedRoom);
+    // console.log('joinRoom', io.sockets.adapter.rooms);
+    console.log(selectedRoom);
+    const messages = await getChatContents(selectedRoom);
     const initialChat = JSON.parse(messages);
     socket.emit('initialChat', initialChat);
     const isReset = await resetNoticeCount(selectedRoom, userId);
+    if (isReset) {
+      const userChatInfos = await getUserChatInfo(userInfo);
+      socket.emit('getRooms', userChatInfos, false, 'reset');
+    } else {
+      socket.emit('getRooms', userChatInfos, false, '잠시 후에 다시 시도해주세요');
+    }
   });
 
   socket.on('sendMessage', async (DBform, selectedRoom) => {
@@ -146,12 +160,31 @@ io.on('connection', async (socket) => {
     //   user_id,
     //   content,
     // };
-    const count = await updateMessage(DBform, selectedRoom, userId);
+    await updateMessage(DBform, selectedRoom, userId);
     // const data = { date, user_id, content };
-    io.to(selectedRoom).emit('getMessage', [DBform], count);
+    io.to(selectedRoom).emit('getMessage', [DBform], selectedRoom);
     const partnerChatInfos = await getPartnerChatInfo(selectedRoom, userId);
     console.log(partnerChatInfos);
-    socket.to(selectedRoom).emit('getRooms', partnerChatInfos, false);
+    socket.to(selectedRoom).emit('getRooms', partnerChatInfos, false, false);
+  });
+
+  socket.on('countReset', async (currentRoom) => {
+    if (!socket.handshake.headers.cookie) return socket.emit('shouldLogin');
+    const userInfo = isSocketAuthorized(
+      socket.handshake.headers.cookie.replace('accessToken=', '')
+    );
+    // console.log(userInfo);
+    if (!userInfo) return socket.emit('shouldLogin');
+
+    const { userId } = userInfo;
+
+    const isReset = await resetNoticeCount(currentRoom, userId);
+    if (isReset) {
+      const userChatInfos = await getUserChatInfo(userInfo);
+      socket.emit('resetRooms', userChatInfos, 'reset');
+    } else {
+      socket.emit('resetRooms', userChatInfos, '잠시 후에 다시 시도해주세요');
+    }
   });
 
   socket.on('leaveRoom', async (DBform, selectedRoom) => {
@@ -161,30 +194,33 @@ io.on('connection', async (socket) => {
     );
     // console.log(userInfo);
     if (!userInfo) return socket.emit('shouldLogin');
-
     const { userId } = userInfo;
     await updateMessage(DBform, selectedRoom);
 
     let isLeft;
     let userChatInfos;
 
-    const leave = await deleteRoom(userId, selectedRoom);
+    const leave = await deleteRoom(selectedRoom, userId);
 
     if (leave) {
+      isLeft = 'success';
       socket.leave(selectedRoom);
       userChatInfos = await getUserChatInfo(userInfo);
-      isLeft = 'success';
     } else {
       isLeft = '잠시 후에 다시 시도해주세요';
     }
 
-    socket.emit('getRooms', userChatInfos, isLeft);
+    socket.emit('getRooms', userChatInfos, isLeft, false);
     if (leave) {
       socket.to(selectedRoom).emit('getMessage', [DBform]);
     }
   });
 
   socket.on('disconnectng', () => {
+    console.log('disconnecting -------------------------------------------------');
+    console.log('disconnecting -------------------------------------------------');
+    console.log('disconnecting -------------------------------------------------');
+
     console.log('disconnecting');
   });
 

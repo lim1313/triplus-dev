@@ -34,8 +34,9 @@ export default function ChattingPage() {
   const isLogin = useSelector((state) => state.loginReducer.isLogin);
 
   const [openModal, setOpenModal] = useState(false);
-  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [exitRoom, setExitRoom] = useState(null);
 
+  const currentRoomRef = useRef(currentRoom);
   const dateConversion = (date) => {
     let day;
     let time;
@@ -75,6 +76,14 @@ export default function ChattingPage() {
 
   //* 채팅 페이지 초기 렌더링
   // TODO 1. Socket 연결하고 해당 유저의 정보 가져오기
+
+  useEffect(() => {
+    currentRoomRef.current = currentRoom;
+    return () => {
+      currentRoomRef.current = null;
+    };
+  }, [currentRoom]);
+
   useEffect(async () => {
     socketRef.current = io.connect(`${process.env.REACT_APP_HTTPSURL}`, {
       transports: ['websocket'],
@@ -93,14 +102,18 @@ export default function ChattingPage() {
   }, []);
 
   useEffect(() => {
-    socketRef.current.on('getRooms', (data, isLeft) => {
+    socketRef.current.on('getRooms', (data, isLeft, reset) => {
       console.log('getRooms');
-      if (isLeft === '잠시 후에 다시 시도해주세요') alert(isLeft);
+      if (isLeft === 'Internal Server Error' || reset === 'Internal Server Error')
+        alert('잠시 후에 다시 시도해주세요');
       else if (isLeft === 'success') {
-        console.log('success');
         dispatch(changeCurrentRoom(''));
       }
+
       dispatch(getUserChatInfo(data));
+      if (currentRoomRef.current) {
+        socketRef.current.emit('countReset', currentRoomRef.current);
+      }
     });
 
     return () => {
@@ -109,9 +122,17 @@ export default function ChattingPage() {
   }, []);
 
   useEffect(() => {
+    socketRef.current.on('resetRooms', (data, reset) => {
+      if (reset === 'Internal Server Error') alert('잠시 후에 다시 시도해주세요');
+      dispatch(getUserChatInfo(data));
+    });
+  }, []);
+
+  useEffect(() => {
     // TODO 2. 룸 입장 후 채팅 데이터 받아오기
     socketRef.current.on('initialChat', (initialChat) => {
       console.log('initialChat');
+
       const newChat = editChat(initialChat);
       dispatch(resetChatList(newChat));
     });
@@ -122,10 +143,13 @@ export default function ChattingPage() {
 
   useEffect(() => {
     // TODO 3. 송신한 메세지 수신하기
-    socketRef.current.on('getMessage', (data) => {
+    socketRef.current.on('getMessage', (data, selectedRoom) => {
       console.log('getMessage');
-      const newChat = editChat(data);
-      dispatch(getChatList(newChat));
+      console.log(currentRoomRef.current);
+      if (selectedRoom === currentRoomRef.current) {
+        const newChat = editChat(data);
+        dispatch(getChatList(newChat));
+      }
     });
     return () => {
       socketRef.current.disconnect();
@@ -154,18 +178,20 @@ export default function ChattingPage() {
   };
 
   const iconClickHandler = (selectedRoom) => {
-    setSelectedRoom(selectedRoom);
+    console.log(selectedRoom);
+    setExitRoom(selectedRoom);
     setOpenModal(true);
   };
 
-  const leaveRoomHandler = () => {
+  const leaveRoomHandler = (exitRoom) => {
     setOpenModal(false);
     const DBform = {
       date: 'expired',
       user_id: userId,
       content: 'nothing',
     };
-    socketRef.current.emit('leaveRoom', DBform, selectedRoom);
+    setExitRoom('');
+    socketRef.current.emit('leaveRoom', DBform, exitRoom);
   };
 
   const stayRoomHandler = () => {
@@ -183,6 +209,7 @@ export default function ChattingPage() {
         <ChatModal
           leaveRoomHandler={leaveRoomHandler}
           stayRoomHandler={stayRoomHandler}
+          exitRoom={exitRoom}
         ></ChatModal>
       )}
     </>

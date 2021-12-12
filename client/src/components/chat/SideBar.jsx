@@ -1,114 +1,3 @@
-// import React from 'react';
-// import styled, { css } from 'styled-components';
-
-// import { useSelector } from 'react-redux';
-
-// import { BorderBtn } from '../../styles/common/index';
-
-// const SideContainer = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   width: 14rem;
-//   height: inherit;
-//   padding: 2rem;
-//   border-left: 1px solid #aeb8c2;
-//   @media ${({ theme }) => theme.device.mobile} {
-//     flex-direction: row;
-//     align-items: center;
-//     width: 100%;
-//     height: 10vh;
-//     padding: 0.5rem 0.5rem;
-//     overflow: auto;
-//     -ms-overflow-style: none;
-//     scrollbar-width: none;
-
-//     &::-webkit-scrollbar {
-//       display: none;
-//     }
-//   }
-// `;
-
-// const RoomName = styled(BorderBtn)`
-//   position: relative;
-//   font-size: 0.9rem;
-//   border-radius: 15px;
-//   margin-bottom: 1rem;
-//   word-break: break-word;
-//   padding: 1rem;
-//   ${({ selected }) =>
-//     selected &&
-//     css`
-//       background-color: ${({ theme }) => theme.color.blue};
-//       border-color: ${({ theme }) => theme.color.blue};
-//       color: #fff;
-//     `}
-//   &:hover {
-//     background-color: ${({ theme }) => theme.color.lightBlue};
-//     color: #fff;
-//     border-color: ${({ theme }) => theme.color.lightBlue};
-//     ${({ selected }) =>
-//       selected &&
-//       css`
-//         background-color: ${({ theme }) => theme.color.blue};
-//         color: #fff;
-//         border-color: ${({ theme }) => theme.color.blue};
-//       `}
-//   }
-
-//   @media ${({ theme }) => theme.device.mobile} {
-//     width: inherit;
-//     font-size: 0.8rem;
-//     margin: 0 0.5rem;
-//     word-break: keep-all;
-//   }
-// `;
-// const IconWrapper = styled.div`
-//   position: absolute;
-//   font-size: 1rem;
-//   top: 0;
-//   left: 3px;
-//   &:hover {
-//     color: ${({ theme }) => theme.color.darkGray};
-//   }
-//   @media ${({ theme }) => theme.device.mobile} {
-//     font-size: 0.9rem;
-//   }
-// `;
-
-// export default function SideBar({ selectRoomHandler }) {
-//   const roomList = useSelector((state) => state.chatUserInfoReducer.chatRooms);
-//   const currentRoom = useSelector((state) => state.currentRoomReducer.currentRoom);
-
-//   const clickRoomHandler = (e) => {
-//     selectRoomHandler(currentRoom, e.target.id);
-//   };
-
-//   return (
-//     <SideContainer>
-//       {roomList.map((el) => {
-//         return (
-//           <RoomName
-//             id={el.roomId}
-//             selected={String(el.roomId) === currentRoom}
-//             onClick={clickRoomHandler}
-//             key={el.chatPartnerId}
-//             palette='gray'
-//           >
-//             <IconWrapper
-//               id={el.roomId}
-//               selected={String(el.roomId) === currentRoom}
-//               onClick={clickRoomHandler}
-//               key={el.chatPartnerId}
-//             >
-//               {el.chatPartnerNickName}
-//             </IconWrapper>
-//           </RoomName>
-//         );
-//       })}
-//     </SideContainer>
-//   );
-// }
-
 import React from 'react';
 import styled, { css } from 'styled-components';
 
@@ -126,18 +15,18 @@ const SideContainer = styled.div`
   padding: 2rem;
   border-left: 1px solid #aeb8c2;
   z-index: 997;
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
   @media ${({ theme }) => theme.device.mobile} {
     width: 100vw;
     flex-direction: row;
     height: 10vh;
     padding: 0.5rem 0.5rem;
-    overflow: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
   }
 `;
 
@@ -166,11 +55,11 @@ const RoomName = styled(BorderBtn)`
         color: #fff;
         border-color: ${({ theme }) => theme.color.blue};
       `}
-    > button {
+    > .icon {
       color: #fff;
     }
   }
-  > button {
+  > .icon {
     position: absolute;
     background-color: rgba(255, 255, 255, 0);
     border: none;
@@ -194,6 +83,20 @@ const RoomName = styled(BorderBtn)`
         color: #fff;
       `}
   }
+  > .count {
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: ${({ theme }) => theme.color.red};
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    color: #fff;
+  }
 
   @media ${({ theme }) => theme.device.mobile} {
     width: 9rem;
@@ -207,7 +110,6 @@ const RoomName = styled(BorderBtn)`
 export default function SideBar({ selectRoomHandler, iconClickHandler }) {
   const roomList = useSelector((state) => state.chatUserInfoReducer.chatRooms);
   const currentRoom = useSelector((state) => state.currentRoomReducer.currentRoom);
-
   const clickRoomHandler = (e) => {
     e.preventDefault();
     if (e.target.className === 'icon') return;
@@ -232,15 +134,13 @@ export default function SideBar({ selectRoomHandler, iconClickHandler }) {
             key={el.chatPartnerId}
             palette='gray'
           >
-            <button
-              id={el.roomId}
-              className='icon'
-              selectedRoom={el.roomId}
-              onClick={deleteRoomHandler}
-            >
+            <div id={el.roomId} className='icon' onClick={deleteRoomHandler}>
               <GiCancel id={el.roomId} />
-            </button>
+            </div>
             {el.chatPartnerNickName}
+            {el.count > 0 && currentRoom !== String(el.roomId) ? (
+              <div className='count'>{el.count > 99 ? '99+' : el.count}</div>
+            ) : null}
           </RoomName>
         );
       })}

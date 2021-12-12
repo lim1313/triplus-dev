@@ -19,7 +19,7 @@ const NoBtn = styled(ColorBtn)`
   width: 5rem;
 `;
 
-export default function ChatModal({ leaveRoomHandler, stayRoomHandler }) {
+export default function ChatModal({ leaveRoomHandler, stayRoomHandler, exitRoom }) {
   return (
     <Background>
       <ModalWrapper>
@@ -28,7 +28,7 @@ export default function ChatModal({ leaveRoomHandler, stayRoomHandler }) {
           <NoBtn onClick={stayRoomHandler} palette='blue'>
             아니오
           </NoBtn>
-          <YesBtn onClick={leaveRoomHandler}>네</YesBtn>
+          <YesBtn onClick={() => leaveRoomHandler(exitRoom)}>네</YesBtn>
         </ButtonWrapper>
       </ModalWrapper>
     </Background>
