@@ -72,7 +72,7 @@ export default function KakaoMap({ filterInfo, loading }) {
     // TODO GET 요청
     getGuideCards(latLngparams).then((res) => {
       dispatch(openGuideModal({ isOpen: false, modalInfo: {} }));
-      if (res >= 300 || res < 200) return alert('에러가 발생했습니다. 다시 시도해 주세요');
+      if (res >= 300) return alert('에러가 발생했습니다. 다시 시도해 주세요');
       dispatch(guideCardInfo(res));
       createMarker(res, map, clickMarker);
       loading(false);

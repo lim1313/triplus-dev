@@ -7,6 +7,7 @@ module.exports = {
   createGuideUserParticipate: async (req) => {
     const resObject = {};
     const accessToken = isAuthorized(req);
+    req.query.guideId = req.body.guideId;
     
     // 토큰이 없었을 때
     try {
@@ -20,7 +21,7 @@ module.exports = {
       return resObject;
     }
 
-    const {guideCard} = await selectGuideCardById(req.body.guideId);
+    const {guideCard} = await selectGuideCardById(req);
 
     // 참가인원이 다 찼을 때
     if(guideCard.state === GLOBAL_VARIABLE.COMPLETED){
@@ -81,11 +82,7 @@ module.exports = {
 
       await guide_user_participate.findAll({
         where: {userId: accessToken.userId},
-        include: [
-          {
-            model: guide_card,
-          }
-        ]
+        
       })
     } catch (error) {
       console.log(`ERROR: ${error}`);
