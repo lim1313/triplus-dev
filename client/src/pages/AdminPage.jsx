@@ -13,8 +13,10 @@ import GuideInfoModal from '../components/admin/GuideInfoModal';
 
 const Body = styled.div`
   display: flex;
-  justify-content: center;
   width: 100vw;
+  height: 90vh;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Section = styled.section`
@@ -42,7 +44,7 @@ const LogoWrapper = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 10;
-  width: 20vw;
+  width: 18rem;
   height: 10rem;
   background-color: #fff;
   border-radius: 30%;
