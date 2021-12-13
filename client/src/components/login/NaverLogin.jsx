@@ -13,10 +13,13 @@ const NaverBtn = styled(OauthBtn)`
   align-items: center;
 `;
 
-export default function KakaoLogin() {
+export default function NaverLogin() {
+  const handleSignNaver = () => {
+    window.location.href = `${process.env.REACT_APP_HTTPSURL}/oauth/naver`;
+  };
   return (
     <ButtonBlock>
-      <NaverBtn>
+      <NaverBtn onClick={handleSignNaver}>
         <SiNaver className='oauth-btn' />
       </NaverBtn>
       <span>

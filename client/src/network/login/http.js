@@ -27,3 +27,14 @@ export const googleOauth = (authorizationCode) =>
       },
     }
   );
+
+export const naverOauth = (authorizationCode, state) =>
+  axios.post(
+    `${http}/oauth/navercallback`,
+    { authorizationCode, state },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
