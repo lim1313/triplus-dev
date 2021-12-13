@@ -203,6 +203,8 @@ export default function CreateModal(props) {
         .catch((error) => {
           setIsLoading(false);
           dispatch(exit());
+          alert('로그인이 만료되어 로그인페이지로 이동합니다.');
+          navigate('/login');
         });
     } else {
       setTimeout(() => setUnCompleteMsgOpen(true), 0);

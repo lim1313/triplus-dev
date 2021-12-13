@@ -10,6 +10,10 @@ const CardCtn = styled.div`
   height: 200px;
   display: flex;
   justify-content: center;
+  position: relative;
+  @media ${({ theme }) => theme.device.mobile} {
+    /* flex-direction: column; */
+  }
 `;
 const CardWrapper = styled.div`
   width: 90%;
@@ -18,6 +22,9 @@ const CardWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
+  /* @media ${({ theme }) => theme.device.mobile} {
+    flex-direction: column;
+  } */
 `;
 const GuideImg = styled.div`
   width: 150px;
@@ -27,6 +34,18 @@ const GuideImg = styled.div`
   border: 3px solid ${({ theme }) => theme.color.lightGray};
   border-radius: 75%;
   flex-shrink: 0;
+  @media ${({ theme }) => theme.device.mobile} {
+    position: absolute;
+    border-radius: 0;
+    border: none;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    top: 0;
+    width: 90%;
+    background-size: cover;
+    height: 80px;
+    filter: opacity(80%);
+  }
 `;
 const GuideInfo = styled.div`
   display: flex;
@@ -38,17 +57,50 @@ const GuideInfo = styled.div`
   & span {
     font-size: 1rem;
   }
+  @media ${({ theme }) => theme.device.mobile} {
+    position: absolute;
+    top: 20%;
+    left: 8%;
+    & h1 {
+      text-shadow: 1px 1px 1px #fff;
+      width: 20rem;
+    }
+  }
+  @media screen and (max-width: 350px) {
+    & h1 {
+      font-size: 1.2rem;
+    }
+    & span {
+      width: 16rem;
+    }
+  }
 `;
 const Count = styled.div`
   text-align: center;
+  flex-shrink: 0;
   & h5 {
     margin: 0 0 0.5rem 0;
   }
-  flex-shrink: 0;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    position: absolute;
+    left: 8%;
+    top: 80%;
+    & h5 {
+      font-size: 1rem;
+      display: inline;
+    }
+  }
 `;
 
 const BtnCtn = styled.div`
   flex: none;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    position: absolute;
+    right: 5%;
+    top: 78%;
+  }
 `;
 
 export default function MyGuideCard(props) {
@@ -66,10 +118,12 @@ export default function MyGuideCard(props) {
             <GuideInfo>
               <h1>{guideInfo && guideInfo.title}</h1>
               <span>날짜: {guideInfo && guideInfo.guideDate}</span>
-              <span>대표장소: {guideInfo && guideInfo.address} 경복궁체험</span>
+              <span>대표장소: {guideInfo && guideInfo.address}</span>
             </GuideInfo>
             <Count>
-              <h5>신청인원</h5>
+              <h5>
+                신청인원<span className='colon'>:&nbsp;</span>
+              </h5>
               {applicantInfo.length === 0 ? 0 : applicantInfo.length}/
               {guideInfo && guideInfo.numPeople}5
             </Count>
