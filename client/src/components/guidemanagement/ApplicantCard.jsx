@@ -19,6 +19,9 @@ const CardCtn = styled.li`
   padding-bottom: 1rem;
   box-shadow: 0px 0px 9px -1px rgba(46, 46, 46, 0.57);
   transform: translateX(${({ fromLeft }) => fromLeft + 'px'});
+  @media ${({ theme }) => theme.device.mobile} {
+    height: 150px;
+  }
 `;
 const GuideInfo = styled.div`
   display: flex;
@@ -32,12 +35,21 @@ const UserProfile = styled(Profile)`
 const Nick = styled.div`
   color: ${({ theme }) => theme.color.gray};
   /* font-weight: bold; */
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 0.9rem;
+  }
 `;
 const ChatBtn = styled(ColorBtn)`
   margin-top: 10px;
   position: absolute;
   right: 5px;
   bottom: 10px;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 3rem;
+    height: 25px;
+    padding: 0;
+    right: 28%;
+  }
 `;
 
 export default function ApplicantCard(props) {

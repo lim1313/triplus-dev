@@ -50,6 +50,10 @@ const CardUl = styled.ul`
   transition: all 0.5s;
   width: 100%;
   transform: translateX(${({ fromLeft }) => fromLeft + 'px'});
+  @media ${({ theme }) => theme.device.mobile} {
+    height: 160px;
+    align-items: center;
+  }
 `;
 
 export default function ApplicantCards({ applicantInfo }) {
@@ -92,10 +96,6 @@ export default function ApplicantCards({ applicantInfo }) {
                 applicantInfo.map((applicant) => (
                   <ApplicantCard applicant={applicant} key={applicant.nickName} cardRef={cardRef} />
                 ))}
-              {/* <ApplicantCard applicantInfo={applicantInfo} cardRef={cardRef} />
-          <ApplicantCard cardRef={cardRef} />
-          <ApplicantCard cardRef={cardRef} />
-          <ApplicantCard cardRef={cardRef} /> */}
             </CardUl>
           </CardsWarpper>
         </>
