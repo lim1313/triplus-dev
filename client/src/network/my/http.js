@@ -13,12 +13,13 @@ export const getUserInfo = () => {
       return res.data;
     })
     .catch((err) => {
-      return err.response.status;
+      console.log(err);
+      // return err.response.status;
     });
 };
 
 //* POST 프로필 변경
-// 기본의 프로필 url은 삭제하고 새로운 url로 갱신
+// 새로운 url로 갱신
 export const postProfile = (data) => {
   return axios
     .post(`${http}/my/profile`, { image: data })

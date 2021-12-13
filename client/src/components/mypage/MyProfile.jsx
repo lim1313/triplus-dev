@@ -24,6 +24,7 @@ const ProfileWrapper = styled.div`
 
 const ImgWrapper = styled.img`
   position: relative;
+  display: inline-block;
   width: 165px;
   height: 220px;
   object-fit: cover;

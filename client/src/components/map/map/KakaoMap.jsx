@@ -20,6 +20,7 @@ const MapWrapper = styled.div`
     border-radius: 10px;
     word-break: break-word;
     text-align: center;
+    min-width: 8rem;
 
     box-shadow: 0px 0px 5px 2px rgba(46, 46, 46, 0.4);
     overflow: hidden;
