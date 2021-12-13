@@ -15,6 +15,9 @@ const TourCardLi = styled(CardLi)`
   .card-wrapper {
     filter: ${({ state }) => (state === 'COMPLETED' || state === 'CANCELED') && 'grayscale(100%)'};
   }
+  &:hover {
+    cursor: ${({ state }) => state === 'COMPLETED' && 'not-allowed'};
+  }
 `;
 const CardWrapper = styled.div`
   width: 100%;
@@ -37,13 +40,13 @@ const CardWrapper = styled.div`
     top: 4%;
     margin-top: 0;
     color: ${({ theme }) => theme.color.red};
-    background: ${({ theme }) => theme.color.lightGray};
+    background: #fff;
     border-radius: 5px;
     filter: none;
   }
 `;
 
-export default function ListItem({ guideInfo }) {
+export default function ListItem({ guideInfo, handleTourCardClick }) {
   const getDday = () => {
     const [year, month, day] = guideInfo.guideDate.split('.');
     let today = new Date().getTime();
@@ -53,7 +56,7 @@ export default function ListItem({ guideInfo }) {
     return result;
   };
   return (
-    <TourCardLi state={guideInfo && guideInfo.state}>
+    <TourCardLi state={guideInfo && guideInfo.state} onClick={() => handleTourCardClick(guideInfo)}>
       {guideInfo && guideInfo.state === 'COMPLETED' && (
         <CardWrapper>
           <img src='/asset/main/stamp.png' alt='완료스탬프' />

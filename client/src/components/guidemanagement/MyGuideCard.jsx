@@ -124,8 +124,7 @@ export default function MyGuideCard(props) {
               <h5>
                 신청인원<span className='colon'>:&nbsp;</span>
               </h5>
-              {applicantInfo.length === 0 ? 0 : applicantInfo.length}/
-              {guideInfo && guideInfo.numPeople}5
+              {applicantInfo.length === 0 ? 0 : applicantInfo.length}/{guideInfo && guideInfo.count}
             </Count>
             <BtnCtn>
               <NoBorderBtn palette='red' onClick={handleDeleteClick}>
