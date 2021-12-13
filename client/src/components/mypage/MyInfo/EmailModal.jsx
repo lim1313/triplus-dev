@@ -56,7 +56,7 @@ export default function EmailModal({ clickModal }) {
   const [verifyNum, verifyNumChange] = useInput('');
   const [alertMsg, setAlertMsg] = useState(null);
   const [alertMsg2, setAlertMsg2] = useState(null);
-  const [completeModal, setCompleteModal] = useState(true);
+  const [completeModal, setCompleteModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isClickVerify, setIsClickVerify] = useState(false);
   const [isError] = useError();
