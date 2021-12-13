@@ -17,26 +17,26 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true,
-        field: 'user_id'
+        field: 'user_id',
       },
       password: DataTypes.STRING,
       email: DataTypes.STRING,
       nickName: {
         type: DataTypes.STRING,
-        field: 'nick_name'
+        field: 'nick_name',
       },
       gender: DataTypes.STRING,
       region: DataTypes.STRING,
       image: DataTypes.STRING,
-      OAuth: {
+      social: {
         type: DataTypes.STRING,
-        field: 'o_auth',
+        field: 'social',
       },
       state: DataTypes.STRING,
       role: DataTypes.STRING,
       expiredDatetime: {
         type: DataTypes.DATE,
-        field: 'expired_datetime'
+        field: 'expired_datetime',
       },
     },
     {
