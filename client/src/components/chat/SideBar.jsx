@@ -18,7 +18,6 @@ const SideContainer = styled.div`
   overflow: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
-
   &::-webkit-scrollbar {
     display: none;
   }
@@ -36,6 +35,7 @@ const RoomName = styled(BorderBtn)`
   border-radius: 15px;
   margin-bottom: 1rem;
   word-break: break-word;
+  flex-shrink: 0;
   padding: 1rem;
   ${({ selected }) =>
     selected &&
@@ -99,7 +99,7 @@ const RoomName = styled(BorderBtn)`
   }
 
   @media ${({ theme }) => theme.device.mobile} {
-    width: 9rem;
+    width: 7.5rem;
     font-size: 0.8rem;
     padding: 0.7rem;
     margin: 0 0.5rem;

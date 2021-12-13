@@ -22,17 +22,19 @@ const Wrapper = styled.div`
   display: none;
   @media ${({ theme }) => theme.device.mobile} {
     position: fixed;
-    left: 50vw;
+    right: -50vw;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     justify-content: space-around;
     padding: 2rem 1.3rem 15rem;
-    width: 100%;
+    width: 60%;
     height: 100%;
-    background-color: ${({ theme }) => theme.color.black};
+    /* background-color: ${({ theme }) => theme.color.gray}; */
+    background-color: #fff;
     transition: all 1s;
-    z-index: 999;
+    z-index: 998;
+    box-shadow: -1px 0 5px 1px ${({ theme }) => theme.color.lightGray};
     overflow: hidden;
     ${({ isToggled }) =>
       isToggled &&
@@ -64,40 +66,40 @@ export default function Toggle() {
   return (
     <Wrapper isToggled={isToggled}>
       <Link to='map'>
-        <NoBorderBtn fontSize='1.2rem' palette='lightGray' onClick={toggleCloseHandler}>
+        <NoBorderBtn fontSize='1rem' palette='gray' onClick={toggleCloseHandler}>
           지도 Map
         </NoBorderBtn>
       </Link>
       <Link to='management'>
-        <NoBorderBtn fontSize='1.2rem' palette='lightGray' onClick={toggleCloseHandler}>
+        <NoBorderBtn fontSize='1rem' palette='gray' onClick={toggleCloseHandler}>
           여행 관리
         </NoBorderBtn>
       </Link>
       <Link to='chat'>
-        <NoBorderBtn fontSize='1.2rem' palette='lightGray' onClick={toggleCloseHandler}>
+        <NoBorderBtn fontSize='1rem' palette='gray' onClick={toggleCloseHandler}>
           채팅
         </NoBorderBtn>
       </Link>
       {isLogin ? (
         <Link to='mypage'>
-          <NoBorderBtn fontSize='1.2rem' palette='lightGray' onClick={toggleCloseHandler}>
+          <NoBorderBtn fontSize='1rem' palette='gray' onClick={toggleCloseHandler}>
             마이 페이지
           </NoBorderBtn>
         </Link>
       ) : (
         <Link to='login'>
-          <NoBorderBtn fontSize='1.2rem' palette='lightGray' onClick={toggleCloseHandler}>
+          <NoBorderBtn fontSize='1rem' palette='blue' onClick={toggleCloseHandler}>
             로그인
           </NoBorderBtn>
         </Link>
       )}
       {isLogin ? (
-        <NoBorderBtn fontSize='1.2rem' palette='lightGray' onClick={handleLogoutClick}>
+        <NoBorderBtn fontSize='1rem' palette='blue' onClick={handleLogoutClick}>
           로그아웃
         </NoBorderBtn>
       ) : (
         <Link to='signup'>
-          <NoBorderBtn fontSize='1.2rem' palette='lightGray' onClick={toggleCloseHandler}>
+          <NoBorderBtn fontSize='1rem' palette='blue' onClick={toggleCloseHandler}>
             회원가입
           </NoBorderBtn>
         </Link>
