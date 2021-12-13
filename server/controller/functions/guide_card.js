@@ -97,7 +97,7 @@ module.exports = {
   updateGuideCard: async (params) => {
     const resObject = {};
     const updateValue = checkParams(params);
-    console.log(params);
+    console.log('params', params);
 
     try {
       await guide_card
@@ -422,17 +422,17 @@ module.exports = {
 
     const approvedGuideUserPart = await guide_user_participate.findAll({
       raw: true,
-      where: {userId: accessToken.userId},
+      where: { userId: accessToken.userId },
       include: [
         {
           model: guide_card,
-          where: {state: GLOBAL_VARIABLE.APPROVED}
-        }
+          where: { state: GLOBAL_VARIABLE.APPROVED },
+        },
       ],
       offset: offset,
       limit: limit,
     });
 
     return resObject;
-  }
+  },
 };
