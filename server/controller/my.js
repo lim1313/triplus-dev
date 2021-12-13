@@ -1,10 +1,4 @@
-const {
-  isAuthorized,
-  updateUser,
-  expiredUser,
-  changePassword,
-  selectUser,
-} = require('./functions/user');
+const { isAuthorized, updateUser, expiredUser, changePassword, selectUser, updateEmail } = require('./functions/user');
 const crypto = require('crypto');
 const { user, user_verify } = require('../models');
 const { stmpTransport } = require('../config/email');
@@ -78,6 +72,7 @@ module.exports = {
       if (!accessToken) {
         throw '다시 로그인하여 주세요';
       } else {
+
         res.status(200).json(userInfo);
       }
     } catch (error) {
@@ -100,4 +95,9 @@ module.exports = {
     const resObject = await changePassword(req);
     res.status(resObject.code).send(resObject.message);
   },
+
+  updateEmail: (req, res) => {
+    const resObject = updateEmail(req);
+    res.status(resObject.code).send(resObject.message);
+  }
 };

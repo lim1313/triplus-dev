@@ -15,6 +15,7 @@ const InputCtn = styled.div`
   & .popup {
     position: absolute;
     left: -50%;
+    z-index: 999;
   }
   @media screen and (max-width: 400px) {
     margin-left: 1rem;

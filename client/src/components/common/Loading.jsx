@@ -22,19 +22,19 @@ const Wrapper = styled.div`
 
 const boxFade = keyframes`
   0% {
-  background-image: url('/asset/loading/loading1.png');
+  background-image: url('/asset/loading/loading1.svg');
   }
   25% {
-  background-image: url("/asset/loading/loading2.png");
+  background-image: url("/asset/loading/loading2.svg");
   }
   50% {
-  background-image: url("/asset/loading/loading3.png");
+  background-image: url("/asset/loading/loading3.svg");
   }
   75% {
-  background-image: url("/asset/loading/loading4.png");
+  background-image: url("/asset/loading/loading4.svg");
   }
   100% {
-  background-image: url("/asset/loading/loading1.png");
+  background-image: url("/asset/loading/loading1.svg");
   }
 `;
 
