@@ -96,8 +96,8 @@ module.exports = {
     res.status(resObject.code).send(resObject.message);
   },
 
-  updateEmail: (req, res) => {
-    const resObject = updateEmail(req);
+  updateEmail: async (req, res) => {
+    const resObject = await updateEmail(req);
     res.status(resObject.code).send(resObject.message);
-  }
+  },
 };

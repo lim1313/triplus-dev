@@ -2,6 +2,7 @@ const {
   createGuideCard,
   updateGuideCard,
   selectGuideCardByUserId,
+  selectGuideCardForTour,
 } = require('./functions/guide_card');
 const GLOBAL_VARIABLE = require('./functions/global_variable');
 
@@ -47,7 +48,6 @@ module.exports = {
     const params = req.body;
     params.state = GLOBAL_VARIABLE.CANCELED;
     const resObject = await updateGuideCard(params);
-    console.log(resObject);
     res.status(resObject.code).send(resObject.message);
   },
 
@@ -59,4 +59,9 @@ module.exports = {
       message: resObject.message,
     });
   },
+
+  selectGuideCardForTour: (req, res) => {
+    const resObject = selectGuideCardForTour(req);
+    res.status(resObject.code).send(resObject.message);
+  }
 };

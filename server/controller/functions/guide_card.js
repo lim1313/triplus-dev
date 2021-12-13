@@ -159,7 +159,6 @@ module.exports = {
     }
 
     try {
-      console.log(guide_card);
       const guideCards = await guide_card.findAll({
         include: [
           {
@@ -400,4 +399,40 @@ module.exports = {
       return resObject;
     }
   },
+
+  selectGuideCardForTour: async (req) => {
+    const resObject = {};
+    const accessToken = isAuthorized(req);
+
+    // 토큰이 없었을 때
+    try {
+      if (!accessToken) {
+        throw 'accessToken이 없습니다';
+      }
+    } catch (error) {
+      console.log(`ERROR: ${error}`);
+      resObject['code'] = 400;
+      resObject['message'] = error;
+      return resObject;
+    }
+
+    const page = req.body.page;
+    const limit = page * 6;
+    const offset = limit - 6;
+
+    const approvedGuideUserPart = await guide_user_participate.findAll({
+      raw: true,
+      where: {userId: accessToken.userId},
+      include: [
+        {
+          model: guide_card,
+          where: {state: GLOBAL_VARIABLE.APPROVED}
+        }
+      ],
+      offset: offset,
+      limit: limit,
+    });
+
+    return resObject;
+  }
 };

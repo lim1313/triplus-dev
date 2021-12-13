@@ -167,6 +167,14 @@ module.exports = {
   updateEmail: async (req) => {
     const resObject = {};
     const accessToken = authorized(req.cookies.accessToken);
+
+    if (!accessToken) {
+      resObject['code'] = 401;
+      resObject['message'] = '로그인 시간이 만료되었습니다';
+
+      return resObject;
+    }
+
     const userVerify = await user_verify.findOne({
       where: {user_id: accessToken.userId, email: req.body.email, verify_key: req.body.verifyKey}
     });

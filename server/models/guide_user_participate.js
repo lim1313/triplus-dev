@@ -19,7 +19,13 @@ module.exports = (sequelize, DataTypes) => {
         }
       );
 
-      // guide_card.hasMany()
+      guide_user_participate.hasOne(
+        models.guide_card,
+        {
+          sourceKey: 'guideId',
+          foreignKey: 'guideId',
+        }
+      );
     }
   };
   guide_user_participate.init({
