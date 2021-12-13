@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { sign, verify } = require('jsonwebtoken');
-const {user} = require('./../../models');
+const {user, guide_user_participate, user_verify} = require('./../../models');
 const bcrypt = require('bcrypt');
 const {hashPassword} = require('./secure');
 
@@ -93,6 +93,11 @@ module.exports = {
         resObject['code'] = 500;
         resObject['message'] = '서버에 오류가 발생했습니다';
       });
+
+      await guide_user_participate.update(
+        {left: 'left'},
+        {where: {userId: userData.dataValues.userId}}
+      );
     } catch (error) {
       console.log(error);
       resObject['code'] = 400;
@@ -102,7 +107,6 @@ module.exports = {
   },
 
   changePassword: async (req) => {
-    console.log(req.body);
     const resObject = {};
     const accessToken = authorized(req.cookies.accessToken);
 
@@ -138,5 +142,41 @@ module.exports = {
       resObject['message'] = error
     }
     return resObject;
-  }
+  },
+
+  selectUser: (userId) => {
+    return user.findOne({
+      attributes: ['userId', 'email', 'nickName', 'region', 'image'],
+      where: {
+          userId
+      }
+    }).then(result => {
+      const userInfo = result.dataValues;
+      return userInfo;
+    });
+  },
+
+  updateEmail: async (req) => {
+    const resObject = {};
+    const accessToken = authorized(req.cookies.accessToken);
+    const userVerify = await user_verify.findOne({
+      where: {user_id: accessToken.userId, email: req.body.email, verify_key: req.body.verifyKey}
+    });
+    
+    try {
+      if(!userVerify.user_id){
+        throw '인증번호가 일치하지 않습니다'
+      }
+
+      user.update({email: req.body.email}, {where: {userId: accessToken.email}});
+      
+      resObject['code'] = 200;
+      resObject['message'] = '이메일이 변경되었습니다';
+    } catch (error) {
+      resObject['code'] = 400;
+      resObject['message'] = '이메일을 변경하지 못하였습니다';
+    }
+
+    return resObject;
+  },
 };
