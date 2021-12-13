@@ -159,7 +159,6 @@ module.exports = {
     }
 
     try {
-      console.log(guide_card);
       const guideCards = await guide_card.findAll({
         include: [
           {
@@ -400,4 +399,10 @@ module.exports = {
       return resObject;
     }
   },
+
+  selectGuideCardForTour: (req) => {
+    const resObject = {};
+    
+    return resObject;
+  }
 };
