@@ -6,6 +6,9 @@ import { BorderBtn } from '../../styles/common/index.js';
 import MyGuideCard from './MyGuideCard.jsx';
 
 const H3 = styled.h3``;
+const CreateBtn = styled(BorderBtn)`
+  flex-shrink: 0;
+`;
 
 export default function GuideLists(props) {
   const { handleCreateClick, guideInfo, applicantInfo } = props;
@@ -13,9 +16,9 @@ export default function GuideLists(props) {
     <div>
       <H3Ctn>
         <H3>가이드 목록</H3>
-        <BorderBtn palette='red' onClick={() => handleCreateClick(guideInfo)}>
+        <CreateBtn palette='red' onClick={() => handleCreateClick(guideInfo)}>
           +가이드 생성
-        </BorderBtn>
+        </CreateBtn>
       </H3Ctn>
       <MyGuideCard guideInfo={guideInfo} applicantInfo={applicantInfo} />
       {/* <GuideTable
