@@ -41,7 +41,11 @@ function App() {
         <Route path='/googlecallback' element={<GoogleCallback />} />
         <Route path='/navercallback' element={<NaverCallback />} />
       </Routes>
-      {pathname === '/map' || pathname === '/admin' || pathname === '/mypage' ? null : (
+      {pathname === '/map' ||
+      pathname === '/admin' ||
+      pathname === '/mypage' ||
+      pathname === '/management' ||
+      pathname === '/management/tourlist' ? null : (
         <Footer main={pathname === '/' ? 'main' : null} />
       )}
     </>

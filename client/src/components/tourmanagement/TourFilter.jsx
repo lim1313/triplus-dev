@@ -26,12 +26,9 @@ const FilterBtn = styled(ColorBtn)`
 `;
 
 export default function TourFilter(props) {
-  const { handleAllClick, handleApprovedClick, handleCompletedClick, isActive } = props;
+  const { handleApprovedClick, handleCompletedClick, isActive } = props;
   return (
     <FilterCtn>
-      <FilterBtn onClick={handleAllClick} active={isActive && isActive.all}>
-        내 여행
-      </FilterBtn>
       <FilterBtn onClick={handleApprovedClick} active={isActive && isActive.approved}>
         예정된 여행
       </FilterBtn>

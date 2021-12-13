@@ -6,28 +6,31 @@ import OrderFilter from '../components/tourmanagement/OrderFilter';
 import ListSection from '../components/tourmanagement/ListSection';
 import { useSelector } from 'react-redux';
 import TourModal from '../components/tourmanagement/tourModal/TourModal';
-import { getAllList, getExpectedList, getCompletedList } from '../network/tourmanagement/http';
 import SpinLoading from '../components/common/SpinLoading';
+import useFetch from '../utils/useFetch';
 
 const SectionCtn = styled.section`
   width: 70vw;
   border-radius: 0.5rem;
   background-color: white;
-  height: auto;
+  height: ${({ count }) => (count.length < 4 ? '700px' : 'auto')};
   padding: 0 1.5rem;
   display: flex;
   flex-direction: column;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100vw;
+    padding: 0.5rem;
+    border-radius: 0;
+    margin-top: 2rem;
+  }
 `;
 
 export default function TourManagementPage() {
   //상태관리
   const state = useSelector((state) => state.openTourModalReducer);
   const { isOpen, modalInfo } = state;
-  const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState(false);
-  const [itemList, setItemList] = useState([]);
-  const [pageNum, setPageNum] = useState(1);
-  const loader = useRef();
+  const [pageNum, setPageNum] = useState({ approved: 1, completed: 0 });
+  const [isActive, setIsActive] = useState({ approved: true, completed: false });
   const [isListItems, setListItems] = useState([
     {
       title: '안녕1',
@@ -68,63 +71,33 @@ export default function TourManagementPage() {
       address: '대전',
       openDate: '몰라',
     },
-    {
-      title: '안녕4',
-      gender: 'true',
-      guideDate: '2022.2.17',
-      tourImage: '',
-      userImage: '',
-      state: 'CANCELED',
-      nickName: '야무진여행자',
-      content: 'asjnfkas',
-      guideId: 'aksnfl',
-      address: '부산',
-      openDate: '몰라',
-    },
   ]);
-  const [isActive, setIsActive] = useState({ all: true, approved: false, completed: false });
   const [isFiltered, setIsFiltered] = useState([]);
+
+  const observerRef = useRef();
+  const { items, hasMore, isLoading } = useFetch(pageNum, isActive);
 
   //초기 아이템리스트 세팅
   useEffect(() => {
-    getAllList().then((res) => setItemList(res.data));
     setIsFiltered(isListItems);
   }, [isListItems]);
 
-  //서버에서 아이템을 가져오는 함수
-  const getMoreItems = useCallback(async () => {
-    setLoading(true);
-    if (isActive.all) {
-      getAllList(pageNum).then((res) => setItemList(res.data));
-      setLoading(false);
-    } else if (isActive.approved) {
-      getExpectedList(pageNum).then((res) => setItemList(res.data));
-      setLoading(false);
-    } else if (isActive.completed) {
-      getCompletedList(pageNum).then((res) => setItemList(res.data));
-      setLoading(false);
-    }
-  }, [pageNum, isActive.all, isActive.approved, isActive.completed]);
-
   //oberver핸들함수
-  const handleObserver = useCallback(
-    (entries) => {
-      const target = entries[0];
-      if (target.isIntersecting) {
-        // getMoreItems();
-        setPageNum(pageNum + 1);
-      }
+  const observer = useCallback(
+    (node) => {
+      if (isLoading) return;
+      if (observerRef.current) observerRef.current.disconnect();
+      observerRef.current = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting && hasMore && isActive.approved) {
+          setPageNum({ ...pageNum, approved: pageNum.approved + 1, completed: 0 });
+        } else if (entry.isIntersecting && hasMore && isActive.completed) {
+          setPageNum({ ...pageNum, completed: pageNum.completed + 1, approved: 0 });
+        }
+      });
+      node && observerRef.current.observe(node);
     },
-    [pageNum]
+    [hasMore, isLoading, pageNum, isActive.approved, isActive.completed]
   );
-
-  //observer 설정
-  useEffect(() => {
-    const option = { root: null, rootMargin: '0px', threshold: 1 };
-    const observer = new IntersectionObserver(handleObserver, option);
-    if (loader.current) observer.observe(loader.current);
-    return () => observer.disconnect();
-  }, [handleObserver]);
 
   const handleAllClick = () => {
     setIsFiltered(isListItems);
@@ -143,7 +116,7 @@ export default function TourManagementPage() {
     <>
       {isOpen ? <TourModal modalInfo={modalInfo} /> : null}
       <ManageCtn>
-        <SectionCtn>
+        <SectionCtn id='scrollArea' count={isFiltered}>
           <TourFilter
             handleAllClick={handleAllClick}
             handleApprovedClick={handleApprovedClick}
@@ -151,15 +124,10 @@ export default function TourManagementPage() {
             isActive={isActive}
           />
           <OrderFilter />
-          <ListSection
-            isFiltered={isFiltered}
-            setListItems={setListItems}
-            itemList={itemList}
-            getMoreItems={getMoreItems}
-          />
-          {loading && <SpinLoading />}
+          <ListSection isFiltered={isFiltered} setListItems={setListItems} items={items} />
         </SectionCtn>
-        <div ref={loader} />
+        {isLoading && isFiltered.length > 3 && <SpinLoading />}
+        <div ref={observer} style={{ backgroundColor: 'red', width: '200px', height: '1px' }} />
       </ManageCtn>
     </>
   );
