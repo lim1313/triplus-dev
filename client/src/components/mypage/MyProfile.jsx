@@ -1,5 +1,3 @@
-/*eslint-disable no-unused-vars*/
-
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { v4 as uuid4 } from 'uuid';
@@ -7,6 +5,7 @@ import S3 from 'react-aws-s3';
 import { deleteProfile, postProfile } from '../../network/my/http';
 import DeleteSave from './MyProfile/DeleteSave';
 import FileChange from './MyProfile/FileChange';
+import { useError } from '../../hooks/useError';
 
 const ProfileWrapper = styled.div`
   margin-right: 2rem;
@@ -50,7 +49,7 @@ export default function MyProfile({ image }) {
 
   const [isLoading, setIsLoading] = useState(false);
   const [alertMsg, setAlertMsg] = useState(null);
-
+  const [isError] = useError();
   const imgRef = useRef();
 
   const delSaveImg = async (state) => {
@@ -63,32 +62,27 @@ export default function MyProfile({ image }) {
     };
     const ReactS3Client = new S3(config);
 
-    //* 이미지가 존재하는 경우 or 삭제하는 경우 해당 이미지는 s3에서 제거
+    //* s3에서 제거
     setIsLoading(true);
-    if (imguuid) {
+    if (state === 'del' && imguuid) {
       const oldImg = imguuid.split('/')[5];
       await ReactS3Client.deleteFile(oldImg)
         .then((res) => {
           //TODO DELETE /mypage/profile
-          deleteProfile()
-            .then(() => {
-              if (state === 'del') {
-                setPreviewImg(null);
-                setImguuid(null);
-                setIsLoading(false);
-              }
-            })
-            .catch((err) => console.error(err));
-          setTimeout(() => {
-            if (state === 'del') {
+          deleteProfile().then((res) => {
+            if (res === 401) return isError();
+            else if (res >= 400) {
+              alert('에러가 발생했습니다. 다시 시도해 주세요.');
+            } else {
               setPreviewImg(null);
               setImguuid(null);
-              setIsLoading(false);
             }
-          }, 1000);
+            setIsLoading(false);
+          });
         })
-        .catch((err) => {
-          console.error(err);
+        .catch(() => {
+          alert('*에러가 발생했습니다. 다시 시도해 주세요.');
+          setIsLoading(false);
         });
     }
     if (state === 'del') return;
@@ -98,34 +92,32 @@ export default function MyProfile({ image }) {
     await ReactS3Client.uploadFile(fileImg, newFileName)
       .then((data) => {
         // TODO POST /mypage/image
-        postProfile(data.location)
-          .then(() => {
-            setIsChange(!isChange);
+        postProfile(data.location).then((res) => {
+          if (res === 401) return isError();
+          else if (res >= 400) {
+            alert('에러가 발생했습니다. 다시 시도해 주세요.');
+          } else {
             setImguuid(data.location);
             setFileImg(null);
             setPreviewImg(null);
-            setIsLoading(false);
-          })
-          .catch((err) => console.error(err));
-
-        setTimeout(() => {
+          }
           setIsChange(!isChange);
-          setImguuid(data.location);
-          setFileImg(null);
-          setPreviewImg(null);
           setIsLoading(false);
-        }, 1000);
+        });
       })
-      .catch((err) => {
-        console.error(err);
+      .catch(() => {
+        alert('*에러가 발생했습니다. 다시 시도해 주세요.');
+        setIsChange(!isChange);
+        setIsLoading(false);
       });
-    console.log('end');
   };
 
   const selectImage = (e) => {
     //* 만약 취소를 누를 경우 return
     if (!e.target.files[0]) return;
+
     let imgFile = e.target.files[0];
+
     setFileImg(imgFile);
     setPreviewImg(URL.createObjectURL(imgFile));
     e.target.value = null;
@@ -134,9 +126,9 @@ export default function MyProfile({ image }) {
   return (
     <ProfileWrapper>
       <ImgWrapper
+        ref={imgRef}
         src={previewImg || imguuid || '/asset/else/userBlank.png'}
         alt='프로필'
-        ref={imgRef}
         onError={() => setImguuid(null)}
       />
       {isChange && (

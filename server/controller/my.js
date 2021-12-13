@@ -68,10 +68,11 @@ module.exports = {
     try {
       const accessToken = isAuthorized(req);
       const userInfo = await selectUser(accessToken.userId);
-      
-      if(!accessToken){
-        throw '다시 로그인하여 주세요'
-      }else{
+
+      if (!accessToken) {
+        throw '다시 로그인하여 주세요';
+      } else {
+
         res.status(200).json(userInfo);
       }
     } catch (error) {

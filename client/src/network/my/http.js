@@ -5,6 +5,18 @@ const http = process.env.REACT_APP_HTTPSURL;
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 
+//* GET 유저 정보 가져오기
+export const getUserInfo = () => {
+  return axios
+    .get(`${http}/my`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      return err.response.status;
+    });
+};
+
 //* POST 프로필 변경
 // 기본의 프로필 url은 삭제하고 새로운 url로 갱신
 export const postProfile = (data) => {
@@ -21,11 +33,6 @@ export const deleteProfile = () => {
     .delete(`${http}/my/profile`, { data: { image: null } })
     .then((res) => res.status)
     .catch((err) => err.response.status);
-};
-
-//* GET 유저 정보 가져오기
-export const getUserInfo = () => {
-  return axios.get(`${http}/my`).then((res) => res.data);
 };
 
 //* POST 정보 변경

@@ -2,7 +2,7 @@ require('dotenv').config();
 const { sign, verify } = require('jsonwebtoken');
 const {user, guide_user_participate, user_verify} = require('./../../models');
 const bcrypt = require('bcrypt');
-const {hashPassword} = require('./secure');
+const { hashPassword } = require('./secure');
 
 const authorized = (accessToken) => {
   if (!accessToken) return null;
@@ -44,23 +44,26 @@ module.exports = {
     const resObject = {};
     const accessToken = authorized(req.cookies.accessToken);
 
-    if(!accessToken){
+    if (!accessToken) {
       resObject['code'] = 401;
-      resObject['message'] = '로그인 시간이 만료되었습니다'
+      resObject['message'] = '로그인 시간이 만료되었습니다';
 
       return resObject;
     }
 
-    await user.update(req.body, {
-      where: {userId: accessToken.userId}
-    }).then(() => {
-      resObject['code'] = 201;
-      resObject['message'] = '유저 정보를 수정하였습니다'
-    }).catch(() => {
-      resObject['code'] = 400;
-      resObject['message'] = '유저 정보를 수정하지 못하였습니다'
-    });
-    
+    await user
+      .update(req.body, {
+        where: { userId: accessToken.userId },
+      })
+      .then(() => {
+        resObject['code'] = 201;
+        resObject['message'] = '유저 정보를 수정하였습니다';
+      })
+      .catch(() => {
+        resObject['code'] = 400;
+        resObject['message'] = '유저 정보를 수정하지 못하였습니다';
+      });
+
     return resObject;
   },
 
@@ -69,13 +72,13 @@ module.exports = {
     const accessToken = authorized(req.cookies.accessToken);
 
     try {
-      if(!accessToken){
-        throw '로그인하여 주시기 바랍니다'
+      if (!accessToken) {
+        throw '로그인하여 주시기 바랍니다';
       }
 
-      const userData = await user.findOne({where: {userId: accessToken.userId}});
+      const userData = await user.findOne({ where: { userId: accessToken.userId } });
       const match = await bcrypt.compare(req.body.password, userData.dataValues.password);
-      if(!match){
+      if (!match) {
         throw '비밀번호를 잘못 입력하였습니다';
       }
 
@@ -101,7 +104,7 @@ module.exports = {
     } catch (error) {
       console.log(error);
       resObject['code'] = 400;
-      resObject['message'] = error
+      resObject['message'] = error;
     }
     return resObject;
   },
@@ -111,40 +114,45 @@ module.exports = {
     const accessToken = authorized(req.cookies.accessToken);
 
     try {
-      if(!accessToken){
-        throw '로그인하여 주시기 바랍니다'
+      if (!accessToken) {
+        throw '로그인하여 주시기 바랍니다';
       }
 
-      const userData = await user.findOne({where: {userId: accessToken.userId}});
+      const userData = await user.findOne({ where: { userId: accessToken.userId } });
       const match = await bcrypt.compare(req.body.oldPassword, userData.dataValues.password);
-      if(!match){
+      if (!match) {
         throw '비밀번호를 잘못 입력하였습니다';
       }
 
       const password = await hashPassword(req.body.password);
-      await user.update(
-        {
-          password
-        }, {
-          where: {userId: userData.dataValues.userId}
-        }
-      ).then(() => {
-        resObject['code'] = 200;
-        resObject['message'] = '비밀번호가 변경 되었습니다';
-      }).catch((error) => {
-        console.log(error);
-        resObject['code'] = 500;
-        resObject['message'] = '서버에 오류가 발생했습니다';
-      });
+      await user
+        .update(
+          {
+            password,
+          },
+          {
+            where: { userId: userData.dataValues.userId },
+          }
+        )
+        .then(() => {
+          resObject['code'] = 200;
+          resObject['message'] = '비밀번호가 변경 되었습니다';
+        })
+        .catch((error) => {
+          console.log(error);
+          resObject['code'] = 500;
+          resObject['message'] = '서버에 오류가 발생했습니다';
+        });
     } catch (error) {
       console.log(error);
       resObject['code'] = 400;
-      resObject['message'] = error
+      resObject['message'] = error;
     }
     return resObject;
   },
 
   selectUser: (userId) => {
+
     return user.findOne({
       attributes: ['userId', 'email', 'nickName', 'region', 'image'],
       where: {
@@ -168,7 +176,7 @@ module.exports = {
         throw '인증번호가 일치하지 않습니다'
       }
 
-      user.update({email: req.body.email}, {where: {userId: accessToken.email}});
+      user.update({email: req.body.email}, {where: {userId: accessToken.userId}});
       
       resObject['code'] = 200;
       resObject['message'] = '이메일이 변경되었습니다';

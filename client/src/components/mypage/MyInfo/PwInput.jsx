@@ -12,6 +12,7 @@ const SubTitle = styled.div`
 `;
 
 const InputPw = styled.input`
+  width: 100%;
   &:focus {
     outline: none;
   }
