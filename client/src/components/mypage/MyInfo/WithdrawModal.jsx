@@ -31,6 +31,7 @@ const SubText = styled.div`
 
 const PWInput = styled.input`
   text-align: center;
+  margin-bottom: 1.7rem;
   width: 100%;
 
   &:focus {
@@ -42,7 +43,7 @@ const AlertMsg = styled.div`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: -1.5rem;
+  bottom: 0.2rem;
   font-size: 0.85rem;
   color: ${({ theme }) => theme.color.red};
 
@@ -62,12 +63,12 @@ export default function WithdrawModal({ closeModal }) {
     //TODO /my/withdraw
     deleteUser(inputValue).then((res) => {
       if (res === 401) return isError();
-      else if (res > 400) {
-        alert('에러가 발생했습니다. 다시 시도해 주세요.');
-      } else if (res === 204) {
+      else if (res === 400) {
         setAlertMsg('*비밀번호가 옳지 않습니다');
       } else if (res === 201) {
         isError('회원탈퇴가 완료되었습니다');
+      } else if (res > 400) {
+        alert('에러가 발생했습니다. 다시 시도해 주세요.');
       } else {
         console.log(res);
       }

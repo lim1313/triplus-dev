@@ -49,11 +49,11 @@ export default function PwModal({ closeModal }) {
         if (res === 401) return isError();
         else if (res === 201) {
           // 201 성공적으로 수행
-          dispatch(exit());
           navigate('/login', {
             state: { logout: '비밀번호가 변경되어, 로그아웃되었습니다' },
             replace: true,
           });
+          dispatch(exit());
         } else if (res === 400) {
           // 현재 비밀번호를 잘못 작성
           setAlertMsg1('*현재 비밀번호가 일치하지 않습니다');

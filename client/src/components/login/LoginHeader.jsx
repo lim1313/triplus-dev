@@ -21,7 +21,7 @@ const AlertMsg = styled.div`
 
 export default function LoginHeader() {
   const { state } = useLocation();
-
+  console.log(state);
   return (
     <HeaderBlock>
       <img src='/asset/logo/logo.png' alt='로고' />

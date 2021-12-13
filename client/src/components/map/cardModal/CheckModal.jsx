@@ -30,7 +30,7 @@ export const BackWrapper = styled.div`
 const TitleWrapper = styled(ModalWrapper)`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 `;
 
@@ -39,7 +39,6 @@ const ImgWrapper = styled.img`
 `;
 
 const Content = styled.div`
-  margin-top: 1rem;
   color: ${({ theme, end }) => (end ? theme.color.red : theme.color.blue)};
   font-weight: 500;
   font-weight: 700;
