@@ -1,5 +1,5 @@
 import React from 'react';
-import { Profile, UserNick } from '../../styles/map/card';
+import { Profile } from '../../styles/map/card';
 import styled from 'styled-components';
 import {
   CardLi,
@@ -9,6 +9,7 @@ import {
   ImageWrapper,
   TitleWrapper,
 } from '../map/sideBar/GuideCard';
+import { UserNick } from './UserNick';
 
 const TourCardLi = styled(CardLi)`
   filter: none;
@@ -17,6 +18,18 @@ const TourCardLi = styled(CardLi)`
   }
   &:hover {
     cursor: ${({ state }) => state === 'COMPLETED' && 'not-allowed'};
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 90%;
+    height: 15rem;
+    & .profile {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      left: 10%;
+      bottom: 0;
+    }
   }
 `;
 const CardWrapper = styled.div`
@@ -44,6 +57,9 @@ const CardWrapper = styled.div`
     border-radius: 5px;
     filter: none;
   }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100vw;
+  }
 `;
 
 export default function ListItem({ guideInfo, handleTourCardClick }) {
@@ -68,7 +84,7 @@ export default function ListItem({ guideInfo, handleTourCardClick }) {
         </CardWrapper>
       )}
       <div className='card-wrapper'>
-        <ImageWrapper />
+        <ImageWrapper className='img-wrapper' />
         <TitleWrapper>
           <div className='date'>
             {guideInfo && guideInfo.state === 'COMPLETED' ? 'END' : `D - ${getDday()}`}
@@ -77,7 +93,14 @@ export default function ListItem({ guideInfo, handleTourCardClick }) {
         </TitleWrapper>
         <GuideWrapper>
           <GuideInfo>
-            <Profile width='80px' height='80px' mWidth='70px' mHeight='70px' marginRight='1rem' />
+            <Profile
+              width='80px'
+              height='80px'
+              mWidth='70px'
+              mHeight='70px'
+              marginRight='1rem'
+              className='profile'
+            />
             <UserNick
               gender={guideInfo && guideInfo.gender}
               nickName={guideInfo && guideInfo.nickName}

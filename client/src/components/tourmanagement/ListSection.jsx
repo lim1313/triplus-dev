@@ -9,6 +9,13 @@ const ListSectionCtn = styled.ul`
   display: grid;
   grid-template-columns: repeat(3, 32%);
   column-gap: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 export default function ListSection({ isFiltered }) {
