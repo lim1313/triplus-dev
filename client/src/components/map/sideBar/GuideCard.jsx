@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { getCardModal } from '../../../network/map/http';
@@ -17,7 +17,6 @@ export const CardLi = styled.li`
   overflow: hidden;
   background-color: white;
   filter: ${({ state }) => (state === 'COMPLETED' || state === 'CANCELED') && 'grayscale(100%)'};
-
   position: relative;
   box-shadow: 0px 0px 9px -1px rgba(46, 46, 46, 0.57);
 
@@ -47,15 +46,36 @@ export const CardLi = styled.li`
       margin-bottom: unset;
     }
   }
+
+  & .imageWrapper {
+    position: absolute;
+    filter: blur(1px);
+    height: 100px;
+    width: 100%;
+  }
+
+  & .lazy {
+    background: none;
+    background-color: ${({ theme }) => theme.color.gray};
+  }
+
+  & .imgload {
+    background-image: url(${({ backImage }) => backImage}), url('/asset/else/trip.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
 `;
 
 export const ImageWrapper = styled.div`
   position: absolute;
-  background: url(${({ backImage }) => backImage}) no-repeat center;
-  background-size: cover;
   filter: blur(1px);
   height: 100px;
   width: 100%;
+  background-image: url(${({ backImage }) => backImage}), url('/asset/else/trip.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 `;
 
 export const TitleWrapper = styled.div`
@@ -144,15 +164,16 @@ export const GuideContent = styled.div`
   }
 `;
 
-export default function GuideCard({ cardInfo }) {
+export default function GuideCard({ cardInfo, ulRef, scroll }) {
   const { title, gender, guideDate, tourImage, userImage, state, nickName, content, guideId } =
     cardInfo;
 
+  let scrollerTimeStart;
+
   const { modalInfo } = useSelector((state) => state.guideModalReducer);
   const dispatch = useDispatch();
-  const cardRef = useRef();
-
   let dDay = getDday(guideDate);
+  const cardRef = useRef();
 
   const cardClick = (cardId) => {
     // TODO GET /map/guide-card?guide-id=cardId
@@ -162,23 +183,46 @@ export default function GuideCard({ cardInfo }) {
     });
   };
 
-  // useEffect(() => {
-  //   if (modalInfo && modalInfo.guideId === guideId) {
-  //     console.log(cardRef.current);
-  //     cardRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  //   }
-  // }, [modalInfo]);
+  useEffect(() => {
+    if (scroll) {
+      scrollTimeout();
+      ulRef.current.addEventListener('scroll', scrollTimeout, false);
+    }
+  }, []);
+
+  const scrollTimeout = () => {
+    if (scrollerTimeStart) {
+      clearTimeout(scrollerTimeStart);
+    }
+
+    scrollerTimeStart = setTimeout(() => {
+      const imgCard = cardRef.current;
+      if (!imgCard) return;
+      const classes = imgCard && imgCard.classList;
+
+      if (classes.contains('imgload'))
+        return ulRef.current.removeEventListener('scroll', scrollTimeout, false);
+      let elementTop = cardRef.current.getBoundingClientRect().top;
+
+      if (elementTop < window.innerHeight + window.pageYOffset + 500) {
+        const node = cardRef.current;
+        if (node) {
+          classes.add('imgload');
+        }
+      }
+    }, 100);
+  };
 
   return (
     <CardLi
-      // ref={cardRef}
       onClick={() => cardClick(guideId)}
       isClicked={modalInfo && modalInfo.guideId === guideId}
       state={state}
+      backImage={tourImage}
       onMouseEnter={() => overlays[guideId].setMap(map)}
       onMouseLeave={() => overlays[guideId].setMap(null)}
     >
-      <ImageWrapper backImage={tourImage} />
+      <div className='imageWrapper lazy' ref={cardRef} />
       <TitleWrapper dday={dDay}>
         <div className='date'>{state === 'COMPLETED' ? 'END' : `D - ${dDay}`}</div>
         <h2 className='title'>{title}</h2>
