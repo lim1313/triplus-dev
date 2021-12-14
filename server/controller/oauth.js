@@ -22,7 +22,7 @@ module.exports = {
     user
       .findOrCreate({
         where: { userId: sub, email: email },
-        defaults: { userId: sub, email: email, image: picture },
+        defaults: { userId: sub, email: email, image: picture, social: 'google' },
       })
       .then(([data, created]) => {
         const accessToken = generateAccessToken(data.dataValues);

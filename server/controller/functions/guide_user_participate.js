@@ -24,7 +24,6 @@ module.exports = {
 
     const { guideCard } = await selectGuideCardById(req);
 
-
     // 참가인원이 다 찼을 때
     if (guideCard.state === GLOBAL_VARIABLE.COMPLETED) {
       resObject['code'] = 201;
@@ -75,6 +74,7 @@ module.exports = {
   findGuideUserApproved: async (req, res) => {
     const resObject = {};
     const accessToken = isAuthorized(req);
+    const pages = req.query.page;
 
     try {
       if (!accessToken) {
@@ -90,24 +90,28 @@ module.exports = {
           {
             model: guide_card,
             where: {
-              state: GLOBAL_VARIABLE.APPROVED
+              state: GLOBAL_VARIABLE.APPROVED,
             },
             include: [
               {
-                model: guide_image
-              }
+                model: guide_image,
+              },
             ],
-            order: ['guideDate', 'ASC']
           },
           {
             model: user,
             attributes: ['nickName', 'gender', 'image'],
-          }
+          },
         ],
+        separate: true,
+        // order: [[guide_card, 'createdAt', 'desc']],
+        // order: [`guide_card`.`guide_date`]
+        offset: pages * 6 - 6,
+        limit: 6,
       });
 
       const guideCardData = [];
-      for(let guideItem of guideList){
+      for (let guideItem of guideList) {
         const guideCard = guideItem.dataValues.guide_card.dataValues;
         const guideCardWriter = guideItem.dataValues.user.dataValues;
         const guideCardImages = guideCard.guide_images;
@@ -124,15 +128,15 @@ module.exports = {
         guidePushData['userId'] = guideCardWriter['userId'];
         guidePushData['nickName'] = guideCardWriter['nickName'];
         guidePushData['gender'] = guideCardWriter['gender'];
-        if(guideCardWriter['image']){
+        if (guideCardWriter['image']) {
           guidePushData['userImage'] = guideCardWriter['image'];
-        }else{
+        } else {
           guidePushData['userImage'] = '/asset/main/stamp.png';
         }
 
-        if(guideCardImages.length > 0){
+        if (guideCardImages.length > 0) {
           const guideImages = [];
-          for(let guideCardImage of guideCardImages){
+          for (let guideCardImage of guideCardImages) {
             const guideImageData = guideCardImage.dataValues;
             guideImages.push(guideImageData.image);
           }
@@ -158,6 +162,7 @@ module.exports = {
   findGuideUserCompleted: async (req, res) => {
     const resObject = {};
     const accessToken = isAuthorized(req);
+    const pages = req.query.page;
 
     try {
       if (!accessToken) {
@@ -173,24 +178,26 @@ module.exports = {
           {
             model: guide_card,
             where: {
-              state: GLOBAL_VARIABLE.COMPLETED
+              state: GLOBAL_VARIABLE.COMPLETED,
             },
             include: [
               {
-                model: guide_image
-              }
+                model: guide_image,
+              },
             ],
-            order: ['guideDate', 'ASC']
+            order: ['guideDate', 'ASC'],
           },
           {
             model: user,
             attributes: ['nickName', 'gender', 'image'],
-          }
+          },
         ],
+        offset: pages * 6 - 6,
+        limit: 6,
       });
 
       const guideCardData = [];
-      for(let guideItem of guideList){
+      for (let guideItem of guideList) {
         const guideCard = guideItem.dataValues.guide_card.dataValues;
         const guideCardWriter = guideItem.dataValues.user.dataValues;
         const guideCardImages = guideCard.guide_images;
@@ -207,15 +214,15 @@ module.exports = {
         guidePushData['userId'] = guideCardWriter['userId'];
         guidePushData['nickName'] = guideCardWriter['nickName'];
         guidePushData['gender'] = guideCardWriter['gender'];
-        if(guideCardWriter['image']){
+        if (guideCardWriter['image']) {
           guidePushData['userImage'] = guideCardWriter['image'];
-        }else{
+        } else {
           guidePushData['userImage'] = '/asset/main/stamp.png';
         }
 
-        if(guideCardImages.length > 0){
+        if (guideCardImages.length > 0) {
           const guideImages = [];
-          for(let guideCardImage of guideCardImages){
+          for (let guideCardImage of guideCardImages) {
             const guideImageData = guideCardImage.dataValues;
             guideImages.push(guideImageData.image);
           }

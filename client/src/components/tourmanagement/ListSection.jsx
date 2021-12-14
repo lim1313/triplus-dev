@@ -18,7 +18,7 @@ const ListSectionCtn = styled.ul`
   }
 `;
 
-export default function ListSection({ isFiltered }) {
+export default function ListSection({ items }) {
   const dispatch = useDispatch();
   const handleTourCardClick = (el) => {
     if (el.state === 'COMPLETED') return;
@@ -30,7 +30,7 @@ export default function ListSection({ isFiltered }) {
   };
   return (
     <ListSectionCtn>
-      {isFiltered.map((el) => {
+      {items.map((el) => {
         return (
           <ListItem key={el.nickName} guideInfo={el} handleTourCardClick={handleTourCardClick} />
         );
