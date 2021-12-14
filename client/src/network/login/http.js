@@ -38,3 +38,6 @@ export const naverOauth = (authorizationCode, state) =>
       },
     }
   );
+
+export const kakaoOauth = (authorizationCode) =>
+  axios.post(`${http}/oauth/kakaocallback`, { authorizationCode });

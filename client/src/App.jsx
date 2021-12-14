@@ -18,6 +18,7 @@ import NaverCallback from './pages/NaverCallback';
 import { useSelector } from 'react-redux';
 import ManagementPage from './pages/ManagementPage';
 import TourManagementPage from './pages/TourManagementPage';
+import KakaoCallback from './pages/KakaoCallback';
 
 function App() {
   const { pathname } = useLocation();
@@ -40,6 +41,7 @@ function App() {
         <Route path='/mypage' element={<MyPage />} />
         <Route path='/googlecallback' element={<GoogleCallback />} />
         <Route path='/navercallback' element={<NaverCallback />} />
+        <Route path='/kakaocallback' element={<KakaoCallback />} />
       </Routes>
       {pathname === '/map' || pathname === '/admin' || pathname === '/mypage' ? null : (
         <Footer main={pathname === '/' ? 'main' : null} />
