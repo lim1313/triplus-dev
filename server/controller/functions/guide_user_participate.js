@@ -1,7 +1,8 @@
 const { isAuthorized } = require('./user');
-const { guide_user_participate } = require('./../../models');
+const { guide_user_participate, guide_card, user, guide_image } = require('./../../models');
 const { selectGuideCardById } = require('./../functions/guide_card');
 const GLOBAL_VARIABLE = require('./global_variable');
+const date_fns = require('date-fns');
 
 module.exports = {
   createGuideUserParticipate: async (req) => {
@@ -71,7 +72,7 @@ module.exports = {
     }
   },
 
-  selectGuideUserParticipateByUserId: async (req, res) => {
+  findGuideUserApproved: async (req, res) => {
     const resObject = {};
     const accessToken = isAuthorized(req);
 
@@ -81,18 +82,159 @@ module.exports = {
         throw 'accessToken이 없습니다';
       }
 
-      await guide_user_participate.findAll({
-        where: { userId: accessToken.userId },
+      const guideList = await guide_user_participate.findAll({
+        where: {
+          userId: accessToken.userId,
+        },
         include: [
           {
             model: guide_card,
+            where: {
+              state: GLOBAL_VARIABLE.APPROVED
+            },
+            include: [
+              {
+                model: guide_image
+              }
+            ],
+            order: ['guideDate', 'ASC']
           },
+          {
+            model: user,
+            attributes: ['nickName', 'gender', 'image'],
+          }
         ],
       });
+
+      const guideCardData = [];
+      for(let guideItem of guideList){
+        const guideCard = guideItem.dataValues.guide_card.dataValues;
+        const guideCardWriter = guideItem.dataValues.user.dataValues;
+        const guideCardImages = guideCard.guide_images;
+        const guidePushData = {};
+        guidePushData['guideId'] = guideCard['guideId'];
+        guidePushData['title'] = guideCard['title'];
+        guidePushData['content'] = guideCard['content'];
+        guidePushData['guideDate'] = date_fns.format(guideCard['guideDate'], 'yyyy.MM.dd');
+        guidePushData['startTime'] = guideCard['startTime'];
+        guidePushData['endTime'] = guideCard['endTime'];
+        guidePushData['address'] = guideCard['address'];
+        guidePushData['openDate'] = guideCard['openDate'];
+        guidePushData['state'] = guideCard['state'];
+        guidePushData['userId'] = guideCardWriter['userId'];
+        guidePushData['nickName'] = guideCardWriter['nickName'];
+        guidePushData['gender'] = guideCardWriter['gender'];
+        if(guideCardWriter['image']){
+          guidePushData['userImage'] = guideCardWriter['image'];
+        }else{
+          guidePushData['userImage'] = '/asset/main/stamp.png';
+        }
+
+        if(guideCardImages.length > 0){
+          const guideImages = [];
+          for(let guideCardImage of guideCardImages){
+            const guideImageData = guideCardImage.dataValues;
+            guideImages.push(guideImageData.image);
+          }
+          guidePushData['tourImage'] = guideImages;
+        } else {
+          guidePushData['tourImage'] = ['/asset/else/trip.jpg'];
+        }
+
+        guideCardData.push(guidePushData);
+      }
+
+      resObject['code'] = 200;
+      resObject['guideList'] = guideCardData;
     } catch (error) {
       console.log(`ERROR: ${error}`);
       resObject['message'] = error;
       return resObject;
     }
+
+    return resObject;
+  },
+
+  findGuideUserCompleted: async (req, res) => {
+    const resObject = {};
+    const accessToken = isAuthorized(req);
+
+    try {
+      if (!accessToken) {
+        resObject['code'] = 401;
+        throw 'accessToken이 없습니다';
+      }
+
+      const guideList = await guide_user_participate.findAll({
+        where: {
+          userId: accessToken.userId,
+        },
+        include: [
+          {
+            model: guide_card,
+            where: {
+              state: GLOBAL_VARIABLE.COMPLETED
+            },
+            include: [
+              {
+                model: guide_image
+              }
+            ],
+            order: ['guideDate', 'ASC']
+          },
+          {
+            model: user,
+            attributes: ['nickName', 'gender', 'image'],
+          }
+        ],
+      });
+
+      const guideCardData = [];
+      for(let guideItem of guideList){
+        const guideCard = guideItem.dataValues.guide_card.dataValues;
+        const guideCardWriter = guideItem.dataValues.user.dataValues;
+        const guideCardImages = guideCard.guide_images;
+        const guidePushData = {};
+        guidePushData['guideId'] = guideCard['guideId'];
+        guidePushData['title'] = guideCard['title'];
+        guidePushData['content'] = guideCard['content'];
+        guidePushData['guideDate'] = date_fns.format(guideCard['guideDate'], 'yyyy.MM.dd');
+        guidePushData['startTime'] = guideCard['startTime'];
+        guidePushData['endTime'] = guideCard['endTime'];
+        guidePushData['address'] = guideCard['address'];
+        guidePushData['openDate'] = guideCard['openDate'];
+        guidePushData['state'] = guideCard['state'];
+        guidePushData['userId'] = guideCardWriter['userId'];
+        guidePushData['nickName'] = guideCardWriter['nickName'];
+        guidePushData['gender'] = guideCardWriter['gender'];
+        if(guideCardWriter['image']){
+          guidePushData['userImage'] = guideCardWriter['image'];
+        }else{
+          guidePushData['userImage'] = '/asset/main/stamp.png';
+        }
+
+        if(guideCardImages.length > 0){
+          const guideImages = [];
+          for(let guideCardImage of guideCardImages){
+            const guideImageData = guideCardImage.dataValues;
+            guideImages.push(guideImageData.image);
+          }
+          guidePushData['tourImage'] = guideImages;
+        } else {
+          guidePushData['tourImage'] = ['/asset/else/trip.jpg'];
+        }
+
+        guideCardData.push(guidePushData);
+      }
+
+      resObject['code'] = 200;
+      resObject['guideList'] = guideCardData;
+    } catch (error) {
+      console.log(`ERROR: ${error}`);
+      resObject['message'] = error;
+      return resObject;
+    }
+
+    return resObject;
   },
 };

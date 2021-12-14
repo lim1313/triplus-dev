@@ -11,8 +11,8 @@ router.put('/change-state-rejected', controller.changeStateRejected);
 router.put('/change-state-completed', controller.changeStateCompleted);
 router.put('/change-state-canceled', controller.changeStateCanceled);
 router.get('/guide', controller.selectGuideCardByUserId);
-router.get('/tourlist/all', controller.selectGuideCardForTour);
-router.get('/tourlist/expected', controller.selectGuideCardForTour);
-router.get('/tourlist/completed', controller.selectGuideCardForTour);
+// router.get('/tourlist/all');
+router.get('/tourlist/expected', controller.findGuideUserApproved);
+router.get('/tourlist/completed', controller.findGuideUserCompleted);
 
 module.exports = router;
