@@ -132,7 +132,7 @@ export default function SideBar({ selectRoomHandler, iconClickHandler }) {
 
   return (
     <SideContainer>
-      {roomList.map((el, i) => {
+      {roomList.map((el, index) => {
         return (
           <RoomName
             id={el.roomId}
@@ -140,7 +140,7 @@ export default function SideBar({ selectRoomHandler, iconClickHandler }) {
             selected={String(el.roomId) === currentRoom}
             partnerLeft={el.partnerLeft === 'left'}
             onClick={clickRoomHandler}
-            key={i}
+            key={index}
             palette={el.partnerLeft ? 'lightRed' : 'gray'}
           >
             <div
