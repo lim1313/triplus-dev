@@ -93,7 +93,7 @@ const TableHeader = styled.ul`
 const TableHeaderLi = styled.li`
   width: ${({ width }) => width};
   text-align: center;
-  color: ${({ gray, theme }) => theme.color.black}
+  color: ${({ gray, theme }) => theme.color.black};
   height: 1.6rem;
 `;
 

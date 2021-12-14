@@ -13,11 +13,15 @@ import { UserNick } from './UserNick';
 
 const TourCardLi = styled(CardLi)`
   filter: none;
+  height: 230px;
   .card-wrapper {
     filter: ${({ state }) => (state === 'COMPLETED' || state === 'CANCELED') && 'grayscale(100%)'};
   }
   &:hover {
     cursor: ${({ state }) => state === 'COMPLETED' && 'not-allowed'};
+  }
+  & .profile {
+    margin-top: 1.1rem;
   }
   @media ${({ theme }) => theme.device.mobile} {
     width: 90%;
@@ -85,7 +89,7 @@ export default function ListItem({ guideInfo, handleTourCardClick }) {
       )}
       <div className='card-wrapper'>
         <ImageWrapper className='img-wrapper' backImage={guideInfo.tourImage} />
-        <TitleWrapper>
+        <TitleWrapper dday={getDday()}>
           <div className='date'>
             {guideInfo && guideInfo.state === 'COMPLETED' ? 'END' : `D - ${getDday()}`}
           </div>

@@ -87,7 +87,11 @@ export default function ApplicantCards({ applicantInfo }) {
           <MoveBtn left onClick={() => moveImg('l')}>
             <FaAngleLeft />
           </MoveBtn>
-          <MoveBtn onClick={() => moveImg('r')}>
+          <MoveBtn
+            onClick={() => {
+              if (applicantInfo.length > 3) moveImg('r');
+            }}
+          >
             <FaAngleRight />
           </MoveBtn>
           <CardsWarpper>
