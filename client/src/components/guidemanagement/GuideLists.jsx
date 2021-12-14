@@ -12,6 +12,7 @@ const CreateBtn = styled(BorderBtn)`
 
 export default function GuideLists(props) {
   const { handleCreateClick, guideInfo, applicantInfo } = props;
+  console.log('lists', applicantInfo);
   return (
     <div>
       <H3Ctn>

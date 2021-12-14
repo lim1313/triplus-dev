@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BorderBtn } from '../../styles/common';
+import { BorderBtn, ColorBtn } from '../../styles/common';
 import { useSelector } from 'react-redux';
 
 const BtnsBlock = styled.div`
@@ -25,21 +25,13 @@ const BtnsBlock = styled.div`
 //   padding: 0;
 //   padding-left: 5rem;
 // `;
-const LoginBtn = styled(BorderBtn)`
+const LoginBtn = styled(ColorBtn)`
   height: 7vh;
   margin-top: 20px;
-  &:hover {
-    background: ${({ theme }) => theme.color.blue};
-    color: white;
-  }
 `;
 const SignupBtn = styled(BorderBtn)`
   height: 7vh;
   margin-top: 20px;
-  &:hover {
-    background: ${({ theme }) => theme.color.blue};
-    color: white;
-  }
 `;
 
 export default function LoginBtns(props) {
@@ -50,7 +42,9 @@ export default function LoginBtns(props) {
       <div>
         <span>{state.message}</span>
       </div>
-      <LoginBtn onClick={handleLoginClick}>로그인</LoginBtn>
+      <LoginBtn palette='blue' onClick={handleLoginClick}>
+        로그인
+      </LoginBtn>
       <SignupBtn onClick={handleSignupClick}>회원가입</SignupBtn>
     </BtnsBlock>
   );

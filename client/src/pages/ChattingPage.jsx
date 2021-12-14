@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars*/
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +16,6 @@ import {
 } from '../redux/chat/action';
 import { logoutUser } from '../redux/login/action';
 
-import Loading from '../components/common/Loading';
 import ChatContainer from '../components/chat/ChatContainer';
 import ChatModal from '../components/chat/ChatModal';
 
@@ -31,7 +29,6 @@ export default function ChattingPage() {
 
   const userId = useSelector((state) => state.chatUserInfoReducer.userId);
   const currentRoom = useSelector((state) => state.currentRoomReducer.currentRoom);
-  const isLogin = useSelector((state) => state.loginReducer.isLogin);
 
   const [openModal, setOpenModal] = useState(false);
   const [exitRoom, setExitRoom] = useState(null);

@@ -4,8 +4,7 @@ import styled, { css } from 'styled-components';
 import dayjs from 'dayjs';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { logoutUser } from '../redux/login/action';
-import { adminUser, adminOpen } from '../redux/admin/action';
+import { adminUser, adminOpen, logoutAdminUser } from '../redux/admin/action';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -139,15 +138,11 @@ export default function AdminPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getGuide(currentPage, size)
-      .then((res) => {
-        setGuideList(res.data.data);
-        setCount(res.data.count);
-      })
-      .catch((err) => {
-        dispatch(adminOpen());
-      });
-  }, [currentPage, dispatch]);
+    getGuide(currentPage, size).then((res) => {
+      setGuideList(res.data.data);
+      setCount(res.data.count);
+    });
+  }, [currentPage, isOpen]);
 
   const getGuideInfo = (e) => {
     console.log(e.target.id);
@@ -162,7 +157,7 @@ export default function AdminPage() {
   };
 
   const handleLogoutClick = () => {
-    dispatch(logoutUser());
+    dispatch(logoutAdminUser());
     navigate('/');
   };
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { adminUser } from '../../../redux/admin/action';
 import AdminBtns from './AdminBtns';
@@ -37,10 +37,18 @@ export default function ModalTemplete() {
   const [adminId, setAdminId] = useState('');
   const [adminPw, setAdminPw] = useState('');
   const dispatch = useDispatch();
-  // const adminState = useSelector((state) => state.adminReducer);
+  const adminState = useSelector((state) => state.adminReducer);
   const navigate = useNavigate();
-  // const { isAdmin } = adminState;
+  const { isAdmin } = adminState;
 
+  // ---- navigate ----
+  if (isAdmin) {
+    return () => {
+      navigate('/admin');
+    };
+  }
+
+  // ---- 이벤트 핸들러 ----
   const handleIdChange = (e) => {
     setAdminId(e.target.value);
   };
@@ -50,15 +58,13 @@ export default function ModalTemplete() {
   const handleCancelClick = () => {
     navigate('/');
   };
-  const handleLoginClick = async (e) => {
+  const handleLoginClick = (e) => {
     e.preventDefault();
     let body = {
       userId: adminId,
       password: adminPw,
       isAdmin: 'admin',
     };
-    setAdminId('');
-    setAdminPw('');
     dispatch(adminUser(body));
   };
 

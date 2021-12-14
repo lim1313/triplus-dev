@@ -93,7 +93,7 @@ export default function ManagementPage() {
       })
       .catch((err) => setIsLoading(false));
   }, [pathname, isDeleted, isCompleted]);
-
+  console.log('management', applicantInfo);
   return (
     <>
       {isOpen ? (
