@@ -126,6 +126,7 @@ module.exports = {
     const whereUser = {};
 
     try {
+      whereGuideCard[Op.and].push({ state: { [Op.eq]: GLOBAL_VARIABLE.APPROVED } });
       if (params['swLat']) {
         whereGuideCard[Op.and].push({ latitude: { [Op.gte]: params['swLat'] } });
       }
@@ -195,11 +196,6 @@ module.exports = {
         guideCardItem['userId'] = guideCardData['userId'];
         guideCardItem['nickName'] = userData['nickName'];
         guideCardItem['gender'] = userData['gender'];
-        if (userData['image']) {
-          guideCardItem['userImage'] = userData['image'];
-        } else {
-          guideCardItem['userImage'] = '/asset/main/stamp.png';
-        }
         guideCardItem['createdAt'] = date_fns.format(guideCardData['createdAt'], 'yyyy.MM.dd');
         guideCardItem['updatedAt'] = date_fns.format(guideCardData['updatedAt'], 'yyyy.MM.dd');
         if (userData['image']) {
@@ -399,40 +395,4 @@ module.exports = {
       return resObject;
     }
   },
-
-  selectGuideCardForTour: async (req) => {
-    const resObject = {};
-    const accessToken = isAuthorized(req);
-
-    // 토큰이 없었을 때
-    try {
-      if (!accessToken) {
-        throw 'accessToken이 없습니다';
-      }
-    } catch (error) {
-      console.log(`ERROR: ${error}`);
-      resObject['code'] = 400;
-      resObject['message'] = error;
-      return resObject;
-    }
-
-    const page = req.body.page;
-    const limit = page * 6;
-    const offset = limit - 6;
-
-    const approvedGuideUserPart = await guide_user_participate.findAll({
-      raw: true,
-      where: {userId: accessToken.userId},
-      include: [
-        {
-          model: guide_card,
-          where: {state: GLOBAL_VARIABLE.APPROVED}
-        }
-      ],
-      offset: offset,
-      limit: limit,
-    });
-
-    return resObject;
-  }
 };
