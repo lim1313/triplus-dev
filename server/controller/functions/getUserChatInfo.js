@@ -53,7 +53,7 @@ module.exports = {
       const chatRoomAndMembers = await chat_member
         .findAll({
           raw: true,
-          attributes: ['roomId'],
+          attributes: ['roomId', 'left'],
           include: [
             {
               model: user,
@@ -76,6 +76,7 @@ module.exports = {
               roomId: chatRoomAndMember.roomId,
               chatPartnerId: chatRoomAndMember['user.userId'],
               chatPartnerNickName: chatRoomAndMember['user.nickName'],
+              partnerLeft: chatRoomAndMember['left'],
               count: chatRoomInfo.count,
             });
           }
@@ -131,15 +132,16 @@ module.exports = {
         partnerChatRoomCondition[Op.or].push({ roomId: chatMember.roomId });
       }
 
+      console.log(partnerChatRoomCondition);
+
       const chatRoomAndMembers = await chat_member
         .findAll({
           raw: true,
-          attributes: ['roomId'],
+          attributes: ['roomId', 'left'],
           include: [
             {
               model: user,
               attributes: ['userId', 'nickName'],
-              // > [Op.ne] => no equal <>
               where: { userId: { [Op.ne]: partnerUserInfo.userId } },
             },
           ],
@@ -158,12 +160,14 @@ module.exports = {
               roomId: chatRoomAndMember.roomId,
               chatPartnerId: chatRoomAndMember['user.userId'],
               chatPartnerNickName: chatRoomAndMember['user.nickName'],
+              partnerLeft: chatRoomAndMember['left'],
               count: chatRoomInfo.count,
             });
           }
         }
       }
 
+      console.log(chatRooms);
       resObject['userId'] = partnerUserInfo.userId;
       resObject['nickname'] = partnerUserInfo.nickName;
       resObject['chatRooms'] = chatRooms;

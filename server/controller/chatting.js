@@ -10,10 +10,17 @@ module.exports = {
     const myId = verifed.userId;
 
     let roomAlready = 0;
+    let alreadyLeft = false;
 
     try {
-      const myRooms = await chat_member.findAll({ raw: true, where: { userId: myId } });
-      const partnerRooms = await chat_member.findAll({ raw: true, where: { userId: userId } });
+      const myRooms = await chat_member.findAll({
+        raw: true,
+        where: { userId: myId, left: { [Op.ne]: 'left' } },
+      });
+      const partnerRooms = await chat_member.findAll({
+        raw: true,
+        where: { userId: userId, left: { [Op.ne]: 'left' } },
+      });
 
       for (let myRoom of myRooms) {
         for (let partnerRoom of partnerRooms) {

@@ -93,14 +93,12 @@ export default function ChattingPage() {
       dispatch(logoutUser());
       navigate('/login');
     });
-    return () => {
-      socketRef.current.disconnect();
-    };
   }, []);
 
   useEffect(() => {
     socketRef.current.on('getRooms', (data, isLeft, reset) => {
       console.log('getRooms');
+      console.log(data);
       if (isLeft === 'Internal Server Error' || reset === 'Internal Server Error')
         alert('잠시 후에 다시 시도해주세요');
       else if (isLeft === 'success') {
@@ -112,10 +110,6 @@ export default function ChattingPage() {
         socketRef.current.emit('countReset', currentRoomRef.current);
       }
     });
-
-    return () => {
-      socketRef.current.disconnect();
-    };
   }, []);
 
   useEffect(() => {
@@ -133,16 +127,11 @@ export default function ChattingPage() {
       const newChat = editChat(initialChat);
       dispatch(resetChatList(newChat));
     });
-    return () => {
-      socketRef.current.disconnect();
-    };
   }, []);
 
   useEffect(() => {
     // TODO 3. 송신한 메세지 수신하기
     socketRef.current.on('getMessage', (data, selectedRoom) => {
-      console.log(data);
-      console.log(selectedRoom);
       if (selectedRoom === currentRoomRef.current) {
         const newChat = editChat(data);
         dispatch(getChatList(newChat));
@@ -150,13 +139,20 @@ export default function ChattingPage() {
     });
     return () => {
       socketRef.current.disconnect();
+      dispatch(resetChatList([]));
+      dispatch(
+        getUserChatInfo({
+          userId: '',
+          nickname: '',
+          chatRooms: [],
+        })
+      );
     };
   }, []);
 
   // TODO 4. 룸에 입장
   const selectRoomHandler = (currentRoom, selectedRoom) => {
     if (selectedRoom === '') return;
-    console.log('enter');
     dispatch(changeCurrentRoom(selectedRoom));
     socketRef.current.emit('joinRoom', currentRoom, selectedRoom);
   };
@@ -175,7 +171,6 @@ export default function ChattingPage() {
   };
 
   const iconClickHandler = (selectedRoom) => {
-    console.log(selectedRoom);
     setExitRoom(selectedRoom);
     setOpenModal(true);
   };
