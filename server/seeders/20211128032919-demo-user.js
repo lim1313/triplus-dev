@@ -13,23 +13,8 @@ module.exports = {
     //  */
     return queryInterface.bulkInsert('user', [
       {
-        user_id: 'william9563',
-        password: '123412',
-        email: 'example@example.com',
-        nick_name: 'mola',
-        gender: '1',
-        region: '서울',
-        image: '',
-        social: '',
-        state: '',
-        role: '',
-        expired_datetime: new Date(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
         user_id: 'cindy12',
-        password: '123412',
+        password: '$2b$12$uUahY/hX0p43voKF/to3xuXZ6cCYbF8ahIwY/mYPXNIhrIZ/aWm1K',
         email: 'example1@example.com',
         nick_name: 'cindy12',
         gender: '1',

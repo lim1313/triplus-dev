@@ -53,7 +53,12 @@ const ButtonContainer = styled.div`
   padding: ${({ notice }) => (notice ? '2rem 2rem .5rem' : '2rem')};
 `;
 
-export default function GuideInfoModal({ selectedGuide, setSelectedGuide, setOpenModal }) {
+export default function GuideInfoModal({
+  selectedGuide,
+  setSelectedGuide,
+  setOpenModal,
+  setCurrentPage,
+}) {
   const [noticeModal, setNoticeModal] = useState(false);
 
   const outModal = () => {
@@ -62,7 +67,9 @@ export default function GuideInfoModal({ selectedGuide, setSelectedGuide, setOpe
   };
 
   const resetPage = () => {
-    window.location.assign(window.location.href);
+    setSelectedGuide(null);
+    setOpenModal(false);
+    setCurrentPage(0);
   };
 
   const deleteGuide = () => {
