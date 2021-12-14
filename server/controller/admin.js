@@ -1,10 +1,16 @@
 const { updateGuideCard } = require('./functions/guide_card');
 const GLOBAL_VARIABLE = require('./functions/global_variable');
 const { guide_card, guide_image } = require('../models');
+const { isAuthorized } = require('./functions/user');
 const { consumers } = require('nodemailer/lib/xoauth2');
 
 module.exports = {
   guideCardList: async (req, res) => {
+    const verified = isAuthorized(req);
+    if (!verified) return res.status(400).send('다시 로그인해주세요');
+    else if (verified.role === 'general')
+      return res.status(400).send('관리자 권한이 없습니다. 다시 로그인 해주세요');
+
     try {
       const { page, size } = req.query;
       const numberPage = Number(page);
@@ -18,7 +24,6 @@ module.exports = {
           },
         ],
       });
-      console.log(guideCardList);
       const guideListCount = guideCardList.length;
       const startIdx = numberPage * numberSize;
       const endIdx =
@@ -36,6 +41,12 @@ module.exports = {
   // > 진행중인 것: APPROVED
 
   changeStateCanceled: async (req, res) => {
+    const verified = isAuthorized(req);
+    console.log(verified);
+    if (!verified) return res.status(400).send('다시 로그인해주세요');
+    else if (verified.role === 'general')
+      return res.status(400).send('관리자 권한이 없습니다. 다시 로그인 해주세요');
+
     try {
       const params = req.body;
       // > req.body : {guideId: guideId}

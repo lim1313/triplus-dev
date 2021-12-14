@@ -4,12 +4,17 @@ import styled, { css } from 'styled-components';
 import dayjs from 'dayjs';
 
 import { useSelector, useDispatch } from 'react-redux';
+import { logoutUser } from '../redux/login/action';
+import { adminUser, adminOpen } from '../redux/admin/action';
+
+import { useNavigate } from 'react-router-dom';
+
 import ModalTemplete from '../components/admin/adminmodal/ModalTemplete';
 import Pagination from '../components/admin/Pagination';
-import { adminOpen } from '../redux/admin/action';
 
 import { getGuide, cancelGuide } from '../network/admin/http';
 import GuideInfoModal from '../components/admin/GuideInfoModal';
+import { BorderBtn } from '../styles/common';
 
 const Body = styled.div`
   display: flex;
@@ -29,6 +34,7 @@ const Section = styled.section`
 `;
 
 const Title = styled.h1`
+  position: relative;
   text-align: center;
   font-size: 2.5rem;
   margin-top: 0;
@@ -53,6 +59,13 @@ const LogoWrapper = styled.div`
 const Img = styled.img`
   object-fit: contain;
   width: inherit;
+`;
+
+const LogoutBtn = styled(BorderBtn)`
+  position: absolute;
+  top: 2rem;
+  right: 3rem;
+  z-index: 10;
 `;
 
 const SubTitle = styled.p`
@@ -112,12 +125,7 @@ const TableGuideListLi = styled.li`
 `;
 
 export default function AdminPage() {
-  // const isOpen = useSelector((state) => state.adminOpenReducer);
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(adminOpen());
-  // }, [dispatch]);
-
+  const isOpen = useSelector((state) => state.adminOpenReducer.isOpen);
   const [currentPage, setCurrentPage] = useState(0);
   const [count, setCount] = useState(0);
   const [guideList, setGuideList] = useState([]);
@@ -127,15 +135,19 @@ export default function AdminPage() {
 
   const totalPageLength = Math.ceil(count / size);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   useEffect(() => {
     getGuide(currentPage, size)
       .then((res) => {
-        console.log(res);
         setGuideList(res.data.data);
         setCount(res.data.count);
       })
-      .catch((err) => alert(err.response.data));
-  }, [currentPage]);
+      .catch((err) => {
+        dispatch(adminOpen());
+      });
+  }, [currentPage, dispatch]);
 
   const getGuideInfo = (e) => {
     console.log(e.target.id);
@@ -148,60 +160,75 @@ export default function AdminPage() {
   const changePageHandler = (changePage) => {
     setCurrentPage(changePage);
   };
+
+  const handleLogoutClick = () => {
+    dispatch(logoutUser());
+    navigate('/');
+  };
+
   return (
     <Body>
-      {/* <div>{isOpen ? <ModalTemplete /> : null}</div>; */}
-      <Section>
-        <LogoWrapper>
-          <Img src='/asset/logo/logo.png' alt='로고' />
-          <SubTitle>여행에 우리를 더하다</SubTitle>
-        </LogoWrapper>
-        <Title>가이드 진행 목록</Title>
-        <Table>
-          <TableHeader>
-            <TableHeaderLi width='5%'>No.</TableHeaderLi>
-            <TableHeaderLi width='20%'>작성자</TableHeaderLi>
-            <TableHeaderLi width='45%'>가이드 제목</TableHeaderLi>
-            <TableHeaderLi width='15%'>가이드 날짜</TableHeaderLi>
-            <TableHeaderLi width='15%'>생성 날짜</TableHeaderLi>
-          </TableHeader>
-          <TableGuideListContainer>
-            {guideList.map((guideInfo, i) => {
-              return (
-                <TableGuideList key={guideInfo.guideId}>
-                  <TableGuideListLi width='5%'>{currentPage * size + i + 1}</TableGuideListLi>
-                  <TableGuideListLi width='20%'>{guideInfo.userId}</TableGuideListLi>
-                  <TableGuideListLi
-                    id={guideInfo.guideId}
-                    width='45%'
-                    title='title'
-                    onClick={getGuideInfo}
-                  >
-                    {guideInfo.title}
-                  </TableGuideListLi>
-                  <TableGuideListLi width='15%' gray='gray'>
-                    {dayjs(guideInfo.guideDate).format('YYYY.MM.DD')}
-                  </TableGuideListLi>
-                  <TableGuideListLi width='15%' gray='gray'>
-                    {dayjs(guideInfo.guideCreatedAt).format('YYYY.MM.DD')}
-                  </TableGuideListLi>
-                </TableGuideList>
-              );
-            })}
-          </TableGuideListContainer>
-        </Table>
-        <Pagination
-          totalPageLength={totalPageLength}
-          currentPage={currentPage}
-          changePageHandler={changePageHandler}
-        ></Pagination>
-      </Section>
-      {openModal && (
-        <GuideInfoModal
-          selectedGuide={selectedGuide}
-          setSelectedGuide={setSelectedGuide}
-          setOpenModal={setOpenModal}
-        />
+      {isOpen ? (
+        <>
+          <Section>
+            <LogoWrapper>
+              <Img src='/asset/logo/logo.png' alt='로고' />
+              <SubTitle>여행에 우리를 더하다</SubTitle>
+            </LogoWrapper>
+            <LogoutBtn palette='blue' onClick={handleLogoutClick}>
+              로그아웃
+            </LogoutBtn>
+            <Title>가이드 진행 목록</Title>
+            <Table>
+              <TableHeader>
+                <TableHeaderLi width='5%'>No.</TableHeaderLi>
+                <TableHeaderLi width='20%'>작성자</TableHeaderLi>
+                <TableHeaderLi width='45%'>가이드 제목</TableHeaderLi>
+                <TableHeaderLi width='15%'>가이드 날짜</TableHeaderLi>
+                <TableHeaderLi width='15%'>생성 날짜</TableHeaderLi>
+              </TableHeader>
+              <TableGuideListContainer>
+                {guideList.map((guideInfo, i) => {
+                  return (
+                    <TableGuideList key={guideInfo.guideId}>
+                      <TableGuideListLi width='5%'>{currentPage * size + i + 1}</TableGuideListLi>
+                      <TableGuideListLi width='20%'>{guideInfo.userId}</TableGuideListLi>
+                      <TableGuideListLi
+                        id={guideInfo.guideId}
+                        width='45%'
+                        title='title'
+                        onClick={getGuideInfo}
+                      >
+                        {guideInfo.title}
+                      </TableGuideListLi>
+                      <TableGuideListLi width='15%' gray='gray'>
+                        {dayjs(guideInfo.guideDate).format('YYYY.MM.DD')}
+                      </TableGuideListLi>
+                      <TableGuideListLi width='15%' gray='gray'>
+                        {dayjs(guideInfo.guideCreatedAt).format('YYYY.MM.DD')}
+                      </TableGuideListLi>
+                    </TableGuideList>
+                  );
+                })}
+              </TableGuideListContainer>
+            </Table>
+            <Pagination
+              totalPageLength={totalPageLength}
+              currentPage={currentPage}
+              changePageHandler={changePageHandler}
+            ></Pagination>
+          </Section>
+          {openModal && (
+            <GuideInfoModal
+              selectedGuide={selectedGuide}
+              setSelectedGuide={setSelectedGuide}
+              setOpenModal={setOpenModal}
+              setCurrentPage={setCurrentPage}
+            />
+          )}
+        </>
+      ) : (
+        <ModalTemplete />
       )}
     </Body>
   );
