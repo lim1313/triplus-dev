@@ -23,7 +23,6 @@ export const getGuideCards = async (params) => {
       if (axios.isCancel(err)) {
         console.log(err);
       } else {
-        console.log(err);
         return err.response;
       }
     });
@@ -34,7 +33,6 @@ export const getCardModal = async (params) => {
   return axios
     .get(`${http}/map/guide-card`, { params: { guideId: params } })
     .then((res) => {
-      console.log(res);
       return res.data.guideCard;
     })
     .catch((err) => err.response.status);

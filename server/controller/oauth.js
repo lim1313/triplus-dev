@@ -123,22 +123,24 @@ module.exports = {
         },
         withCredentials: true,
       });
+      console.log(kakaoToken.data.access_token);
+      console.log(userInfo.data);
 
       const { id } = userInfo.data;
       const { nickname, profile_image_url } = userInfo.data.kakao_account.profile;
 
       //* 닉네임 생성
+      //! 닉네임 생성 시 중복 검사 추가 필요
       const key1 = crypto.randomBytes(256).toString('hex').substr(100, 4);
       const randomNum = parseInt(key1, 16);
       const nick = '여행자' + randomNum;
 
       //* 카카오 회원 테이블 저장
-      //! 닉네임 중복 검사 추가 필요
-      const [userData, created] = await user.findOrCreate({
+      const [userData] = await user.findOrCreate({
         where: {
-          userId: id,
+          userId: nickname + id + '@kakao',
           social: 'kakao',
-          expiredDatetime: '',
+          expiredDatetime: null,
         },
         defaults: {
           nickName: nick,

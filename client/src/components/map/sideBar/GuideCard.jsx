@@ -178,7 +178,6 @@ export default function GuideCard({ cardInfo, ulRef, scroll }) {
   const cardClick = (cardId) => {
     // TODO GET /map/guide-card?guide-id=cardId
     getCardModal(cardId).then((res) => {
-      console.log(res);
       dispatch(openGuideModal({ isOpen: true, modalInfo: res }));
     });
   };
@@ -204,11 +203,15 @@ export default function GuideCard({ cardInfo, ulRef, scroll }) {
         return ulRef.current.removeEventListener('scroll', scrollTimeout, false);
 
       let elementTop = cardRef.current.getBoundingClientRect().top;
-      if (elementTop < window.innerHeight + window.pageYOffset + 500) {
+      let elementLeft = cardRef.current.getBoundingClientRect().left;
+
+      if (
+        elementTop < window.innerHeight + window.pageYOffset + 500 &&
+        elementLeft < window.innerWidth + window.pageXOffset + 500
+      ) {
         const node = cardRef.current;
-        if (node) {
-          classes.add('imgload');
-        }
+
+        if (node) classes.add('imgload');
       }
     }, 100);
   };
