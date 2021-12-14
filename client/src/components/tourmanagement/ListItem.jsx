@@ -84,7 +84,7 @@ export default function ListItem({ guideInfo, handleTourCardClick }) {
         </CardWrapper>
       )}
       <div className='card-wrapper'>
-        <ImageWrapper className='img-wrapper' />
+        <ImageWrapper className='img-wrapper' backImage={guideInfo.tourImage} />
         <TitleWrapper>
           <div className='date'>
             {guideInfo && guideInfo.state === 'COMPLETED' ? 'END' : `D - ${getDday()}`}
@@ -100,6 +100,7 @@ export default function ListItem({ guideInfo, handleTourCardClick }) {
               mHeight='70px'
               marginRight='1rem'
               className='profile'
+              userImg={guideInfo.userImage}
             />
             <UserNick
               gender={guideInfo && guideInfo.gender}
