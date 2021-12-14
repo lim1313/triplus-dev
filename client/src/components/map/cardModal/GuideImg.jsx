@@ -8,7 +8,8 @@ const ImageWrapper = styled.li`
   flex-shrink: 0;
   flex-grow: 0;
 
-  background: url(${({ backImage }) => backImage}) no-repeat center;
+  background-image: url(${({ backImage }) => backImage});
+  background-repeat: no-repeat;
   background-size: contain;
 `;
 

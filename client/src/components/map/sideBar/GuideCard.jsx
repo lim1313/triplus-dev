@@ -60,7 +60,9 @@ export const CardLi = styled.li`
   }
 
   & .imgload {
-    background: url(${({ backImage }) => backImage}) no-repeat center;
+    background-image: url(${({ backImage }) => backImage}), url('/asset/else/trip.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
     background-size: cover;
   }
 `;
@@ -70,7 +72,9 @@ export const ImageWrapper = styled.div`
   filter: blur(1px);
   height: 100px;
   width: 100%;
-  background: url(${({ backImage }) => backImage}) no-repeat center;
+  background-image: url(${({ backImage }) => backImage}), url('/asset/else/trip.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
   background-size: cover;
 `;
 
@@ -164,6 +168,8 @@ export default function GuideCard({ cardInfo, ulRef, scroll }) {
   const { title, gender, guideDate, tourImage, userImage, state, nickName, content, guideId } =
     cardInfo;
 
+  let scrollerTimeStart;
+
   const { modalInfo } = useSelector((state) => state.guideModalReducer);
   const dispatch = useDispatch();
   let dDay = getDday(guideDate);
@@ -175,8 +181,6 @@ export default function GuideCard({ cardInfo, ulRef, scroll }) {
       dispatch(openGuideModal({ isOpen: true, modalInfo: res }));
     });
   };
-
-  let scrollerTimeStart;
 
   useEffect(() => {
     if (scroll) {
@@ -205,7 +209,7 @@ export default function GuideCard({ cardInfo, ulRef, scroll }) {
           classes.add('imgload');
         }
       }
-    }, 300);
+    }, 100);
   };
 
   return (

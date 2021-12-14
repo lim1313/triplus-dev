@@ -3,7 +3,10 @@ import styled from 'styled-components';
 import { ImMan, ImWoman } from 'react-icons/im';
 
 export const Profile = styled.div`
-  background: url(${({ userImg }) => userImg}) no-repeat center;
+  background-image: url(${({ userImg }) => userImg});
+  background-repeat: no-repeat;
+  background-position: center;
+
   background-size: contain;
   background-color: white;
   width: ${({ width }) => width};
