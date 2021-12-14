@@ -33,18 +33,21 @@ export const getGuideCards = async (params) => {
 export const getCardModal = async (params) => {
   return axios
     .get(`${http}/map/guide-card`, { params: { guideId: params } })
-    .then((res) => res.data.guideCard)
+    .then((res) => {
+      console.log(res);
+      return res.data.guideCard;
+    })
     .catch((err) => err.response.status);
 };
 
 //* POST 가이드 신청하기
-// - 예약완료 => 204
-// - 예약 이미 마감 => 201 {state: "COMPLETED"}
+// - 204 => 예약완료
+// - 201 => 중복 신청, 이미 마감
 // - 서버에러 => 500번대
 //! 신청하기 클릭 시 status code 추가 필요
 export const rezGuide = async (guideId) => {
   return axios
     .post(`${http}/map`, { guideId })
-    .then((res) => res.status)
-    .catch((err) => err.response.status);
+    .then((res) => res)
+    .catch((err) => err.response);
 };

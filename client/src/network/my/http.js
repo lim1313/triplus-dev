@@ -13,8 +13,7 @@ export const getUserInfo = () => {
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
-      // return err.response.status;
+      return err.response.status;
     });
 };
 

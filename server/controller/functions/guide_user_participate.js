@@ -27,7 +27,7 @@ module.exports = {
     // 참가인원이 다 찼을 때
     if (guideCard.state === GLOBAL_VARIABLE.COMPLETED) {
       resObject['code'] = 201;
-      resObject['message'] = '이미 마감된 가이드입니다';
+      resObject['message'] = 'end';
 
       return resObject;
     }
@@ -42,11 +42,12 @@ module.exports = {
       });
 
       if (guideUserParticipate) {
-        throw '이미 참가신청 된 가이드입니다';
+        throw 'same';
       }
     } catch (error) {
       console.log(error);
-      resObject['code'] = 204;
+      // resObject['code'] = 204;
+      resObject['code'] = 201;
       resObject['message'] = error;
 
       return resObject;

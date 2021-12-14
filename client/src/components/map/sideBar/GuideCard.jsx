@@ -60,7 +60,7 @@ export const CardLi = styled.li`
   }
 
   & .imgload {
-    background-image: url(${({ backImage }) => backImage}), url('/asset/else/trip.jpg');
+    background-image: url(${({ backImage }) => backImage});
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -72,7 +72,7 @@ export const ImageWrapper = styled.div`
   filter: blur(1px);
   height: 100px;
   width: 100%;
-  background-image: url(${({ backImage }) => backImage}), url('/asset/else/trip.jpg');
+  background-image: url(${({ backImage }) => backImage})
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
