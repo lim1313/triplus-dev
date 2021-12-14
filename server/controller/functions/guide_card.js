@@ -97,7 +97,7 @@ module.exports = {
   updateGuideCard: async (params) => {
     const resObject = {};
     const updateValue = checkParams(params);
-    console.log(params);
+    console.log('params', params);
 
     try {
       await guide_card

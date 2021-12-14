@@ -68,13 +68,8 @@ module.exports = {
       //     name: '박예찬'
       //   }
       // }
-      const { gender, email, nickname, profile_image } = userInfo.data.response;
-      // console.log(id);
-      if (gender === 'M') {
-        gender = 0;
-      } else {
-        gender = 1;
-      }
+      const { email, nickname, profile_image } = userInfo.data.response;
+
       const userInstance = await user.findOrCreate({
         where: {
           userId: nickname,
@@ -82,7 +77,6 @@ module.exports = {
           email: email,
         },
         defaults: {
-          gender,
           password: '',
           role: 'general',
           image: profile_image,

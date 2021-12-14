@@ -157,6 +157,7 @@ export default function GuideCard({ cardInfo }) {
   const cardClick = (cardId) => {
     // TODO GET /map/guide-card?guide-id=cardId
     getCardModal(cardId).then((res) => {
+      console.log(res);
       dispatch(openGuideModal({ isOpen: true, modalInfo: res }));
     });
   };
