@@ -52,7 +52,7 @@ const AlertMsg = styled.div`
   }
 `;
 
-export default function WithdrawModal({ closeModal }) {
+export default function WithdrawModal({ closeModal, social }) {
   const [inputValue, inputChange] = useInput('');
   const [alertMsg, setAlertMsg] = useState(null);
   const [isError] = useError();
@@ -61,7 +61,7 @@ export default function WithdrawModal({ closeModal }) {
     if (!inputValue) return setAlertMsg('*비밀번호를 입력하세요');
 
     //TODO /my/withdraw
-    deleteUser(inputValue).then((res) => {
+    deleteUser(inputValue, social).then((res) => {
       if (res === 401) return isError();
       else if (res === 400) {
         setAlertMsg('*비밀번호가 옳지 않습니다');

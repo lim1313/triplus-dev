@@ -49,6 +49,11 @@ const BtnColor = styled(ColorBtn)`
   padding: 0.1em 0.7em;
   flex-shrink: 0;
   margin-left: 0.5rem;
+
+  &:hover {
+    cursor: ${({ disabled }) => disabled && 'not-allowed'};
+  }
+
   @media ${({ theme }) => theme.device.mobile} {
     margin-bottom: ${({ twoBtn }) => twoBtn && '0.5rem'};
   }
@@ -67,7 +72,7 @@ const AlertMsg = styled.div`
   }
 `;
 
-export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
+export const UserInfo = ({ title, content, marginRight, noBtn, user, social }) => {
   const [isChange, setIsChange] = useState(false);
   const [inputValue, inputChange] = useInput(content);
   const [isAlert, setIsAlert] = useState(null);
@@ -117,6 +122,7 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
           <BtnColor
             palette='blue'
             onClick={title === 'e-mail' ? () => setOpenModal(true) : changeContent}
+            disabled={social}
           >
             {isChange ? '완료' : '수정'}
           </BtnColor>

@@ -202,8 +202,8 @@ export default function GuideCard({ cardInfo, ulRef, scroll }) {
 
       if (classes.contains('imgload'))
         return ulRef.current.removeEventListener('scroll', scrollTimeout, false);
-      let elementTop = cardRef.current.getBoundingClientRect().top;
 
+      let elementTop = cardRef.current.getBoundingClientRect().top;
       if (elementTop < window.innerHeight + window.pageYOffset + 500) {
         const node = cardRef.current;
         if (node) {

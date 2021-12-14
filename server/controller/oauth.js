@@ -124,6 +124,7 @@ module.exports = {
         withCredentials: true,
       });
 
+      const { id } = userInfo.data;
       const { nickname, profile_image_url } = userInfo.data.kakao_account.profile;
 
       //* 닉네임 생성
@@ -132,13 +133,15 @@ module.exports = {
       const nick = '여행자' + randomNum;
 
       //* 카카오 회원 테이블 저장
+      //! 닉네임 중복 검사 추가 필요
       const [userData, created] = await user.findOrCreate({
         where: {
-          userId: nickname,
+          userId: id,
           social: 'kakao',
+          expiredDatetime: '',
         },
         defaults: {
-          nick_name: nick,
+          nickName: nick,
           gender: '',
           password: '',
           email: '',

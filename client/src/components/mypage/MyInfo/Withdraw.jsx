@@ -8,13 +8,13 @@ const BtnBorder = styled(BorderBtn)`
   width: 50%;
 `;
 
-export default function Withdraw() {
+export default function Withdraw({ social }) {
   const [openModal, setOpenModal] = useState(false);
 
   return (
     <>
       <BtnBorder onClick={() => setOpenModal(true)}>회원탈퇴</BtnBorder>
-      {openModal && <WithdrawModal closeModal={() => setOpenModal(false)} />}
+      {openModal && <WithdrawModal closeModal={() => setOpenModal(false)} social={social} />}
     </>
   );
 }
