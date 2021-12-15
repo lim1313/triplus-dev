@@ -24,6 +24,7 @@ const SectionCtn = styled.section`
 
 export default function ManageSection(props) {
   const { handleCreateClick, guideInfo, applicantInfo, isLoading } = props;
+  console.log('section', applicantInfo);
   return (
     <SectionCtn>
       {isLoading ? (

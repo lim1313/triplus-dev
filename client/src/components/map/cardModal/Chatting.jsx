@@ -2,21 +2,16 @@ import React from 'react';
 import { ModalBtn } from './GuideBtn';
 import { useNavigate } from 'react-router-dom';
 
-import { useDispatch } from 'react-redux';
-import { changeCurrentRoom } from '../../../redux/chat/action';
-
 import { createRoom } from '../../../network/chat/http';
 
 export default function Chatting({ userId, state }) {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const clikcChat = async (userId, state) => {
     if (state === 'COMPLETED') return;
     const isCreated = await createRoom(userId);
 
     if (isCreated.data) {
-      dispatch(changeCurrentRoom(isCreated.data));
       navigate('/chat');
     } else {
       alert(isCreated);

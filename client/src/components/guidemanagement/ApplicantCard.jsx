@@ -3,6 +3,10 @@ import styled from 'styled-components';
 import { ColorBtn } from '../../styles/common';
 import { Profile } from '../../styles/map/card';
 
+import { useNavigate } from 'react-router-dom';
+
+import { createRoom } from '../../network/chat/http';
+
 const CardCtn = styled.li`
   /* flex: 0 0 auto; */
   flex-shrink: 0;
@@ -53,7 +57,21 @@ const ChatBtn = styled(ColorBtn)`
 `;
 
 export default function ApplicantCard(props) {
-  const { applicantInfo, cardRef } = props;
+  const { applicant, cardRef } = props;
+  console.log('applicantCard', applicant);
+
+  const navigate = useNavigate();
+
+  const clikcChat = async (e) => {
+    const userId = e.target.id;
+    const isCreated = await createRoom(userId);
+
+    if (isCreated.data) {
+      navigate('/chat');
+    } else {
+      alert(isCreated);
+    }
+  };
 
   return (
     <CardCtn ref={cardRef}>
@@ -66,9 +84,11 @@ export default function ApplicantCard(props) {
           mHeight='70px'
           marginRight='1rem'
         ></UserProfile>
-        <Nick>닉네임: {applicantInfo && applicantInfo.nickname}안뇽안뇽</Nick>
+        <Nick>닉네임: {applicant && applicant.nickName}</Nick>
       </GuideInfo>
-      <ChatBtn palette='red'>채팅</ChatBtn>
+      <ChatBtn id={applicant.userId} palette='red' onClick={clikcChat}>
+        채팅
+      </ChatBtn>
     </CardCtn>
   );
 }

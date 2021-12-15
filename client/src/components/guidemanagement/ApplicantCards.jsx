@@ -60,6 +60,7 @@ export default function ApplicantCards({ applicantInfo }) {
   const [fromLeft, setFromLeft] = useState(0);
   // const [last, setLast] = useState(0);
   const cardRef = useRef();
+  console.log('applicantCard', applicantInfo);
 
   const moveImg = (direct) => {
     console.log(fromLeft);

@@ -85,7 +85,6 @@ const Title = styled.h1`
 
 const SubText = styled.p`
   font-size: 1.5rem;
-  font-weight: 600;
   margin: 0;
   margin-bottom: 3rem;
   color: ${({ theme }) => theme.color.gray};

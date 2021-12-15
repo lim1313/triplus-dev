@@ -27,6 +27,21 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        user_id: 'william9563',
+        password: '$2b$12$uUahY/hX0p43voKF/to3xuXZ6cCYbF8ahIwY/mYPXNIhrIZ/aWm1K',
+        email: 'example2@example.com',
+        nick_name: 'william',
+        gender: '1',
+        region: '서울',
+        image: '',
+        social: '',
+        state: '',
+        role: 'admin',
+        expired_datetime: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
   },
 

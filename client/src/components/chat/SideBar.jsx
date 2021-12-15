@@ -37,23 +37,30 @@ const RoomName = styled(BorderBtn)`
   word-break: break-word;
   flex-shrink: 0;
   padding: 1rem;
-  ${({ selected }) =>
+
+  ${({ selected, partnerLeft }) =>
     selected &&
     css`
-      background-color: ${({ theme }) => theme.color.blue};
-      border-color: ${({ theme }) => theme.color.blue};
+      background-color: ${({ partnerLeft, theme }) =>
+        partnerLeft ? theme.color.lightRed : theme.color.blue};
+      border-color: ${({ partnerLeft, theme }) =>
+        partnerLeft ? theme.color.lightRed : theme.color.blue};
       color: #fff;
     `}
   &:hover {
-    background-color: ${({ theme }) => theme.color.lightBlue};
+    background-color: ${({ partnerLeft, theme }) =>
+      partnerLeft ? theme.color.lightRed : theme.color.lightBlue};
     color: #fff;
-    border-color: ${({ theme }) => theme.color.lightBlue};
+    border-color: ${({ partnerLeft, theme }) =>
+      partnerLeft ? theme.color.lightRed : theme.color.lightBlue};
     ${({ selected }) =>
       selected &&
       css`
-        background-color: ${({ theme }) => theme.color.blue};
+        background-color: ${({ partnerLeft, theme }) =>
+          partnerLeft ? theme.color.lightRed : theme.color.blue};
         color: #fff;
-        border-color: ${({ theme }) => theme.color.blue};
+        border-color: ${({ partnerLeft, theme }) =>
+          partnerLeft ? theme.color.lightRed : theme.color.blue}; ;
       `}
     > .icon {
       color: #fff;
@@ -68,11 +75,11 @@ const RoomName = styled(BorderBtn)`
     top: 0;
     left: 3px;
     z-index: 5;
-    color: ${({ theme }) => theme.color.gray};
+    color: ${({ partnerLeft, theme }) => (partnerLeft ? theme.color.lightRed : theme.color.gray)};
     transition: 0.2s;
     &:hover {
       cursor: pointer;
-      color: ${({ theme }) => theme.color.darkGray};
+      color: ${({ partnerLeft, theme }) => (partnerLeft ? theme.color.red : theme.color.darkGray)};
     }
     @media ${({ theme }) => theme.device.mobile} {
       font-size: 0.8rem;
@@ -122,19 +129,26 @@ export default function SideBar({ selectRoomHandler, iconClickHandler }) {
     if (!selectedRoom) selectedRoom = e.target.parentNode.id;
     iconClickHandler(selectedRoom);
   };
+
   return (
     <SideContainer>
-      {roomList.map((el) => {
+      {roomList.map((el, index) => {
         return (
           <RoomName
             id={el.roomId}
             className='roomName'
             selected={String(el.roomId) === currentRoom}
+            partnerLeft={el.partnerLeft === 'left'}
             onClick={clickRoomHandler}
-            key={el.chatPartnerId}
-            palette='gray'
+            key={index}
+            palette={el.partnerLeft ? 'lightRed' : 'gray'}
           >
-            <div id={el.roomId} className='icon' onClick={deleteRoomHandler}>
+            <div
+              id={el.roomId}
+              className='icon'
+              onClick={deleteRoomHandler}
+              partnerLeft={el.partnerLeft === 'left'}
+            >
               <GiCancel id={el.roomId} />
             </div>
             {el.chatPartnerNickName}
