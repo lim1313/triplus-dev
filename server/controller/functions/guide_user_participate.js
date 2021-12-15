@@ -1,4 +1,5 @@
 const { isAuthorized } = require('./user');
+const { Op } = require('sequelize');
 const { guide_user_participate, guide_card, user, guide_image } = require('./../../models');
 const { selectGuideCardById } = require('./../functions/guide_card');
 const GLOBAL_VARIABLE = require('./global_variable');
@@ -66,6 +67,19 @@ module.exports = {
         guideId: guideCard.guideId,
         userId: accessToken.userId,
       });
+
+      // 참가 신청이 되고 인원이 다찼을때
+      const guideUserLength = await guide_user_participate.findAll({
+        where: {guideId: guideCard.guideId}
+      });
+      if(guideCard.numPeople === guideUserLength.length){
+        await guide_card.update({
+          state: GLOBAL_VARIABLE.COMPLETED
+        }, {
+          where: {guideId: guideCard.guideId}
+        });
+      }
+
       resObject['code'] = 204;
       resObject['message'] = '참가신청이 되었습니다';
 
@@ -90,37 +104,36 @@ module.exports = {
         throw 'accessToken이 없습니다';
       }
 
-      const guideList = await guide_user_participate
-        .findAll({
-          subQuery: false,
-          where: {
-            userId: accessToken.userId,
-          },
-          include: [
-            {
-              model: guide_card,
-              where: {
-                state: GLOBAL_VARIABLE.APPROVED,
+
+const guideList = await guide_user_participate.findAll({
+        subQuery: false,
+        where: {
+          userId: accessToken.userId,
+        },
+        include: [
+          {
+            model: guide_card,
+            where: {
+              state: {[Op.ne]: GLOBAL_VARIABLE.COMPLETED},
+            },
+            include: [
+              {
+                model: guide_image,
               },
-              include: [
-                {
-                  model: guide_image,
-                },
-              ],
-            },
-            {
-              model: user,
-              attributes: ['nickName', 'gender', 'image'],
-            },
-          ],
-          order: [[guide_card, 'guideDate', req.query.sortBy]],
-          offset: pages * 6 - 6,
-          limit: 6,
-        })
-        .catch((error) => {
-          console.log(error);
-          resObject['code'] = 200;
-        });
+            ],
+          },
+          {
+            model: user,
+            attributes: ['nickName', 'gender', 'image'],
+          },
+        ],
+        order: [[guide_card, 'guideDate', req.query.sortBy]],
+        offset: pages * 6 - 6,
+        limit: 6,
+      }).catch(error => {
+        console.log(error);
+        resObject['code'] = 200;
+      });
 
       const guideCardData = [];
       for (let guideItem of guideList) {
@@ -260,6 +273,33 @@ module.exports = {
       return resObject;
     }
 
+    return resObject;
+  },
+
+  deleteData: (req) => {
+    const resObject = {};
+    const accessToken = isAuthorized(req);
+
+    try {
+      if (!accessToken) {
+        throw 'accessToken이 없습니다';
+      }
+    } catch (error) {
+      console.log(`ERROR: ${error}`);
+      resObject['code'] = 401;
+      resObject['message'] = error;
+      return resObject;
+    }
+
+    guide_user_participate.destroy({
+      where: {
+        guideId: req.body.guideId,
+        userId: accessToken.userId,
+      }
+    });
+
+    resObject['code'] = 200;
+    resObject['message'] = '참가신청이 취소되었습니다';
     return resObject;
   },
 };
