@@ -31,7 +31,7 @@ const useFetch = (page, isActive, sortBy) => {
       console.log(page);
       try {
         setIsLoading(true);
-        const response = await getCompletedList(page).then((res) => res.data.guideList);
+        const response = await getCompletedList(page, sortBy).then((res) => res.data.guideList);
         if (!response) {
           throw new Error(`서버에 오류가 있습니다.`);
         }

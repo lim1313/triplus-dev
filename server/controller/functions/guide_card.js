@@ -53,7 +53,6 @@ const checkParams = (params) => {
 module.exports = {
   createGuideCard: async (req) => {
     let resObject = {};
-    console.log(req.body);
     const insertValue = checkParams(req.body);
     const accessToken = isAuthorized(req);
 
@@ -66,7 +65,7 @@ module.exports = {
       insertValue['state'] = GLOBAL_VARIABLE.APPROVED;
     } catch (error) {
       console.log(`ERROR: ${error}`);
-      resObject['code'] = 400;
+      resObject['code'] = 401;
       resObject['message'] = error;
       return resObject;
     }
@@ -97,7 +96,6 @@ module.exports = {
   updateGuideCard: async (params) => {
     const resObject = {};
     const updateValue = checkParams(params);
-    console.log('params', params);
 
     try {
       await guide_card
@@ -120,10 +118,16 @@ module.exports = {
     }
   },
 
-  selectGuideCard: async (params) => {
+  selectGuideCard: async (params, req) => {
     const resObject = {};
     const whereGuideCard = { [Op.and]: [] };
     const whereUser = {};
+    const accessToken = isAuthorized(req);
+    if(accessToken){
+      resObject['userId'] = accessToken.userId;
+    }else{
+      resObject['userId'] = undefined;
+    }
 
     try {
       whereGuideCard[Op.and].push({ state: { [Op.eq]: GLOBAL_VARIABLE.APPROVED } });
@@ -169,7 +173,6 @@ module.exports = {
           },
           {
             model: guide_image,
-            order: ['id', 'ASC'],
           },
         ],
         where: whereGuideCard,
@@ -234,7 +237,6 @@ module.exports = {
         },
         {
           model: guide_image,
-          order: ['id', 'ASC'],
         },
       ],
       where: { guideId: req.query.guideId },
@@ -311,7 +313,7 @@ module.exports = {
       }
     } catch (error) {
       console.log(`ERROR: ${error}`);
-      resObject['code'] = 400;
+      resObject['code'] = 401;
       resObject['message'] = error;
       return resObject;
     }
