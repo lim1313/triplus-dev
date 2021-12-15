@@ -20,10 +20,10 @@ export default function NaverCallback() {
         navigate(-1);
       })
       .catch((err) => {
-        alert(err.response.data);
-        navigate(-1);
+        alert('로그인에 실패했습니다');
+        navigate('/login', { replace: true });
       });
   }, [authorizationCode, navigate, dispatch, state]);
 
-  return <Loading></Loading>;
+  return <Loading />;
 }

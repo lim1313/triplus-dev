@@ -8,7 +8,7 @@ export const Profile = styled.div`
   background-position: center;
   background-size: contain;
 
-  background-color: rgba(246, 247, 250, 1);
+  background-color: ${({ userImg }) => (userImg ? '#fff' : 'rgba(246, 247, 250, 1)')};
   width: ${({ width }) => width};
   height: ${({ height }) => height};
   border: 3px solid ${({ theme }) => theme.color.lightGray};

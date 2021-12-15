@@ -15,11 +15,11 @@ module.exports = {
     try {
       const myRooms = await chat_member.findAll({
         raw: true,
-        where: { userId: myId, left: { [Op.ne]: 'left' } },
+        where: { userId: myId, left: { [Op.eq]: null } },
       });
       const partnerRooms = await chat_member.findAll({
         raw: true,
-        where: { userId: userId, left: { [Op.ne]: 'left' } },
+        where: { userId: userId, left: { [Op.eq]: null } },
       });
 
       for (let myRoom of myRooms) {

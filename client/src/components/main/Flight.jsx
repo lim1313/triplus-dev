@@ -61,15 +61,7 @@ const Airplane = styled.path`
 `;
 
 export default function Flight() {
-  // const style1 = { fill: 'none', stroke: '#e9edf3', strokeWidth: '3px', strokeMiterlimit: '10' };
-  // const style2 = { fill: '#3386f7' };
-  // const style3 = { fill: '#fff', stroke: '#8d97a1', strokeWidth: '2px', strokeMiterlimit: '10' };
-  // const style4 = { fill: 'none', stroke: '#7dcbf8', strokeWidth: '3px', strokeMiterlimit: '10' };
-  // const style5 = { fill: '#fff', stroke: '#3287f7', strokeWidth: '2px', strokeMiterlimit: '10' };
-
-  // ! ratioY 값이 useEffect 안으로 들어가면 변하질 않음
   const ratioY = parseInt(useSelector((state) => state.scrollReducer.scrollY) * 100);
-  // ! useRef 를 쓰면 오히려 에러가 발생함
   const path = useRef(null);
 
   useEffect(() => {
@@ -155,8 +147,8 @@ export default function Flight() {
         cy='260.04'
         r='3.82'
         ratioY={ratioY}
-        id='77'
-        positionedY='77'
+        id='79'
+        positionedY='79'
       />
     </SVG>
   );

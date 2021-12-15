@@ -6,7 +6,7 @@ import { ButtonBlock, OauthBtn } from '../../styles/login/OauthBtn';
 const NaverBtn = styled(OauthBtn)`
   /* background-color: #1dc612; */
   color: #1dc612;
-  font-size: 3.5rem;
+  font-size: 3rem;
   padding: 0;
   display: flex;
   justify-content: center;
