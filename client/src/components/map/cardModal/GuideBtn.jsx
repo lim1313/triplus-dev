@@ -28,20 +28,19 @@ export const ModalBtn = styled(ColorBtn)`
   }
 
   ${({ theme, state, completed, disabled }) =>
-    state === 'COMPLETED' ||
-    ((completed || disabled) &&
-      css`
-        color: #fff;
+    (completed || state === 'COMPLETED' || disabled) &&
+    css`
+      color: #fff;
+      background-color: ${theme.color.gray};
+      border: ${theme.color.gray};
+
+      &:hover {
+        cursor: not-allowed;
         background-color: ${theme.color.gray};
         border: ${theme.color.gray};
-
-        &:hover {
-          cursor: not-allowed;
-          background-color: ${theme.color.gray};
-          border: ${theme.color.gray};
-          color: #fff;
-        }
-      `)}
+        color: #fff;
+      }
+    `}
 `;
 
 export default function GuideBtn({
@@ -83,6 +82,10 @@ export default function GuideBtn({
       }, 2000);
     });
   };
+  console.log(loginId, userId);
+
+  userId = 'yy111';
+  loginId = 'yy111';
 
   return (
     <ModalBottomBtn>

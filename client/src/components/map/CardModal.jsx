@@ -97,7 +97,6 @@ export default function CardModal({ modalInfo }) {
     endTime,
   } = modalInfo;
   const [openModal, setOpenModal] = useState('');
-  console.log(modalInfo);
   const dispatch = useDispatch();
 
   const modalRef = useRef();
