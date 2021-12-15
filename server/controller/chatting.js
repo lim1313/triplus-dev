@@ -51,6 +51,7 @@ module.exports = {
       console.log(err);
       res.status(500).send('방을 생성하지 못했습니다');
     }
+
     res.status(201).json({ data: createdRoomId, message: '방이 성공적으로 생성되었습니다' });
   },
 };

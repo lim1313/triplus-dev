@@ -1,11 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps*/
-import React, { useEffect } from 'react';
+/* eslint-disable no-unused-vars*/
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled, { keyframes, css } from 'styled-components';
 import { BorderBtn, ColorBtn } from '../styles/common';
 import { useSelector, useDispatch } from 'react-redux';
 import { scrollListener } from '../redux/scroll/action';
+import { loginReducer } from '../redux/login/action';
 import Flight from '../components/main/Flight';
+
+import { isLoginMain } from '../network/main/http';
 
 const scaleUp = keyframes`
   from {
@@ -85,7 +89,7 @@ const Title = styled.h1`
 `;
 
 const SubText = styled.p`
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   margin: 0;
   margin-bottom: 3rem;
   color: ${({ theme }) => theme.color.gray};
@@ -147,25 +151,45 @@ const Img = styled.img`
 
 export default function MainPage() {
   const dispatch = useDispatch();
+
+  const [isLogin, setIsLogin] = useState(false);
+  const [isMobile, setIsMobile] = useState(null);
+  const navBarLogout = useSelector((state) => state.loginReducer.isLogin);
   const ratioY = parseInt(useSelector((state) => state.scrollReducer.scrollY) * 100);
-  console.log('main', ratioY);
+  console.log(ratioY);
+
   const scrollEventListener = () => {
     const maxScroll = document.body.offsetHeight - window.innerHeight;
-    console.log(maxScroll);
     const currentY = window.pageYOffset;
-    console.log(currentY);
     const ratio = currentY / maxScroll;
     dispatch(scrollListener(ratio));
   };
 
   useEffect(() => {
+    isLoginMain()
+      .then((res) => {
+        console.log(res.data.isLogin);
+        if (res.data.isLogin) setIsLogin(true);
+        else setIsLogin(false);
+      })
+      .catch((err) => console.log(err));
+  }, [navBarLogout]);
+
+  useEffect(() => {
+    window.scroll(0, 0);
     window.addEventListener('scroll', scrollEventListener);
+    window.addEventListener('resize', () => {
+      const mobileSize = window.matchMedia('screen and (max-width: 768px)').matches;
+      console.log('mobileSize', mobileSize);
+      if (mobileSize) setIsMobile(true);
+      else setIsMobile(false);
+    });
     return () => {
+      window.scroll(0, 0);
       window.removeEventListener('scroll', scrollEventListener);
+      dispatch(scrollListener(0));
     };
   }, []);
-
-  const isMobile = window.matchMedia('screen and (max-width: 768px)').matches;
 
   return (
     <>
@@ -328,7 +352,7 @@ export default function MainPage() {
         <Description marginTop='-10rem' center ratioY={ratioY} positionedY='80'>
           <Title>이제 시작해볼까요?</Title>
           <SubText></SubText>
-          <Link to='/login'>
+          <Link to={isLogin ? '/map' : '/login'}>
             <MainBorderBtn>서비스 시작하기</MainBorderBtn>
           </Link>
         </Description>

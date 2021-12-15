@@ -70,14 +70,17 @@ module.exports = {
 
       // 참가 신청이 되고 인원이 다찼을때
       const guideUserLength = await guide_user_participate.findAll({
-        where: {guideId: guideCard.guideId}
+        where: { guideId: guideCard.guideId },
       });
-      if(guideCard.numPeople === guideUserLength.length){
-        await guide_card.update({
-          state: GLOBAL_VARIABLE.COMPLETED
-        }, {
-          where: {guideId: guideCard.guideId}
-        });
+      if (guideCard.numPeople === guideUserLength.length) {
+        await guide_card.update(
+          {
+            state: GLOBAL_VARIABLE.COMPLETED,
+          },
+          {
+            where: { guideId: guideCard.guideId },
+          }
+        );
       }
 
       resObject['code'] = 204;
@@ -104,35 +107,37 @@ module.exports = {
         throw 'accessToken이 없습니다';
       }
 
-const guideList = await guide_user_participate.findAll({
-        subQuery: false,
-        where: {
-          userId: accessToken.userId,
-        },
-        include: [
-          {
-            model: guide_card,
-            where: {
-              state: {[Op.ne]: GLOBAL_VARIABLE.COMPLETED},
-            },
-            include: [
-              {
-                model: guide_image,
+      const guideList = await guide_user_participate
+        .findAll({
+          subQuery: false,
+          where: {
+            userId: accessToken.userId,
+          },
+          include: [
+            {
+              model: guide_card,
+              where: {
+                state: { [Op.ne]: GLOBAL_VARIABLE.COMPLETED },
               },
-            ],
-          },
-          {
-            model: user,
-            attributes: ['nickName', 'gender', 'image'],
-          },
-        ],
-        order: [[guide_card, 'guideDate', req.query.sortBy]],
-        offset: pages * 6 - 6,
-        limit: 6,
-      }).catch(error => {
-        console.log(error);
-        resObject['code'] = 200;
-      });
+              include: [
+                {
+                  model: guide_image,
+                },
+              ],
+            },
+            {
+              model: user,
+              attributes: ['nickName', 'gender', 'image'],
+            },
+          ],
+          order: [[guide_card, 'guideDate', req.query.sortBy]],
+          offset: pages * 6 - 6,
+          limit: 6,
+        })
+        .catch((error) => {
+          console.log(error);
+          resObject['code'] = 200;
+        });
 
       const guideCardData = [];
       for (let guideItem of guideList) {
@@ -294,7 +299,7 @@ const guideList = await guide_user_participate.findAll({
       where: {
         guideId: req.body.guideId,
         userId: accessToken.userId,
-      }
+      },
     });
 
     resObject['code'] = 200;
