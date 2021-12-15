@@ -22,40 +22,30 @@ export const ModalBtn = styled(ColorBtn)`
   color: ${({ chatting, theme }) => chatting && theme.color.blue};
 
   &:hover {
-    background-color: white;
-    color: ${({ theme }) => theme.color.blue};
     border: 1px solid ${({ theme }) => theme.color.blue};
+    color: ${({ theme }) => theme.color.blue};
+    background-color: white;
   }
 
-  &:hover {
-    ${({ completed }) =>
-      completed &&
+  ${({ theme, state, completed, disabled }) =>
+    state === 'COMPLETED' ||
+    ((completed || disabled) &&
       css`
-        cursor: not-allowed;
-        background: ${({ theme }) => theme.color.red};
-        border: 1px solid ${({ theme }) => theme.color.red};
-        &:hover {
-          color: #fff;
-        }
-      `}
-  }
-
-  ${({ theme, state }) =>
-    state === 'COMPLETED' &&
-    css`
-      color: #fff;
-      background-color: ${theme.color.gray};
-      border: ${theme.color.gray};
-
-      &:hover {
-        cursor: not-allowed;
+        color: #fff;
         background-color: ${theme.color.gray};
         border: ${theme.color.gray};
-      }
-    `}
+
+        &:hover {
+          cursor: not-allowed;
+          background-color: ${theme.color.gray};
+          border: ${theme.color.gray};
+          color: #fff;
+        }
+      `)}
 `;
 
 export default function GuideBtn({
+  loginId,
   guideId,
   userId,
   userParticipate,
@@ -73,12 +63,18 @@ export default function GuideBtn({
     //TODO POST 가이드 신청
     rezGuide(id).then((res) => {
       const { status, data } = res;
+      const msg = data && data.message;
+
       if (status === 401) {
         return isError();
       } else if (status === 204) {
         compoleteModal('success');
-      } else if (status === 201) {
-        data.message === 'same' ? compoleteModal('same') : compoleteModal('end');
+      } else if (status === 200) {
+        msg === 'same'
+          ? compoleteModal('same')
+          : msg === 'main'
+          ? compoleteModal('main')
+          : compoleteModal('end');
       } else {
         alert('에러가 발생했습니다. 다시 시도해 주세요');
       }
@@ -95,11 +91,16 @@ export default function GuideBtn({
           예약완료
         </ModalBtn>
       ) : (
-        <ModalBtn palette='blue' onClick={() => clickGuide(guideId, state)} state={state}>
+        <ModalBtn
+          palette='blue'
+          onClick={() => clickGuide(guideId, state)}
+          state={state}
+          disabled={loginId === userId}
+        >
           {state === 'COMPLETED' ? '예약마감' : '신청하기'}
         </ModalBtn>
       )}
-      <Chatting userId={userId} state={state} />
+      <Chatting userId={userId} state={state} loginId={loginId} />
     </ModalBottomBtn>
   );
 }

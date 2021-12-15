@@ -43,7 +43,7 @@ const ModalWrapper = styled.section`
 
 const Wrapper = styled.div`
   position: relative;
-  top: -3rem;
+  top: -2.5rem;
   padding: 0 1.5rem;
 `;
 
@@ -92,6 +92,7 @@ export default function CardModal({ modalInfo }) {
     userParticipate,
     state,
     userId,
+    loginId,
   } = modalInfo;
   const [openModal, setOpenModal] = useState('');
 
@@ -126,6 +127,7 @@ export default function CardModal({ modalInfo }) {
           />
         </Wrapper>
         <GuideBtn
+          loginId={loginId}
           guideId={guideId}
           userId={userId}
           userParticipate={userParticipate}

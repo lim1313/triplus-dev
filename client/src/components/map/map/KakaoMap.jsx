@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { getCardModal, getGuideCards } from '../../../network/map/http';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { guideCardInfo, openGuideModal } from '../../../redux/map/action';
 import { createMarker, deleteMarker, getInfo } from '../../../utils/kakao';
 import styled from 'styled-components';

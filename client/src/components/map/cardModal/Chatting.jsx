@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { createRoom } from '../../../network/chat/http';
 
-export default function Chatting({ userId, state }) {
+export default function Chatting({ userId, state, loginId }) {
   const navigate = useNavigate();
 
   const clikcChat = async (userId, state) => {
@@ -19,7 +19,13 @@ export default function Chatting({ userId, state }) {
   };
 
   return (
-    <ModalBtn palette='lightGray' chatting onClick={() => clikcChat(userId, state)} state={state}>
+    <ModalBtn
+      palette='lightGray'
+      chatting
+      onClick={() => clikcChat(userId, state)}
+      state={state}
+      disabled={loginId === userId}
+    >
       채팅하기
     </ModalBtn>
   );

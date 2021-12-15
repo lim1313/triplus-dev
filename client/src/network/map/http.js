@@ -23,7 +23,7 @@ export const getGuideCards = async (params) => {
       if (axios.isCancel(err)) {
         console.log(err);
       } else {
-        return err.response;
+        return err.response.status;
       }
     });
 };

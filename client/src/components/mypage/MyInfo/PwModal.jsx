@@ -58,10 +58,8 @@ export default function PwModal({ closeModal }) {
         } else if (res === 400) {
           // 현재 비밀번호를 잘못 작성
           setAlertMsg1('*현재 비밀번호가 일치하지 않습니다');
-        } else if (res > 400) {
-          alert('에러가 발생했습니다. 다시 시도해 주세요.');
         } else {
-          console.log(res);
+          alert('에러가 발생했습니다. 다시 시도해 주세요.');
         }
       });
     }
