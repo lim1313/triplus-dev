@@ -71,14 +71,20 @@ module.exports = {
       // }
       const { email, nickname, profile_image } = userInfo.data.response;
 
+      const key1 = crypto.randomBytes(256).toString('hex').substr(100, 4);
+      const randomNum = parseInt(key1, 16);
+      const nick = '여행자' + randomNum;
+
+      const userId = `${nickname}@naver`;
       const userInstance = await user.findOrCreate({
         where: {
-          userId: nickname,
+          userId: userId,
           social: 'naver',
           email: email,
           expiredDatetime: null,
         },
         defaults: {
+          nickName: nick,
           password: '',
           role: 'general',
           image: profile_image,
