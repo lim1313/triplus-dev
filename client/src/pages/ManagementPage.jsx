@@ -81,7 +81,6 @@ export default function ManagementPage() {
     setIsLoading(true);
 
     const path = pathname.split('/').join('');
-    console.log(path);
     if (path === 'management') {
       setClick({ management: true, managementtourlist: false });
     } else {
@@ -97,7 +96,6 @@ export default function ManagementPage() {
       })
       .catch((err) => setIsLoading(false));
   }, [pathname, isDeleted, isCompleted]);
-  console.log('management', applicantInfo);
   return (
     <>
       {isOpen ? (
@@ -115,7 +113,6 @@ export default function ManagementPage() {
             if (getDday(guideInfo.guideDate) !== 1) {
               deleteGuideCard(guideInfo.guideId)
                 .then((res) => {
-                  console.log(res);
                   if (res.status === 200) {
                     dispatch(guideDelete());
                     setTimeout(() => setIsdeleted(true), 0);

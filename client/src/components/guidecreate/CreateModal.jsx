@@ -101,6 +101,8 @@ export default function CreateModal(props) {
   const [isGender, setIsGender] = useState(false);
   const [address, setAddress] = useState('');
   const [extraAddress, setExtraAddress] = useState('');
+  const [startTime, setStartTime] = useState({ sdayNight: '오전', stime: '00', sminute: '00' });
+  const [endTime, setEndTime] = useState({ edayNight: '오전', etime: '00', eminute: '00' });
   // const [isCompleted, setIsCompleted] = useState(false);
   const [unCompleteMsgOpen, setUnCompleteMsgOpen] = useState(false);
   const navigate = useNavigate();
@@ -127,35 +129,47 @@ export default function CreateModal(props) {
   // input상태관리 함수
   const handleInputChange = (e) => {
     const id = e.target.getAttribute('id');
+    const iStartTime = startTime.sdayNight + ' ' + startTime.stime + ':' + startTime.sminute;
+    const iEndTime = endTime.edayNight + ' ' + endTime.etime + ':' + endTime.eminute;
     if (id === 'title' && e.target.value.length > 20) return;
     if (id === 'address') {
-      setInputs({ ...inputs, address: address + ' ' + e.target.value });
+      setInputs({
+        ...inputs,
+        address: address + ' ' + e.target.value,
+        startTime: iStartTime,
+        endTime: iEndTime,
+      });
       setExtraAddress(e.target.value);
+      console.log(inputs);
     } else {
-      setInputs({ ...inputs, [id]: e.target.value });
+      setInputs({ ...inputs, [id]: e.target.value, startTime: iStartTime, endTime: iEndTime });
+      console.log(inputs);
     }
   };
 
   //date input 상태관리 함수
   const handleDateChange = (date) => {
-    console.log(date);
+    const iStartTime = startTime.sdayNight + ' ' + startTime.stime + ':' + startTime.sminute;
+    const iEndTime = endTime.edayNight + ' ' + endTime.etime + ':' + endTime.eminute;
     setStartDate(date);
-    setInputs({ ...inputs, date: dayjs(date).format('YYYY.MM.DD') });
+    setInputs({
+      ...inputs,
+      date: dayjs(date).format('YYYY.MM.DD'),
+      startTime: iStartTime,
+      endTime: iEndTime,
+    });
   };
 
   //img input 상태관리 함수+미리보기 구현
   const handleImgChange = (e) => {
     if (!e.target.files[0]) return;
     if (e.target.files) {
-      console.log(e.target.files);
       const targetId = e.target.getAttribute('id');
-      console.log(targetId);
       const imgFile = e.target.files[0];
       const imgUrl = URL.createObjectURL(imgFile);
       setFileUrl({ ...fileUrl, [targetId]: imgUrl });
       setFileArray([...fileArray, e.target.files[0]]);
     }
-    console.log(fileArray);
   };
 
   //도로명주소 저장 함수
@@ -163,11 +177,22 @@ export default function CreateModal(props) {
     setAddress(data);
   };
 
+  //시간 저장 함수
+  const handleStartTimeChange = (e) => {
+    const key = e.target.getAttribute('id');
+    setStartTime({ ...startTime, [key]: e.target.value });
+  };
+  const handleEndTimeChange = (e) => {
+    const key = e.target.getAttribute('id');
+    setEndTime({ ...endTime, [key]: e.target.value });
+  };
+
   // 성별 토글 상태관리 함수
   const handleGenderClick = () => {
+    const iStartTime = startTime.sdayNight + ' ' + startTime.stime + ':' + startTime.sminute;
+    const iEndTime = endTime.edayNight + ' ' + endTime.etime + ':' + endTime.eminute;
     setIsGender(!isGender);
-    setInputs({ ...inputs, gender: !isGender });
-    console.log(inputs);
+    setInputs({ ...inputs, gender: !isGender, startTime: iStartTime, endTime: iEndTime });
   };
 
   const inputCheck = (checkData) => {
@@ -257,7 +282,12 @@ export default function CreateModal(props) {
                 handlePlaceBlur={handlePlaceBlur}
               />
             </DatePlaceCtn>
-            <GuideTime handleInputChange={handleInputChange} value={inputs} />
+            <GuideTime
+              handleInputChange={handleInputChange}
+              value={inputs}
+              handleStartTimeChange={handleStartTimeChange}
+              handleEndTimeChange={handleEndTimeChange}
+            />
             <GuideContent handleInputChange={handleInputChange} value={inputs} />
             <SubmitCtn>
               <ColorBtn palette='red' width='8rem' fontSize='1rem' onClick={handleSubmitClick}>

@@ -7,6 +7,7 @@ export const Profile = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
+  flex-shrink: 0;
 
   background-color: rgba(246, 247, 250, 1);
   width: ${({ width }) => width};

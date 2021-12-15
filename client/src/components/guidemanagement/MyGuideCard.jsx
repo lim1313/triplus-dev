@@ -7,7 +7,7 @@ import { guideDelete } from '../../redux/management/action';
 const CardCtn = styled.div`
   margin-top: 2rem;
   width: 100%;
-  height: 200px;
+  height: 230px;
   display: flex;
   justify-content: center;
   position: relative;
@@ -64,6 +64,11 @@ const GuideInfo = styled.div`
     & h1 {
       text-shadow: 1px 1px 1px #fff;
       width: 20rem;
+      font-size: 1.2rem;
+    }
+    & p {
+      margin-top: 0;
+      width: 300px;
     }
   }
   @media screen and (max-width: 350px) {
@@ -120,7 +125,7 @@ export default function MyGuideCard(props) {
             <GuideInfo>
               <h1>{guideInfo && guideInfo.title}</h1>
               <span>날짜: {guideInfo && guideInfo.guideDate}</span>
-              <span>대표장소: {guideInfo && guideInfo.address}</span>
+              <p>대표장소: {guideInfo && guideInfo.address}</p>
             </GuideInfo>
             <Count>
               <h5>
