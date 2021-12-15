@@ -47,7 +47,14 @@ const Count = styled(Input)`
 `;
 
 export default function GuideTime(props) {
-  const { handleInputChange, value, handleEndTimeChange, handleStartTimeChange } = props;
+  const {
+    handleInputChange,
+    value,
+    handleEndTimeChange,
+    handleStartTimeChange,
+    startTime,
+    endTime,
+  } = props;
   const times = ['00', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
   const minutes = ['00', '10', '20', '30', '40', '50'];
   return (
@@ -76,18 +83,51 @@ export default function GuideTime(props) {
           <label htmlFor='end'>종료시간</label>
           <TimesCtn>
             <TimeDayNight placeholder='00:00' id='edayNight' onChange={handleEndTimeChange}>
-              <option>오전</option>
-              <option>오후</option>
+              {startTime.sdayNight === '오후' ? (
+                <option>오후</option>
+              ) : (
+                <>
+                  <option>오전</option>
+                  <option>오후</option>
+                </>
+              )}
             </TimeDayNight>
             <TimeTime onChange={handleEndTimeChange} id='etime'>
-              {times.map((time) => (
-                <option key={time}>{time}</option>
-              ))}
+              {startTime.sdayNight === '오후'
+                ? times.map(
+                    (time) =>
+                      Number(time) >= Number(startTime.stime) && <option key={time}>{time}</option>
+                  )
+                : times.map((time) =>
+                    endTime.edayNight === '오전' ? (
+                      Number(time) >= Number(startTime.stime) && <option key={time}>{time}</option>
+                    ) : (
+                      <option key={time}>{time}</option>
+                    )
+                  )}
             </TimeTime>
             <TimeMiniute onChange={handleEndTimeChange} id='eminute'>
-              {minutes.map((minute) => (
-                <option key={minute}>{minute}</option>
-              ))}
+              {startTime.sdayNight === '오후'
+                ? minutes.map((minute) =>
+                    startTime.stime === endTime.etime ? (
+                      Number(minute) >= Number(startTime.sminute) && (
+                        <option key={minute}>{minute}</option>
+                      )
+                    ) : (
+                      <option key={minute}>{minute}</option>
+                    )
+                  )
+                : endTime.edayNight === '오전'
+                ? minutes.map((minute) =>
+                    startTime.stime === endTime.etime ? (
+                      Number(minute) >= Number(startTime.sminute) && (
+                        <option key={minute}>{minute}</option>
+                      )
+                    ) : (
+                      <option key={minute}>{minute}</option>
+                    )
+                  )
+                : minutes.map((minute) => <option key={minute}>{minute}</option>)}
             </TimeMiniute>
           </TimesCtn>
         </div>

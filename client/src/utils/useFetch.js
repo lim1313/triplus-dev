@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getCompletedList, getExpectedList } from '../network/tourmanagement/http';
 
-const useFetch = (page, isActive, sortBy) => {
+const useFetch = (page, isActive, sortBy, isComplete) => {
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -49,7 +49,7 @@ const useFetch = (page, isActive, sortBy) => {
   }, [page, isActive.approved, isActive.completed, sortBy]);
   useEffect(() => {
     sendQuery();
-  }, [sendQuery, page]);
+  }, [sendQuery, page, isComplete]);
 
   return { hasMore, items, isLoading };
 };

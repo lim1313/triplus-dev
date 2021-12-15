@@ -28,13 +28,14 @@ const SectionCtn = styled.section`
 export default function TourManagementPage() {
   //상태관리
   const state = useSelector((state) => state.openTourModalReducer);
+  const isComplete = useSelector((state) => state.completeDeleteReducer);
   const { isOpen, modalInfo } = state;
   const [pageNum, setPageNum] = useState({ approved: 1, completed: 1 });
   const [isActive, setIsActive] = useState({ approved: true, completed: false });
   const [sortBy, setSortBy] = useState('ASC');
 
   const observerRef = useRef();
-  const { items, hasMore, isLoading } = useFetch(pageNum, isActive, sortBy);
+  const { items, hasMore, isLoading } = useFetch(pageNum, isActive, sortBy, isComplete);
   // const [filterdItems, setFilteredItems] = useState([]);
 
   //oberver핸들함수

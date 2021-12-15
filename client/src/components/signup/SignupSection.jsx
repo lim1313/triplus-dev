@@ -17,7 +17,6 @@ const SectionBlock = styled.div`
 
 export default function SignupSection(props) {
   const { handleModalClick } = props.props;
-  // const navigate = useNavigate();
   const [message, setMessage] = useState({
     userId: '',
     password: '',

@@ -58,7 +58,6 @@ const ChatBtn = styled(ColorBtn)`
 
 export default function ApplicantCard(props) {
   const { applicant, cardRef } = props;
-  console.log('applicantCard', applicant);
 
   const navigate = useNavigate();
 
