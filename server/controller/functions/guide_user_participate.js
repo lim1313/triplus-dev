@@ -118,12 +118,11 @@ const guideList = await guide_user_participate.findAll({
             include: [
               {
                 model: guide_image,
+              }, {
+                model: user,
+                attributes: ['nickName', 'gender', 'image'],
               },
             ],
-          },
-          {
-            model: user,
-            attributes: ['nickName', 'gender', 'image'],
           },
         ],
         order: [[guide_card, 'guideDate', req.query.sortBy]],
@@ -137,7 +136,7 @@ const guideList = await guide_user_participate.findAll({
       const guideCardData = [];
       for (let guideItem of guideList) {
         const guideCard = guideItem.dataValues.guide_card.dataValues;
-        const guideCardWriter = guideItem.dataValues.user.dataValues;
+        const guideCardWriter = guideCard.user.dataValues;
         const guideCardImages = guideCard.guide_images;
         const guidePushData = {};
         guidePushData['guideId'] = guideCard['guideId'];
@@ -275,7 +274,7 @@ const guideList = await guide_user_participate.findAll({
     return resObject;
   },
 
-  deleteData: (req) => {
+  deleteData: async (req) => {
     const resObject = {};
     const accessToken = isAuthorized(req);
 
@@ -290,12 +289,34 @@ const guideList = await guide_user_participate.findAll({
       return resObject;
     }
 
-    guide_user_participate.destroy({
+    await guide_user_participate.destroy({
       where: {
         guideId: req.body.guideId,
         userId: accessToken.userId,
       }
     });
+
+    const guideUser = await guide_user_participate.findAll({
+      where: {
+        guideId: req.body.guideId
+      }
+    });
+
+    const guideCard = await guide_card.findOne({
+      where: {
+        guideId: req.body.guideId
+      }
+    });
+
+    if(guideCard.numPeople > guideUser.length){
+      await guide_card.update({
+        state: GLOBAL_VARIABLE.APPROVED
+      }, {
+        where: {
+          guideId: req.body.guideId
+        }
+      });
+    }
 
     resObject['code'] = 200;
     resObject['message'] = '참가신청이 취소되었습니다';

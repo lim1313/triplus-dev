@@ -17,8 +17,7 @@ const upload = multer({
     s3: s3,
     bucket: process.env.TRIPLUS_S3_BUCKET_NAME,
     key: function (req, file, cb) {
-      let extension = path.extname(file.originalname);
-      cb(null, `asset/images/` + Date.now().toString() + extension);
+      cb(null, `asset/images/` + Date.now().toString() + file.originalname);
     },
     acl: 'public-read-write'
   })
