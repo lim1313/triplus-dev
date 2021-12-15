@@ -65,6 +65,11 @@ export default function CheckModal({ openMsg, closeCheckModal }) {
             <Content end>예약이 이미 마감되었습니다</Content>
             <Content end>다음에 이용해 주세요</Content>
           </>
+        ) : openMsg === 'same' ? (
+          <>
+            <Content end>이미 예약이 완료되었습니다</Content>
+            <Content end>즐거운 여행되세요</Content>
+          </>
         ) : (
           openMsg === 'login' && (
             <>

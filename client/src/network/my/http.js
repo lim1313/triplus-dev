@@ -13,8 +13,7 @@ export const getUserInfo = () => {
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
-      // return err.response.status;
+      return err.response.status;
     });
 };
 
@@ -72,9 +71,10 @@ export const putPassword = (data) => {
 };
 
 //* DELETE 탈퇴
-export const deleteUser = (data) => {
+//! ouath인 경우 그냥 탈퇴 진행
+export const deleteUser = (inputValue, social) => {
   return axios
-    .post(`${http}/my/withdraw`, { password: data })
+    .post(`${http}/my/withdraw`, { password: inputValue, social })
     .then((res) => res.status)
     .catch((err) => err.response.status);
 };

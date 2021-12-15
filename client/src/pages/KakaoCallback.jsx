@@ -13,8 +13,13 @@ export default function KakaoCallback() {
 
   useEffect(() => {
     kakaoOauth(authorizationCode).then((res) => {
-      dispatch(oauthLogin());
-      navigate(-1);
+      if (res >= 400) {
+        alert('로그인에 실패했습니다');
+        navigate('/login', { replace: true });
+      } else {
+        dispatch(oauthLogin());
+        navigate(-1);
+      }
     });
   }, [authorizationCode, navigate, dispatch]);
 

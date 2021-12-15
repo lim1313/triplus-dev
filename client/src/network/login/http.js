@@ -39,5 +39,9 @@ export const naverOauth = (authorizationCode, state) =>
     }
   );
 
-export const kakaoOauth = (authorizationCode) =>
-  axios.post(`${http}/oauth/kakaocallback`, { authorizationCode });
+export const kakaoOauth = (authorizationCode) => {
+  return axios
+    .post(`${http}/oauth/kakaocallback`, { authorizationCode })
+    .then((res) => res.status)
+    .catch((err) => err.response.status);
+};

@@ -60,7 +60,7 @@ export const CardLi = styled.li`
   }
 
   & .imgload {
-    background-image: url(${({ backImage }) => backImage}), url('/asset/else/trip.jpg');
+    background-image: url(${({ backImage }) => backImage});
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -72,7 +72,7 @@ export const ImageWrapper = styled.div`
   filter: blur(1px);
   height: 100px;
   width: 100%;
-  background-image: url(${({ backImage }) => backImage}), url('/asset/else/trip.jpg');
+  background-image: url(${({ backImage }) => backImage})
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -178,7 +178,6 @@ export default function GuideCard({ cardInfo, ulRef, scroll }) {
   const cardClick = (cardId) => {
     // TODO GET /map/guide-card?guide-id=cardId
     getCardModal(cardId).then((res) => {
-      console.log(res);
       dispatch(openGuideModal({ isOpen: true, modalInfo: res }));
     });
   };
@@ -202,13 +201,17 @@ export default function GuideCard({ cardInfo, ulRef, scroll }) {
 
       if (classes.contains('imgload'))
         return ulRef.current.removeEventListener('scroll', scrollTimeout, false);
-      let elementTop = cardRef.current.getBoundingClientRect().top;
 
-      if (elementTop < window.innerHeight + window.pageYOffset + 500) {
+      let elementTop = cardRef.current.getBoundingClientRect().top;
+      let elementLeft = cardRef.current.getBoundingClientRect().left;
+
+      if (
+        elementTop < window.innerHeight + window.pageYOffset + 500 &&
+        elementLeft < window.innerWidth + window.pageXOffset + 500
+      ) {
         const node = cardRef.current;
-        if (node) {
-          classes.add('imgload');
-        }
+
+        if (node) classes.add('imgload');
       }
     }, 100);
   };

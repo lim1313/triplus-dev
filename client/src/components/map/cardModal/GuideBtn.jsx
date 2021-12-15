@@ -31,7 +31,7 @@ export const ModalBtn = styled(ColorBtn)`
     ${({ completed }) =>
       completed &&
       css`
-        cursor: unset;
+        cursor: not-allowed;
         background: ${({ theme }) => theme.color.red};
         border: 1px solid ${({ theme }) => theme.color.red};
         &:hover {
@@ -72,14 +72,14 @@ export default function GuideBtn({
 
     //TODO POST 가이드 신청
     rezGuide(id).then((res) => {
-      console.log(res);
-      if (res === 401) {
+      const { status, data } = res;
+      if (status === 401) {
         return isError();
-      } else if (res === 204) {
+      } else if (status === 204) {
         compoleteModal('success');
-      } else if (res === 201) {
-        compoleteModal('end');
-      } else if (res >= 500) {
+      } else if (status === 201) {
+        data.message === 'same' ? compoleteModal('same') : compoleteModal('end');
+      } else {
         alert('에러가 발생했습니다. 다시 시도해 주세요');
       }
       setTimeout(() => {

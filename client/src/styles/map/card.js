@@ -6,9 +6,9 @@ export const Profile = styled.div`
   background-image: url(${({ userImg }) => userImg});
   background-repeat: no-repeat;
   background-position: center;
-
   background-size: contain;
-  background-color: white;
+
+  background-color: rgba(246, 247, 250, 1);
   width: ${({ width }) => width};
   height: ${({ height }) => height};
   border: 3px solid ${({ theme }) => theme.color.lightGray};
