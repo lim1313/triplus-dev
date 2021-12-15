@@ -105,7 +105,7 @@ module.exports = {
   //* 카카오 인가코드 받기
   kakao: async (req, res) => {
     return res.redirect(
-      `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`
+      `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URL}/kakaocallback&response_type=code`
     );
   },
 
@@ -115,7 +115,7 @@ module.exports = {
     try {
       //* 카카오 토큰 발급
       let kakaoToken = await axios.post(
-        `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&code=${authorizationCode}`,
+        `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URL}/kakaocallback&code=${authorizationCode}`,
         {
           headers: { 'Content-type': 'application/x-www-form-urlencoded;charset=utf-8' },
           withCredentials: true,
