@@ -70,8 +70,10 @@ export default function TourManagementPage() {
     const filter = e.target.value;
     if (filter === '날짜 느린순') {
       setSortBy('DESC');
+      setPageNum({ approved: 1, completed: 1 });
     } else {
       setSortBy('ASC');
+      setPageNum({ approved: 1, completed: 1 });
     }
   };
 
@@ -88,7 +90,12 @@ export default function TourManagementPage() {
           />
           <OrderFilter handleFilterChange={handleFilterChange} />
           <ListSection items={items} />
-          {items.length === 0 && <div style={{ textAlign: 'center' }}>신청한 여행이 없습니다.</div>}
+          {items.length === 0 && isActive.approved && (
+            <div style={{ textAlign: 'center' }}>신청한 여행이 없습니다.</div>
+          )}
+          {items.length === 0 && isActive.completed && (
+            <div style={{ textAlign: 'center' }}>다녀온 여행이 없습니다.</div>
+          )}
         </SectionCtn>
         {isLoading && items.length > 3 && <SpinLoading />}
         <div ref={observer} />

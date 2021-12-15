@@ -89,6 +89,7 @@ export default function ManagementPage() {
         console.log(res.data);
         setGuideInfo(res.data.guideData);
         setApplicantInfo(res.data.applicant);
+        console.log(res.data.applicant);
         setIsLoading(false);
       })
       .catch((err) => setIsLoading(false));
