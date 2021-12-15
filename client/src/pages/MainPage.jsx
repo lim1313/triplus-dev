@@ -47,6 +47,7 @@ const Description = styled.div`
   display: flex;
   flex-direction: column;
   align-items: ${({ center }) => (center ? 'center' : 'none')};
+  justify-content: center;
   text-align: ${({ right }) => (right ? 'right' : 'none')};
   margin-top: ${({ marginTop }) => marginTop || 'none'};
   margin-left: ${({ marginLeft }) => marginLeft || 'none'};

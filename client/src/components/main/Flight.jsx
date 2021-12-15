@@ -143,7 +143,7 @@ export default function Flight() {
       />
       <Stopover
         onClick={stopoverClickHandler}
-        cx='14.82'
+        cx='10.82'
         cy='260.04'
         r='3.82'
         ratioY={ratioY}
