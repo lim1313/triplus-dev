@@ -10,7 +10,7 @@ const GoogleBtn = styled(OauthBtn)`
   justify-content: center;
   align-items: center;
   & img {
-    width: 3rem;
+    width: 2rem;
     /* margin: auto; */
   }
 `;
