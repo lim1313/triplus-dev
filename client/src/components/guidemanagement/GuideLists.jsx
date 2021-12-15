@@ -12,7 +12,6 @@ const CreateBtn = styled(BorderBtn)`
 
 export default function GuideLists(props) {
   const { handleCreateClick, guideInfo, applicantInfo } = props;
-  console.log('lists', applicantInfo);
   return (
     <div>
       <H3Ctn>
@@ -22,10 +21,6 @@ export default function GuideLists(props) {
         </CreateBtn>
       </H3Ctn>
       <MyGuideCard guideInfo={guideInfo} applicantInfo={applicantInfo} />
-      {/* <GuideTable
-        columns={['날짜', '가이드 명', ' ', '', '']}
-        data={guideInfo.guideDate ? [{ date: guideInfo.guideDate, title: guideInfo.title }] : []}
-      /> */}
     </div>
   );
 }

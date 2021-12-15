@@ -22,3 +22,7 @@ export const getCompletedList = async (pageNum, sortBy) => {
     params: { page: pageNum.completed, sortBy },
   });
 };
+
+export const deleteTourList = async (guideId) => {
+  return axios.put(`${http}/management/tourlist/cancel`, guideId);
+};

@@ -88,7 +88,7 @@ export default function ListItem({ guideInfo, handleTourCardClick }) {
         </CardWrapper>
       )}
       <div className='card-wrapper'>
-        <ImageWrapper className='img-wrapper' backImage={guideInfo.tourImage} />
+        <ImageWrapper className='img-wrapper' backImage={guideInfo.tourImage[0]} />
         <TitleWrapper dday={getDday()}>
           <div className='date'>
             {guideInfo && guideInfo.state === 'COMPLETED' ? 'END' : `D - ${getDday()}`}
