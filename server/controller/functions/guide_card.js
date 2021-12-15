@@ -304,10 +304,10 @@ module.exports = {
 
     const accessToken = isAuthorized(req);
     if (!accessToken) {
-      resObject['userId'] = undefined;
+      guideCard['loginId'] = undefined;
       guideCard['userParticipate'] = 0;
     } else {
-      resObject['userId'] = accessToken.userId;
+      guideCard['loginId'] = accessToken.userId;
       const selectGuideUserParticipate = await guide_user_participate.findOne({
         raw: true,
         where: { guideId: req.query.guideId, userId: accessToken.userId },
