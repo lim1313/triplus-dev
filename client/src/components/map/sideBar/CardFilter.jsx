@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FilterFrame } from '../../../styles/map/filterFrame';
 import DateFilter from './DateFilter';
-import { FaSearchLocation } from 'react-icons/fa';
 import GenderFilter from './GenderFilter';
+// import { FaSearchLocation } from 'react-icons/fa';
 
 const FilterWrapper = styled.div`
   position: absolute;
@@ -42,13 +42,17 @@ const SearchBtn = styled(FilterFrame).attrs({
 })`
   border: none;
   padding: 0;
+  font-size: 0.9rem;
+  background-color: ${({ theme }) => theme.color.lightRed};
 
   &:hover {
-    background-color: ${({ theme }) => theme.color.lightRed};
-    color: ${({ theme }) => theme.color.darkGray};
+    color: ${({ theme }) => theme.color.red};
+    background-color: #fff;
   }
+
   @media ${({ theme }) => theme.device.mobile} {
     border: 3px solid ${({ theme }) => theme.color.lightGray};
+    font-size: 0.9rem;
   }
 `;
 
@@ -70,8 +74,9 @@ export default function CardFilter({ filterSubmit }) {
         <DateFilter changeDate={(data) => setDate(data)} />
         <div className='genderWrapper'>
           <GenderFilter changeGender={(data) => setGender(data)} />
-          <SearchBtn width='40px' color='red' onClick={filterClick}>
-            <FaSearchLocation />
+          <SearchBtn width='80px' onClick={filterClick}>
+            {/* <FaSearchLocation /> */}
+            <span>적용하기</span>
           </SearchBtn>
         </div>
       </Filter>

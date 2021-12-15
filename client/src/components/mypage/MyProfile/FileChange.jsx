@@ -41,7 +41,7 @@ export default function FileChange({ selectImage, isLoading, isChange, fileImg, 
         type='file'
         id='upload'
         onChange={selectImage}
-        accept='.png, .jpg, .jpeg'
+        accept='.jpg, .jpeg, .png'
         disabled={isLoading}
       />
       {isChange ? (

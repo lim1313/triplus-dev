@@ -29,7 +29,7 @@ const ImgWrapper = styled.img`
   height: 220px;
   object-fit: cover;
   border-radius: 0.5rem;
-  background-color: #fff;
+  background-color: ${({ src }) => (src ? '#fff' : 'rgba(246, 247, 250, 1)')}; ;
 `;
 
 const BtnWrapper = styled.div`
@@ -99,15 +99,17 @@ export default function MyProfile({ image }) {
             alert('에러가 발생했습니다. 다시 시도해 주세요.');
           } else {
             setImguuid(data.location);
-            setFileImg(null);
-            setPreviewImg(null);
           }
+          setFileImg(null);
+          setPreviewImg(null);
           setIsChange(!isChange);
           setIsLoading(false);
         });
       })
       .catch(() => {
         alert('*에러가 발생했습니다. 다시 시도해 주세요.');
+        setFileImg(null);
+        setPreviewImg(null);
         setIsChange(!isChange);
         setIsLoading(false);
       });

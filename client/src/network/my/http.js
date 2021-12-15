@@ -22,7 +22,10 @@ export const getUserInfo = () => {
 export const postProfile = (data) => {
   return axios
     .post(`${http}/my/profile`, { image: data })
-    .then((res) => res.status)
+    .then((res) => {
+      console.log(res);
+      return res.status;
+    })
     .catch((err) => err.response.status);
 };
 
@@ -58,7 +61,10 @@ export const postInfo = (data, path) => {
 export const postEmailCheck = (data) => {
   return axios
     .post(`${http}/my/email-check`, { data })
-    .then((res) => res.status)
+    .then((res) => {
+      console.log(res);
+      return res.status;
+    })
     .catch((err) => err.response.status);
 };
 

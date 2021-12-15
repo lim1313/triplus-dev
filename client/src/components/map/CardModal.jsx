@@ -43,7 +43,7 @@ const ModalWrapper = styled.section`
 
 const Wrapper = styled.div`
   position: relative;
-  top: -3rem;
+  top: -2.5rem;
   padding: 0 1.5rem;
 `;
 
@@ -92,9 +92,12 @@ export default function CardModal({ modalInfo }) {
     userParticipate,
     state,
     userId,
+    loginId,
+    startTime,
+    endTime,
   } = modalInfo;
   const [openModal, setOpenModal] = useState('');
-
+  console.log(modalInfo);
   const dispatch = useDispatch();
 
   const modalRef = useRef();
@@ -123,9 +126,12 @@ export default function CardModal({ modalInfo }) {
             guideDate={guideDate}
             content={content}
             openDate={openDate}
+            startTime={startTime}
+            endTime={endTime}
           />
         </Wrapper>
         <GuideBtn
+          loginId={loginId}
           guideId={guideId}
           userId={userId}
           userParticipate={userParticipate}

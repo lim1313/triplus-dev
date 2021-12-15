@@ -9,6 +9,7 @@ const Wrapper = styled(ModalWrapper)`
   justify-content: space-between;
   width: ${({ width }) => width || '26vw'};
   min-width: 22rem;
+  height: ${({ height }) => height};
 `;
 
 export const BtnWrapper = styled.div`
@@ -39,10 +40,11 @@ export default function Modal({
   firstBtn,
   secondBtn,
   width,
+  height,
 }) {
   return (
     <Background>
-      <Wrapper width={width}>
+      <Wrapper width={width} height={height}>
         {children || (
           <>
             <ModalTitle>{content}</ModalTitle>

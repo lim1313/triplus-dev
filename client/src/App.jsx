@@ -23,7 +23,7 @@ import KakaoCallback from './pages/KakaoCallback';
 function App() {
   const { pathname } = useLocation();
   const isToggled = useSelector((state) => state.toggleReducer.isToggled);
-  console.log(pathname);
+
   return (
     <>
       {pathname === '/admin' ? null : <NavBar />}

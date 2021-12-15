@@ -25,16 +25,17 @@ module.exports = {
 
     const { guideCard } = await selectGuideCardById(req);
 
+    // 가이드 신청자와 가이드 생성자가 같을 때
     if (accessToken.userId === guideCard.userId) {
-      resObject['code'] = 201;
-      resObject['message'] = '참가 신청자와 가이드 작성자가 같습니다';
+      resObject['code'] = 200;
+      resObject['message'] = 'main';
 
       return resObject;
     }
 
     // 참가인원이 다 찼을 때
     if (guideCard.state === GLOBAL_VARIABLE.COMPLETED) {
-      resObject['code'] = 201;
+      resObject['code'] = 200;
       resObject['message'] = 'end';
 
       return resObject;
@@ -54,8 +55,7 @@ module.exports = {
       }
     } catch (error) {
       console.log(error);
-      // resObject['code'] = 204;
-      resObject['code'] = 201;
+      resObject['code'] = 200;
       resObject['message'] = error;
 
       return resObject;
@@ -103,7 +103,6 @@ module.exports = {
         resObject['code'] = 401;
         throw 'accessToken이 없습니다';
       }
-
 
 const guideList = await guide_user_participate.findAll({
         subQuery: false,
