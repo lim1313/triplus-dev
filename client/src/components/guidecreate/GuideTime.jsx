@@ -57,6 +57,7 @@ export default function GuideTime(props) {
             type='number'
             onChange={handleInputChange}
             value={value.count}
+            min='1'
           />
         </div>
       </TimeCtn>

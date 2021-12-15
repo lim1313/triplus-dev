@@ -174,7 +174,7 @@ export default function CreateModal(props) {
     for (let key in checkData) {
       if (key === 'gender') continue;
       if (key === 'openDate') continue;
-      if (!checkData[key]) return false;
+      if (!checkData[key] || Number(checkData.count) < 1) return false;
     }
     return true;
   };
