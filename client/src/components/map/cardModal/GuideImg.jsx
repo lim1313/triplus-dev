@@ -9,7 +9,8 @@ const ImageWrapper = styled.li`
   flex-grow: 0;
   border-radius: 5px;
 
-  background-color: rgba(245, 245, 245, 0.5);
+  /* background-color: ${({ backImage }) => (backImage ? '#fff' : 'rgba(246, 247, 250, 1)')}; */
+  background-color: rgba(246, 247, 250, 1);
   background-image: url(${({ backImage }) => backImage});
   background-repeat: no-repeat;
   background-position: center;

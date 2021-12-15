@@ -10,7 +10,7 @@ const AlertMsg = styled.div`
   background: ${({ theme }) => theme.color.lightGray};
   border-radius: 1rem;
   padding: 0.4rem;
-
+  color: ${({ theme }) => theme.color.red};
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 0.8rem;
     padding: 0.3rem;

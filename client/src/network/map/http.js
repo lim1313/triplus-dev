@@ -33,9 +33,13 @@ export const getCardModal = async (params) => {
   return axios
     .get(`${http}/map/guide-card`, { params: { guideId: params } })
     .then((res) => {
+      console.log(res);
       return res.data.guideCard;
     })
-    .catch((err) => err.response.status);
+    .catch((err) => {
+      console.log(err.response);
+      return err.response.status;
+    });
 };
 
 //* POST 가이드 신청하기

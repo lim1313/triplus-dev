@@ -58,7 +58,7 @@ export default function WithdrawModal({ closeModal, social }) {
   const [isError] = useError();
 
   const withdrawUser = () => {
-    if (!inputValue) return setAlertMsg('*비밀번호를 입력하세요');
+    if (!inputValue && !social) return setAlertMsg('*비밀번호를 입력하세요');
 
     //TODO /my/withdraw
     deleteUser(inputValue, social).then((res) => {
@@ -67,10 +67,8 @@ export default function WithdrawModal({ closeModal, social }) {
         setAlertMsg('*비밀번호가 옳지 않습니다');
       } else if (res === 201) {
         isError('회원탈퇴가 완료되었습니다');
-      } else if (res > 400) {
-        alert('에러가 발생했습니다. 다시 시도해 주세요.');
       } else {
-        console.log(res);
+        alert('에러가 발생했습니다. 다시 시도해 주세요.');
       }
     });
   };
@@ -78,16 +76,20 @@ export default function WithdrawModal({ closeModal, social }) {
   return (
     <Modal width='auto'>
       <ModalTitle fontSize='1.1rem'>회원탈퇴를 진행하시겠습니까?</ModalTitle>
-      <SubText>비밀번호를 입력해주세요</SubText>
-      <InputWrapper>
-        <PWInput
-          type='password'
-          placeholder='비밀번호를 입력해 주세요'
-          value={inputValue}
-          onChange={inputChange}
-        ></PWInput>
-        <AlertMsg>{alertMsg}</AlertMsg>
-      </InputWrapper>
+      {!social && (
+        <>
+          <SubText>비밀번호를 입력해주세요</SubText>
+          <InputWrapper>
+            <PWInput
+              type='password'
+              placeholder='비밀번호를 입력해 주세요'
+              value={inputValue}
+              onChange={inputChange}
+            ></PWInput>
+            <AlertMsg>{alertMsg}</AlertMsg>
+          </InputWrapper>
+        </>
+      )}
       <BtnWrapper>
         <BtnSelect onClick={withdrawUser}>회원탈퇴</BtnSelect>
         <SelectBtn onClick={closeModal}>취소</SelectBtn>
