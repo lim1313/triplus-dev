@@ -1,4 +1,5 @@
 const { isAuthorized } = require('./user');
+const { Op } = require('sequelize');
 const { guide_user_participate, guide_card, user, guide_image } = require('./../../models');
 const { selectGuideCardById } = require('./../functions/guide_card');
 const GLOBAL_VARIABLE = require('./global_variable');
@@ -24,7 +25,7 @@ module.exports = {
 
     const { guideCard } = await selectGuideCardById(req);
 
-    if(accessToken.userId === guideCard.dataValues.userId){
+    if(accessToken.userId === guideCard.userId){
       resObject['code'] = 201;
       resObject['message'] = '참가 신청자와 가이드 작성자가 같습니다';
 
@@ -66,6 +67,19 @@ module.exports = {
         guideId: guideCard.guideId,
         userId: accessToken.userId,
       });
+
+      // 참가 신청이 되고 인원이 다찼을때
+      const guideUserLength = await guide_user_participate.findAll({
+        where: {guideId: guideCard.guideId}
+      });
+      if(guideCard.numPeople === guideUserLength.length){
+        await guide_card.update({
+          state: GLOBAL_VARIABLE.COMPLETED
+        }, {
+          where: {guideId: guideCard.guideId}
+        });
+      }
+
       resObject['code'] = 204;
       resObject['message'] = '참가신청이 되었습니다';
 
@@ -99,7 +113,7 @@ module.exports = {
           {
             model: guide_card,
             where: {
-              state: GLOBAL_VARIABLE.APPROVED,
+              state: {[Op.ne]: GLOBAL_VARIABLE.COMPLETED},
             },
             include: [
               {
@@ -256,6 +270,33 @@ module.exports = {
       return resObject;
     }
 
+    return resObject;
+  },
+
+  deleteData: (req) => {
+    const resObject = {};
+    const accessToken = isAuthorized(req);
+
+    try {
+      if (!accessToken) {
+        throw 'accessToken이 없습니다';
+      }
+    } catch (error) {
+      console.log(`ERROR: ${error}`);
+      resObject['code'] = 401;
+      resObject['message'] = error;
+      return resObject;
+    }
+
+    guide_user_participate.destroy({
+      where: {
+        guideId: req.body.guideId,
+        userId: accessToken.userId,
+      }
+    });
+
+    resObject['code'] = 200;
+    resObject['message'] = '참가신청이 취소되었습니다';
     return resObject;
   },
 };

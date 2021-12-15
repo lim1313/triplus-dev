@@ -74,5 +74,10 @@ module.exports = {
       guideList: resObject.guideList,
       message: resObject.message
     });
+  },
+
+  participateCanceled: async (req, res) => {
+    const resObject = await findGuideUserCompleted(req);
+    res.status(resObject.code).send(resObject.message);
   }
 };

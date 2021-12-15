@@ -14,5 +14,6 @@ router.get('/guide', controller.selectGuideCardByUserId);
 // router.get('/tourlist/all');
 router.get('/tourlist/expected', controller.findGuideUserApproved);
 router.get('/tourlist/completed', controller.findGuideUserCompleted);
+router.post('/tourlist/cancel', controller.participateCanceled);
 
 module.exports = router;
