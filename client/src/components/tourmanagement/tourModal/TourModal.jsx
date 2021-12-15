@@ -13,6 +13,12 @@ const TourModalWrapper = styled(ModalWrapper)`
   height: ${({ allow }) => (allow === 'CANCELED' ? '30vh' : '90vh')};
   overflow: auto;
   width: 27rem;
+
+  .alert-message {
+    margin-top: 0.5rem;
+    color: ${({ theme }) => theme.color.red};
+    font-size: 0.8rem;
+  }
 `;
 const TourTitle = styled.h1`
   margin: 0;
@@ -126,6 +132,7 @@ export default function TourModal({ modalInfo }) {
               content={content}
               openDate={openDate}
             />
+            <div className='alert-message'>*여행 하루전에는 취소가 불가능합니다.</div>
             <CancelBtnWrapper>
               <CancelBtn palette='red'>취소하기</CancelBtn>
             </CancelBtnWrapper>
