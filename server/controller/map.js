@@ -10,7 +10,6 @@ module.exports = {
   selectGuideCard: async (req, res) => {
     const params = req.query;
     const resObject = await selectGuideCard(params, req);
-    console.log(resObject);
     res.status(resObject.code).json({
       message: resObject.message,
       guideCardList: resObject.guideCardList,
