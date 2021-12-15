@@ -44,15 +44,15 @@ const Nick = styled.div`
   }
 `;
 const ChatBtn = styled(ColorBtn)`
-  margin-top: 10px;
   position: absolute;
-  right: 5px;
+  margin-top: 10px;
+  right: 12px;
   bottom: 10px;
   @media ${({ theme }) => theme.device.mobile} {
+    bottom: 5px;
     width: 3rem;
     height: 25px;
     padding: 0;
-    right: 28%;
   }
 `;
 

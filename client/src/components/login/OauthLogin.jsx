@@ -5,6 +5,7 @@ import KakaoLogin from './KakaoLogin';
 import NaverLogin from './NaverLogin';
 
 const OauthBlock = styled.ul`
+  margin-top: 1rem;
   display: flex;
   justify-content: center;
 `;

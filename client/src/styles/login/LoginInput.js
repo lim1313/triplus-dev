@@ -18,6 +18,7 @@ export const LoginInput = styled.input`
   border: none;
   border-bottom: 1px solid ${({ theme }) => theme.color.gray};
   outline: none;
+  margin-top: 0.5rem;
   &::-webkit-input-placeholder {
     font-size: 1rem;
   }

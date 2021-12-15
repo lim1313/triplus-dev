@@ -67,7 +67,7 @@ export default function GuidePlace(props) {
           <DaumPostcode onComplete={onCompletePost} style={postCodeStyle} />
         </div>
       ) : null}
-      <label htmlFor='place'>장소입력</label>
+      <label htmlFor='place'>대표장소입력</label>
       <PlaceInput
         autoComplete='off'
         placeholder='도로명주소'

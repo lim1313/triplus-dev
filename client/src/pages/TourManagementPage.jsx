@@ -79,7 +79,7 @@ export default function TourManagementPage() {
 
   return (
     <>
-      {isOpen ? <TourModal modalInfo={modalInfo} /> : null}
+      {isOpen && <TourModal modalInfo={modalInfo} />}
       <ManageCtn>
         <SectionCtn id='scrollArea' count={items}>
           <TourFilter

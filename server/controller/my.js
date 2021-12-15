@@ -22,6 +22,7 @@ module.exports = {
 
     const userFindOne = await user.findOne({
       where: { email: req.body.data },
+
     });
 
     try {

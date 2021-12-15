@@ -70,7 +70,7 @@ export const ImageWrapper = styled.div`
   filter: blur(1px);
   height: 100px;
   width: 100%;
-  background-image: url(${({ backImage }) => backImage})
+  background-image: url(${({ backImage }) => backImage});
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;

@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { sign, verify } = require('jsonwebtoken');
-const { user, guide_user_participate, user_verify } = require('./../../models');
+const { user, guide_user_participate, user_verify, chat_member } = require('./../../models');
 const bcrypt = require('bcrypt');
 const { hashPassword } = require('./secure');
 
@@ -66,7 +66,7 @@ module.exports = {
         return resObject;
       }
     }
-
+    
     await user
       .update(req.body, {
         where: { userId: accessToken.userId },
@@ -91,6 +91,26 @@ module.exports = {
       if (!accessToken) {
         resObject['code'] = 401;
         throw '로그인하여 주시기 바랍니다';
+      }
+
+      if(req.body.social){
+        await user.destroy({
+          where: {userId: accessToken.userId}
+        });
+
+        await chat_member.update({
+          left: 'left'
+        }, {
+          where: {userId: accessToken.userId}
+        });
+
+        await guide_user_participate.destroy({
+          where: {userId: accessToken.userId}
+        })
+
+        resObject['code'] = 201;
+        resObject['message'] = '회원탈퇴 되었습니다';
+        return resObject;
       }
 
       const userData = await user.findOne({ where: { userId: accessToken.userId } });

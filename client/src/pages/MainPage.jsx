@@ -125,7 +125,10 @@ const MainColorBtn = styled(ColorBtn)`
 
 const Img = styled.img`
   opacity: ${({ positionedY }) => (positionedY === '0' ? '1' : '0')};
-  width: ${({ positionedY }) => (positionedY === '0' ? '32vw' : '25vw')};
+  width: 25vw;
+  width: ${({ positionedY }) => positionedY === '0' && '32vw'};
+  width: ${({ positionedY }) => positionedY === '25' && '30vw'};
+  width: ${({ positionedY }) => positionedY === '67' && '20vw'};
   object-fit: contain;
   ${({ ratioY, positionedY }) =>
     ratioY >= Number(positionedY) &&
@@ -168,7 +171,7 @@ export default function MainPage() {
       <Section>
         {isMobile ? (
           <Content>
-            <Img src='./asset/main/trip1.png' alt='대체 이미지' ratioY={ratioY} positionedY='0' />
+            <Img src='./asset/main/trip1.jpeg' alt='대체 이미지' ratioY={ratioY} positionedY='0' />
             <Description>
               <Title>
                 우리는 여행자이자 <br /> 가이드입니다
@@ -200,13 +203,13 @@ export default function MainPage() {
                 </Link>
               </ButtonWrapper>
             </Description>
-            <Img src='./asset/main/trip1.png' alt='대체 이미지' ratioY={ratioY} positionedY='0' />
+            <Img src='./asset/main/trip1.jpeg' alt='대체 이미지' ratioY={ratioY} positionedY='0' />
           </Content>
         )}
       </Section>
       <Section>
         <Content>
-          <Img src='./asset/main/trip2.png' alt='대체 이미지' ratioY={ratioY} positionedY='7' />
+          <Img src='./asset/main/trip2.jpeg' alt='대체 이미지' ratioY={ratioY} positionedY='7' />
           <Description marginLeft='10rem' marginTop={isMobile ? '3rem' : null}>
             <Title>여행해보세요!</Title>
             <SubText>
@@ -224,7 +227,7 @@ export default function MainPage() {
       <Section>
         {isMobile ? (
           <Content>
-            <Img src='./asset/main/trip3.png' alt='대체 이미지' ratioY={ratioY} positionedY='25' />
+            <Img src='./asset/main/trip3.jpeg' alt='대체 이미지' ratioY={ratioY} positionedY='25' />
             <Description right marginTop='3rem'>
               <Title>
                 현지 가이드가 <br /> 되어 보세요!
@@ -260,13 +263,13 @@ export default function MainPage() {
                 </Link>
               </ButtonWrapper>
             </Description>
-            <Img src='./asset/main/trip3.png' alt='대체 이미지' ratioY={ratioY} positionedY='25' />
+            <Img src='./asset/main/trip3.jpeg' alt='대체 이미지' ratioY={ratioY} positionedY='25' />
           </Content>
         )}
       </Section>
       <Section>
         <Content>
-          <Img src='./asset/main/trip4.png' alt='대체 이미지' ratioY={ratioY} positionedY='45' />
+          <Img src='./asset/main/trip4.jpeg' alt='대체 이미지' ratioY={ratioY} positionedY='45' />
           <Description marginLeft='10rem' right marginTop={isMobile ? '3rem' : null}>
             <Title>채팅해보세요!</Title>
             <SubText>
@@ -286,7 +289,7 @@ export default function MainPage() {
       <Section>
         {isMobile ? (
           <Content>
-            <Img src='./asset/main/trip5.png' alt='대체 이미지' ratioY={ratioY} positionedY='64' />
+            <Img src='./asset/main/trip5.jpeg' alt='대체 이미지' ratioY={ratioY} positionedY='67' />
             <Description marginTop='3rem'>
               <Title>
                 일정을 <br /> 한 눈에 보세요!
@@ -316,7 +319,7 @@ export default function MainPage() {
                 </Link>
               </ButtonWrapper>
             </Description>
-            <Img src='./asset/main/trip5.png' alt='대체 이미지' ratioY={ratioY} positionedY='64' />
+            <Img src='./asset/main/trip5.jpeg' alt='대체 이미지' ratioY={ratioY} positionedY='64' />
           </Content>
         )}
       </Section>

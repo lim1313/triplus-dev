@@ -130,7 +130,7 @@ module.exports = {
     }
 
     try {
-      whereGuideCard[Op.and].push({ state: { [Op.eq]: GLOBAL_VARIABLE.APPROVED } });
+      whereGuideCard[Op.and].push({ state: { [Op.ne]: GLOBAL_VARIABLE.CANCELED } });
       if (params['swLat']) {
         whereGuideCard[Op.and].push({ latitude: { [Op.gte]: params['swLat'] } });
       }
@@ -145,6 +145,8 @@ module.exports = {
       }
       if (params['startDate']) {
         whereGuideCard[Op.and].push({ guide_date: { [Op.gte]: new Date(params['startDate']) } });
+      }else{
+        whereGuideCard[Op.and].push({ guide_date: { [Op.gte]: new Date() } });
       }
       if (params['endDate']) {
         whereGuideCard[Op.and].push({ guide_date: { [Op.lte]: new Date(params['endDate']) } });
@@ -164,6 +166,31 @@ module.exports = {
     }
 
     try {
+      await guide_card.findAll({
+        include: [
+          {
+            model: user,
+            attributes: ['nickName', 'gender', 'image'],
+            where: whereUser,
+          },
+          {
+            model: guide_image,
+          },
+        ],
+        where: whereGuideCard,
+      }).then(async result => {
+        for(let guideCard of result){
+          if(guideCard.dataValues.guideDate < new Date()){
+            await guide_card.update({
+              state: GLOBAL_VARIABLE.COMPLETED
+            }, {
+              where: {guideId: guideCard.dataValues.guideId}
+            })
+          }
+        }
+        return result;
+      });
+
       const guideCards = await guide_card.findAll({
         include: [
           {
@@ -272,8 +299,10 @@ module.exports = {
 
     const accessToken = isAuthorized(req);
     if (!accessToken) {
+      guideCard['userId'] = accessToken.userId;
       guideCard['userParticipate'] = 0;
     } else {
+      guideCard['userId'] = undefined;
       const selectGuideUserParticipate = await guide_user_participate.findOne({
         raw: true,
         where: { guideId: req.query.guideId, userId: accessToken.userId },

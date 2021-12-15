@@ -12,6 +12,7 @@ import AlertModal from '../components/common/AlertModal';
 import { deleteGuideCard } from '../network/management/http';
 import { guideDelete } from '../redux/management/action';
 import LoginModal from '../components/common/LoginModal';
+import { getDday } from '../utils/dDay';
 
 const Background = styled(PageContainer)`
   ${({ pathName }) =>
@@ -44,11 +45,13 @@ export default function ManagementPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleted, setIsdeleted] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [clicked, setClick] = useState({
     management: true,
     managementtourlist: false,
   });
   const navigate = useNavigate();
+
   const handleCreateClick = (guideInfo) => {
     if (!isLogin) {
       setOpenLoginModal(true);
@@ -78,7 +81,6 @@ export default function ManagementPage() {
     setIsLoading(true);
 
     const path = pathname.split('/').join('');
-    console.log(path);
     if (path === 'management') {
       setClick({ management: true, managementtourlist: false });
     } else {
@@ -94,7 +96,6 @@ export default function ManagementPage() {
       })
       .catch((err) => setIsLoading(false));
   }, [pathname, isDeleted, isCompleted]);
-  console.log('management', applicantInfo);
   return (
     <>
       {isOpen ? (
@@ -109,16 +110,20 @@ export default function ManagementPage() {
         <Modal
           content={'등록하신 가이드를 삭제하시겠습니까?'}
           yesClick={() => {
-            deleteGuideCard(guideInfo.guideId)
-              .then((res) => {
-                console.log(res);
-                if (res.status === 200) {
-                  dispatch(guideDelete());
-                  setTimeout(() => setIsdeleted(true), 0);
-                  setTimeout(() => setIsdeleted(false), 1000);
-                }
-              })
-              .catch((err) => dispatch(guideDelete()));
+            if (getDday(guideInfo.guideDate) !== 1) {
+              deleteGuideCard(guideInfo.guideId)
+                .then((res) => {
+                  if (res.status === 200) {
+                    dispatch(guideDelete());
+                    setTimeout(() => setIsdeleted(true), 0);
+                    setTimeout(() => setIsdeleted(false), 1000);
+                  }
+                })
+                .catch((err) => dispatch(guideDelete()));
+            } else {
+              setTimeout(() => setIsAlertOpen(true), 0);
+              setTimeout(() => setIsAlertOpen(false), 1000);
+            }
           }}
           noClick={() => {
             dispatch(guideDelete());
@@ -127,6 +132,7 @@ export default function ManagementPage() {
       )}
       {isDeleted && <AlertModal content={'삭제되었습니다.'} />}
       {isAreadySet && <AlertModal content={'이미 등록된 가이드가 있습니다.'} />}
+      {isAlertOpen && <AlertModal content={'여행 하루전에는 취소가 불가능합니다.'} />}
       {OpenLoginModal && (
         <LoginModal
           content={'로그인된 여행자님만 이용가능합니다. 로그인하시겠습니까?'}
