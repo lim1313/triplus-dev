@@ -76,6 +76,7 @@ module.exports = {
           userId: nickname,
           social: 'naver',
           email: email,
+          expiredDatetime: null,
         },
         defaults: {
           password: '',

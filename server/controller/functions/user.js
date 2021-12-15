@@ -51,6 +51,20 @@ module.exports = {
       return resObject;
     }
 
+    const userFindOne = await user.findOne({
+      where: {nickName: req.body.nickName}
+    });
+
+    try {
+      if(userFindOne){
+        resObject['code'] = 204;
+        throw 'Nick Name 중복';
+      }
+    } catch (error) {
+      console.log(error);
+      return resObject;
+    }
+
     await user
       .update(req.body, {
         where: { userId: accessToken.userId },
@@ -73,12 +87,14 @@ module.exports = {
 
     try {
       if (!accessToken) {
+        resObject['code'] = 401;
         throw '로그인하여 주시기 바랍니다';
       }
 
       const userData = await user.findOne({ where: { userId: accessToken.userId } });
       const match = await bcrypt.compare(req.body.password, userData.dataValues.password);
       if (!match) {
+        resObject['code'] = 400;
         throw '비밀번호를 잘못 입력하였습니다';
       }
 
@@ -107,7 +123,6 @@ module.exports = {
       );
     } catch (error) {
       console.log(error);
-      resObject['code'] = 400;
       resObject['message'] = error;
     }
     return resObject;
@@ -119,12 +134,14 @@ module.exports = {
 
     try {
       if (!accessToken) {
+        resObject['code'] = 401;
         throw '로그인하여 주시기 바랍니다';
       }
 
       const userData = await user.findOne({ where: { userId: accessToken.userId } });
       const match = await bcrypt.compare(req.body.oldPassword, userData.dataValues.password);
       if (!match) {
+        resObject['code'] = 400;
         throw '비밀번호를 잘못 입력하였습니다';
       }
 
@@ -149,7 +166,6 @@ module.exports = {
         });
     } catch (error) {
       console.log(error);
-      resObject['code'] = 400;
       resObject['message'] = error;
     }
     return resObject;
@@ -158,7 +174,7 @@ module.exports = {
   selectUser: (userId) => {
     return user
       .findOne({
-        attributes: ['userId', 'email', 'nickName', 'region', 'image'],
+        attributes: ['userId', 'email', 'nickName', 'social', 'region', 'image'],
         where: {
           userId,
         },

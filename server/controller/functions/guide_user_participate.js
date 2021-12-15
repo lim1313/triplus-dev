@@ -24,6 +24,13 @@ module.exports = {
 
     const { guideCard } = await selectGuideCardById(req);
 
+    if(accessToken.userId === guideCard.dataValues.userId){
+      resObject['code'] = 201;
+      resObject['message'] = '참가 신청자와 가이드 작성자가 같습니다';
+
+      return resObject;
+    }
+
     // 참가인원이 다 찼을 때
     if (guideCard.state === GLOBAL_VARIABLE.COMPLETED) {
       resObject['code'] = 201;
@@ -65,7 +72,7 @@ module.exports = {
       return resObject;
     } catch (error) {
       console.log(error);
-      resObject['code'] = 401;
+      resObject['code'] = 400;
       resObject['message'] = '참가신청이 되지않았습니다';
 
       return resObject;
@@ -84,6 +91,7 @@ module.exports = {
       }
 
       const guideList = await guide_user_participate.findAll({
+        subQuery: false,
         where: {
           userId: accessToken.userId,
         },
@@ -104,11 +112,12 @@ module.exports = {
             attributes: ['nickName', 'gender', 'image'],
           },
         ],
-        separate: true,
-        // order: [[guide_card, 'createdAt', 'desc']],
-        // order: [`guide_card`.`guide_date`]
+        order: [[guide_card, 'guideDate', req.query.sortBy]],
         offset: pages * 6 - 6,
         limit: 6,
+      }).catch(error => {
+        console.log(error);
+        resObject['code'] = 200;
       });
 
       const guideCardData = [];
@@ -172,6 +181,7 @@ module.exports = {
       }
 
       const guideList = await guide_user_participate.findAll({
+        subQuery: false,
         where: {
           userId: accessToken.userId,
         },
@@ -186,15 +196,18 @@ module.exports = {
                 model: guide_image,
               },
             ],
-            order: ['guideDate', 'ASC'],
           },
           {
             model: user,
             attributes: ['nickName', 'gender', 'image'],
           },
         ],
+        order: [[guide_card, 'guideDate', req.query.sortBy]],
         offset: pages * 6 - 6,
         limit: 6,
+      }).catch(error => {
+        console.log(error);
+        resObject['code'] = 200;
       });
 
       const guideCardData = [];

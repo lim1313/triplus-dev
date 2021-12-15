@@ -5,6 +5,7 @@ const {
   changePassword,
   selectUser,
   updateEmail,
+  checkEmail,
 } = require('./functions/user');
 const crypto = require('crypto');
 const { user, user_verify } = require('../models');
@@ -18,6 +19,19 @@ module.exports = {
 
     const { userId } = accessToken;
     const email = req.body.data;
+
+    const userFindOne = user.findOne({
+      where: {email: req.body.data}
+    });
+
+    try {
+      if(userFindOne){
+        throw 'email 중복';
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(204);
+    }
 
     try {
       let userVierify = await user_verify.findOne({ where: { user_id: userId } });

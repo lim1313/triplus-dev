@@ -8,7 +8,7 @@ const Wrapper = styled(ModalWrapper)`
   flex-direction: column;
   justify-content: space-between;
   width: ${({ width }) => width || '26vw'};
-  min-width: 21rem;
+  min-width: 22rem;
 `;
 
 export const BtnWrapper = styled.div`

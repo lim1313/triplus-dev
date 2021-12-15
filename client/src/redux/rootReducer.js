@@ -16,7 +16,7 @@ import { openTourModalReducer } from './tourManagement/reducer';
 const persistConfig = {
   key: 'root',
   storage,
-  whiteList: ['loginReducer'],
+  whiteList: ['loginReducer', 'adminReducer'],
   blacklist: [
     'cardFilterReducer',
     'guideModalReducer',

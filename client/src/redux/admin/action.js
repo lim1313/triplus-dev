@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ADMIN_USER, ADMIN_OPEN } from './type';
+import { ADMIN_USER, ADMIN_OPEN, LOGOUT_ADMIN_USER } from './type';
 
 const http = process.env.REACT_APP_HTTPSURL;
 
@@ -15,9 +15,24 @@ export const adminUser = (dataTosubmit) => (dispatch) => {
         type: ADMIN_USER,
         payload: { success: res.success, message: res.message },
       });
+      if (res.success) {
+        dispatch(adminOpen());
+      }
     })
+    .catch((err) => console.log(err));
+};
+
+export const logoutAdminUser = () => (dispatch) => {
+  axios
+    .get(`${http}/logout`, { crossDomain: true })
     .then((res) => {
-      dispatch(adminOpen());
+      if (res.data.success) {
+        dispatch({
+          type: LOGOUT_ADMIN_USER,
+          payload: { success: '', meesage: '' },
+        });
+        dispatch(adminOpen());
+      }
     })
     .catch((err) => console.log(err));
 };

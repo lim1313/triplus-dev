@@ -109,6 +109,8 @@ export default function MyGuideCard(props) {
   const handleDeleteClick = () => {
     dispatch(guideDelete());
   };
+  console.log('guideCard', applicantInfo);
+
   return (
     <CardCtn>
       <CardWrapper>

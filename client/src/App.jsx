@@ -43,11 +43,7 @@ function App() {
         <Route path='/navercallback' element={<NaverCallback />} />
         <Route path='/kakaocallback' element={<KakaoCallback />} />
       </Routes>
-      {pathname === '/map' ||
-      pathname === '/admin' ||
-      pathname === '/mypage' ||
-      pathname === '/management' ||
-      pathname === '/management/tourlist' ? null : (
+      {(pathname === '/' || pathname === '/login' || pathname === '/signup') && (
         <Footer main={pathname === '/' ? 'main' : null} />
       )}
     </>
