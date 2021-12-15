@@ -63,6 +63,8 @@ export default function EmailModal({ clickModal }) {
 
   //* 이메일 인증 번호 발송
   const sendEmail = () => {
+    setAlertMsg(null);
+    setAlertMsg2(null);
     if (!emailValidation(newEmail)) {
       setAlertMsg('*이메일 형식에 맞춰 작성해 주세요.');
     } else {
@@ -73,6 +75,8 @@ export default function EmailModal({ clickModal }) {
           alert('오류가 발생했습니다. 다시 시도해 주세요');
         } else if (res >= 400) {
           setAlertMsg('*인증번호 발송에 실패했습니다. 다시 시도해 주세요');
+        } else if (res === 204) {
+          setAlertMsg('*중복되는 이메일입니다. 다시 시도해 주세요');
         } else {
           setAlertMsg('*인증번호가 발송되었습니다');
           setIsClickVerify(true);
@@ -83,6 +87,8 @@ export default function EmailModal({ clickModal }) {
 
   //* 이메일 최종 변경 post 요청
   const submitClick = () => {
+    setAlertMsg(null);
+    setAlertMsg2(null);
     if (!emailValidation(newEmail)) {
       setAlertMsg('*올바른 이메일 형식으로 작성해 주세요');
     } else if (!isClickVerify) {
@@ -91,8 +97,8 @@ export default function EmailModal({ clickModal }) {
       setAlertMsg2('*올바른 인증번호를 입력하세요');
     } else {
       //TODO /my/email
-      setIsLoading(true);
       postInfo({ email: newEmail, verifyKey: verifyNum }, 'email').then((res) => {
+        console.log(res);
         if (res === 401) return isError();
         else if (res >= 500) {
           alert('오류가 발생했습니다. 다시 시도해 주세요');

@@ -8,7 +8,7 @@ export const FilterFrame = styled.div`
   background-color: #fff;
   margin: 5px;
   text-align: center;
-  color: ${({ color, theme }) => theme.color[color]};
+  color: ${({ color, theme }) => theme.color[color] || 'black'};
 
   &:hover {
     cursor: pointer;

@@ -20,17 +20,17 @@ module.exports = {
     const { userId } = accessToken;
     const email = req.body.data;
 
-    const userFindOne = user.findOne({
-      where: {email: req.body.data}
+    const userFindOne = await user.findOne({
+      where: { email: req.body.data },
     });
 
     try {
-      if(userFindOne){
+      if (userFindOne) {
         throw 'email 중복';
       }
     } catch (error) {
       console.log(error);
-      return res.status(204);
+      return res.sendStatus(204);
     }
 
     try {
@@ -108,12 +108,26 @@ module.exports = {
 
   expiredUser: async (req, res) => {
     const resObject = await expiredUser(req);
-    res.status(resObject.code).send(resObject.message);
+    res
+      .status(resObject.code)
+      .clearCookie('accessToken', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
+      })
+      .send(resObject.message);
   },
 
   changePassword: async (req, res) => {
     const resObject = await changePassword(req);
-    res.status(resObject.code).send(resObject.message);
+    res
+      .status(resObject.code)
+      .clearCookie('accessToken', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
+      })
+      .send(resObject.message);
   },
 
   updateEmail: async (req, res) => {

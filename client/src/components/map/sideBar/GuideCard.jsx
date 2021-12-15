@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
@@ -56,7 +54,7 @@ export const CardLi = styled.li`
 
   & .lazy {
     background: none;
-    background-color: ${({ theme }) => theme.color.gray};
+    background-color: ${({ userImg, theme }) => (userImg ? '#fff' : theme.color.gray)};
   }
 
   & .imgload {

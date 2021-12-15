@@ -93,9 +93,11 @@ export default function CardModal({ modalInfo }) {
     state,
     userId,
     loginId,
+    startTime,
+    endTime,
   } = modalInfo;
   const [openModal, setOpenModal] = useState('');
-
+  console.log(modalInfo);
   const dispatch = useDispatch();
 
   const modalRef = useRef();
@@ -124,6 +126,8 @@ export default function CardModal({ modalInfo }) {
             guideDate={guideDate}
             content={content}
             openDate={openDate}
+            startTime={startTime}
+            endTime={endTime}
           />
         </Wrapper>
         <GuideBtn

@@ -51,18 +51,20 @@ module.exports = {
       return resObject;
     }
 
-    const userFindOne = await user.findOne({
-      where: {nickName: req.body.nickName}
-    });
+    if (req.body.nickName) {
+      const userFindOne = await user.findOne({
+        where: { nickName: req.body.nickName },
+      });
 
-    try {
-      if(userFindOne){
-        resObject['code'] = 204;
-        throw 'Nick Name 중복';
+      try {
+        if (userFindOne) {
+          resObject['code'] = 204;
+          throw 'Nick Name 중복';
+        }
+      } catch (error) {
+        console.log(error);
+        return resObject;
       }
-    } catch (error) {
-      console.log(error);
-      return resObject;
     }
 
     await user
