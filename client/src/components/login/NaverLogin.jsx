@@ -15,7 +15,7 @@ const NaverBtn = styled(OauthBtn)`
 
 export default function NaverLogin() {
   const handleSignNaver = () => {
-    window.location.href = `${process.env.REACT_APP_HTTPSURL}/oauth/naver`;
+    window.location.href = `${process.env.REACT_APP_OAUTH_REQUEST}/oauth/naver`;
   };
   return (
     <ButtonBlock>
