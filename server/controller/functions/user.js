@@ -94,7 +94,9 @@ module.exports = {
       }
 
       if(req.body.social){
-        await user.destroy({
+        await user.update({
+          expiredDatetime: new Date(),
+        }, {
           where: {userId: accessToken.userId}
         });
 

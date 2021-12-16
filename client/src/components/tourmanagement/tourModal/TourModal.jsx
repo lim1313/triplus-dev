@@ -6,7 +6,7 @@ import GuideImgs from '../../map/cardModal/GuideImgs';
 import Userinfo from '../../map/cardModal/UserInfo';
 import { FaTimes } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { openTourModal } from '../../../redux/tourManagement/action';
+import { completeDelete, openTourModal } from '../../../redux/tourManagement/action';
 import { ColorBtn } from '../../../styles/common/index';
 import { clickDelete } from '../../../redux/tourManagement/action';
 import Modal from '../../common/Modal';
@@ -94,6 +94,8 @@ export default function TourModal({ modalInfo }) {
     openDate,
     content,
     state,
+    startTime,
+    endTime,
   } = modalInfo;
   const isDeleteClick = useSelector((state) => state.openDeleteModalReducer);
   const [isCompletedMsg, setIsCompletedMsg] = useState(false);
@@ -112,6 +114,63 @@ export default function TourModal({ modalInfo }) {
   const handleDeleteClick = () => {
     dispatch(clickDelete());
   };
+  const handleYesClick = () => {
+    if (getDday(guideDate) !== 1) {
+      setIsLoading(true);
+      deleteTourList(guideId)
+        .then((res) => {
+          if (res.status === 200) {
+            setTimeout(() => {
+              setIsLoading(false);
+              setIsCompletedMsg(true);
+            }, 0);
+            setTimeout(() => {
+              setIsCompletedMsg(false);
+              dispatch(openTourModal({ isOpen: false, modalInfo: {} }));
+              dispatch(clickDelete());
+              dispatch(completeDelete());
+            }, 1000);
+          }
+        })
+        .catch((err) => {
+          dispatch(openTourModal({ isOpen: false, modalInfo: {} }));
+          dispatch(clickDelete());
+          dispatch(exit());
+          alert('로그인이 만료되어 로그인페이지로 이동합니다.');
+          navigate('/login');
+        });
+    } else {
+      setTimeout(() => {
+        setIsAlertMsg(true);
+      }, 0);
+      setTimeout(() => {
+        setIsAlertMsg(false);
+      }, 1000);
+    }
+  };
+  const handleCancelClick = () => {
+    setIsLoading(true);
+    deleteTourList(guideId)
+      .then((res) => {
+        if (res.status === 200) {
+          setTimeout(() => {
+            setIsLoading(false);
+            setIsCompletedMsg(true);
+          }, 0);
+          setTimeout(() => {
+            setIsCompletedMsg(false);
+            dispatch(openTourModal({ isOpen: false, modalInfo: {} }));
+            dispatch(completeDelete());
+          }, 1000);
+        }
+      })
+      .catch((err) => {
+        dispatch(openTourModal({ isOpen: false, modalInfo: {} }));
+        dispatch(exit());
+        alert('로그인이 만료되어 로그인페이지로 이동합니다.');
+        navigate('/login');
+      });
+  };
   return (
     <Background onClick={closeModalNotBtn}>
       <TourModalWrapper allow={state}>
@@ -129,8 +188,11 @@ export default function TourModal({ modalInfo }) {
                 하단의 취소하기를 눌러주세요
               </MsgWapper>
               <CancelBtnWrapper>
-                <CancelBtn palette='red'>취소하기</CancelBtn>
+                <CancelBtn palette='red' onClick={handleCancelClick}>
+                  취소하기
+                </CancelBtn>
               </CancelBtnWrapper>
+              {isCompletedMsg && <AlertModal>신청 취소가 완료되었습니다!</AlertModal>}
             </NoticeMsg>
           </>
         ) : (
@@ -138,39 +200,7 @@ export default function TourModal({ modalInfo }) {
             {isDeleteClick && (
               <Modal
                 content='여행신청을 취소하시겠습니까?'
-                yesClick={() => {
-                  if (getDday(guideDate) !== 1) {
-                    setIsLoading(true);
-                    deleteTourList(guideId)
-                      .then((res) => {
-                        if (res.status === 200) {
-                          setTimeout(() => {
-                            setIsLoading(false);
-                            setIsCompletedMsg(true);
-                          }, 0);
-                          setTimeout(() => {
-                            setIsCompletedMsg(false);
-                            dispatch(openTourModal({ isOpen: false, modalInfo: {} }));
-                            dispatch(clickDelete());
-                          }, 1000);
-                        }
-                      })
-                      .catch((err) => {
-                        dispatch(openTourModal({ isOpen: false, modalInfo: {} }));
-                        dispatch(clickDelete());
-                        dispatch(exit());
-                        alert('로그인이 만료되어 로그인페이지로 이동합니다.');
-                        navigate('/login');
-                      });
-                  } else {
-                    setTimeout(() => {
-                      setIsAlertMsg(true);
-                    }, 0);
-                    setTimeout(() => {
-                      setIsAlertMsg(false);
-                    }, 1000);
-                  }
-                }}
+                yesClick={handleYesClick}
                 noClick={() => {
                   dispatch(clickDelete());
                 }}
@@ -192,6 +222,8 @@ export default function TourModal({ modalInfo }) {
               guideDate={guideDate}
               content={content}
               openDate={openDate}
+              startTime={startTime}
+              endTime={endTime}
             />
             <div className='alert-message'>*여행 하루전에는 취소가 불가능합니다.</div>
             <CancelBtnWrapper>

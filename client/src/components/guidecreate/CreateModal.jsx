@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Loading from '../common/Loading';
 import { exit } from '../../redux/login/action';
-import AlertMsgModal from './AlertMsgModal';
+import AlertModal from '../common/AlertModal';
 
 const { kakao } = window;
 
@@ -103,7 +103,6 @@ export default function CreateModal(props) {
   const [extraAddress, setExtraAddress] = useState('');
   const [startTime, setStartTime] = useState({ sdayNight: '오전', stime: '00', sminute: '00' });
   const [endTime, setEndTime] = useState({ edayNight: '오전', etime: '00', eminute: '00' });
-  // const [isCompleted, setIsCompleted] = useState(false);
   const [unCompleteMsgOpen, setUnCompleteMsgOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -114,9 +113,6 @@ export default function CreateModal(props) {
   const callback = (result, status) => {
     const data = result[0].road_address;
     setInputs({ ...inputs, latitude: data.y, longitude: data.x });
-    if (status === kakao.maps.services.Status.Ok) {
-      console.log('Ok');
-    }
   };
 
   //상세주소 입력시점 + 주소->좌표 변경시점
@@ -140,10 +136,8 @@ export default function CreateModal(props) {
         endTime: iEndTime,
       });
       setExtraAddress(e.target.value);
-      console.log(inputs);
     } else {
       setInputs({ ...inputs, [id]: e.target.value, startTime: iStartTime, endTime: iEndTime });
-      console.log(inputs);
     }
   };
 
@@ -181,10 +175,19 @@ export default function CreateModal(props) {
   const handleStartTimeChange = (e) => {
     const key = e.target.getAttribute('id');
     setStartTime({ ...startTime, [key]: e.target.value });
+    if (key === 'stime') {
+      setEndTime({ ...endTime, etime: e.target.value });
+    }
+    const iStartTime = startTime.sdayNight + ' ' + startTime.stime + ':' + startTime.sminute;
+    const iEndTime = endTime.edayNight + ' ' + endTime.etime + ':' + endTime.eminute;
+    setInputs({ ...inputs, startTime: iStartTime, endTime: iEndTime });
   };
   const handleEndTimeChange = (e) => {
     const key = e.target.getAttribute('id');
     setEndTime({ ...endTime, [key]: e.target.value });
+    const iStartTime = startTime.sdayNight + ' ' + startTime.stime + ':' + startTime.sminute;
+    const iEndTime = endTime.edayNight + ' ' + endTime.etime + ':' + endTime.eminute;
+    setInputs({ ...inputs, startTime: iStartTime, endTime: iEndTime });
   };
 
   // 성별 토글 상태관리 함수
@@ -193,12 +196,14 @@ export default function CreateModal(props) {
     const iEndTime = endTime.edayNight + ' ' + endTime.etime + ':' + endTime.eminute;
     setIsGender(!isGender);
     setInputs({ ...inputs, gender: !isGender, startTime: iStartTime, endTime: iEndTime });
+    console.log(inputs);
   };
 
   const inputCheck = (checkData) => {
     for (let key in checkData) {
       if (key === 'gender') continue;
       if (key === 'openDate') continue;
+      if (key === 'date') continue;
       if (!checkData[key] || Number(checkData.count) < 1) return false;
     }
     return true;
@@ -208,7 +213,6 @@ export default function CreateModal(props) {
   const handleSubmitClick = () => {
     if (inputCheck(inputs)) {
       setIsLoading(true);
-      console.log(fileArray);
       const formData = new FormData();
       for (let key in inputs) {
         formData.append(key, inputs[key]);
@@ -218,7 +222,6 @@ export default function CreateModal(props) {
       }
       createGudie(formData)
         .then((res) => {
-          console.log(res);
           if (res.status === 200) {
             // setIsLoading(false);
             handleComplete();
@@ -240,7 +243,7 @@ export default function CreateModal(props) {
 
   return (
     <Background onClick={handleCloseCreate} name='Background'>
-      {unCompleteMsgOpen ? <AlertMsgModal /> : null}
+      {unCompleteMsgOpen && <AlertModal content={'정확한 정보를 기입해주세요'} />}
       <CreateModalWrapper width='26rem' minWidth='23rem'>
         <DeleteBtn>
           <ImCancelCircle className='cancel' onClick={handleCreateClick} />
@@ -287,6 +290,8 @@ export default function CreateModal(props) {
               value={inputs}
               handleStartTimeChange={handleStartTimeChange}
               handleEndTimeChange={handleEndTimeChange}
+              startTime={startTime}
+              endTime={endTime}
             />
             <GuideContent handleInputChange={handleInputChange} value={inputs} />
             <SubmitCtn>

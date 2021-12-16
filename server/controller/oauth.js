@@ -11,7 +11,7 @@ module.exports = {
     const oauth2Client = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
-      process.env.REDIRECT_URL
+      `${process.env.REDIRECT_URL}/googlecallback`
     );
     const { tokens } = await oauth2Client.getToken(accessCode);
     oauth2Client.setCredentials(tokens);
@@ -22,7 +22,7 @@ module.exports = {
     user
       .findOrCreate({
         where: { userId: sub, email: email },
-        defaults: { userId: sub, email: email, image: picture, social: 'google' },
+        defaults: { userId: `${sub}*google`, email: email, image: picture, social: 'google' },
       })
       .then(([data, created]) => {
         const accessToken = generateAccessToken(data.dataValues);
@@ -34,7 +34,7 @@ module.exports = {
 
   naver: async (req, res) => {
     return res.redirect(
-      `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT}&state=STATE_STRING&redirect_uri=${process.env.REACT_APP_REDIRECT_URL}/navercallback`
+      `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NAVER_CLIENT_ID}&state=STATE_STRING&redirect_uri=${process.env.REDIRECT_URL}/navercallback`
     );
   },
 
@@ -43,7 +43,7 @@ module.exports = {
     const state = req.body.state;
     try {
       const result = await axios.get(
-        `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${process.env.REACT_APP_NAVER_CLIENT}&client_secret=${process.env.REACT_APP_NAVERPW}&code=${authorizationCode}&state=${state}`
+        `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${process.env.NAVER_CLIENT_ID}&client_secret=${process.env.NAVER_CLIENT_SECRET}&code=${authorizationCode}&state=${state}`
       );
 
       console.log(result);
@@ -71,9 +71,20 @@ module.exports = {
       // }
       const { email, nickname, profile_image } = userInfo.data.response;
 
-      const key1 = crypto.randomBytes(256).toString('hex').substr(100, 4);
-      const randomNum = parseInt(key1, 16);
-      const nick = '여행자' + randomNum;
+      let dontBreak = true;
+      let uniqueNickName;
+      const nickNameData = await user.findAll({ attributes: ['nickName'] });
+      const nickNames = nickNameData.map((el) => el.dataValues.nickName);
+
+      while (dontBreak) {
+        const key1 = crypto.randomBytes(256).toString('hex').substr(100, 4);
+        const randomNum = parseInt(key1, 16);
+        const nick = '여행자' + randomNum;
+        if (!nickNames.includes(nick)) {
+          uniqueNickName = nick;
+          dontBreak = false;
+        }
+      }
 
       const userId = `${nickname}@naver`;
       const userInstance = await user.findOrCreate({
@@ -84,7 +95,7 @@ module.exports = {
           expiredDatetime: null,
         },
         defaults: {
-          nickName: nick,
+          nickName: uniqueNickName,
           password: '',
           role: 'general',
           image: profile_image,

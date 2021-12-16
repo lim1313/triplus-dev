@@ -5,8 +5,6 @@ import styled from 'styled-components';
 const ManageH2 = styled(H2)`
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.5rem;
-    /* position: absolute;
-    left: 30%; */
     text-align: center;
   }
 `;

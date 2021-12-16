@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import ApplicantCards from './ApplicantCards';
-// import { ColorBtn } from '../../styles/common/index';
-// import ApplicantTable from './ApplicantTable';
 
 const ListCtn = styled.div`
   margin: 0;
