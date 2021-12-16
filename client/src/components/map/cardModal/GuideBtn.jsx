@@ -82,7 +82,6 @@ export default function GuideBtn({
       }, 2000);
     });
   };
-  console.log(loginId, userId);
 
   return (
     <ModalBottomBtn>

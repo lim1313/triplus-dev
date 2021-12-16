@@ -141,6 +141,7 @@ module.exports = {
 
     try {
       whereGuideCard[Op.and].push({ state: { [Op.ne]: GLOBAL_VARIABLE.CANCELED } });
+      whereGuideCard[Op.and].push({ state: { [Op.ne]: GLOBAL_VARIABLE.COMPLETED } });
       if (params['swLat']) {
         whereGuideCard[Op.and].push({ latitude: { [Op.gte]: params['swLat'] } });
       }
