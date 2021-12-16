@@ -151,7 +151,9 @@ export default function EmailModal({ clickModal }) {
           </BtnsWrapper>
         </section>
       </Modal>
-      {completeModal && <Modal content='이메일 변경 완료' yesClick={yesClick} onlyOne />}
+      {completeModal && (
+        <Modal content='이메일 변경이 완료되었습니다' yesClick={yesClick} onlyOne />
+      )}
     </>
   );
 }

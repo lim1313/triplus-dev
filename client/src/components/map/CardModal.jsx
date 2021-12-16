@@ -97,18 +97,18 @@ export default function CardModal({ modalInfo }) {
     endTime,
   } = modalInfo;
   const [openModal, setOpenModal] = useState('');
-  console.log(modalInfo);
   const dispatch = useDispatch();
 
   const modalRef = useRef();
 
   useEffect(() => {
-    modalRef.current.scrollIntoView({ behavior: 'smooth' });
+    modalRef.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
   }, [modalInfo]);
 
   const closeModal = () => {
     dispatch(openGuideModal({ isOpen: false }));
   };
+
   return (
     <>
       <ModalWrapper>
@@ -117,8 +117,8 @@ export default function CardModal({ modalInfo }) {
             <FaTimes />
           </CloseBtn>
         </BtnWrapper>
-        <Wrapper ref={modalRef}>
-          <Title>{title}</Title>
+        <Wrapper>
+          <Title ref={modalRef}>{title}</Title>
           <UserInfo nickName={nickName} gender={gender} userImage={userImage} />
           <GuideImgs tourImage={tourImage} title={title} />
           <GuideContent
@@ -137,7 +137,7 @@ export default function CardModal({ modalInfo }) {
           userParticipate={userParticipate}
           state={state}
           closeModal={closeModal}
-          compoleteModal={(result) => setOpenModal(result)}
+          cardModalResult={(result) => setOpenModal(result)}
         />
       </ModalWrapper>
       {openModal && <CheckModal openMsg={openModal} closeCheckModal={() => setOpenModal(false)} />}

@@ -54,10 +54,11 @@ export const CardLi = styled.li`
 
   & .lazy {
     background: none;
-    background-color: ${({ userImg, theme }) => (userImg ? '#fff' : theme.color.gray)};
+    background-color: ${({ theme }) => theme.color.gray};
   }
 
   & .imgload {
+    background-color: #fff;
     background-image: url(${({ backImage }) => backImage});
     background-repeat: no-repeat;
     background-position: center;

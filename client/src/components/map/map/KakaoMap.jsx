@@ -14,6 +14,12 @@ const MapWrapper = styled.div`
   height: 100%;
   position: relative;
 
+  & .svgMarker {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
   & .infowindow {
     display: inline-block;
     background: white;

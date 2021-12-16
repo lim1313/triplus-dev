@@ -138,6 +138,7 @@ module.exports = {
     const whereGuideCard = { [Op.and]: [] };
     const whereUser = {};
     const accessToken = isAuthorized(req);
+
     // if(accessToken){
     //   resObject['userId'] = accessToken.userId;
     // }else{

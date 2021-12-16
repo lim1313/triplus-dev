@@ -9,7 +9,7 @@ export const Profile = styled.div`
   background-size: contain;
   flex-shrink: 0;
 
-  background-color: ${({ userImg }) => (userImg ? '#fff' : 'rgba(246, 247, 250, 1)')};
+  background-color: #fff;
   width: ${({ width }) => width};
   height: ${({ height }) => height};
   border: 3px solid ${({ theme }) => theme.color.lightGray};
@@ -28,9 +28,6 @@ export const CardModalSubTitle = styled.div`
   font-size: 1.1rem;
   color: ${({ theme }) => theme.color.blue};
   margin: 2.5rem 0 1rem 0;
-
-  @media ${({ theme }) => theme.device.mobile} {
-  }
 `;
 
 export const User = styled.div`
@@ -64,7 +61,7 @@ export const User = styled.div`
 
 export const UserNick = ({ gender, nickName, card, margin }) => {
   return (
-    <User gender={gender} card={card} margin={margin}>
+    <User gender={+gender} card={card} margin={margin}>
       <div>
         <span className='nick'>{card || '가이드'} 닉네임</span>
         <span className='gender'>

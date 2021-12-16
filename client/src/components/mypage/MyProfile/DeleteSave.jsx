@@ -62,7 +62,6 @@ export default function DeleteSave({
           content='정말 삭제하시겠습니까?'
           noClick={() => setIsModal(false)}
           yesClick={() => clickDelSave('del')}
-          height='5rem'
         />
       )}
       <BottomBtnWrapper>

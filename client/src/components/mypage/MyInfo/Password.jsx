@@ -18,7 +18,12 @@ export default function Password({ social }) {
 
   return (
     <>
-      <BtnColor marginRight onClick={() => setOpenModal(true)} disabled={social}>
+      <BtnColor
+        marginRight
+        onClick={() => setOpenModal(true)}
+        disabled={social}
+        title={social && '비밀번호을 수정할 수 없습니다'}
+      >
         비밀번호 수정
       </BtnColor>
       {openModal && <PwModal closeModal={() => setOpenModal(false)} />}

@@ -10,6 +10,7 @@ const Wrapper = styled(ModalWrapper)`
   width: ${({ width }) => width || '26vw'};
   min-width: 22rem;
   height: ${({ height }) => height};
+  min-height: 12rem;
 `;
 
 export const BtnWrapper = styled.div`

@@ -4,17 +4,18 @@ import { useNavigate } from 'react-router-dom';
 
 import { createRoom } from '../../../network/chat/http';
 
-export default function Chatting({ userId, state, loginId }) {
+export default function Chatting({ userId, state, loginId, cardModalResult }) {
   const navigate = useNavigate();
 
   const clikcChat = async (userId, state) => {
     if (state === 'COMPLETED') return;
-    const isCreated = await createRoom(userId);
 
+    const isCreated = await createRoom(userId);
+    console.log(isCreated);
     if (isCreated.data) {
       navigate('/chat');
     } else {
-      alert(isCreated);
+      return cardModalResult('login');
     }
   };
 

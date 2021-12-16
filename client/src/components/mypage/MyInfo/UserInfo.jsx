@@ -131,6 +131,7 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user, social }) =
             palette='blue'
             onClick={title === 'e-mail' ? () => setOpenModal(true) : changeContent}
             disabled={social}
+            title={social && '이메일을 수정할 수 없습니다'}
           >
             {isChange ? '완료' : '수정'}
           </BtnColor>

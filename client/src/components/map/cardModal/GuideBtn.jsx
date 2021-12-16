@@ -28,20 +28,19 @@ export const ModalBtn = styled(ColorBtn)`
   }
 
   ${({ theme, state, completed, disabled }) =>
-    state === 'COMPLETED' ||
-    ((completed || disabled) &&
-      css`
-        color: #fff;
+    (completed || state === 'COMPLETED' || disabled) &&
+    css`
+      color: #fff;
+      background-color: ${theme.color.gray};
+      border: ${theme.color.gray};
+
+      &:hover {
+        cursor: not-allowed;
         background-color: ${theme.color.gray};
         border: ${theme.color.gray};
-
-        &:hover {
-          cursor: not-allowed;
-          background-color: ${theme.color.gray};
-          border: ${theme.color.gray};
-          color: #fff;
-        }
-      `)}
+        color: #fff;
+      }
+    `}
 `;
 
 export default function GuideBtn({
@@ -51,14 +50,14 @@ export default function GuideBtn({
   userParticipate,
   state,
   closeModal,
-  compoleteModal,
+  cardModalResult,
 }) {
   const isLogin = useSelector((state) => state.loginReducer.isLogin);
   const [isError] = useError();
 
-  const clickGuide = (id) => {
-    if (!isLogin) return compoleteModal('login');
+  const clickGuideBtn = (id, state) => {
     if (state === 'COMPLETED') return;
+    if (!isLogin) return cardModalResult('login');
 
     //TODO POST 가이드 신청
     rezGuide(id).then((res) => {
@@ -68,13 +67,13 @@ export default function GuideBtn({
       if (status === 401) {
         return isError();
       } else if (status === 204) {
-        compoleteModal('success');
+        cardModalResult('success');
       } else if (status === 200) {
         msg === 'same'
-          ? compoleteModal('same')
+          ? cardModalResult('same')
           : msg === 'main'
-          ? compoleteModal('main')
-          : compoleteModal('end');
+          ? cardModalResult('main')
+          : cardModalResult('end');
       } else {
         alert('에러가 발생했습니다. 다시 시도해 주세요');
       }
@@ -83,6 +82,7 @@ export default function GuideBtn({
       }, 2000);
     });
   };
+  console.log(loginId, userId);
 
   return (
     <ModalBottomBtn>
@@ -93,14 +93,14 @@ export default function GuideBtn({
       ) : (
         <ModalBtn
           palette='blue'
-          onClick={() => clickGuide(guideId, state)}
+          onClick={() => clickGuideBtn(guideId, state)}
           state={state}
           disabled={loginId === userId}
         >
           {state === 'COMPLETED' ? '예약마감' : '신청하기'}
         </ModalBtn>
       )}
-      <Chatting userId={userId} state={state} loginId={loginId} />
+      <Chatting userId={userId} state={state} loginId={loginId} cardModalResult={cardModalResult} />
     </ModalBottomBtn>
   );
 }
