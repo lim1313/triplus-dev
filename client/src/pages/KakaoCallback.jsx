@@ -18,7 +18,7 @@ export default function KakaoCallback() {
         navigate('/login', { replace: true });
       } else {
         dispatch(oauthLogin());
-        navigate(-1);
+        navigate('/');
       }
     });
   }, [authorizationCode, navigate, dispatch]);

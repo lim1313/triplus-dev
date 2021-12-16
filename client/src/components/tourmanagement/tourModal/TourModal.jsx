@@ -96,7 +96,9 @@ export default function TourModal({ modalInfo }) {
     state,
     startTime,
     endTime,
+    userId,
   } = modalInfo;
+  console.log('userId', userId);
   const isDeleteClick = useSelector((state) => state.openDeleteModalReducer);
   const [isCompletedMsg, setIsCompletedMsg] = useState(false);
   const [isAlertMsg, setIsAlertMsg] = useState(false);

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars*/
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
-import { v4 as uuidV4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 import { useSelector } from 'react-redux';
 
@@ -248,23 +248,27 @@ export default function ChatRoom({ sendMessageHandler }) {
               else if (i > 0 && origin[i - 1].day === el.day) day = '';
 
               if (el.day === 'expired') {
-                return <LeftMessage>{`${partnerNickName}님이 방에서 나가셨습니다`}</LeftMessage>;
+                return (
+                  <LeftMessage
+                    key={uuidv4()}
+                  >{`${partnerNickName}님이 방에서 나가셨습니다`}</LeftMessage>
+                );
               } else {
                 return (
-                  <>
+                  <div key={uuidv4()}>
                     {day && (
-                      <DayWrapper>
+                      <DayWrapper key={uuidv4()}>
                         <p>{day}</p>
                       </DayWrapper>
                     )}
-                    <BubbleBox key={i} isUser={isUser}>
+                    <BubbleBox key={uuidv4()} isUser={isUser}>
                       <BubbleWrapper>
                         {isUser ? <TimeSpan isUser={isUser}>{time}</TimeSpan> : null}
                         <ChatBubble isUser={isUser}>{el.content}</ChatBubble>
                         {isUser ? null : <TimeSpan isUser={isUser}>{time}</TimeSpan>}
                       </BubbleWrapper>
                     </BubbleBox>
-                  </>
+                  </div>
                 );
               }
             })}
