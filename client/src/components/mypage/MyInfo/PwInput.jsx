@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 const InputWrapper = styled.div`
@@ -28,11 +28,18 @@ const AlertMsg = styled.div`
     font-size: 0.75rem;
   }
 `;
-export default function PwInput({ subTitle, pwNum, onChange, alertMsg, onBlur }) {
+export default function PwInput({ firstInput, subTitle, pwNum, onChange, alertMsg, onBlur }) {
+  const inputRef = useRef();
+
+  useEffect(() => {
+    firstInput && inputRef.current.focus();
+  }, []);
+
   return (
     <InputWrapper>
       <SubTitle>{subTitle}</SubTitle>
       <InputPw
+        ref={inputRef}
         type='password'
         placeholder={subTitle}
         value={pwNum}

@@ -99,6 +99,7 @@ io.on('connection', async (socket) => {
   const userInfo = isSocketAuthorized(socket.handshake.headers.cookie.replace('accessToken=', ''));
   if (!userInfo) return socket.emit('shouldLogin');
   const userChatInfos = await getUserChatInfo(userInfo);
+  if (userChatInfos === '500') return socket.emit('invalid');
 
   if (userChatInfos.chatRooms.length > 0) {
     for (let chatRoom of userChatInfos.chatRooms) {
@@ -120,13 +121,15 @@ io.on('connection', async (socket) => {
     if (selectedRoom === '') return;
 
     const messages = await getChatContents(selectedRoom);
+    if (messages === '500') return socket.emit('invalid');
+
     const initialChat = JSON.parse(messages);
 
     socket.emit('initialChat', initialChat);
 
     const isReset = await resetNoticeCount(selectedRoom, userId);
-
-    if (isReset) {
+    if (isReset === '500') return socket.emit('invalid');
+    else if (isReset === 'success') {
       const userChatInfos = await getUserChatInfo(userInfo);
       socket.emit('getRooms', userChatInfos, false, 'reset');
     } else {
@@ -143,17 +146,14 @@ io.on('connection', async (socket) => {
 
     const { userId } = userInfo;
 
-    // const { date, user_id, content } = DBform;
-    // const messageUpdate = {
-    //   date,
-    //   user_id,
-    //   content,
-    // };
-    await updateMessage(DBform, selectedRoom, userId);
+    const message = await updateMessage(DBform, selectedRoom, userId);
+    if (message === '500') return socket.emit('invalid');
 
     io.to(selectedRoom).emit('getMessage', [DBform], selectedRoom);
 
     const partnerChatInfos = await getPartnerChatInfo(selectedRoom, userId);
+    if (partnerChatInfos === '500') return socket.emit('invalid');
+
     socket.to(selectedRoom).emit('getRooms', partnerChatInfos, false, false);
   });
 
@@ -166,8 +166,8 @@ io.on('connection', async (socket) => {
     const { userId } = userInfo;
 
     const isReset = await resetNoticeCount(currentRoom, userId);
-
-    if (isReset) {
+    if (isReset === '500') return socket.emit('invalid');
+    else if (isReset === 'success') {
       const userChatInfos = await getUserChatInfo(userInfo);
       socket.emit('resetRooms', userChatInfos, 'reset');
     } else {
@@ -184,14 +184,15 @@ io.on('connection', async (socket) => {
 
     const { userId } = userInfo;
 
-    await updateMessage(DBform, selectedRoom, userId);
+    const update = await updateMessage(DBform, selectedRoom, userId);
+    if (update === '500') return socket.emit('invalid');
 
     let isLeft;
     let userChatInfos;
 
     const leave = await deleteRoom(selectedRoom, userId);
-
-    if (leave) {
+    if (leave === '500') return socket.emit('invalid');
+    else if (leave === 'success') {
       isLeft = 'success';
       socket.leave(selectedRoom);
       userChatInfos = await getUserChatInfo(userInfo);

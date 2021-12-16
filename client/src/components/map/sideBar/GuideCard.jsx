@@ -226,7 +226,7 @@ export default function GuideCard({ cardInfo, ulRef, scroll }) {
     >
       <div className='imageWrapper lazy' ref={cardRef} />
       <TitleWrapper dday={dDay}>
-        <div className='date'>{state === 'COMPLETED' ? 'END' : `D - ${dDay}`}</div>
+        <div className='date'>{state === 'COMPLETED' ? '예약마감' : `D - ${dDay}`}</div>
         <h2 className='title'>{title}</h2>
       </TitleWrapper>
       <GuideWrapper>

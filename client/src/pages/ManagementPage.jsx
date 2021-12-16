@@ -13,6 +13,7 @@ import { deleteGuideCard } from '../network/management/http';
 import { guideDelete } from '../redux/management/action';
 import LoginModal from '../components/common/LoginModal';
 import { getDday } from '../utils/dDay';
+import { exit } from '../redux/login/action';
 
 const Background = styled(PageContainer)`
   ${({ pathName }) =>
@@ -94,8 +95,15 @@ export default function ManagementPage() {
         console.log(res.data.applicant);
         setIsLoading(false);
       })
-      .catch((err) => setIsLoading(false));
-  }, [pathname, isDeleted, isCompleted]);
+      .catch((err) => {
+        setIsLoading(false);
+        if (isLogin === true) {
+          dispatch(exit());
+          alert('로그인이 만료되어 로그인페이지로 이동합니다.');
+          navigate('/login');
+        }
+      });
+  }, [pathname, isDeleted, isCompleted, dispatch, isLogin, navigate]);
   return (
     <>
       {isOpen ? (

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { ColorBtn } from '../../../styles/common';
 
@@ -54,12 +54,25 @@ export default function EmailInput({
   onChange,
   disabled,
   alertMsg,
+  firstInput,
 }) {
+  const inputRef = useRef();
+
+  useEffect(() => {
+    firstInput && inputRef.current.focus();
+  }, []);
+
   return (
     <>
       <Title>{title}</Title>
       <InputWrapper>
-        <input type='text' placeholder={placeText} value={value} onChange={onChange} />
+        <input
+          ref={inputRef}
+          type='text'
+          placeholder={placeText}
+          value={value}
+          onChange={onChange}
+        />
         {email && (
           <ColorBtn palette='blue' onClick={onClick} disabled={disabled}>
             인증

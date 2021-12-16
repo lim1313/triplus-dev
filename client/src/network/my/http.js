@@ -23,7 +23,6 @@ export const postProfile = (data) => {
   return axios
     .post(`${http}/my/profile`, { image: data })
     .then((res) => {
-      console.log(res);
       return res.status;
     })
     .catch((err) => err.response.status);
