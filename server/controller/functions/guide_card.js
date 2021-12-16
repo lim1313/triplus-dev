@@ -73,12 +73,6 @@ module.exports = {
 
     try {
       const guideCard = await guide_card.create(insertValue);
-      const userData = await user.update({
-        gender: req.body.gender === 'true' ? 1 : 0
-      }, {
-        where: {userId: accessToken.userId}
-      });
-
       const userData = await user.update(
         {
           gender: req.body.gender === 'true' ? 1 : 0,
