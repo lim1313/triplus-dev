@@ -73,6 +73,11 @@ module.exports = {
 
     try {
       const guideCard = await guide_card.create(insertValue);
+      const userData = await user.update({
+        gender: req.body.gender === 'true' ? 1 : 0
+      }, {
+        where: {userId: accessToken.userId}
+      });
 
       const userData = await user.update(
         {
@@ -133,11 +138,11 @@ module.exports = {
     const whereGuideCard = { [Op.and]: [] };
     const whereUser = {};
     const accessToken = isAuthorized(req);
-    if (accessToken) {
-      resObject['userId'] = accessToken.userId;
-    } else {
-      resObject['userId'] = undefined;
-    }
+    // if(accessToken){
+    //   resObject['userId'] = accessToken.userId;
+    // }else{
+    //   resObject['userId'] = undefined;
+    // }
 
     try {
       whereGuideCard[Op.and].push({ state: { [Op.ne]: GLOBAL_VARIABLE.CANCELED } });
@@ -315,10 +320,10 @@ module.exports = {
 
     const accessToken = isAuthorized(req);
     if (!accessToken) {
-      resObject['userId'] = undefined;
+      guideCard['loginId'] = undefined;
       guideCard['userParticipate'] = 0;
     } else {
-      resObject['userId'] = accessToken.userId;
+      guideCard['loginId'] = accessToken.userId;
       const selectGuideUserParticipate = await guide_user_participate.findOne({
         raw: true,
         where: { guideId: req.query.guideId, userId: accessToken.userId },
