@@ -174,9 +174,15 @@ export default function CreateModal(props) {
   //시간 저장 함수
   const handleStartTimeChange = (e) => {
     const key = e.target.getAttribute('id');
+    console.log(key);
+    console.log(e.target.value);
     setStartTime({ ...startTime, [key]: e.target.value });
     if (key === 'stime') {
       setEndTime({ ...endTime, etime: e.target.value });
+    } else if (key === 'sminute') {
+      setEndTime({ ...endTime, eminute: e.target.value });
+    } else if (key === 'sdayNight') {
+      setEndTime({ ...endTime, edayNight: e.target.value });
     }
     const iStartTime = startTime.sdayNight + ' ' + startTime.stime + ':' + startTime.sminute;
     const iEndTime = endTime.edayNight + ' ' + endTime.etime + ':' + endTime.eminute;
