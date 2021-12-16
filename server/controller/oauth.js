@@ -146,10 +146,20 @@ module.exports = {
       const { nickname, profile_image_url } = userInfo.data.kakao_account.profile;
 
       //* 닉네임 생성
-      //! 닉네임 생성 시 중복 검사 추가 필요
-      const key1 = crypto.randomBytes(256).toString('hex').substr(100, 4);
-      const randomNum = parseInt(key1, 16);
-      const nick = '여행자' + randomNum;
+      let dontBreak = true;
+      let uniqueNickName;
+      const nickNameData = await user.findAll({ attributes: ['nickName'] });
+      const nickNames = nickNameData.map((el) => el.dataValues.nickName);
+
+      while (dontBreak) {
+        const key1 = crypto.randomBytes(256).toString('hex').substr(100, 4);
+        const randomNum = parseInt(key1, 16);
+        const nick = '여행자' + randomNum;
+        if (!nickNames.includes(nick)) {
+          uniqueNickName = nick;
+          dontBreak = false;
+        }
+      }
 
       //* 카카오 회원 테이블 저장
       const [userData] = await user.findOrCreate({
@@ -159,7 +169,7 @@ module.exports = {
           expiredDatetime: null,
         },
         defaults: {
-          nickName: nick,
+          nickName: uniqueNickName,
           gender: '',
           password: '',
           email: '',

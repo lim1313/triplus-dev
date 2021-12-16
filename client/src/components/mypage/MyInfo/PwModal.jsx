@@ -87,6 +87,7 @@ export default function PwModal({ closeModal }) {
       <ModalTitle fontSize='1.1rem'>비밀번호 변경</ModalTitle>
       <InputWrapper>
         <PwInput
+          firstInput
           subTitle='현재 비밀번호'
           pwNum={currentPw}
           onChange={currentChange}

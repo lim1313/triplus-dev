@@ -1,6 +1,6 @@
 /*eslint-disable no-unused-vars*/
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useInput } from '../../../hooks/useInput';
 import { postInfo } from '../../../network/my/http';
@@ -79,16 +79,26 @@ const AlertMsg = styled.div`
 `;
 
 export const UserInfo = ({ title, content, marginRight, noBtn, user, social }) => {
+  const [inputValue, inputChange, setInputValue] = useInput(content);
+  const [fixValue, setFixValue] = useState(content);
   const [isChange, setIsChange] = useState(false);
-  const [inputValue, inputChange] = useInput(content);
-  const [isAlert, setIsAlert] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const [clickBtn, setClickBtn] = useState(false);
+  const [isAlert, setIsAlert] = useState(null);
+
   const inputRef = useRef();
   const [isError] = useError();
+
+  useEffect(() => {
+    if (isChange) {
+      inputRef.current.focus();
+    }
+  }, [isChange, clickBtn]);
 
   //* 변경된 유저 정보 POST 서버 요청
   const changeContent = (e) => {
     if (isChange) {
+      setClickBtn(true);
       if (title === 'e-mail' && !inputValue.length) return setIsAlert('*필수 입력 사항');
       if (title === 'nickname' && !nickValidation(inputValue))
         return setIsAlert('*3~8자리의 한글, 영문, 숫자만 가능합니다.');
@@ -97,17 +107,28 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user, social }) =
       postInfo(inputValue, title).then((res) => {
         if (res === 401) return isError();
         else if (res === 204) {
+          setClickBtn(false);
           return setIsAlert(`*이미 존재하는 ${title === 'nickname' ? '닉네임' : title}입니다.`);
         } else if (res === 201) {
-          setIsAlert(null);
+          setFixValue(inputValue);
         } else {
-          setIsAlert(null);
+          setInputValue(fixValue);
           alert('에러가 발생했습니다. 다시 시도해 주세요.');
         }
-        setIsChange(!isChange);
+        setIsAlert(null);
+        setClickBtn(false);
+        setIsChange(false);
       });
     } else {
-      setIsChange(!isChange);
+      setIsChange(true);
+    }
+  };
+
+  const inputBlur = () => {
+    if (!clickBtn) {
+      setIsAlert(null);
+      setInputValue(fixValue);
+      setIsChange(false);
     }
   };
 
@@ -123,14 +144,15 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user, social }) =
             onChange={inputChange}
             maxLength={user && '8'}
             placeholder={title}
+            onBlur={inputBlur}
           />
         ) : (
-          <DivInput>{inputValue}</DivInput>
+          <DivInput>{fixValue}</DivInput>
         )}
         {noBtn || (
           <BtnColor
             palette='blue'
-            onClick={title === 'e-mail' ? () => setOpenModal(true) : changeContent}
+            onMouseDown={title === 'e-mail' ? () => setOpenModal(true) : changeContent}
             disabled={social}
             title={social && '이메일을 수정할 수 없습니다'}
           >
