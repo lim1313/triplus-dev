@@ -34,7 +34,7 @@ module.exports = {
     }
 
     // 참가인원이 다 찼을 때
-    if (guideCard.state === GLOBAL_VARIABLE.COMPLETED) {
+    if (guideCard.state === GLOBAL_VARIABLE.FULL) {
       resObject['code'] = 200;
       resObject['message'] = 'end';
 
@@ -75,7 +75,7 @@ module.exports = {
       if (guideCard.numPeople === guideUserLength.length) {
         await guide_card.update(
           {
-            state: GLOBAL_VARIABLE.COMPLETED,
+            state: GLOBAL_VARIABLE.FULL,
           },
           {
             where: { guideId: guideCard.guideId },
@@ -311,7 +311,7 @@ const guideList = await guide_user_participate.findAll({
       }
     });
 
-    if(guideCard.numPeople > guideUser.length){
+    if(guideCard.numPeople > guideUser.length && guideCard.state === GLOBAL_VARIABLE.FULL){
       await guide_card.update({
         state: GLOBAL_VARIABLE.APPROVED
       }, {

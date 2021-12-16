@@ -3,6 +3,7 @@ const APPROVED = 'APPROVED';
 const REJECTED = 'REJECTED';
 const COMPLETED = 'COMPLETED';
 const CANCELED = 'CANCELED';
+const FULL = 'FULL';
 
 module.exports = {
   REQUESTED,
@@ -10,4 +11,5 @@ module.exports = {
   REJECTED,
   COMPLETED,
   CANCELED,
+  FULL,
 }
