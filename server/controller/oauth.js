@@ -19,10 +19,32 @@ module.exports = {
       `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${tokens.access_token}`
     );
     const { sub, email, picture } = userInfo.data;
+    let dontBreak = true;
+
+    let uniqueNickName;
+    const nickNameData = await user.findAll({ attributes: ['nickName'] });
+    const nickNames = nickNameData.map((el) => el.dataValues.nickName);
+
+    while (dontBreak) {
+      const key1 = crypto.randomBytes(256).toString('hex').substr(100, 4);
+      const randomNum = parseInt(key1, 16);
+      const nick = '여행자' + randomNum;
+      if (!nickNames.includes(nick)) {
+        uniqueNickName = nick;
+        dontBreak = false;
+      }
+    }
+
     user
       .findOrCreate({
-        where: { userId: sub, email: email },
-        defaults: { userId: `${sub}*google`, email: email, image: picture, social: 'google' },
+        where: { userId: `${sub}@google`, email: email },
+        defaults: {
+          userId: `${sub}@google`,
+          email: email,
+          image: picture,
+          social: 'google',
+          nickName: uniqueNickName,
+        },
       })
       .then(([data, created]) => {
         const accessToken = generateAccessToken(data.dataValues);

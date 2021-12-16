@@ -18,8 +18,6 @@ const H3Ctn = styled.div`
 const H3 = styled.h3``;
 
 export default function Applicants({ applicantInfo }) {
-  console.log('applicants', applicantInfo);
-
   return (
     <ListCtn>
       <H3Ctn>
