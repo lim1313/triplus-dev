@@ -3,7 +3,7 @@ const {
   updateGuideCard,
   selectGuideCardByUserId,
 } = require('./functions/guide_card');
-const {findGuideUserApproved, findGuideUserCompleted} = require('./functions/guide_user_participate');
+const {findGuideUserApproved, findGuideUserCompleted, deleteData} = require('./functions/guide_user_participate');
 const GLOBAL_VARIABLE = require('./functions/global_variable');
 
 module.exports = {
@@ -77,7 +77,7 @@ module.exports = {
   },
 
   participateCanceled: async (req, res) => {
-    const resObject = await findGuideUserCompleted(req);
+    const resObject = await deleteData(req);
     res.status(resObject.code).send(resObject.message);
   }
 };
