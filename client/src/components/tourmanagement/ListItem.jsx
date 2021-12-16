@@ -107,7 +107,7 @@ export default function ListItem({ guideInfo, handleTourCardClick }) {
               userImg={guideInfo.userImage}
             />
             <UserNick
-              gender={guideInfo && guideInfo.gender}
+              gender={Number(guideInfo.gender)}
               nickName={guideInfo && guideInfo.nickName}
             />
           </GuideInfo>
