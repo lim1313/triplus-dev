@@ -87,7 +87,6 @@ export default function ChattingPage() {
     });
 
     socketRef.current.on('shouldLogin', async () => {
-      console.log('shouldLogin');
       await alert('로그인을 해야지만 채팅 서비스를 이용할 수 있습니다');
       logOut();
       dispatch(logoutUser());
@@ -97,8 +96,6 @@ export default function ChattingPage() {
 
   useEffect(() => {
     socketRef.current.on('getRooms', (data, isLeft, reset) => {
-      console.log('getRooms');
-      console.log(data);
       if (isLeft === 'Internal Server Error' || reset === 'Internal Server Error')
         alert('잠시 후에 다시 시도해주세요');
       else if (isLeft === 'success') {
@@ -122,10 +119,15 @@ export default function ChattingPage() {
   useEffect(() => {
     // TODO 2. 룸 입장 후 채팅 데이터 받아오기
     socketRef.current.on('initialChat', (initialChat) => {
-      console.log('initialChat');
-
       const newChat = editChat(initialChat);
       dispatch(resetChatList(newChat));
+    });
+  }, []);
+
+  // TODO. 서버 쪽에서 에러가 났을 경우
+  useEffect(() => {
+    socketRef.current.on('invalid', () => {
+      alert('잠시 후에 다시 시도해주세요');
     });
   }, []);
 

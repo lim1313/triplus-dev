@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps*/
-/* eslint-disable no-unused-vars*/
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled, { keyframes, css } from 'styled-components';
 import { BorderBtn, ColorBtn } from '../styles/common';
 import { useSelector, useDispatch } from 'react-redux';
 import { scrollListener } from '../redux/scroll/action';
-import { loginReducer } from '../redux/login/action';
+import { exit } from '../redux/login/action';
 import Flight from '../components/main/Flight';
 
 import { isLoginMain } from '../network/main/http';
@@ -156,7 +155,6 @@ export default function MainPage() {
   const [isMobile, setIsMobile] = useState(null);
   const navBarLogout = useSelector((state) => state.loginReducer.isLogin);
   const ratioY = parseInt(useSelector((state) => state.scrollReducer.scrollY) * 100);
-  console.log(ratioY);
 
   const scrollEventListener = () => {
     const maxScroll = document.body.offsetHeight - window.innerHeight;
@@ -170,13 +168,17 @@ export default function MainPage() {
       .then((res) => {
         console.log(res.data.isLogin);
         if (res.data.isLogin) setIsLogin(true);
-        else setIsLogin(false);
+        else {
+          dispatch(exit());
+          setIsLogin(false);
+        }
       })
       .catch((err) => console.log(err));
   }, [navBarLogout]);
 
   useEffect(() => {
     window.scroll(0, 0);
+    setIsMobile(window.matchMedia('screen and (max-width: 768px)').matches);
     window.addEventListener('scroll', scrollEventListener);
     window.addEventListener('resize', () => {
       const mobileSize = window.matchMedia('screen and (max-width: 768px)').matches;
