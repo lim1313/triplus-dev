@@ -70,14 +70,17 @@ module.exports = {
 
       // 참가 신청이 되고 인원이 다찼을때
       const guideUserLength = await guide_user_participate.findAll({
-        where: {guideId: guideCard.guideId}
+        where: { guideId: guideCard.guideId },
       });
-      if(guideCard.numPeople === guideUserLength.length){
-        await guide_card.update({
-          state: GLOBAL_VARIABLE.COMPLETED
-        }, {
-          where: {guideId: guideCard.guideId}
-        });
+      if (guideCard.numPeople === guideUserLength.length) {
+        await guide_card.update(
+          {
+            state: GLOBAL_VARIABLE.COMPLETED,
+          },
+          {
+            where: { guideId: guideCard.guideId },
+          }
+        );
       }
 
       resObject['code'] = 204;
@@ -103,6 +106,7 @@ module.exports = {
         resObject['code'] = 401;
         throw 'accessToken이 없습니다';
       }
+
 
 const guideList = await guide_user_participate.findAll({
         subQuery: false,
@@ -293,7 +297,7 @@ const guideList = await guide_user_participate.findAll({
       where: {
         guideId: req.body.guideId,
         userId: accessToken.userId,
-      }
+      },
     });
 
     const guideUser = await guide_user_participate.findAll({

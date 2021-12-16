@@ -52,6 +52,7 @@ const checkParams = (params) => {
 
 module.exports = {
   createGuideCard: async (req) => {
+    console.log(req.files);
     let resObject = {};
     const insertValue = checkParams(req.body);
     const accessToken = isAuthorized(req);
@@ -77,6 +78,15 @@ module.exports = {
       }, {
         where: {userId: accessToken.userId}
       });
+
+      const userData = await user.update(
+        {
+          gender: req.body.gender === 'true' ? 1 : 0,
+        },
+        {
+          where: { userId: accessToken.userId },
+        }
+      );
 
       if (req.files.length > 0) {
         const guideImages = [];
@@ -150,7 +160,7 @@ module.exports = {
       }
       if (params['startDate']) {
         whereGuideCard[Op.and].push({ guide_date: { [Op.gte]: new Date(params['startDate']) } });
-      }else{
+      } else {
         whereGuideCard[Op.and].push({ guide_date: { [Op.gte]: new Date() } });
       }
       if (params['endDate']) {
@@ -171,30 +181,35 @@ module.exports = {
     }
 
     try {
-      await guide_card.findAll({
-        include: [
-          {
-            model: user,
-            attributes: ['nickName', 'gender', 'image'],
-            where: whereUser,
-          },
-          {
-            model: guide_image,
-          },
-        ],
-        where: whereGuideCard,
-      }).then(async result => {
-        for(let guideCard of result){
-          if(guideCard.dataValues.guideDate < new Date()){
-            await guide_card.update({
-              state: GLOBAL_VARIABLE.COMPLETED
-            }, {
-              where: {guideId: guideCard.dataValues.guideId}
-            })
+      await guide_card
+        .findAll({
+          include: [
+            {
+              model: user,
+              attributes: ['nickName', 'gender', 'image'],
+              where: whereUser,
+            },
+            {
+              model: guide_image,
+            },
+          ],
+          where: whereGuideCard,
+        })
+        .then(async (result) => {
+          for (let guideCard of result) {
+            if (guideCard.dataValues.guideDate < new Date()) {
+              await guide_card.update(
+                {
+                  state: GLOBAL_VARIABLE.COMPLETED,
+                },
+                {
+                  where: { guideId: guideCard.dataValues.guideId },
+                }
+              );
+            }
           }
-        }
-        return result;
-      });
+          return result;
+        });
 
       const guideCards = await guide_card.findAll({
         include: [
@@ -208,6 +223,7 @@ module.exports = {
           },
         ],
         where: whereGuideCard,
+        order: [['guideDate', 'ASC']],
       });
 
       const guideCardList = [];
