@@ -66,7 +66,6 @@ export default function Flight() {
 
   useEffect(() => {
     const coloredPath = path.current;
-    console.log(coloredPath);
     const totalLength = coloredPath.getTotalLength();
     coloredPath.style.strokeDasharray = totalLength;
     coloredPath.style.strokeDashoffset = totalLength;
@@ -87,7 +86,6 @@ export default function Flight() {
   }, []);
 
   const stopoverClickHandler = (e) => {
-    console.log(e.target);
     const toRatio = Number(e.target.id);
     const toY = (toRatio * (document.body.offsetHeight - window.innerHeight)) / 100;
     window.scrollTo(0, toY + 1);
@@ -116,12 +114,12 @@ export default function Flight() {
       />
       <Stopover
         onClick={stopoverClickHandler}
-        cx='25.06'
-        cy='80.53'
+        cx='24.56'
+        cy='81.53'
         r='3.82'
         ratioY={ratioY}
-        id='19'
-        positionedY='19'
+        id='20'
+        positionedY='20'
       />
       <Stopover
         onClick={stopoverClickHandler}
@@ -129,21 +127,21 @@ export default function Flight() {
         cy='143.86'
         r='3.82'
         ratioY={ratioY}
-        id='39'
-        positionedY='39'
+        id='40'
+        positionedY='40'
       />
       <Stopover
         onClick={stopoverClickHandler}
-        cx='28.2'
-        cy='200.63'
+        cx='34.5'
+        cy='210.63'
         r='3.82'
         ratioY={ratioY}
-        id='58'
-        positionedY='58'
+        id='59'
+        positionedY='59'
       />
       <Stopover
         onClick={stopoverClickHandler}
-        cx='14.82'
+        cx='10.82'
         cy='260.04'
         r='3.82'
         ratioY={ratioY}

@@ -3,11 +3,13 @@ const {
   updateGuideCard,
   selectGuideCardByUserId,
 } = require('./functions/guide_card');
+
 const {
   findGuideUserApproved,
   findGuideUserCompleted,
   deleteData,
 } = require('./functions/guide_user_participate');
+
 const GLOBAL_VARIABLE = require('./functions/global_variable');
 
 module.exports = {

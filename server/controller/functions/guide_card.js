@@ -52,6 +52,7 @@ const checkParams = (params) => {
 
 module.exports = {
   createGuideCard: async (req) => {
+    console.log(req.files);
     let resObject = {};
     const insertValue = checkParams(req.body);
     const accessToken = isAuthorized(req);
@@ -72,6 +73,20 @@ module.exports = {
 
     try {
       const guideCard = await guide_card.create(insertValue);
+      const userData = await user.update({
+        gender: req.body.gender === 'true' ? 1 : 0
+      }, {
+        where: {userId: accessToken.userId}
+      });
+
+      const userData = await user.update(
+        {
+          gender: req.body.gender === 'true' ? 1 : 0,
+        },
+        {
+          where: { userId: accessToken.userId },
+        }
+      );
 
       if (req.files.length > 0) {
         const guideImages = [];
@@ -123,11 +138,11 @@ module.exports = {
     const whereGuideCard = { [Op.and]: [] };
     const whereUser = {};
     const accessToken = isAuthorized(req);
-    if(accessToken){
-      resObject['userId'] = accessToken.userId;
-    }else{
-      resObject['userId'] = undefined;
-    }
+    // if(accessToken){
+    //   resObject['userId'] = accessToken.userId;
+    // }else{
+    //   resObject['userId'] = undefined;
+    // }
 
     try {
       whereGuideCard[Op.and].push({ state: { [Op.ne]: GLOBAL_VARIABLE.CANCELED } });
@@ -145,16 +160,16 @@ module.exports = {
       }
       if (params['startDate']) {
         whereGuideCard[Op.and].push({ guide_date: { [Op.gte]: new Date(params['startDate']) } });
-      }else{
+      } else {
         whereGuideCard[Op.and].push({ guide_date: { [Op.gte]: new Date() } });
       }
       if (params['endDate']) {
         whereGuideCard[Op.and].push({ guide_date: { [Op.lte]: new Date(params['endDate']) } });
       }
       if (params['gender'] === '0') {
-        whereUser['gender'] = false;
+        whereUser['gender'] = 0;
       } else if (params['gender'] === '1') {
-        whereUser['gender'] = true;
+        whereUser['gender'] = 1;
       }
     } catch (error) {
       console.log(error);
@@ -166,30 +181,35 @@ module.exports = {
     }
 
     try {
-      await guide_card.findAll({
-        include: [
-          {
-            model: user,
-            attributes: ['nickName', 'gender', 'image'],
-            where: whereUser,
-          },
-          {
-            model: guide_image,
-          },
-        ],
-        where: whereGuideCard,
-      }).then(async result => {
-        for(let guideCard of result){
-          if(guideCard.dataValues.guideDate < new Date()){
-            await guide_card.update({
-              state: GLOBAL_VARIABLE.COMPLETED
-            }, {
-              where: {guideId: guideCard.dataValues.guideId}
-            })
+      await guide_card
+        .findAll({
+          include: [
+            {
+              model: user,
+              attributes: ['nickName', 'gender', 'image'],
+              where: whereUser,
+            },
+            {
+              model: guide_image,
+            },
+          ],
+          where: whereGuideCard,
+        })
+        .then(async (result) => {
+          for (let guideCard of result) {
+            if (guideCard.dataValues.guideDate < new Date()) {
+              await guide_card.update(
+                {
+                  state: GLOBAL_VARIABLE.COMPLETED,
+                },
+                {
+                  where: { guideId: guideCard.dataValues.guideId },
+                }
+              );
+            }
           }
-        }
-        return result;
-      });
+          return result;
+        });
 
       const guideCards = await guide_card.findAll({
         include: [
@@ -203,6 +223,7 @@ module.exports = {
           },
         ],
         where: whereGuideCard,
+        order: [['guideDate', 'ASC']],
       });
 
       const guideCardList = [];
@@ -299,10 +320,10 @@ module.exports = {
 
     const accessToken = isAuthorized(req);
     if (!accessToken) {
-      guideCard['userId'] = accessToken.userId;
+      guideCard['loginId'] = undefined;
       guideCard['userParticipate'] = 0;
     } else {
-      guideCard['userId'] = undefined;
+      guideCard['loginId'] = accessToken.userId;
       const selectGuideUserParticipate = await guide_user_participate.findOne({
         raw: true,
         where: { guideId: req.query.guideId, userId: accessToken.userId },
