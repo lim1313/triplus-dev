@@ -7,7 +7,7 @@ import Userinfo from '../../map/cardModal/UserInfo';
 import { FaTimes } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { completeDelete, openTourModal } from '../../../redux/tourManagement/action';
-import { ColorBtn } from '../../../styles/common/index';
+import { ColorBtn, BorderBtn } from '../../../styles/common/index';
 import { clickDelete } from '../../../redux/tourManagement/action';
 import Modal from '../../common/Modal';
 import AlertModal from '../../common/AlertModal';
@@ -16,6 +16,7 @@ import { deleteTourList } from '../../../network/tourmanagement/http';
 import { useNavigate } from 'react-router';
 import SpinLoading from '../../common/SpinLoading';
 import { exit } from '../../../redux/login/action';
+import { createRoom } from '../../../network/chat/http';
 
 const TourModalWrapper = styled(ModalWrapper)`
   height: ${({ allow }) => (allow === 'CANCELED' ? '30vh' : '90vh')};
@@ -60,12 +61,17 @@ const CloseBtn = styled.button`
 const CancelBtnWrapper = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   margin-top: 1rem;
 `;
 const CancelBtn = styled(ColorBtn)`
-  width: 10rem;
+  width: 9rem;
 `;
+
+const ChattingBtn = styled(BorderBtn)`
+  width: 9rem;
+`;
+
 const NoticeMsg = styled.div`
   position: absolute;
   width: 100%;
@@ -77,6 +83,7 @@ const NoticeMsg = styled.div`
   align-items: center;
   flex-direction: column;
 `;
+
 const MsgWapper = styled.div`
   text-align: center;
 `;
@@ -98,7 +105,6 @@ export default function TourModal({ modalInfo }) {
     endTime,
     userId,
   } = modalInfo;
-  console.log('userId', userId);
   const isDeleteClick = useSelector((state) => state.openDeleteModalReducer);
   const [isCompletedMsg, setIsCompletedMsg] = useState(false);
   const [isAlertMsg, setIsAlertMsg] = useState(false);
@@ -173,6 +179,17 @@ export default function TourModal({ modalInfo }) {
         navigate('/login');
       });
   };
+
+  const clickChat = async (e) => {
+    const guideUserId = e.target.id;
+    const isCreated = await createRoom(guideUserId);
+
+    if (isCreated.data) {
+      navigate('/chat');
+    } else {
+      alert(isCreated);
+    }
+  };
   return (
     <Background onClick={closeModalNotBtn}>
       <TourModalWrapper allow={state}>
@@ -232,6 +249,9 @@ export default function TourModal({ modalInfo }) {
               <CancelBtn palette='red' onClick={handleDeleteClick}>
                 취소하기
               </CancelBtn>
+              <ChattingBtn id={userId} palette='black' onClick={clickChat}>
+                채팅하기
+              </ChattingBtn>
             </CancelBtnWrapper>
           </>
         )}
