@@ -6,7 +6,7 @@ module.exports = {
   createChatRoom: async (req, res) => {
     const { userId } = req.body;
     const verifed = isAuthorized(req);
-    if (!verifed) return res.status(400).send('채팅을 하기 위해 로그인을 진행해주세요');
+    if (!verifed) return res.status(401).send('채팅을 하기 위해 로그인을 진행해주세요');
     const myId = verifed.userId;
 
     let roomAlready = 0;

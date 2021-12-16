@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useError } from '../../../hooks/useError';
 import { useInput } from '../../../hooks/useInput';
@@ -56,6 +56,11 @@ export default function WithdrawModal({ closeModal, social }) {
   const [inputValue, inputChange] = useInput('');
   const [alertMsg, setAlertMsg] = useState(null);
   const [isError] = useError();
+  const inputRef = useRef();
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   const withdrawUser = () => {
     if (!inputValue && !social) return setAlertMsg('*비밀번호를 입력하세요');
@@ -81,6 +86,7 @@ export default function WithdrawModal({ closeModal, social }) {
           <SubText>비밀번호를 입력해주세요</SubText>
           <InputWrapper>
             <PWInput
+              ref={inputRef}
               type='password'
               placeholder='비밀번호를 입력해 주세요'
               value={inputValue}

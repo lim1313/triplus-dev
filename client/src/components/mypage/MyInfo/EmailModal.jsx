@@ -1,6 +1,6 @@
 /*eslint-disable no-unused-vars*/
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useError } from '../../../hooks/useError';
 import { useInput } from '../../../hooks/useInput';
@@ -125,6 +125,7 @@ export default function EmailModal({ clickModal }) {
         <section>
           <EmailInput
             email
+            firstInput
             onClick={sendEmail}
             title='새로운 이메일'
             placeText='이메일 입력'

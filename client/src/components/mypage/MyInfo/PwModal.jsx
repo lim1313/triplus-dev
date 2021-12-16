@@ -60,7 +60,6 @@ export default function PwModal({ closeModal }) {
             state: { logout: '비밀번호가 변경되어, 로그아웃되었습니다' },
             replace: true,
           });
-          //! 수정 필요 => accessToken을 null로 변경하지 않음.
           dispatch(exit());
         } else if (res === 400) {
           // 현재 비밀번호를 잘못 작성
@@ -88,6 +87,7 @@ export default function PwModal({ closeModal }) {
       <ModalTitle fontSize='1.1rem'>비밀번호 변경</ModalTitle>
       <InputWrapper>
         <PwInput
+          firstInput
           subTitle='현재 비밀번호'
           pwNum={currentPw}
           onChange={currentChange}

@@ -114,10 +114,14 @@ export default function KakaoMap({ filterInfo, loading }) {
     getGuideCards(latLngparams).then((res) => {
       dispatch(openGuideModal({ isOpen: false, modalInfo: {} }));
       deleteMarker();
-      if (res >= 400) return alert('에러가 발생했습니다. 다시 시도해 주세요');
-      dispatch(guideCardInfo(res));
-      createMarker(res, map, clickMarker);
-      loading(false);
+      if (res >= 400) {
+        alert('에러가 발생했습니다. 다시 시도해 주세요');
+        loading(false);
+      } else {
+        dispatch(guideCardInfo(res));
+        createMarker(res, map, clickMarker);
+        loading(false);
+      }
     });
   };
 
