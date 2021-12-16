@@ -141,8 +141,6 @@ module.exports = {
         },
         withCredentials: true,
       });
-      console.log(kakaoToken.data.access_token);
-      console.log(userInfo.data);
 
       const { id } = userInfo.data;
       const { nickname, profile_image_url } = userInfo.data.kakao_account.profile;

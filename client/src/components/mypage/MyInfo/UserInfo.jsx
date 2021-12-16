@@ -97,10 +97,11 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user, social }) =
       postInfo(inputValue, title).then((res) => {
         if (res === 401) return isError();
         else if (res === 204) {
-          return setIsAlert(`이미 존재하는 ${title === 'nickname' ? '닉네임' : title}입니다.`);
+          return setIsAlert(`*이미 존재하는 ${title === 'nickname' ? '닉네임' : title}입니다.`);
         } else if (res === 201) {
           setIsAlert(null);
         } else {
+          setIsAlert(null);
           alert('에러가 발생했습니다. 다시 시도해 주세요.');
         }
         setIsChange(!isChange);
