@@ -6,17 +6,20 @@ import { ButtonBlock, OauthBtn } from '../../styles/login/OauthBtn';
 const NaverBtn = styled(OauthBtn)`
   /* background-color: #1dc612; */
   color: #1dc612;
-  font-size: 3.5rem;
+  font-size: 3rem;
   padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-export default function KakaoLogin() {
+export default function NaverLogin() {
+  const handleSignNaver = () => {
+    window.location.href = `${process.env.REACT_APP_HTTPSURL}/oauth/naver`;
+  };
   return (
     <ButtonBlock>
-      <NaverBtn>
+      <NaverBtn onClick={handleSignNaver}>
         <SiNaver className='oauth-btn' />
       </NaverBtn>
       <span>

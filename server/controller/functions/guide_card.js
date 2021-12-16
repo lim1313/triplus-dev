@@ -52,8 +52,8 @@ const checkParams = (params) => {
 
 module.exports = {
   createGuideCard: async (req) => {
+    console.log(req.files);
     let resObject = {};
-    console.log(req.body);
     const insertValue = checkParams(req.body);
     const accessToken = isAuthorized(req);
 
@@ -66,13 +66,27 @@ module.exports = {
       insertValue['state'] = GLOBAL_VARIABLE.APPROVED;
     } catch (error) {
       console.log(`ERROR: ${error}`);
-      resObject['code'] = 400;
+      resObject['code'] = 401;
       resObject['message'] = error;
       return resObject;
     }
 
     try {
       const guideCard = await guide_card.create(insertValue);
+      const userData = await user.update({
+        gender: req.body.gender === 'true' ? 1 : 0
+      }, {
+        where: {userId: accessToken.userId}
+      });
+
+      const userData = await user.update(
+        {
+          gender: req.body.gender === 'true' ? 1 : 0,
+        },
+        {
+          where: { userId: accessToken.userId },
+        }
+      );
 
       if (req.files.length > 0) {
         const guideImages = [];
@@ -97,7 +111,6 @@ module.exports = {
   updateGuideCard: async (params) => {
     const resObject = {};
     const updateValue = checkParams(params);
-    console.log(params);
 
     try {
       await guide_card
@@ -120,12 +133,20 @@ module.exports = {
     }
   },
 
-  selectGuideCard: async (params) => {
+  selectGuideCard: async (params, req) => {
     const resObject = {};
     const whereGuideCard = { [Op.and]: [] };
     const whereUser = {};
+    const accessToken = isAuthorized(req);
+
+    // if(accessToken){
+    //   resObject['userId'] = accessToken.userId;
+    // }else{
+    //   resObject['userId'] = undefined;
+    // }
 
     try {
+      whereGuideCard[Op.and].push({ state: { [Op.ne]: GLOBAL_VARIABLE.CANCELED } });
       if (params['swLat']) {
         whereGuideCard[Op.and].push({ latitude: { [Op.gte]: params['swLat'] } });
       }
@@ -140,14 +161,16 @@ module.exports = {
       }
       if (params['startDate']) {
         whereGuideCard[Op.and].push({ guide_date: { [Op.gte]: new Date(params['startDate']) } });
+      } else {
+        whereGuideCard[Op.and].push({ guide_date: { [Op.gte]: new Date() } });
       }
       if (params['endDate']) {
         whereGuideCard[Op.and].push({ guide_date: { [Op.lte]: new Date(params['endDate']) } });
       }
       if (params['gender'] === '0') {
-        whereUser['gender'] = false;
+        whereUser['gender'] = 0;
       } else if (params['gender'] === '1') {
-        whereUser['gender'] = true;
+        whereUser['gender'] = 1;
       }
     } catch (error) {
       console.log(error);
@@ -159,7 +182,36 @@ module.exports = {
     }
 
     try {
-      console.log(guide_card);
+      await guide_card
+        .findAll({
+          include: [
+            {
+              model: user,
+              attributes: ['nickName', 'gender', 'image'],
+              where: whereUser,
+            },
+            {
+              model: guide_image,
+            },
+          ],
+          where: whereGuideCard,
+        })
+        .then(async (result) => {
+          for (let guideCard of result) {
+            if (guideCard.dataValues.guideDate < new Date()) {
+              await guide_card.update(
+                {
+                  state: GLOBAL_VARIABLE.COMPLETED,
+                },
+                {
+                  where: { guideId: guideCard.dataValues.guideId },
+                }
+              );
+            }
+          }
+          return result;
+        });
+
       const guideCards = await guide_card.findAll({
         include: [
           {
@@ -169,10 +221,10 @@ module.exports = {
           },
           {
             model: guide_image,
-            order: ['id', 'ASC'],
           },
         ],
         where: whereGuideCard,
+        order: [['guideDate', 'ASC']],
       });
 
       const guideCardList = [];
@@ -196,11 +248,6 @@ module.exports = {
         guideCardItem['userId'] = guideCardData['userId'];
         guideCardItem['nickName'] = userData['nickName'];
         guideCardItem['gender'] = userData['gender'];
-        if (userData['image']) {
-          guideCardItem['userImage'] = userData['image'];
-        } else {
-          guideCardItem['userImage'] = '/asset/main/stamp.png';
-        }
         guideCardItem['createdAt'] = date_fns.format(guideCardData['createdAt'], 'yyyy.MM.dd');
         guideCardItem['updatedAt'] = date_fns.format(guideCardData['updatedAt'], 'yyyy.MM.dd');
         if (userData['image']) {
@@ -239,7 +286,6 @@ module.exports = {
         },
         {
           model: guide_image,
-          order: ['id', 'ASC'],
         },
       ],
       where: { guideId: req.query.guideId },
@@ -275,8 +321,10 @@ module.exports = {
 
     const accessToken = isAuthorized(req);
     if (!accessToken) {
+      guideCard['loginId'] = undefined;
       guideCard['userParticipate'] = 0;
     } else {
+      guideCard['loginId'] = accessToken.userId;
       const selectGuideUserParticipate = await guide_user_participate.findOne({
         raw: true,
         where: { guideId: req.query.guideId, userId: accessToken.userId },
@@ -316,7 +364,7 @@ module.exports = {
       }
     } catch (error) {
       console.log(`ERROR: ${error}`);
-      resObject['code'] = 400;
+      resObject['code'] = 401;
       resObject['message'] = error;
       return resObject;
     }

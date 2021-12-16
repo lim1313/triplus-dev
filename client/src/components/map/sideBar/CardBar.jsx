@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import GuideCard from './GuideCard';
@@ -33,13 +33,14 @@ const CardNone = styled.div`
 `;
 export default memo(function CardBar() {
   const cards = useSelector((state) => state.guideCardsReducer);
+  const ulRef = useRef();
 
   return (
-    <SideCardWrapper>
+    <SideCardWrapper ref={ulRef}>
       {cards.length ? (
         <>
           {cards.map((cardInfo) => (
-            <GuideCard key={cardInfo.guideId} cardInfo={cardInfo} />
+            <GuideCard ulRef={ulRef} key={cardInfo.guideId} cardInfo={cardInfo} scroll />
           ))}
         </>
       ) : (

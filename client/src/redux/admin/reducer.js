@@ -1,8 +1,14 @@
-import { ADMIN_USER, ADMIN_OPEN } from './type';
+import { ADMIN_USER, ADMIN_OPEN, LOGOUT_ADMIN_USER } from './type';
 
 export function adminReducer(state = {}, action) {
   switch (action.type) {
     case ADMIN_USER:
+      return {
+        ...state,
+        isAdmin: action.payload.success,
+        message: action.payload.message,
+      };
+    case LOGOUT_ADMIN_USER:
       return {
         ...state,
         isAdmin: action.payload.success,

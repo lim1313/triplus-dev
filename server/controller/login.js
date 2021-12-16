@@ -19,7 +19,7 @@ module.exports = {
           return res.json({ success: false, message: '아이디 또는 비밀번호가 잘못되었습니다' });
         }
         if (userInfo.dataValues.role !== isAdmin) {
-          return res.json({ success: false, message: '관리자 권한이 없습니다.' });
+          return res.json({ success: false, message: '관리자 권한이 없습니다' });
         }
 
         delete userInfo.password;
@@ -50,6 +50,10 @@ module.exports = {
           if (!verify.dataValues.email_verified) {
             return res.json({ success: false, message: '이메일 인증을 완료해주세요' });
           }
+        }
+
+        if (userInfo.dataValues.expiredDatetime) {
+          return res.json({ success: false, message: '탈퇴한 회원입니다' });
         }
 
         delete userInfo.dataValues.password;

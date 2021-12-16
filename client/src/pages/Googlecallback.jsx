@@ -3,20 +3,26 @@ import { useNavigate } from 'react-router-dom';
 import { googleOauth } from '../network/login/http';
 import { useDispatch } from 'react-redux';
 import { oauthLogin } from '../redux/login/action';
+import Loading from '../components/common/Loading';
 
-export default function GoogleCallback({ loginHandler }) {
+export default function GoogleCallback() {
   const navigate = useNavigate();
   const url = new URL(window.location.href);
   const authorizationCode = url.searchParams.get('code');
   const dispatch = useDispatch();
 
   useEffect(() => {
-    googleOauth(authorizationCode).then((res) => {
-      console.log(res);
-      dispatch(oauthLogin());
-      navigate(-1);
-    });
+    googleOauth(authorizationCode)
+      .then((res) => {
+        console.log(res);
+        dispatch(oauthLogin());
+        navigate(-1);
+      })
+      .catch((err) => {
+        alert('로그인에 실패했습니다');
+        navigate('/login', { replace: true });
+      });
   }, [authorizationCode, navigate, dispatch]);
 
-  return <div>구글로그인 진행중....!!!</div>;
+  return <Loading />;
 }

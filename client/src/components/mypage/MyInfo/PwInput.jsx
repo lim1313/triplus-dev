@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const InputWrapper = styled.div`
   position: relative;
-  margin: 1rem 0 1.3rem 0;
+  margin: 1.7rem 0;
 `;
 
 const SubTitle = styled.div`
@@ -12,6 +12,7 @@ const SubTitle = styled.div`
 `;
 
 const InputPw = styled.input`
+  width: 100%;
   &:focus {
     outline: none;
   }

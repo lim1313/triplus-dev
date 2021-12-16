@@ -6,13 +6,21 @@ module.exports = {
   createChatRoom: async (req, res) => {
     const { userId } = req.body;
     const verifed = isAuthorized(req);
+    if (!verifed) return res.status(400).send('채팅을 하기 위해 로그인을 진행해주세요');
     const myId = verifed.userId;
 
     let roomAlready = 0;
+    let alreadyLeft = false;
 
     try {
-      const myRooms = await chat_member.findAll({ raw: true, where: { userId: myId } });
-      const partnerRooms = await chat_member.findAll({ raw: true, where: { userId: userId } });
+      const myRooms = await chat_member.findAll({
+        raw: true,
+        where: { userId: myId, left: { [Op.eq]: null } },
+      });
+      const partnerRooms = await chat_member.findAll({
+        raw: true,
+        where: { userId: userId, left: { [Op.eq]: null } },
+      });
 
       for (let myRoom of myRooms) {
         for (let partnerRoom of partnerRooms) {
@@ -43,6 +51,7 @@ module.exports = {
       console.log(err);
       res.status(500).send('방을 생성하지 못했습니다');
     }
+
     res.status(201).json({ data: createdRoomId, message: '방이 성공적으로 생성되었습니다' });
   },
 };

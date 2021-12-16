@@ -3,6 +3,13 @@ const {
   updateGuideCard,
   selectGuideCardByUserId,
 } = require('./functions/guide_card');
+
+const {
+  findGuideUserApproved,
+  findGuideUserCompleted,
+  deleteData,
+} = require('./functions/guide_user_participate');
+
 const GLOBAL_VARIABLE = require('./functions/global_variable');
 
 module.exports = {
@@ -47,7 +54,6 @@ module.exports = {
     const params = req.body;
     params.state = GLOBAL_VARIABLE.CANCELED;
     const resObject = await updateGuideCard(params);
-    console.log(resObject);
     res.status(resObject.code).send(resObject.message);
   },
 
@@ -58,5 +64,26 @@ module.exports = {
       applicant: resObject.applicant,
       message: resObject.message,
     });
+  },
+
+  findGuideUserApproved: async (req, res) => {
+    const resObject = await findGuideUserApproved(req);
+    res.status(resObject.code).json({
+      guideList: resObject.guideList,
+      message: resObject.message,
+    });
+  },
+
+  findGuideUserCompleted: async (req, res) => {
+    const resObject = await findGuideUserCompleted(req);
+    res.status(resObject.code).json({
+      guideList: resObject.guideList,
+      message: resObject.message,
+    });
+  },
+
+  participateCanceled: async (req, res) => {
+    const resObject = await deleteData(req);
+    res.status(resObject.code).send(resObject.message);
   },
 };

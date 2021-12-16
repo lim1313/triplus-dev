@@ -13,15 +13,17 @@ import MyPage from './pages/MyPage';
 import AdminPage from './pages/AdminPage';
 import Toggle from './components/common/Toggle';
 import GoogleCallback from './pages/Googlecallback';
+import NaverCallback from './pages/NaverCallback';
 
 import { useSelector } from 'react-redux';
 import ManagementPage from './pages/ManagementPage';
 import TourManagementPage from './pages/TourManagementPage';
+import KakaoCallback from './pages/KakaoCallback';
 
 function App() {
   const { pathname } = useLocation();
   const isToggled = useSelector((state) => state.toggleReducer.isToggled);
-  console.log(pathname);
+
   return (
     <>
       {pathname === '/admin' ? null : <NavBar />}
@@ -38,8 +40,10 @@ function App() {
         <Route path='/chat' element={<ChattingPage />} />
         <Route path='/mypage' element={<MyPage />} />
         <Route path='/googlecallback' element={<GoogleCallback />} />
+        <Route path='/navercallback' element={<NaverCallback />} />
+        <Route path='/kakaocallback' element={<KakaoCallback />} />
       </Routes>
-      {pathname === '/map' || pathname === '/admin' || pathname === '/mypage' ? null : (
+      {(pathname === '/' || pathname === '/login' || pathname === '/signup') && (
         <Footer main={pathname === '/' ? 'main' : null} />
       )}
     </>

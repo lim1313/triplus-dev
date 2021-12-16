@@ -11,6 +11,6 @@ export const createRoom = (userId) => {
     .then((res) => res.data)
     .catch((err) => {
       console.log(err);
-      return err.response.data;
+      return err.response.status;
     });
 };

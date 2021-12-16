@@ -22,26 +22,13 @@ export const ModalBtn = styled(ColorBtn)`
   color: ${({ chatting, theme }) => chatting && theme.color.blue};
 
   &:hover {
-    background-color: white;
-    color: ${({ theme }) => theme.color.blue};
     border: 1px solid ${({ theme }) => theme.color.blue};
+    color: ${({ theme }) => theme.color.blue};
+    background-color: white;
   }
 
-  &:hover {
-    ${({ completed }) =>
-      completed &&
-      css`
-        cursor: unset;
-        background: ${({ theme }) => theme.color.red};
-        border: 1px solid ${({ theme }) => theme.color.red};
-        &:hover {
-          color: #fff;
-        }
-      `}
-  }
-
-  ${({ theme, state }) =>
-    state === 'COMPLETED' &&
+  ${({ theme, state, completed, disabled }) =>
+    (completed || state === 'COMPLETED' || disabled) &&
     css`
       color: #fff;
       background-color: ${theme.color.gray};
@@ -51,35 +38,43 @@ export const ModalBtn = styled(ColorBtn)`
         cursor: not-allowed;
         background-color: ${theme.color.gray};
         border: ${theme.color.gray};
+        color: #fff;
       }
     `}
 `;
 
 export default function GuideBtn({
+  loginId,
   guideId,
   userId,
   userParticipate,
   state,
   closeModal,
-  compoleteModal,
+  cardModalResult,
 }) {
   const isLogin = useSelector((state) => state.loginReducer.isLogin);
   const [isError] = useError();
 
-  const clickGuide = (id) => {
-    if (!isLogin) return compoleteModal('login');
+  const clickGuideBtn = (id, state) => {
     if (state === 'COMPLETED') return;
+    if (!isLogin) return cardModalResult('login');
 
     //TODO POST 가이드 신청
     rezGuide(id).then((res) => {
-      console.log(res);
-      if (res === 401) {
+      const { status, data } = res;
+      const msg = data && data.message;
+
+      if (status === 401) {
         return isError();
-      } else if (res === 204) {
-        compoleteModal('success');
-      } else if (res === 201) {
-        compoleteModal('end');
-      } else if (res >= 500) {
+      } else if (status === 204) {
+        cardModalResult('success');
+      } else if (status === 200) {
+        msg === 'same'
+          ? cardModalResult('same')
+          : msg === 'main'
+          ? cardModalResult('main')
+          : cardModalResult('end');
+      } else {
         alert('에러가 발생했습니다. 다시 시도해 주세요');
       }
       setTimeout(() => {
@@ -87,6 +82,7 @@ export default function GuideBtn({
       }, 2000);
     });
   };
+  console.log(loginId, userId);
 
   return (
     <ModalBottomBtn>
@@ -95,11 +91,16 @@ export default function GuideBtn({
           예약완료
         </ModalBtn>
       ) : (
-        <ModalBtn palette='blue' onClick={() => clickGuide(guideId, state)} state={state}>
+        <ModalBtn
+          palette='blue'
+          onClick={() => clickGuideBtn(guideId, state)}
+          state={state}
+          disabled={loginId === userId}
+        >
           {state === 'COMPLETED' ? '예약마감' : '신청하기'}
         </ModalBtn>
       )}
-      <Chatting userId={userId} state={state} />
+      <Chatting userId={userId} state={state} loginId={loginId} cardModalResult={cardModalResult} />
     </ModalBottomBtn>
   );
 }

@@ -61,20 +61,11 @@ const Airplane = styled.path`
 `;
 
 export default function Flight() {
-  // const style1 = { fill: 'none', stroke: '#e9edf3', strokeWidth: '3px', strokeMiterlimit: '10' };
-  // const style2 = { fill: '#3386f7' };
-  // const style3 = { fill: '#fff', stroke: '#8d97a1', strokeWidth: '2px', strokeMiterlimit: '10' };
-  // const style4 = { fill: 'none', stroke: '#7dcbf8', strokeWidth: '3px', strokeMiterlimit: '10' };
-  // const style5 = { fill: '#fff', stroke: '#3287f7', strokeWidth: '2px', strokeMiterlimit: '10' };
-
-  // ! ratioY 값이 useEffect 안으로 들어가면 변하질 않음
   const ratioY = parseInt(useSelector((state) => state.scrollReducer.scrollY) * 100);
-  // ! useRef 를 쓰면 오히려 에러가 발생함
   const path = useRef(null);
 
   useEffect(() => {
     const coloredPath = path.current;
-    console.log(coloredPath);
     const totalLength = coloredPath.getTotalLength();
     coloredPath.style.strokeDasharray = totalLength;
     coloredPath.style.strokeDashoffset = totalLength;
@@ -95,7 +86,6 @@ export default function Flight() {
   }, []);
 
   const stopoverClickHandler = (e) => {
-    console.log(e.target);
     const toRatio = Number(e.target.id);
     const toY = (toRatio * (document.body.offsetHeight - window.innerHeight)) / 100;
     window.scrollTo(0, toY + 1);
@@ -124,12 +114,12 @@ export default function Flight() {
       />
       <Stopover
         onClick={stopoverClickHandler}
-        cx='25.06'
-        cy='80.53'
+        cx='24.56'
+        cy='81.53'
         r='3.82'
         ratioY={ratioY}
-        id='19'
-        positionedY='19'
+        id='20'
+        positionedY='20'
       />
       <Stopover
         onClick={stopoverClickHandler}
@@ -137,26 +127,26 @@ export default function Flight() {
         cy='143.86'
         r='3.82'
         ratioY={ratioY}
-        id='39'
-        positionedY='39'
+        id='40'
+        positionedY='40'
       />
       <Stopover
         onClick={stopoverClickHandler}
-        cx='28.2'
-        cy='200.63'
+        cx='34.5'
+        cy='210.63'
         r='3.82'
         ratioY={ratioY}
-        id='58'
-        positionedY='58'
+        id='59'
+        positionedY='59'
       />
       <Stopover
         onClick={stopoverClickHandler}
-        cx='14.82'
+        cx='10.82'
         cy='260.04'
         r='3.82'
         ratioY={ratioY}
-        id='77'
-        positionedY='77'
+        id='79'
+        positionedY='79'
       />
     </SVG>
   );

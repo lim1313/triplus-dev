@@ -1,5 +1,5 @@
 import React from 'react';
-import { Profile, UserNick } from '../../styles/map/card';
+import { Profile } from '../../styles/map/card';
 import styled from 'styled-components';
 import {
   CardLi,
@@ -9,11 +9,31 @@ import {
   ImageWrapper,
   TitleWrapper,
 } from '../map/sideBar/GuideCard';
+import { UserNick } from './UserNick';
 
 const TourCardLi = styled(CardLi)`
   filter: none;
+  height: 230px;
   .card-wrapper {
     filter: ${({ state }) => (state === 'COMPLETED' || state === 'CANCELED') && 'grayscale(100%)'};
+  }
+  &:hover {
+    cursor: ${({ state }) => state === 'COMPLETED' && 'not-allowed'};
+  }
+  & .profile {
+    margin-top: 1.1rem;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 90%;
+    height: 15rem;
+    & .profile {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      left: 10%;
+      bottom: 0;
+    }
   }
 `;
 const CardWrapper = styled.div`
@@ -37,13 +57,16 @@ const CardWrapper = styled.div`
     top: 4%;
     margin-top: 0;
     color: ${({ theme }) => theme.color.red};
-    background: ${({ theme }) => theme.color.lightGray};
+    background: #fff;
     border-radius: 5px;
     filter: none;
   }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100vw;
+  }
 `;
 
-export default function ListItem({ guideInfo }) {
+export default function ListItem({ guideInfo, handleTourCardClick }) {
   const getDday = () => {
     const [year, month, day] = guideInfo.guideDate.split('.');
     let today = new Date().getTime();
@@ -53,7 +76,7 @@ export default function ListItem({ guideInfo }) {
     return result;
   };
   return (
-    <TourCardLi state={guideInfo && guideInfo.state}>
+    <TourCardLi state={guideInfo && guideInfo.state} onClick={() => handleTourCardClick(guideInfo)}>
       {guideInfo && guideInfo.state === 'COMPLETED' && (
         <CardWrapper>
           <img src='/asset/main/stamp.png' alt='완료스탬프' />
@@ -65,8 +88,8 @@ export default function ListItem({ guideInfo }) {
         </CardWrapper>
       )}
       <div className='card-wrapper'>
-        <ImageWrapper />
-        <TitleWrapper>
+        <ImageWrapper className='img-wrapper' backImage={guideInfo.tourImage[0]} />
+        <TitleWrapper dday={getDday()}>
           <div className='date'>
             {guideInfo && guideInfo.state === 'COMPLETED' ? 'END' : `D - ${getDday()}`}
           </div>
@@ -74,7 +97,15 @@ export default function ListItem({ guideInfo }) {
         </TitleWrapper>
         <GuideWrapper>
           <GuideInfo>
-            <Profile width='80px' height='80px' mWidth='70px' mHeight='70px' marginRight='1rem' />
+            <Profile
+              width='80px'
+              height='80px'
+              mWidth='70px'
+              mHeight='70px'
+              marginRight='1rem'
+              className='profile'
+              userImg={guideInfo.userImage}
+            />
             <UserNick
               gender={guideInfo && guideInfo.gender}
               nickName={guideInfo && guideInfo.nickName}

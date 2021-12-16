@@ -15,6 +15,7 @@ const InputCtn = styled.div`
   & .popup {
     position: absolute;
     left: -50%;
+    z-index: 999;
   }
   @media screen and (max-width: 400px) {
     margin-left: 1rem;
@@ -66,7 +67,7 @@ export default function GuidePlace(props) {
           <DaumPostcode onComplete={onCompletePost} style={postCodeStyle} />
         </div>
       ) : null}
-      <label htmlFor='place'>장소입력</label>
+      <label htmlFor='place'>대표장소입력</label>
       <PlaceInput
         autoComplete='off'
         placeholder='도로명주소'

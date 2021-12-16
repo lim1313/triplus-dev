@@ -3,10 +3,19 @@ import styled from 'styled-components';
 import { ColorBtn } from '../../styles/common';
 import { Background, ModalTitle, ModalWrapper } from '../../styles/common/modal';
 
+const Wrapper = styled(ModalWrapper)`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: ${({ width }) => width || '26vw'};
+  min-width: 22rem;
+  height: ${({ height }) => height};
+  min-height: 12rem;
+`;
+
 export const BtnWrapper = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 2rem;
 `;
 
 export const SelectBtn = styled(ColorBtn)`
@@ -23,20 +32,30 @@ export const SelectBtn = styled(ColorBtn)`
   }
 `;
 
-export default function Modal({ children, content, yesClick, noClick, width }) {
+export default function Modal({
+  children,
+  content,
+  yesClick,
+  noClick,
+  onlyOne,
+  firstBtn,
+  secondBtn,
+  width,
+  height,
+}) {
   return (
     <Background>
-      <ModalWrapper width={width}>
+      <Wrapper width={width} height={height}>
         {children || (
           <>
             <ModalTitle>{content}</ModalTitle>
             <BtnWrapper>
-              <SelectBtn onClick={yesClick}>확인</SelectBtn>
-              <SelectBtn onClick={noClick}>취소</SelectBtn>
+              <SelectBtn onClick={yesClick}>{firstBtn || '확인'}</SelectBtn>
+              {onlyOne || <SelectBtn onClick={noClick}>{secondBtn || '취소'}</SelectBtn>}
             </BtnWrapper>
           </>
         )}
-      </ModalWrapper>
+      </Wrapper>
     </Background>
   );
 }
@@ -48,3 +67,6 @@ export default function Modal({ children, content, yesClick, noClick, width }) {
 // 2) content : 모달 창 안의 title
 // 3) yesClick, noClick : 확인, 취소 클릭 이벤트
 // 4) width : 모달창의 custom 넓이
+// 5) onlyOne : 확인 버튼만 필요한 경우
+// 5) firstBtn : 첫번째 btn value
+// 5) secondBtn : 두번째 btn value

@@ -1,11 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps*/
-import React, { useEffect } from 'react';
+/* eslint-disable no-unused-vars*/
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled, { keyframes, css } from 'styled-components';
 import { BorderBtn, ColorBtn } from '../styles/common';
 import { useSelector, useDispatch } from 'react-redux';
 import { scrollListener } from '../redux/scroll/action';
+import { loginReducer } from '../redux/login/action';
 import Flight from '../components/main/Flight';
+
+import { isLoginMain } from '../network/main/http';
 
 const scaleUp = keyframes`
   from {
@@ -47,6 +51,7 @@ const Description = styled.div`
   display: flex;
   flex-direction: column;
   align-items: ${({ center }) => (center ? 'center' : 'none')};
+  justify-content: center;
   text-align: ${({ right }) => (right ? 'right' : 'none')};
   margin-top: ${({ marginTop }) => marginTop || 'none'};
   margin-left: ${({ marginLeft }) => marginLeft || 'none'};
@@ -84,8 +89,7 @@ const Title = styled.h1`
 `;
 
 const SubText = styled.p`
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.3rem;
   margin: 0;
   margin-bottom: 3rem;
   color: ${({ theme }) => theme.color.gray};
@@ -126,7 +130,10 @@ const MainColorBtn = styled(ColorBtn)`
 
 const Img = styled.img`
   opacity: ${({ positionedY }) => (positionedY === '0' ? '1' : '0')};
-  width: ${({ positionedY }) => (positionedY === '0' ? '32vw' : '25vw')};
+  width: 25vw;
+  width: ${({ positionedY }) => positionedY === '0' && '32vw'};
+  width: ${({ positionedY }) => positionedY === '25' && '30vw'};
+  width: ${({ positionedY }) => positionedY === '67' && '20vw'};
   object-fit: contain;
   ${({ ratioY, positionedY }) =>
     ratioY >= Number(positionedY) &&
@@ -144,32 +151,52 @@ const Img = styled.img`
 
 export default function MainPage() {
   const dispatch = useDispatch();
+
+  const [isLogin, setIsLogin] = useState(false);
+  const [isMobile, setIsMobile] = useState(null);
+  const navBarLogout = useSelector((state) => state.loginReducer.isLogin);
   const ratioY = parseInt(useSelector((state) => state.scrollReducer.scrollY) * 100);
-  console.log('main', ratioY);
+  console.log(ratioY);
+
   const scrollEventListener = () => {
     const maxScroll = document.body.offsetHeight - window.innerHeight;
-    console.log(maxScroll);
     const currentY = window.pageYOffset;
-    console.log(currentY);
     const ratio = currentY / maxScroll;
     dispatch(scrollListener(ratio));
   };
 
   useEffect(() => {
+    isLoginMain()
+      .then((res) => {
+        console.log(res.data.isLogin);
+        if (res.data.isLogin) setIsLogin(true);
+        else setIsLogin(false);
+      })
+      .catch((err) => console.log(err));
+  }, [navBarLogout]);
+
+  useEffect(() => {
+    window.scroll(0, 0);
     window.addEventListener('scroll', scrollEventListener);
+    window.addEventListener('resize', () => {
+      const mobileSize = window.matchMedia('screen and (max-width: 768px)').matches;
+      console.log('mobileSize', mobileSize);
+      if (mobileSize) setIsMobile(true);
+      else setIsMobile(false);
+    });
     return () => {
+      window.scroll(0, 0);
       window.removeEventListener('scroll', scrollEventListener);
+      dispatch(scrollListener(0));
     };
   }, []);
-
-  const isMobile = window.matchMedia('screen and (max-width: 768px)').matches;
 
   return (
     <>
       <Section>
         {isMobile ? (
           <Content>
-            <Img src='./asset/main/trip1.png' alt='대체 이미지' ratioY={ratioY} positionedY='0' />
+            <Img src='./asset/main/trip1.jpeg' alt='대체 이미지' ratioY={ratioY} positionedY='0' />
             <Description>
               <Title>
                 우리는 여행자이자 <br /> 가이드입니다
@@ -201,13 +228,13 @@ export default function MainPage() {
                 </Link>
               </ButtonWrapper>
             </Description>
-            <Img src='./asset/main/trip1.png' alt='대체 이미지' ratioY={ratioY} positionedY='0' />
+            <Img src='./asset/main/trip1.jpeg' alt='대체 이미지' ratioY={ratioY} positionedY='0' />
           </Content>
         )}
       </Section>
       <Section>
         <Content>
-          <Img src='./asset/main/trip2.png' alt='대체 이미지' ratioY={ratioY} positionedY='7' />
+          <Img src='./asset/main/trip2.jpeg' alt='대체 이미지' ratioY={ratioY} positionedY='7' />
           <Description marginLeft='10rem' marginTop={isMobile ? '3rem' : null}>
             <Title>여행해보세요!</Title>
             <SubText>
@@ -225,7 +252,7 @@ export default function MainPage() {
       <Section>
         {isMobile ? (
           <Content>
-            <Img src='./asset/main/trip3.png' alt='대체 이미지' ratioY={ratioY} positionedY='25' />
+            <Img src='./asset/main/trip3.jpeg' alt='대체 이미지' ratioY={ratioY} positionedY='25' />
             <Description right marginTop='3rem'>
               <Title>
                 현지 가이드가 <br /> 되어 보세요!
@@ -261,13 +288,13 @@ export default function MainPage() {
                 </Link>
               </ButtonWrapper>
             </Description>
-            <Img src='./asset/main/trip3.png' alt='대체 이미지' ratioY={ratioY} positionedY='25' />
+            <Img src='./asset/main/trip3.jpeg' alt='대체 이미지' ratioY={ratioY} positionedY='25' />
           </Content>
         )}
       </Section>
       <Section>
         <Content>
-          <Img src='./asset/main/trip4.png' alt='대체 이미지' ratioY={ratioY} positionedY='45' />
+          <Img src='./asset/main/trip4.jpeg' alt='대체 이미지' ratioY={ratioY} positionedY='45' />
           <Description marginLeft='10rem' right marginTop={isMobile ? '3rem' : null}>
             <Title>채팅해보세요!</Title>
             <SubText>
@@ -287,7 +314,7 @@ export default function MainPage() {
       <Section>
         {isMobile ? (
           <Content>
-            <Img src='./asset/main/trip5.png' alt='대체 이미지' ratioY={ratioY} positionedY='64' />
+            <Img src='./asset/main/trip5.jpeg' alt='대체 이미지' ratioY={ratioY} positionedY='67' />
             <Description marginTop='3rem'>
               <Title>
                 일정을 <br /> 한 눈에 보세요!
@@ -317,7 +344,7 @@ export default function MainPage() {
                 </Link>
               </ButtonWrapper>
             </Description>
-            <Img src='./asset/main/trip5.png' alt='대체 이미지' ratioY={ratioY} positionedY='64' />
+            <Img src='./asset/main/trip5.jpeg' alt='대체 이미지' ratioY={ratioY} positionedY='64' />
           </Content>
         )}
       </Section>
@@ -325,7 +352,7 @@ export default function MainPage() {
         <Description marginTop='-10rem' center ratioY={ratioY} positionedY='80'>
           <Title>이제 시작해볼까요?</Title>
           <SubText></SubText>
-          <Link to='/login'>
+          <Link to={isLogin ? '/map' : '/login'}>
             <MainBorderBtn>서비스 시작하기</MainBorderBtn>
           </Link>
         </Description>

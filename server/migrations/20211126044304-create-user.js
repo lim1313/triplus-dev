@@ -25,7 +25,7 @@ module.exports = {
       image: {
         type: Sequelize.STRING,
       },
-      o_auth: {
+      social: {
         type: Sequelize.STRING,
       },
       state: {

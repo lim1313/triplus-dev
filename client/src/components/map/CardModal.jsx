@@ -43,7 +43,7 @@ const ModalWrapper = styled.section`
 
 const Wrapper = styled.div`
   position: relative;
-  top: -3rem;
+  top: -2.5rem;
   padding: 0 1.5rem;
 `;
 
@@ -92,20 +92,23 @@ export default function CardModal({ modalInfo }) {
     userParticipate,
     state,
     userId,
+    loginId,
+    startTime,
+    endTime,
   } = modalInfo;
   const [openModal, setOpenModal] = useState('');
-
   const dispatch = useDispatch();
 
   const modalRef = useRef();
 
   useEffect(() => {
-    modalRef.current.scrollIntoView({ behavior: 'smooth' });
+    modalRef.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
   }, [modalInfo]);
 
   const closeModal = () => {
     dispatch(openGuideModal({ isOpen: false }));
   };
+
   return (
     <>
       <ModalWrapper>
@@ -114,8 +117,8 @@ export default function CardModal({ modalInfo }) {
             <FaTimes />
           </CloseBtn>
         </BtnWrapper>
-        <Wrapper ref={modalRef}>
-          <Title>{title}</Title>
+        <Wrapper>
+          <Title ref={modalRef}>{title}</Title>
           <UserInfo nickName={nickName} gender={gender} userImage={userImage} />
           <GuideImgs tourImage={tourImage} title={title} />
           <GuideContent
@@ -123,15 +126,18 @@ export default function CardModal({ modalInfo }) {
             guideDate={guideDate}
             content={content}
             openDate={openDate}
+            startTime={startTime}
+            endTime={endTime}
           />
         </Wrapper>
         <GuideBtn
+          loginId={loginId}
           guideId={guideId}
           userId={userId}
           userParticipate={userParticipate}
           state={state}
           closeModal={closeModal}
-          compoleteModal={(result) => setOpenModal(result)}
+          cardModalResult={(result) => setOpenModal(result)}
         />
       </ModalWrapper>
       {openModal && <CheckModal openMsg={openModal} closeCheckModal={() => setOpenModal(false)} />}

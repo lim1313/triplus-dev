@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import { ModalWrapper } from '../../../styles/common/modal';
 import { BtnWrapper, SelectBtn } from '../../common/Modal';
+import CheckModalContent from './CheckModalContent';
 
 export const BackWrapper = styled.div`
   position: absolute;
@@ -30,7 +31,7 @@ export const BackWrapper = styled.div`
 const TitleWrapper = styled(ModalWrapper)`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 `;
 
@@ -38,8 +39,7 @@ const ImgWrapper = styled.img`
   width: 60%;
 `;
 
-const Content = styled.div`
-  margin-top: 1rem;
+export const Content = styled.div`
   color: ${({ theme, end }) => (end ? theme.color.red : theme.color.blue)};
   font-weight: 500;
   font-weight: 700;
@@ -57,15 +57,25 @@ export default function CheckModal({ openMsg, closeCheckModal }) {
       <TitleWrapper>
         {openMsg !== 'login' && <ImgWrapper src='/asset/logo/logo.png' alt='triplus 로고' />}
         {openMsg === 'success' ? (
-          <>
-            <Content>예약이 완료되었습니다</Content>
-            <Content>즐거운 여행되세요</Content>
-          </>
+          <CheckModalContent content1='예약이 완료되었습니다' content2='즐거운 여행되세요' />
         ) : openMsg === 'end' ? (
-          <>
-            <Content end>예약이 이미 마감되었습니다</Content>
-            <Content end>다음에 이용해 주세요</Content>
-          </>
+          <CheckModalContent
+            end={true}
+            content1='예약이 이미 마감되었습니다'
+            content2='다음에 이용해 주세요'
+          />
+        ) : openMsg === 'same' ? (
+          <CheckModalContent
+            end={true}
+            content1='이미 예약이 완료되었습니다'
+            content2='즐거운 여행되세요'
+          />
+        ) : openMsg === 'main' ? (
+          <CheckModalContent
+            end={true}
+            content1='본인의 가이드 카드를 신청할 수 없습니다'
+            content2='즐거운 하루되세요'
+          />
         ) : (
           openMsg === 'login' && (
             <>

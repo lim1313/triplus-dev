@@ -11,11 +11,16 @@ import scrollReducer from '../redux/scroll/reducer';
 import toggleReducer from '../redux/toggle/reducer';
 import { chatUserInfoReducer, chatListReducer, currentRoomReducer } from '../redux/chat/reducer';
 import { guideDeleteReducer } from './management/reducer';
+import {
+  openTourModalReducer,
+  openDeleteModalReducer,
+  completeDeleteReducer,
+} from './tourManagement/reducer';
 
 const persistConfig = {
   key: 'root',
   storage,
-  whiteList: ['loginReducer'],
+  whiteList: ['loginReducer', 'adminReducer'],
   blacklist: [
     'cardFilterReducer',
     'guideModalReducer',
@@ -24,6 +29,9 @@ const persistConfig = {
     'chatListReducer',
     'currentRoomReducer',
     'guideDeleteReducer',
+    'openTourModalReducer',
+    'openDeleteModalReducer',
+    'completeDeleteReducer',
   ],
 };
 
@@ -41,6 +49,9 @@ const rootReducer = combineReducers({
   chatListReducer,
   currentRoomReducer,
   guideDeleteReducer,
+  openTourModalReducer,
+  openDeleteModalReducer,
+  completeDeleteReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

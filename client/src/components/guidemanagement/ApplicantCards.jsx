@@ -50,21 +50,21 @@ const CardUl = styled.ul`
   transition: all 0.5s;
   width: 100%;
   transform: translateX(${({ fromLeft }) => fromLeft + 'px'});
+  @media ${({ theme }) => theme.device.mobile} {
+    height: 160px;
+    align-items: center;
+  }
 `;
 
 export default function ApplicantCards({ applicantInfo }) {
   const [fromLeft, setFromLeft] = useState(0);
-  // const [last, setLast] = useState(0);
   const cardRef = useRef();
 
   const moveImg = (direct) => {
-    console.log(fromLeft);
-    // console.log(cardRef.current.offsetWidth);
     const cardWidth = cardRef.current.offsetWidth;
     if (direct === 'l' && fromLeft >= 0) {
       return;
     } else if (direct === 'r' && fromLeft <= -((cardWidth + 12) * 4) + (cardWidth + 12) * 3) {
-      // width * 신청자 개수, width*3
       return;
     }
 
@@ -83,7 +83,11 @@ export default function ApplicantCards({ applicantInfo }) {
           <MoveBtn left onClick={() => moveImg('l')}>
             <FaAngleLeft />
           </MoveBtn>
-          <MoveBtn onClick={() => moveImg('r')}>
+          <MoveBtn
+            onClick={() => {
+              if (applicantInfo.length > 3) moveImg('r');
+            }}
+          >
             <FaAngleRight />
           </MoveBtn>
           <CardsWarpper>
@@ -92,10 +96,6 @@ export default function ApplicantCards({ applicantInfo }) {
                 applicantInfo.map((applicant) => (
                   <ApplicantCard applicant={applicant} key={applicant.nickName} cardRef={cardRef} />
                 ))}
-              {/* <ApplicantCard applicantInfo={applicantInfo} cardRef={cardRef} />
-          <ApplicantCard cardRef={cardRef} />
-          <ApplicantCard cardRef={cardRef} />
-          <ApplicantCard cardRef={cardRef} /> */}
             </CardUl>
           </CardsWarpper>
         </>

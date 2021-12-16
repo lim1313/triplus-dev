@@ -7,8 +7,13 @@ const ImageWrapper = styled.li`
   width: 220px;
   flex-shrink: 0;
   flex-grow: 0;
+  border-radius: 5px;
 
-  background: url(${({ backImage }) => backImage}) no-repeat center;
+  /* background-color: ${({ backImage }) => (backImage ? '#fff' : 'rgba(246, 247, 250, 1)')}; */
+  background-color: rgba(246, 247, 250, 1);
+  background-image: url(${({ backImage }) => backImage});
+  background-repeat: no-repeat;
+  background-position: center;
   background-size: contain;
 `;
 

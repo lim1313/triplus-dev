@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { getCardModal, getGuideCards } from '../../../network/map/http';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { guideCardInfo, openGuideModal } from '../../../redux/map/action';
 import { createMarker, deleteMarker, getInfo } from '../../../utils/kakao';
 import styled from 'styled-components';
@@ -14,12 +14,19 @@ const MapWrapper = styled.div`
   height: 100%;
   position: relative;
 
+  & .svgMarker {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
   & .infowindow {
     display: inline-block;
     background: white;
     border-radius: 10px;
     word-break: break-word;
     text-align: center;
+    min-width: 8rem;
 
     box-shadow: 0px 0px 5px 2px rgba(46, 46, 46, 0.4);
     overflow: hidden;

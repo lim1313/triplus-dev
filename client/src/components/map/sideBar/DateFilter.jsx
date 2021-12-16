@@ -79,6 +79,10 @@ const DateFrame = styled(DatePicker)`
   &:focus {
     outline: none;
   }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 0.9rem;
+  }
 `;
 
 const CustomHeader = styled.div`

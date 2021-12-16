@@ -14,10 +14,10 @@ const OrderBy = styled.select`
   }
 `;
 
-export default function OrderFilter() {
+export default function OrderFilter({ handleFilterChange }) {
   return (
     <OrderCtn>
-      <OrderBy>
+      <OrderBy onChange={handleFilterChange}>
         <option value='날짜 빠른순'>날짜 빠른순</option>
         <option value='날짜 느린순'>날짜 느린순</option>
       </OrderBy>

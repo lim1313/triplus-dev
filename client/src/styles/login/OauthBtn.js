@@ -6,17 +6,19 @@ export const ButtonBlock = styled.div`
   align-items: center;
   margin: 20px;
   & span {
+    margin-top: 0.3rem;
+    color: ${({ theme }) => theme.color.gray};
     text-align: center;
+    font-size: 0.7rem;
   }
 `;
 export const OauthBtn = styled.button`
   background: none;
   border: none;
-  font-size: 2.5rem;
   cursor: pointer;
   border-radius: 50%;
-  height: 3.5rem;
-  width: 3.5rem;
+  height: 3rem;
+  width: 3rem;
   color: ${({ theme }) => theme.color.gray};
   & .oauth-btn {
     border-radius: 50%;

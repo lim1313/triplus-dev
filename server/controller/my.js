@@ -1,4 +1,12 @@
-const { isAuthorized, updateUser, expiredUser, changePassword } = require('./functions/user');
+const {
+  isAuthorized,
+  updateUser,
+  expiredUser,
+  changePassword,
+  selectUser,
+  updateEmail,
+  checkEmail,
+} = require('./functions/user');
 const crypto = require('crypto');
 const { user, user_verify } = require('../models');
 const { stmpTransport } = require('../config/email');
@@ -11,6 +19,20 @@ module.exports = {
 
     const { userId } = accessToken;
     const email = req.body.data;
+
+    const userFindOne = await user.findOne({
+      where: { email: req.body.data },
+
+    });
+
+    try {
+      if (userFindOne) {
+        throw 'email 중복';
+      }
+    } catch (error) {
+      console.log(error);
+      return res.sendStatus(204);
+    }
 
     try {
       let userVierify = await user_verify.findOne({ where: { user_id: userId } });
@@ -64,14 +86,15 @@ module.exports = {
     }
   },
 
-  myInfo: (req, res) => {
+  myInfo: async (req, res) => {
     try {
       const accessToken = isAuthorized(req);
-      
-      if(!accessToken){
-        throw '다시 로그인하여 주세요'
-      }else{
-        res.status(200);
+      const userInfo = await selectUser(accessToken.userId);
+
+      if (!accessToken) {
+        throw '다시 로그인하여 주세요';
+      } else {
+        res.status(200).json(userInfo);
       }
     } catch (error) {
       console.log(error);
@@ -86,11 +109,30 @@ module.exports = {
 
   expiredUser: async (req, res) => {
     const resObject = await expiredUser(req);
-    res.status(resObject.code).send(resObject.message);
+    res
+      .status(resObject.code)
+      .clearCookie('accessToken', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
+      })
+      .send(resObject.message);
   },
 
   changePassword: async (req, res) => {
     const resObject = await changePassword(req);
+    res
+      .status(resObject.code)
+      .clearCookie('accessToken', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
+      })
+      .send(resObject.message);
+  },
+
+  updateEmail: async (req, res) => {
+    const resObject = await updateEmail(req);
     res.status(resObject.code).send(resObject.message);
   },
 };

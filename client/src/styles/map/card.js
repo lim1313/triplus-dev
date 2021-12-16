@@ -3,9 +3,13 @@ import styled from 'styled-components';
 import { ImMan, ImWoman } from 'react-icons/im';
 
 export const Profile = styled.div`
-  background: url(${({ userImg }) => userImg}) no-repeat center;
+  background-image: url(${({ userImg }) => userImg});
+  background-repeat: no-repeat;
+  background-position: center;
   background-size: contain;
-  background-color: white;
+  flex-shrink: 0;
+
+  background-color: #fff;
   width: ${({ width }) => width};
   height: ${({ height }) => height};
   border: 3px solid ${({ theme }) => theme.color.lightGray};
@@ -24,9 +28,6 @@ export const CardModalSubTitle = styled.div`
   font-size: 1.1rem;
   color: ${({ theme }) => theme.color.blue};
   margin: 2.5rem 0 1rem 0;
-
-  @media ${({ theme }) => theme.device.mobile} {
-  }
 `;
 
 export const User = styled.div`
@@ -60,7 +61,7 @@ export const User = styled.div`
 
 export const UserNick = ({ gender, nickName, card, margin }) => {
   return (
-    <User gender={gender} card={card} margin={margin}>
+    <User gender={+gender} card={card} margin={margin}>
       <div>
         <span className='nick'>{card || '가이드'} 닉네임</span>
         <span className='gender'>

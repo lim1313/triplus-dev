@@ -1,9 +1,9 @@
 /*eslint-disable no-unused-vars*/
 
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useInput } from '../../../hooks/useInput';
-import { postEmailCheck, postInfo } from '../../../network/my/http';
+import { postInfo } from '../../../network/my/http';
 import { ColorBtn } from '../../../styles/common';
 import EmailModal from './EmailModal';
 import { nickValidation } from '../../../utils/validation';
@@ -36,19 +36,30 @@ const NameWrapper = styled.div`
 const ChangeInput = styled.input.attrs({ type: 'text' })`
   width: ${({ user }) => (user ? '60%' : '70%')};
   font-size: 1.2rem;
+
   &:focus {
     outline: none;
   }
+
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 0.9rem;
     width: ${({ user }) => (user ? '60%' : '70%')};
   }
 `;
 
+const DivInput = styled.div`
+  word-break: break-word;
+`;
+
 const BtnColor = styled(ColorBtn)`
   padding: 0.1em 0.7em;
   flex-shrink: 0;
   margin-left: 0.5rem;
+
+  &:hover {
+    cursor: ${({ disabled }) => disabled && 'not-allowed'};
+  }
+
   @media ${({ theme }) => theme.device.mobile} {
     margin-bottom: ${({ twoBtn }) => twoBtn && '0.5rem'};
   }
@@ -67,37 +78,32 @@ const AlertMsg = styled.div`
   }
 `;
 
-const BtnWrapper = styled.div`
-  display: flex;
-
-  @media ${({ theme }) => theme.device.mobile} {
-    flex-direction: column;
-  }
-`;
-
-export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
+export const UserInfo = ({ title, content, marginRight, noBtn, user, social }) => {
   const [isChange, setIsChange] = useState(false);
   const [inputValue, inputChange] = useInput(content);
   const [isAlert, setIsAlert] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const inputRef = useRef();
   const [isError] = useError();
 
+  //* 변경된 유저 정보 POST 서버 요청
   const changeContent = (e) => {
     if (isChange) {
       if (title === 'e-mail' && !inputValue.length) return setIsAlert('*필수 입력 사항');
       if (title === 'nickname' && !nickValidation(inputValue))
-        return setIsAlert('*3~8자리의 영문, 숫자만 가능합니다.');
+        return setIsAlert('*3~8자리의 한글, 영문, 숫자만 가능합니다.');
 
       // TODO POST /개인정보 변경
       postInfo(inputValue, title).then((res) => {
-        if (res === 401) {
-          isError();
-        } else if (res >= 200 && res < 300) {
+        if (res === 401) return isError();
+        else if (res === 204) {
+          return setIsAlert(`이미 존재하는 ${title === 'nickname' ? '닉네임' : title}입니다.`);
+        } else if (res === 201) {
           setIsAlert(null);
-          setIsChange(!isChange);
         } else {
-          setIsChange(!isChange);
+          alert('에러가 발생했습니다. 다시 시도해 주세요.');
         }
+        setIsChange(!isChange);
       });
     } else {
       setIsChange(!isChange);
@@ -110,6 +116,7 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
       <NameWrapper>
         {isChange ? (
           <ChangeInput
+            ref={inputRef}
             user={user}
             value={inputValue}
             onChange={inputChange}
@@ -117,12 +124,14 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user }) => {
             placeholder={title}
           />
         ) : (
-          <div>{inputValue}</div>
+          <DivInput>{inputValue}</DivInput>
         )}
         {noBtn || (
           <BtnColor
             palette='blue'
             onClick={title === 'e-mail' ? () => setOpenModal(true) : changeContent}
+            disabled={social}
+            title={social && '이메일을 수정할 수 없습니다'}
           >
             {isChange ? '완료' : '수정'}
           </BtnColor>

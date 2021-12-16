@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import ApplicantCards from './ApplicantCards';
-// import { ColorBtn } from '../../styles/common/index';
-// import ApplicantTable from './ApplicantTable';
 
 const ListCtn = styled.div`
   margin: 0;
@@ -20,6 +18,8 @@ const H3Ctn = styled.div`
 const H3 = styled.h3``;
 
 export default function Applicants({ applicantInfo }) {
+  console.log('applicants', applicantInfo);
+
   return (
     <ListCtn>
       <H3Ctn>

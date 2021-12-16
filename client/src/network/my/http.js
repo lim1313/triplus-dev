@@ -5,12 +5,27 @@ const http = process.env.REACT_APP_HTTPSURL;
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 
+//* GET 유저 정보 가져오기
+export const getUserInfo = () => {
+  return axios
+    .get(`${http}/my`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      return err.response.status;
+    });
+};
+
 //* POST 프로필 변경
-// 기본의 프로필 url은 삭제하고 새로운 url로 갱신
+// 새로운 url로 갱신
 export const postProfile = (data) => {
   return axios
     .post(`${http}/my/profile`, { image: data })
-    .then((res) => res.status)
+    .then((res) => {
+      console.log(res);
+      return res.status;
+    })
     .catch((err) => err.response.status);
 };
 
@@ -21,11 +36,6 @@ export const deleteProfile = () => {
     .delete(`${http}/my/profile`, { data: { image: null } })
     .then((res) => res.status)
     .catch((err) => err.response.status);
-};
-
-//* GET 유저 정보 가져오기
-export const getUserInfo = () => {
-  return axios.get(`${http}/my`).then((res) => res.data);
 };
 
 //* POST 정보 변경
@@ -51,7 +61,10 @@ export const postInfo = (data, path) => {
 export const postEmailCheck = (data) => {
   return axios
     .post(`${http}/my/email-check`, { data })
-    .then((res) => res.status)
+    .then((res) => {
+      console.log(res);
+      return res.status;
+    })
     .catch((err) => err.response.status);
 };
 
@@ -64,9 +77,10 @@ export const putPassword = (data) => {
 };
 
 //* DELETE 탈퇴
-export const deleteUser = (data) => {
+//! ouath인 경우 그냥 탈퇴 진행
+export const deleteUser = (inputValue, social) => {
   return axios
-    .post(`${http}/my/withdraw`, { password: data })
+    .post(`${http}/my/withdraw`, { password: inputValue, social })
     .then((res) => res.status)
     .catch((err) => err.response.status);
 };

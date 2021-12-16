@@ -12,7 +12,7 @@ export default function UserInfo({ userImage, nickName, gender }) {
         mWidth='130px'
         mHeight='130px'
       />
-      <UserNick gender={gender} nickName={'hello'} />
+      <UserNick gender={gender} nickName={nickName} />
     </>
   );
 }
