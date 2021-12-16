@@ -58,18 +58,13 @@ const CardUl = styled.ul`
 
 export default function ApplicantCards({ applicantInfo }) {
   const [fromLeft, setFromLeft] = useState(0);
-  // const [last, setLast] = useState(0);
   const cardRef = useRef();
-  console.log('applicantCard', applicantInfo);
 
   const moveImg = (direct) => {
-    console.log(fromLeft);
-    // console.log(cardRef.current.offsetWidth);
     const cardWidth = cardRef.current.offsetWidth;
     if (direct === 'l' && fromLeft >= 0) {
       return;
     } else if (direct === 'r' && fromLeft <= -((cardWidth + 12) * 4) + (cardWidth + 12) * 3) {
-      // width * 신청자 개수, width*3
       return;
     }
 

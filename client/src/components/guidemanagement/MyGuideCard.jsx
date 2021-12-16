@@ -63,20 +63,17 @@ const GuideInfo = styled.div`
     left: 8%;
     & h1 {
       text-shadow: 1px 1px 1px #fff;
-      width: 20rem;
+      width: 80vw;
       font-size: 1.2rem;
     }
     & p {
       margin-top: 0;
-      width: 300px;
+      width: 80vw;
     }
   }
   @media screen and (max-width: 350px) {
     & h1 {
-      font-size: 1.2rem;
-    }
-    & span {
-      width: 16rem;
+      font-size: 1rem;
     }
   }
 `;
@@ -114,7 +111,6 @@ export default function MyGuideCard(props) {
   const handleDeleteClick = () => {
     dispatch(guideDelete());
   };
-  console.log('guideCard', applicantInfo);
 
   return (
     <CardCtn>

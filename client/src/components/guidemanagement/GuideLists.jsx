@@ -1,5 +1,4 @@
 import React from 'react';
-// import GuideTable from './GuideTable';
 import styled from 'styled-components';
 import { H3Ctn } from '../../styles/management/guidelist.js';
 import { BorderBtn } from '../../styles/common/index.js';

@@ -11,7 +11,7 @@ module.exports = {
     const oauth2Client = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
-      process.env.REDIRECT_URL
+      `${process.env.REDIRECT_URL}/googlecallback`
     );
     const { tokens } = await oauth2Client.getToken(accessCode);
     oauth2Client.setCredentials(tokens);
@@ -22,7 +22,7 @@ module.exports = {
     user
       .findOrCreate({
         where: { userId: sub, email: email },
-        defaults: { userId: sub, email: email, image: picture, social: 'google' },
+        defaults: { userId: `${sub}*google`, email: email, image: picture, social: 'google' },
       })
       .then(([data, created]) => {
         const accessToken = generateAccessToken(data.dataValues);

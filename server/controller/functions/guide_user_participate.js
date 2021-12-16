@@ -107,7 +107,6 @@ module.exports = {
         throw 'accessToken이 없습니다';
       }
 
-
 const guideList = await guide_user_participate.findAll({
         subQuery: false,
         where: {

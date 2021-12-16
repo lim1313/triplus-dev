@@ -18,13 +18,6 @@ const BtnsBlock = styled.div`
     color: ${({ theme }) => theme.color.red};
   }
 `;
-
-// const GuestLogin = styled(NoBorderBtn)`
-//   text-align: right;
-//   white-space: nowrap;
-//   padding: 0;
-//   padding-left: 5rem;
-// `;
 const LoginBtn = styled(ColorBtn)`
   height: 7vh;
   margin-top: 20px;

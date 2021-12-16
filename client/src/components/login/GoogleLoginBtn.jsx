@@ -5,13 +5,11 @@ import { ButtonBlock, OauthBtn } from '../../styles/login/OauthBtn';
 const GoogleBtn = styled(OauthBtn)`
   box-shadow: 3px 3px 5px ${({ theme }) => theme.color.lightGray},
     -3px -3px 5px ${({ theme }) => theme.color.lightGray};
-  /* border: 0.2px solid ${({ theme }) => theme.color.lightGray}; */
   display: flex;
   justify-content: center;
   align-items: center;
   & img {
     width: 2rem;
-    /* margin: auto; */
   }
 `;
 

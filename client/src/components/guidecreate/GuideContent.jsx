@@ -30,7 +30,7 @@ export default function GuideContent(props) {
         onChange={handleInputChange}
       />
       <ReopenDate
-        placeholder='모집 예정일'
+        placeholder='추후 재모집 예정일'
         id='openDate'
         value={value.openDate}
         onChange={handleInputChange}

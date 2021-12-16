@@ -24,5 +24,5 @@ export const getCompletedList = async (pageNum, sortBy) => {
 };
 
 export const deleteTourList = async (guideId) => {
-  return axios.post(`${http}/management/tourlist/cancel`, {guideId});
+  return axios.post(`${http}/management/tourlist/cancel`, { guideId });
 };

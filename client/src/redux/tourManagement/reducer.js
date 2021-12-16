@@ -1,4 +1,4 @@
-import { OPEN_TOUR_MODAL, DELETE_CLICK } from './type';
+import { OPEN_TOUR_MODAL, DELETE_CLICK, COMPELTE_DELETE } from './type';
 
 //{isOpen: true, guideInfo: {}}
 export const openTourModalReducer = (state = {}, action) => {
@@ -13,6 +13,15 @@ export const openTourModalReducer = (state = {}, action) => {
 export const openDeleteModalReducer = (state = false, action) => {
   switch (action.type) {
     case DELETE_CLICK:
+      return !state;
+    default:
+      return state;
+  }
+};
+
+export const completeDeleteReducer = (state = false, action) => {
+  switch (action.type) {
+    case COMPELTE_DELETE:
       return !state;
     default:
       return state;
