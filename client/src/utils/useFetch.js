@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getCompletedList, getExpectedList } from '../network/tourmanagement/http';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { exit } from '../redux/login/action';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,17 +10,17 @@ const useFetch = (page, isActive, sortBy, isComplete) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLoginState = useSelector((state) => state.loginReducer);
-  const { isLogin } = isLoginState;
 
   const sendQuery = useCallback(async () => {
     setIsLoading(true);
     if (isActive.approved) {
       try {
         setIsLoading(true);
-        const response = await getExpectedList(page, sortBy).then((res) => res.data.guideList);
-        if (!response) {
-          throw new Error(`서버에 오류가 있습니다.`);
+        const response = await getExpectedList(page, sortBy).then((res) => res);
+        if (response.data.message === 'accessToken이 없습니다') {
+          dispatch(exit());
+          alert('로그인이 만료되어 로그인페이지로 이동합니다.');
+          navigate('/login');
         }
         if (page.approved === 1) {
           setItems(() => [...new Set([...response])]);
@@ -30,11 +30,7 @@ const useFetch = (page, isActive, sortBy, isComplete) => {
         setHasMore(response.length === 6);
         setIsLoading(false);
       } catch (e) {
-        if (isLogin) {
-          dispatch(exit());
-          alert('로그인이 만료되어 로그인페이지로 이동합니다.');
-          navigate('/login');
-        }
+        alert('잠시 후 다시 시도해주세요');
       }
     } else if (isActive.completed) {
       try {
@@ -51,14 +47,12 @@ const useFetch = (page, isActive, sortBy, isComplete) => {
         setHasMore(response.length === 6);
         setIsLoading(false);
       } catch (e) {
-        if (isLogin) {
-          dispatch(exit());
-          alert('로그인이 만료되어 로그인페이지로 이동합니다.');
-          navigate('/login');
-        }
+        dispatch(exit());
+        alert('로그인이 만료되어 로그인페이지로 이동합니다.');
+        navigate('/login');
       }
     }
-  }, [page, isActive.approved, isActive.completed, sortBy, dispatch, navigate, isLogin]);
+  }, [page, isActive.approved, isActive.completed, sortBy, dispatch, navigate]);
   useEffect(() => {
     sendQuery();
   }, [sendQuery, page, isComplete]);
