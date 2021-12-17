@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 
 import { GiCancel } from 'react-icons/gi';
 import { useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 
 import { BorderBtn } from '../../styles/common/index';
 
@@ -38,29 +39,29 @@ const RoomName = styled(BorderBtn)`
   flex-shrink: 0;
   padding: 1rem;
 
-  ${({ selected, partnerLeft }) =>
+  ${({ selected, partnerleft }) =>
     selected &&
     css`
-      background-color: ${({ partnerLeft, theme }) =>
-        partnerLeft ? theme.color.lightRed : theme.color.blue};
-      border-color: ${({ partnerLeft, theme }) =>
-        partnerLeft ? theme.color.lightRed : theme.color.blue};
+      background-color: ${({ partnerleft, theme }) =>
+        partnerleft === 'left' ? theme.color.lightRed : theme.color.blue};
+      border-color: ${({ partnerleft, theme }) =>
+        partnerleft === 'left' ? theme.color.lightRed : theme.color.blue};
       color: #fff;
     `}
   &:hover {
-    background-color: ${({ partnerLeft, theme }) =>
-      partnerLeft ? theme.color.lightRed : theme.color.lightBlue};
+    background-color: ${({ partnerleft, theme }) =>
+      partnerleft === 'left' ? theme.color.lightRed : theme.color.lightBlue};
     color: #fff;
-    border-color: ${({ partnerLeft, theme }) =>
-      partnerLeft ? theme.color.lightRed : theme.color.lightBlue};
+    border-color: ${({ partnerleft, theme }) =>
+      partnerleft === 'left' ? theme.color.lightRed : theme.color.lightBlue};
     ${({ selected }) =>
       selected &&
       css`
-        background-color: ${({ partnerLeft, theme }) =>
-          partnerLeft ? theme.color.lightRed : theme.color.blue};
+        background-color: ${({ partnerleft, theme }) =>
+          partnerleft === 'left' ? theme.color.lightRed : theme.color.blue};
         color: #fff;
-        border-color: ${({ partnerLeft, theme }) =>
-          partnerLeft ? theme.color.lightRed : theme.color.blue}; ;
+        border-color: ${({ partnerleft, theme }) =>
+          partnerleft === 'left' ? theme.color.lightRed : theme.color.blue}; ;
       `}
     > .icon {
       color: #fff;
@@ -75,11 +76,13 @@ const RoomName = styled(BorderBtn)`
     top: 0;
     left: 3px;
     z-index: 5;
-    color: ${({ partnerLeft, theme }) => (partnerLeft ? theme.color.lightRed : theme.color.gray)};
+    color: ${({ partnerleft, theme }) =>
+      partnerleft === 'left' ? theme.color.lightRed : theme.color.gray};
     transition: 0.2s;
     &:hover {
       cursor: pointer;
-      color: ${({ partnerLeft, theme }) => (partnerLeft ? theme.color.red : theme.color.darkGray)};
+      color: ${({ partnerleft, theme }) =>
+        partnerleft === 'left' ? theme.color.red : theme.color.darkGray};
     }
     @media ${({ theme }) => theme.device.mobile} {
       font-size: 0.8rem;
@@ -132,22 +135,22 @@ export default function SideBar({ selectRoomHandler, iconClickHandler }) {
 
   return (
     <SideContainer>
-      {roomList.map((el, index) => {
+      {roomList.map((el) => {
         return (
           <RoomName
             id={el.roomId}
             className='roomName'
             selected={String(el.roomId) === currentRoom}
-            partnerLeft={el.partnerLeft === 'left'}
+            partnerleft={el.partnerLeft === 'left' ? 'left' : 'stay'}
             onClick={clickRoomHandler}
-            key={index}
+            key={uuidv4()}
             palette={el.partnerLeft ? 'lightRed' : 'gray'}
           >
             <div
               id={el.roomId}
               className='icon'
               onClick={deleteRoomHandler}
-              partnerLeft={el.partnerLeft === 'left'}
+              partnerleft={el.partnerLeft === 'left' ? 'left' : 'stay'}
             >
               <GiCancel id={el.roomId} />
             </div>

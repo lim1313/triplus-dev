@@ -61,7 +61,7 @@ export default function ApplicantCard(props) {
 
   const navigate = useNavigate();
 
-  const clikcChat = async (e) => {
+  const clickChat = async (e) => {
     const userId = e.target.id;
     const isCreated = await createRoom(userId);
 
@@ -85,7 +85,7 @@ export default function ApplicantCard(props) {
         ></UserProfile>
         <Nick>닉네임: {applicant && applicant.nickName}</Nick>
       </GuideInfo>
-      <ChatBtn id={applicant.userId} palette='red' onClick={clikcChat}>
+      <ChatBtn id={applicant.userId} palette='red' onClick={clickChat}>
         채팅
       </ChatBtn>
     </CardCtn>

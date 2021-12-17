@@ -11,7 +11,7 @@ export default function Chatting({ userId, state, loginId, cardModalResult }) {
   const isLogin = useSelector((state) => state.loginReducer.isLogin);
   const [isError] = useError();
 
-  const clikcChat = async (userId, state) => {
+  const clickChat = async (userId, state) => {
     if (!isLogin) return cardModalResult('login');
 
     const isCreated = await createRoom(userId);
@@ -29,7 +29,7 @@ export default function Chatting({ userId, state, loginId, cardModalResult }) {
     <ModalBtn
       palette='lightGray'
       chatting
-      onClick={() => clikcChat(userId, state)}
+      onClick={() => clickChat(userId, state)}
       disabled={loginId === userId}
       // state={state}
     >

@@ -13,11 +13,15 @@ module.exports = {
       process.env.GOOGLE_CLIENT_SECRET,
       `${process.env.REDIRECT_URL}/googlecallback`
     );
+
     const { tokens } = await oauth2Client.getToken(accessCode);
+
     oauth2Client.setCredentials(tokens);
+
     const userInfo = await axios.get(
       `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${tokens.access_token}`
     );
+
     const { sub, email, picture } = userInfo.data;
     let dontBreak = true;
 
