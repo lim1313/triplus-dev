@@ -20,7 +20,7 @@ const Spin = styled.div`
   animation: ${spinLoad} 2s ease-in infinite;
 `;
 
-export default function SpinLoading({ width, height }) {
+export default function SpinLoading() {
   return <Spin />;
 }
 

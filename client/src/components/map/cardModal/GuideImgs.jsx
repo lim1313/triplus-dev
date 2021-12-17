@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import GuideImg from './GuideImg';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
@@ -46,17 +46,22 @@ const MoveBtn = styled.button`
 
 export default function GuideImgs({ tourImage }) {
   const [fromLeft, setFromLeft] = useState(0);
+  const imgWidth = 220;
+
+  useEffect(() => {
+    setFromLeft(0);
+  }, [tourImage]);
 
   const moveImg = (direct) => {
     if (tourImage.length <= 1) return;
     if (direct === 'l' && fromLeft === 0) return;
-    else if (direct === 'r' && fromLeft === -220 * (tourImage.length - 1)) return;
+    else if (direct === 'r' && fromLeft === -imgWidth * (tourImage.length - 1)) return;
 
     if (direct === 'l') {
-      let plusLeft = fromLeft + 220;
+      let plusLeft = fromLeft + imgWidth;
       setFromLeft(plusLeft);
     } else {
-      let minusLeft = fromLeft - 220;
+      let minusLeft = fromLeft - imgWidth;
       setFromLeft(minusLeft);
     }
   };

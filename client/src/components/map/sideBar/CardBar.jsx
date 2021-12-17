@@ -25,8 +25,11 @@ const SideCardWrapper = styled.ul`
 const CardNone = styled.div`
   text-align: center;
   color: ${({ theme }) => theme.color.darkGray};
+
   @media ${({ theme }) => theme.device.mobile} {
     background-color: ${({ theme }) => theme.color.lightRed};
+    height: 2.3rem;
+    line-height: 2.3rem;
     padding: 0;
     flex: 1 0 auto;
   }

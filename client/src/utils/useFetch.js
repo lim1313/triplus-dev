@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getCompletedList, getExpectedList } from '../network/tourmanagement/http';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { exit } from '../redux/login/action';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,6 +10,8 @@ const useFetch = (page, isActive, sortBy, isComplete) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isLoginState = useSelector((state) => state.loginReducer);
+  const { isLogin } = isLoginState;
 
   const sendQuery = useCallback(async () => {
     setIsLoading(true);
@@ -28,9 +30,11 @@ const useFetch = (page, isActive, sortBy, isComplete) => {
         setHasMore(response.length === 6);
         setIsLoading(false);
       } catch (e) {
-        dispatch(exit());
-        alert('로그인이 만료되어 로그인페이지로 이동합니다.');
-        navigate('/login');
+        if (isLogin) {
+          dispatch(exit());
+          alert('로그인이 만료되어 로그인페이지로 이동합니다.');
+          navigate('/login');
+        }
       }
     } else if (isActive.completed) {
       try {
@@ -47,12 +51,14 @@ const useFetch = (page, isActive, sortBy, isComplete) => {
         setHasMore(response.length === 6);
         setIsLoading(false);
       } catch (e) {
-        dispatch(exit());
-        alert('로그인이 만료되어 로그인페이지로 이동합니다.');
-        navigate('/login');
+        if (isLogin) {
+          dispatch(exit());
+          alert('로그인이 만료되어 로그인페이지로 이동합니다.');
+          navigate('/login');
+        }
       }
     }
-  }, [page, isActive.approved, isActive.completed, sortBy, dispatch, navigate]);
+  }, [page, isActive.approved, isActive.completed, sortBy, dispatch, navigate, isLogin]);
   useEffect(() => {
     sendQuery();
   }, [sendQuery, page, isComplete]);
