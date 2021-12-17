@@ -75,7 +75,6 @@ export const putPassword = (data) => {
 };
 
 //* DELETE 탈퇴
-//! ouath인 경우 그냥 탈퇴 진행
 export const deleteUser = (inputValue, social) => {
   return axios
     .post(`${http}/my/withdraw`, { password: inputValue, social })
