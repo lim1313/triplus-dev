@@ -55,7 +55,6 @@ export default function PwModal({ closeModal }) {
       setIsLoading(true);
       //TODO 새로운 비밀번호 갱신
       putPassword({ oldPassword: currentPw, password: newPw }).then((res) => {
-        console.log(res);
         if (res === 401) return isError();
         else if (res === 201) {
           // 201 성공적으로 수행

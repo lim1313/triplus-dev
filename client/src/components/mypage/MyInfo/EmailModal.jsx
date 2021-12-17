@@ -49,7 +49,7 @@ const BtnBorder = styled(BorderBtn)`
     `}
 `;
 
-export default function EmailModal({ clickModal }) {
+export default function EmailModal({ clickModal, emailFixValue }) {
   const [newEmail, emailChange] = useInput('');
   const [verifyNum, verifyNumChange] = useInput('');
   const [alertMsg, setAlertMsg] = useState(null);
@@ -103,6 +103,7 @@ export default function EmailModal({ clickModal }) {
           setAlertMsg(null);
           setAlertMsg2('*인증번호가 틀립니다. 올바른 인증번호를 입력하세요');
         } else {
+          emailFixValue(newEmail);
           setCompleteModal(true);
         }
         setIsLoading(false);

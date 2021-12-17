@@ -8,17 +8,16 @@ export const BtnColor = styled(ColorBtn)`
   width: 50%;
   margin-right: ${({ marginRight }) => marginRight && '0.5rem'};
 
-  ${({ disabled }) => {
+  ${({ disabled }) =>
     disabled &&
-      css`
-        &:hover {
-          cursor: ${({ disabled }) => disabled && 'not-allowed'};
-          color: #fff;
-          background: ${({ theme }) => theme.color.gray};
-          border: 1px solid ${({ theme }) => theme.color.gray};
-        }
-      `;
-  }}
+    css`
+      &:hover {
+        cursor: not-allowed;
+        color: #fff;
+        background: ${({ theme }) => theme.color.gray};
+        border: 1px solid ${({ theme }) => theme.color.gray};
+      }
+    `}
 `;
 
 export default function Password({ social }) {

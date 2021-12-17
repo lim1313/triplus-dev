@@ -23,7 +23,11 @@ export default function MyPage() {
       {isLogin ? (
         <MyPageComponent />
       ) : (
-        <Navigate to='/login' replace state='비밀번호가 변경되어, 로그아웃되었습니다.' />
+        <Navigate
+          to='/login'
+          replace
+          state={state?.logout && '비밀번호가 변경되어, 로그아웃되었습니다.'}
+        />
       )}
     </>
   );
