@@ -14,7 +14,6 @@ export default function GoogleCallback() {
   useEffect(() => {
     googleOauth(authorizationCode)
       .then((res) => {
-        console.log(res);
         dispatch(oauthLogin());
         navigate('/', { replace: true });
       })

@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import ApplicantCard from './ApplicantCard';
+import { v4 as uuidv4 } from 'uuid';
 
 const CardsCtn = styled.div`
   height: 250px;
@@ -94,7 +95,7 @@ export default function ApplicantCards({ applicantInfo }) {
             <CardUl fromLeft={fromLeft}>
               {applicantInfo.length > 0 &&
                 applicantInfo.map((applicant) => (
-                  <ApplicantCard applicant={applicant} key={applicant.nickName} cardRef={cardRef} />
+                  <ApplicantCard applicant={applicant} key={uuidv4()} cardRef={cardRef} />
                 ))}
             </CardUl>
           </CardsWarpper>

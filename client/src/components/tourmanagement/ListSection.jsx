@@ -3,6 +3,7 @@ import ListItem from './ListItem';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { openTourModal } from '../../redux/tourManagement/action';
+import { v4 as uuidv4 } from 'uuid';
 
 const ListSectionCtn = styled.ul`
   width: 100%;
@@ -22,18 +23,13 @@ export default function ListSection({ items }) {
   const dispatch = useDispatch();
   const handleTourCardClick = (el) => {
     if (el.state === 'COMPLETED') return;
-    console.log('clicked');
-    console.log(el);
     const data = { isOpen: true, modalInfo: { ...el } };
-    console.log(data);
     dispatch(openTourModal(data));
   };
   return (
     <ListSectionCtn>
       {items.map((el) => {
-        return (
-          <ListItem key={el.nickName} guideInfo={el} handleTourCardClick={handleTourCardClick} />
-        );
+        return <ListItem key={uuidv4()} guideInfo={el} handleTourCardClick={handleTourCardClick} />;
       })}
     </ListSectionCtn>
   );

@@ -96,8 +96,10 @@ export default function CreateModal(props) {
     file2: null,
     file3: null,
   });
-  const [startDate, setStartDate] = useState(new Date());
-  const [fileArray, setFileArray] = useState([]);
+  const [startDate, setStartDate] = useState(
+    new Date(new Date().setDate(new Date().getDate() + 1))
+  );
+  const [fileArray, setFileArray] = useState({ file: null, file2: null, file3: null });
   const [isGender, setIsGender] = useState(false);
   const [address, setAddress] = useState('');
   const [extraAddress, setExtraAddress] = useState('');
@@ -162,7 +164,7 @@ export default function CreateModal(props) {
       const imgFile = e.target.files[0];
       const imgUrl = URL.createObjectURL(imgFile);
       setFileUrl({ ...fileUrl, [targetId]: imgUrl });
-      setFileArray([...fileArray, e.target.files[0]]);
+      setFileArray({ ...fileArray, [targetId]: e.target.files[0] });
     }
   };
 
@@ -174,8 +176,6 @@ export default function CreateModal(props) {
   //시간 저장 함수
   const handleStartTimeChange = (e) => {
     const key = e.target.getAttribute('id');
-    console.log(key);
-    console.log(e.target.value);
     setStartTime({ ...startTime, [key]: e.target.value });
     if (key === 'stime') {
       setEndTime({ ...endTime, etime: e.target.value });
@@ -202,7 +202,6 @@ export default function CreateModal(props) {
     const iEndTime = endTime.edayNight + ' ' + endTime.etime + ':' + endTime.eminute;
     setIsGender(!isGender);
     setInputs({ ...inputs, gender: !isGender, startTime: iStartTime, endTime: iEndTime });
-    console.log(inputs);
   };
 
   const inputCheck = (checkData) => {
@@ -223,8 +222,10 @@ export default function CreateModal(props) {
       for (let key in inputs) {
         formData.append(key, inputs[key]);
       }
-      for (let el of fileArray) {
-        formData.append('file', el);
+      for (let key in fileArray) {
+        if (fileArray[key]) {
+          formData.append('file', fileArray[key]);
+        } else continue;
       }
       createGudie(formData)
         .then((res) => {

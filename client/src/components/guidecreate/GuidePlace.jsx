@@ -46,7 +46,6 @@ export default function GuidePlace(props) {
   const [isPopupOpen, setPopupOpen] = useState(false);
 
   const openPostCode = () => {
-    console.log('open');
     setPopupOpen(!isPopupOpen);
   };
 

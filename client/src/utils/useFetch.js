@@ -1,10 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getCompletedList, getExpectedList } from '../network/tourmanagement/http';
+import { useDispatch } from 'react-redux';
+import { exit } from '../redux/login/action';
+import { useNavigate } from 'react-router-dom';
 
 const useFetch = (page, isActive, sortBy, isComplete) => {
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const sendQuery = useCallback(async () => {
     setIsLoading(true);
@@ -12,7 +17,6 @@ const useFetch = (page, isActive, sortBy, isComplete) => {
       try {
         setIsLoading(true);
         const response = await getExpectedList(page, sortBy).then((res) => res.data.guideList);
-        console.log(response);
         if (!response) {
           throw new Error(`서버에 오류가 있습니다.`);
         }
@@ -24,11 +28,11 @@ const useFetch = (page, isActive, sortBy, isComplete) => {
         setHasMore(response.length === 6);
         setIsLoading(false);
       } catch (e) {
-        console.log(e);
+        dispatch(exit());
+        alert('로그인이 만료되어 로그인페이지로 이동합니다.');
+        navigate('/login');
       }
     } else if (isActive.completed) {
-      console.log(isActive.completed);
-      console.log(page);
       try {
         setIsLoading(true);
         const response = await getCompletedList(page, sortBy).then((res) => res.data.guideList);
@@ -43,10 +47,12 @@ const useFetch = (page, isActive, sortBy, isComplete) => {
         setHasMore(response.length === 6);
         setIsLoading(false);
       } catch (e) {
-        console.log(e);
+        dispatch(exit());
+        alert('로그인이 만료되어 로그인페이지로 이동합니다.');
+        navigate('/login');
       }
     }
-  }, [page, isActive.approved, isActive.completed, sortBy]);
+  }, [page, isActive.approved, isActive.completed, sortBy, dispatch, navigate]);
   useEffect(() => {
     sendQuery();
   }, [sendQuery, page, isComplete]);
