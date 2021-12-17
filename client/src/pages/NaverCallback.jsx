@@ -17,7 +17,7 @@ export default function NaverCallback() {
       .then((res) => {
         console.log(res);
         dispatch(oauthLogin());
-        navigate(-1);
+        navigate('/', { replace: true });
       })
       .catch((err) => {
         alert('로그인에 실패했습니다');

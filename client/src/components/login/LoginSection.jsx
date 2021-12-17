@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import LoginBtns from './LoginBtns';
 import LoginId from './LoginId';
@@ -11,7 +11,7 @@ const SectionBlock = styled.div`
   max-width: 100%;
 `;
 
-export default function LoginSection(props) {
+export default function LoginSection() {
   // ---- 상태정의 ----
   const state = useSelector((state) => state.loginReducer);
   const { isLogin } = state;
@@ -21,9 +21,11 @@ export default function LoginSection(props) {
   let navigate = useNavigate();
 
   // ---- navigate ----
-  if (isLogin) {
-    navigate('/');
-  }
+  useEffect(() => {
+    if (isLogin) {
+      navigate('/');
+    }
+  }, [isLogin, navigate]);
 
   // ---- 이벤트 핸들러 ----
   const handleIdChange = (e) => {

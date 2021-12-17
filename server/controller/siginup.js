@@ -59,8 +59,8 @@ module.exports = {
             from: process.env.AUTH_EMAIL,
             to: email,
             subject: '안녕하세요 triplus입니다!',
-            html: `
-            <h1>이메일 인증을 위해 '여행시작하기'를 클릭해주세요</h1><br>
+            html: `<div style="text-align: center; margin: 30px">
+            <h2>안녕하세요. ${userId}님. 이메일 인증을 위해 아래의 여행 시작하기 버튼을 눌러주세요</h2>
             <a href=${url}><button style="background: #3386f7;
               border: 1px solid #3386f7;
               color: #e9edf3;
@@ -68,7 +68,10 @@ module.exports = {
               cursor: pointer;
               font-size: 28px;
               border-radius: 5px;
-              ">여행시작하기</button></a>`,
+              ">여행시작하기</button></a>
+            <p style="
+                padding: 30px;"><img src="https://triplus-deploy.s3-ap-northeast-2.amazonaws.com/asset/logo/logo.png" width="500px" alt="triplus 로고"></p>
+            </div>`,
           };
           stmpTransport.sendMail(mailOpt, (err, res) => {
             if (err) {

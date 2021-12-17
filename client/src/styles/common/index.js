@@ -22,29 +22,7 @@ export const BorderBtn = styled.button`
   &:hover {
     background-color: ${({ palette, theme }) =>
       palette ? theme.color[palette] : theme.color['black']};
-
     color: #fff;
-
-    /* border: 1px solid ${({ theme }) => theme.color['gray']};
-    color: ${({ theme }) => theme.color['gray']};
-    ${({ palette, theme }) =>
-      palette === 'blue' &&
-      css`
-        border: 1px solid ${theme.color['lightBlue']};
-        color: ${theme.color['lightBlue']};
-      `}
-    ${({ palette, theme }) =>
-      palette === 'red' &&
-      css`
-        border: 1px solid ${theme.color['lightRed']};
-        color: ${theme.color['lightRed']};
-      `}
-    ${({ palette, theme }) =>
-      palette === 'gray' &&
-      css`
-        border: 1px solid ${theme.color['black']};
-        color: ${theme.color['black']};
-      `} */
     cursor: pointer;
   }
 `;
@@ -98,21 +76,6 @@ export const ColorBtn = styled.button`
   &:hover {
     background: none;
     color: ${({ palette, theme }) => (palette ? theme.color[palette] : theme.color['black'])};
-
-    /* border: 1px solid ${({ theme }) => theme.color['gray']};
-    background: ${({ theme }) => theme.color['gray']};
-    ${({ palette, theme }) =>
-      palette === 'blue' &&
-      css`
-        border: 1px solid ${theme.color['lightBlue']};
-        background: ${theme.color['lightBlue']};
-      `}
-    ${({ palette, theme }) =>
-      palette === 'red' &&
-      css`
-        border: 1px solid ${theme.color['lightRed']};
-        background: ${theme.color['lightRed']};
-      `} */
     cursor: pointer;
   }
 `;
