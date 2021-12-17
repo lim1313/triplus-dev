@@ -41,10 +41,6 @@ export const getCardModal = async (params) => {
 };
 
 //* POST 가이드 신청하기
-// - 204 => 예약완료
-// - 201 => 중복 신청, 이미 마감
-// - 서버에러 => 500번대
-//! 신청하기 클릭 시 status code 추가 필요
 export const rezGuide = async (guideId) => {
   return axios
     .post(`${http}/map`, { guideId })

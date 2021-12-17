@@ -81,7 +81,7 @@ export default function MyProfile({ image }) {
             setIsLoading(false);
           });
         })
-        .catch(() => {
+        .catch((err) => {
           alert('*에러가 발생했습니다. 다시 시도해 주세요.');
           setIsLoading(false);
         });

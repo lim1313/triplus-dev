@@ -4,10 +4,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useInput } from '../../../hooks/useInput';
 import { postInfo } from '../../../network/my/http';
-import { ColorBtn } from '../../../styles/common';
 import EmailModal from './EmailModal';
 import { nickValidation } from '../../../utils/validation';
 import { useError } from '../../../hooks/useError';
+import { BtnColor } from './Password';
 
 export const LiWrapper = styled.li`
   flex-grow: 1;
@@ -51,14 +51,12 @@ const DivInput = styled.div`
   word-break: break-word;
 `;
 
-const BtnColor = styled(ColorBtn)`
+const InfoColorBtn = styled(BtnColor)`
+  width: unset;
   padding: 0.1em 0.7em;
   flex-shrink: 0;
+  margin-right: unset;
   margin-left: 0.5rem;
-
-  &:hover {
-    cursor: ${({ disabled }) => disabled && 'not-allowed'};
-  }
 
   @media ${({ theme }) => theme.device.mobile} {
     margin-bottom: ${({ twoBtn }) => twoBtn && '0.5rem'};
@@ -99,7 +97,6 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user, social }) =
   const changeContent = (e) => {
     if (isChange) {
       setClickBtn(true);
-      if (title === 'e-mail' && !inputValue.length) return setIsAlert('*필수 입력 사항');
       if (title === 'nickname' && !nickValidation(inputValue))
         return setIsAlert('*3~8자리의 한글, 영문, 숫자만 가능합니다.');
 
@@ -150,14 +147,14 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user, social }) =
           <DivInput>{fixValue}</DivInput>
         )}
         {noBtn || (
-          <BtnColor
-            palette='blue'
+          <InfoColorBtn
+            palette={social ? 'gray' : 'blue'}
             onMouseDown={title === 'e-mail' ? () => setOpenModal(true) : changeContent}
             disabled={social}
             title={social && '이메일을 수정할 수 없습니다'}
           >
             {isChange ? '완료' : '수정'}
-          </BtnColor>
+          </InfoColorBtn>
         )}
         {isAlert && <AlertMsg>{isAlert}</AlertMsg>}
       </NameWrapper>

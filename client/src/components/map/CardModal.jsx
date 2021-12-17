@@ -43,7 +43,7 @@ const ModalWrapper = styled.section`
 
 const Wrapper = styled.div`
   position: relative;
-  top: -2.5rem;
+  top: -44px;
   padding: 0 1.5rem;
 `;
 
