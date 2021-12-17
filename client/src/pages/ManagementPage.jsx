@@ -69,15 +69,18 @@ export default function ManagementPage() {
       setIsCompleted(false);
     }
   };
+
   const handleCloseCreate = (e) => {
     if (e.target === e.currentTarget) {
       setOpen(false);
       setIsCompleted(false);
     }
   };
+
   const handleComplete = () => {
     setIsCompleted(true);
   };
+
   useEffect(() => {
     setIsLoading(true);
 
@@ -89,17 +92,24 @@ export default function ManagementPage() {
     }
     getGuideInfo()
       .then((res) => {
-        setGuideInfo(res.data.guideData);
-        setApplicantInfo(res.data.applicant);
-        setIsLoading(false);
+        if (res.data.message === 'accessToken이 없습니다') {
+          if (isLogin) {
+            dispatch(exit());
+            alert('로그인이 만료되어 로그인페이지로 이동합니다.');
+            navigate('/login');
+          } else {
+            setGuideInfo({});
+            setApplicantInfo([]);
+            setIsLoading(false);
+          }
+        } else {
+          setGuideInfo(res.data.guideData);
+          setApplicantInfo(res.data.applicant);
+          setIsLoading(false);
+        }
       })
       .catch((err) => {
-        setIsLoading(false);
-        if (isLogin === true) {
-          dispatch(exit());
-          alert('로그인이 만료되어 로그인페이지로 이동합니다.');
-          navigate('/login');
-        }
+        alert('잠시후에 다시 시도해주세요');
       });
   }, [pathname, isDeleted, isCompleted, dispatch, isLogin, navigate]);
   return (

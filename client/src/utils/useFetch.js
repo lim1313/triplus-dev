@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getCompletedList, getExpectedList } from '../network/tourmanagement/http';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { exit } from '../redux/login/action';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,6 +10,8 @@ const useFetch = (page, isActive, sortBy, isComplete) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isLoginState = useSelector((state) => state.loginReducer);
+  const { isLogin } = isLoginState;
 
   const sendQuery = useCallback(async () => {
     setIsLoading(true);
@@ -17,42 +19,49 @@ const useFetch = (page, isActive, sortBy, isComplete) => {
       try {
         setIsLoading(true);
         const response = await getExpectedList(page, sortBy).then((res) => res);
-        if (response.data.message === 'accessToken이 없습니다') {
+        console.log(response);
+        if (!isLogin && !response.data.guideList) {
+          setItems([]);
+        } else if (isLogin && !response.data.guideList) {
           dispatch(exit());
           alert('로그인이 만료되어 로그인페이지로 이동합니다.');
           navigate('/login');
-        }
-        if (page.approved === 1) {
-          setItems(() => [...new Set([...response])]);
         } else {
-          setItems((prev) => [...new Set([...prev, ...response])]);
+          if (page.approved === 1) {
+            setItems(() => [...new Set([...response.data.guideList])]);
+          } else {
+            setItems((prev) => [...new Set([...prev, ...response.data.guideList])]);
+          }
+          setHasMore(response.data.guideList.length === 6);
+          setIsLoading(false);
         }
-        setHasMore(response.length === 6);
-        setIsLoading(false);
       } catch (e) {
-        alert('잠시 후 다시 시도해주세요');
+        alert('잠시후에 다시 시도해주세요');
       }
     } else if (isActive.completed) {
       try {
         setIsLoading(true);
-        const response = await getCompletedList(page, sortBy).then((res) => res.data.guideList);
-        if (!response) {
-          throw new Error(`서버에 오류가 있습니다.`);
-        }
-        if (page.completed === 1) {
-          setItems(() => [...response]);
+        const response = await getCompletedList(page, sortBy).then((res) => res);
+        if (!isLogin && !response.data.guideList) {
+          setItems([]);
+        } else if (isLogin && !response.data.guideList) {
+          dispatch(exit());
+          alert('로그인이 만료되어 로그인페이지로 이동합니다.');
+          navigate('/login');
         } else {
-          setItems((prev) => [...new Set([...prev, ...response])]);
+          if (page.completed === 1) {
+            setItems(() => [...new Set([...response.data.guideList])]);
+          } else {
+            setItems((prev) => [...new Set([...prev, ...response.data.guideList])]);
+          }
+          setHasMore(response.data.guideList.length === 6);
+          setIsLoading(false);
         }
-        setHasMore(response.length === 6);
-        setIsLoading(false);
       } catch (e) {
-        dispatch(exit());
-        alert('로그인이 만료되어 로그인페이지로 이동합니다.');
-        navigate('/login');
+        alert('잠시후에 다시 시도해주세요');
       }
     }
-  }, [page, isActive.approved, isActive.completed, sortBy, dispatch, navigate]);
+  }, [page, isActive.approved, isActive.completed, sortBy, dispatch, navigate, isLogin]);
   useEffect(() => {
     sendQuery();
   }, [sendQuery, page, isComplete]);

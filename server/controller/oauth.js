@@ -218,7 +218,6 @@ module.exports = {
 
       return res.status(201).json({ success: true, message: '로그인이 완료되었습니다' });
     } catch (err) {
-      console.error(err);
       return res.status(400).send({ success: false, message: '로그인에 실패했습니다' });
     }
   },
