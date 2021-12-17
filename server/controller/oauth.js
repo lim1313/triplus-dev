@@ -7,55 +7,66 @@ const { generateAccessToken, sendAccessToken, isAuthorized } = require('./functi
 
 module.exports = {
   google: async (req, res) => {
+    return res.redirect(
+      `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URL}/googlecallback&response_type=code&scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&state=google`
+    );
+  },
+
+  googlecallback: async (req, res) => {
     const accessCode = req.body.authorizationCode;
-    const oauth2Client = new google.auth.OAuth2(
-      process.env.GOOGLE_CLIENT_ID,
-      process.env.GOOGLE_CLIENT_SECRET,
-      `${process.env.REDIRECT_URL}/googlecallback`
-    );
+    console.log(accessCode);
+    try {
+      const oauth2Client = new google.auth.OAuth2(
+        process.env.GOOGLE_CLIENT_ID,
+        process.env.GOOGLE_CLIENT_SECRET,
+        `${process.env.REDIRECT_URL}/googlecallback`
+      );
+      const { tokens } = await oauth2Client.getToken(accessCode);
 
-    const { tokens } = await oauth2Client.getToken(accessCode);
+      oauth2Client.setCredentials(tokens);
 
-    oauth2Client.setCredentials(tokens);
+      const userInfo = await axios.get(
+        `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${tokens.access_token}`
+      );
 
-    const userInfo = await axios.get(
-      `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${tokens.access_token}`
-    );
+      const { sub, email, picture } = userInfo.data;
+      let dontBreak = true;
 
-    const { sub, email, picture } = userInfo.data;
-    let dontBreak = true;
+      let uniqueNickName;
+      const nickNameData = await user.findAll({ attributes: ['nickName'] });
+      const nickNames = nickNameData.map((el) => el.dataValues.nickName);
 
-    let uniqueNickName;
-    const nickNameData = await user.findAll({ attributes: ['nickName'] });
-    const nickNames = nickNameData.map((el) => el.dataValues.nickName);
-
-    while (dontBreak) {
-      const key1 = crypto.randomBytes(256).toString('hex').substr(100, 4);
-      const randomNum = parseInt(key1, 16);
-      const nick = '여행자' + randomNum;
-      if (!nickNames.includes(nick)) {
-        uniqueNickName = nick;
-        dontBreak = false;
+      while (dontBreak) {
+        const key1 = crypto.randomBytes(256).toString('hex').substr(100, 4);
+        const randomNum = parseInt(key1, 16);
+        const nick = '여행자' + randomNum;
+        if (!nickNames.includes(nick)) {
+          uniqueNickName = nick;
+          dontBreak = false;
+        }
       }
-    }
 
-    user
-      .findOrCreate({
-        where: { userId: `${sub}@google`, email: email },
-        defaults: {
-          userId: `${sub}@google`,
-          email: email,
-          image: picture,
-          social: 'google',
-          nickName: uniqueNickName,
-        },
-      })
-      .then(([data, created]) => {
-        const accessToken = generateAccessToken(data.dataValues);
-        sendAccessToken(res, accessToken);
-        return res.status(201).json({ success: true, message: '로그인이 완료되었습니다' });
-      })
-      .catch((err) => console.log(err));
+      user
+        .findOrCreate({
+          where: { userId: `${sub}@google`, email: email },
+          defaults: {
+            userId: `${sub}@google`,
+            email: email,
+            image: picture,
+            social: 'google',
+            nickName: uniqueNickName,
+          },
+        })
+        .then(([data, created]) => {
+          const accessToken = generateAccessToken(data.dataValues);
+          sendAccessToken(res, accessToken);
+          return res.status(201).json({ success: true, message: '로그인이 완료되었습니다' });
+        })
+        .catch((err) => console.log(err));
+    } catch (err) {
+      console.log(err);
+      res.status(500).send('잠시 후 다시 시도해주세요');
+    }
   },
 
   naver: async (req, res) => {
