@@ -19,22 +19,19 @@ export const adminUser = (dataTosubmit) => (dispatch) => {
         dispatch(adminOpen());
       }
     })
-    .catch((err) => console.log(err));
+    .catch((err) => alert(err));
 };
 
 export const logoutAdminUser = () => (dispatch) => {
-  axios
-    .get(`${http}/logout`, { crossDomain: true })
-    .then((res) => {
-      if (res.data.success) {
-        dispatch({
-          type: LOGOUT_ADMIN_USER,
-          payload: { success: '', meesage: '' },
-        });
-        dispatch(adminOpen());
-      }
-    })
-    .catch((err) => console.log(err));
+  axios.get(`${http}/logout`, { crossDomain: true }).then((res) => {
+    if (res.data.success) {
+      dispatch({
+        type: LOGOUT_ADMIN_USER,
+        payload: { success: '', meesage: '' },
+      });
+      dispatch(adminOpen());
+    }
+  });
 };
 
 export const adminOpen = () => {

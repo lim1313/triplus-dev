@@ -1,5 +1,3 @@
-/*eslint-disable no-unused-vars*/
-
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import GuideContent from './cardModal/GuideContent';

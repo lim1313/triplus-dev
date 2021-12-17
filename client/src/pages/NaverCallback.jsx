@@ -15,7 +15,6 @@ export default function NaverCallback() {
   useEffect(() => {
     naverOauth(authorizationCode, state)
       .then((res) => {
-        console.log(res);
         dispatch(oauthLogin());
         navigate('/', { replace: true });
       })

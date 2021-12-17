@@ -10,7 +10,6 @@ export const createRoom = (userId) => {
     .post(`${http}/chat/rooms`, { userId })
     .then((res) => res.data)
     .catch((err) => {
-      console.log(err);
       return err.response.status;
     });
 };

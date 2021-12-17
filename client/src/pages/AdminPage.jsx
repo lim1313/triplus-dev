@@ -1,17 +1,16 @@
-/* eslint-disable no-unused-vars*/
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import dayjs from 'dayjs';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { adminUser, adminOpen, logoutAdminUser } from '../redux/admin/action';
+import { logoutAdminUser } from '../redux/admin/action';
 
 import { useNavigate } from 'react-router-dom';
 
 import ModalTemplete from '../components/admin/adminmodal/ModalTemplete';
 import Pagination from '../components/admin/Pagination';
 
-import { getGuide, cancelGuide } from '../network/admin/http';
+import { getGuide } from '../network/admin/http';
 import GuideInfoModal from '../components/admin/GuideInfoModal';
 import { BorderBtn } from '../styles/common';
 
@@ -145,9 +144,7 @@ export default function AdminPage() {
   }, [currentPage, isOpen]);
 
   const getGuideInfo = (e) => {
-    console.log(e.target.id);
     const selectedGuide = guideList.filter((el) => el.guideId === Number(e.target.id))[0];
-    console.log(selectedGuide);
     setSelectedGuide(selectedGuide);
     setOpenModal(true);
   };

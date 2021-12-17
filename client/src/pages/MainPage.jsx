@@ -166,14 +166,13 @@ export default function MainPage() {
   useEffect(() => {
     isLoginMain()
       .then((res) => {
-        console.log(res.data.isLogin);
         if (res.data.isLogin) setIsLogin(true);
         else {
           dispatch(exit());
           setIsLogin(false);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => alert(err));
   }, [navBarLogout]);
 
   useEffect(() => {
@@ -182,7 +181,6 @@ export default function MainPage() {
     window.addEventListener('scroll', scrollEventListener);
     window.addEventListener('resize', () => {
       const mobileSize = window.matchMedia('screen and (max-width: 768px)').matches;
-      console.log('mobileSize', mobileSize);
       if (mobileSize) setIsMobile(true);
       else setIsMobile(false);
     });

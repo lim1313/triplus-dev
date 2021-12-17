@@ -1,5 +1,3 @@
-/*eslint-disable no-unused-vars*/
-
 import { getDday } from './dDay';
 
 const { kakao } = window;
@@ -65,7 +63,6 @@ export const createMarker = (positions, map, clickMarker) => {
     markers[position.guideId] = marker;
 
     let svgMarker = document.querySelector(`._${position.guideId}`);
-    // if (!svgMarker) console.log('null');
 
     if (svgMarker) {
       svgMarker.addEventListener('mouseenter', () => overlays[position.guideId].setMap(map));

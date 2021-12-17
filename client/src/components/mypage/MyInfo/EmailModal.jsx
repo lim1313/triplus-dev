@@ -1,5 +1,3 @@
-/*eslint-disable no-unused-vars*/
-
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useError } from '../../../hooks/useError';
@@ -98,7 +96,6 @@ export default function EmailModal({ clickModal }) {
     } else {
       //TODO /my/email
       postInfo({ email: newEmail, verifyKey: verifyNum }, 'email').then((res) => {
-        console.log(res);
         if (res === 401) return isError();
         else if (res >= 500) {
           alert('오류가 발생했습니다. 다시 시도해 주세요');

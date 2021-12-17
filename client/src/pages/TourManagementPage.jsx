@@ -67,7 +67,6 @@ export default function TourManagementPage() {
     setPageNum({ approved: 1, completed: 1 });
   };
   const handleFilterChange = (e) => {
-    console.log(e.target.value);
     const filter = e.target.value;
     if (filter === '날짜 느린순') {
       setSortBy('DESC');

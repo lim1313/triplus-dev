@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars*/
 const usePaginate = ({ totalPageLength, currentPage, changePageHandler, disabled }) => {
   const range = (start, end) => {
     const length = end - start + 1;

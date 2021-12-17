@@ -61,7 +61,6 @@ export const postEmailCheck = (data) => {
   return axios
     .post(`${http}/my/email-check`, { data })
     .then((res) => {
-      console.log(res);
       return res.status;
     })
     .catch((err) => err.response.status);
