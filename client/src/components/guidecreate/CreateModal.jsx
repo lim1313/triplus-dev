@@ -80,7 +80,7 @@ export default function CreateModal(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [inputs, setInputs] = useState({
     title: '',
-    date: '',
+    date: new Date(new Date().setDate(new Date().getDate() + 1)),
     address: '',
     gender: false,
     startTime: '',
