@@ -19,7 +19,6 @@ module.exports = {
 
   createGuideCard: async (req, res) => {
     const resObject = await createGuideCard(req);
-    console.log(resObject);
     res.status(resObject.code).send(resObject.message);
   },
 

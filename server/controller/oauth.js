@@ -14,7 +14,6 @@ module.exports = {
 
   googlecallback: async (req, res) => {
     const accessCode = req.body.authorizationCode;
-    console.log(accessCode);
     try {
       const oauth2Client = new google.auth.OAuth2(
         process.env.GOOGLE_CLIENT_ID,
@@ -82,8 +81,6 @@ module.exports = {
       const result = await axios.get(
         `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${process.env.NAVER_CLIENT_ID}&client_secret=${process.env.NAVER_CLIENT_SECRET}&code=${authorizationCode}&state=${state}`
       );
-
-      console.log(result);
 
       const userInfo = await axios.get('https://openapi.naver.com/v1/nid/me', {
         headers: {

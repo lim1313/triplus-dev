@@ -11,7 +11,6 @@ router.put('/change-state-rejected', controller.changeStateRejected);
 router.put('/change-state-completed', controller.changeStateCompleted);
 router.put('/change-state-canceled', controller.changeStateCanceled);
 router.get('/guide', controller.selectGuideCardByUserId);
-// router.get('/tourlist/all');
 router.get('/tourlist/expected', controller.findGuideUserApproved);
 router.get('/tourlist/completed', controller.findGuideUserCompleted);
 router.post('/tourlist/cancel', controller.participateCanceled);

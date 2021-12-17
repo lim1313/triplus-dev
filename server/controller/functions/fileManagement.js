@@ -13,7 +13,6 @@ const upload = multer({
     s3: s3,
     bucket: process.env.TRIPLUS_S3_BUCKET_NAME,
     key: function (req, file, cb) {
-      // let extension = path.extname(file.originalname);
       cb(null, `asset/images/` + Date.now().toString() + file.originalname);
     },
     acl: 'public-read-write',
@@ -21,11 +20,5 @@ const upload = multer({
 });
 
 module.exports = {
-  fileUploadMulti: (req, res) => {
-    console.log(req.files);
-    console.log(req.body);
-
-    res.status(200).send('등록완료 후, 작업 시작');
-  },
   upload,
 };

@@ -103,7 +103,7 @@ module.exports = {
 
     try {
       if (!accessToken) {
-        resObject['code'] = 401;
+        resObject['code'] = 200;
         throw 'accessToken이 없습니다';
       }
 
@@ -195,7 +195,7 @@ module.exports = {
 
     try {
       if (!accessToken) {
-        resObject['code'] = 401;
+        resObject['code'] = 200;
         throw 'accessToken이 없습니다';
       }
 

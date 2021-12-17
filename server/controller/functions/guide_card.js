@@ -43,7 +43,6 @@ const checkParams = (params) => {
         setParams[`state`] = params[param];
       }
     }
-    console.log(setParams);
     return setParams;
   } catch (error) {
     console.log(error);
@@ -52,7 +51,6 @@ const checkParams = (params) => {
 
 module.exports = {
   createGuideCard: async (req) => {
-    console.log(req.files);
     let resObject = {};
     const insertValue = checkParams(req.body);
     const accessToken = isAuthorized(req);
