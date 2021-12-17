@@ -3,13 +3,15 @@ import styled from 'styled-components';
 import { ColorBtn } from '../../../styles/common';
 import PwModal from './PwModal';
 
-const BtnColor = styled(ColorBtn)`
+export const BtnColor = styled(ColorBtn)`
   padding: 0.1em 1.1em;
   width: 50%;
   margin-right: ${({ marginRight }) => marginRight && '0.5rem'};
 
   &:hover {
     cursor: ${({ disabled }) => disabled && 'not-allowed'};
+    color: #fff;
+    background: ${({ theme }) => theme.color.gray};
   }
 `;
 
@@ -19,6 +21,7 @@ export default function Password({ social }) {
   return (
     <>
       <BtnColor
+        palette={social && 'gray'}
         marginRight
         onClick={() => setOpenModal(true)}
         disabled={social}

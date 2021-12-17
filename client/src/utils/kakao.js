@@ -100,15 +100,17 @@ export const createMarker = (positions, map, clickMarker) => {
       yAnchor: -0.3,
     });
 
-    let svgMarker = document.querySelector(`._${position.guideId}`);
-    console.log(svgMarker);
-    svgMarker.addEventListener('mouseenter', () => overlays[position.guideId].setMap(map));
-    svgMarker.addEventListener('mouseleave', () => overlays[position.guideId].setMap(null));
-    svgMarker.addEventListener('click', () => clickMarker(positions[i].guideId));
-
     overlays[position.guideId] = overlay;
     overlay.setMap(null);
     markers[position.guideId] = marker;
+
+    let svgMarker = document.querySelector(`._${position.guideId}`);
+    // if (!svgMarker) console.log('nulllll');
+    if (svgMarker) {
+      svgMarker.addEventListener('mouseenter', () => overlays[position.guideId].setMap(map));
+      svgMarker.addEventListener('mouseleave', () => overlays[position.guideId].setMap(null));
+      svgMarker.addEventListener('click', () => clickMarker(positions[i].guideId));
+    }
   }
 };
 //yeji 20211216

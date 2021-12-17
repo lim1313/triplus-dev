@@ -141,6 +141,7 @@ module.exports = {
 
     try {
       whereGuideCard[Op.and].push({ state: { [Op.ne]: GLOBAL_VARIABLE.CANCELED } });
+      whereGuideCard[Op.and].push({ state: { [Op.ne]: GLOBAL_VARIABLE.COMPLETED } });
       if (params['swLat']) {
         whereGuideCard[Op.and].push({ latitude: { [Op.gte]: params['swLat'] } });
       }
@@ -178,18 +179,10 @@ module.exports = {
     try {
       await guide_card
         .findAll({
-          include: [
-            {
-              model: user,
-              attributes: ['nickName', 'gender', 'image'],
-              where: whereUser,
-            },
-            {
-              model: guide_image,
-            },
-          ],
-          where: whereGuideCard,
-        })
+          where: {
+            state: GLOBAL_VARIABLE.APPROVED,
+          }},
+        )
         .then(async (result) => {
           for (let guideCard of result) {
             if (guideCard.dataValues.guideDate < new Date()) {
@@ -372,7 +365,7 @@ module.exports = {
         order: [['createdAt', 'DESC']],
       });
 
-      if (!guideCard || guideCard.state === 'CANCELED') {
+      if (!guideCard || guideCard.state === GLOBAL_VARIABLE.CANCELED || guideCard.state === GLOBAL_VARIABLE.COMPLETED) {
         throw '진행 중인 가이드가 없습니다';
       }
 
