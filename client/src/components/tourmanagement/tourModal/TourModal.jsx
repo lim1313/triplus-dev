@@ -185,8 +185,10 @@ export default function TourModal({ modalInfo }) {
     const isCreated = await createRoom(guideUserId);
 
     if (isCreated.data) {
+      dispatch(openTourModal({ isOpen: false, modalInfo: {} }));
       navigate('/chat');
     } else {
+      dispatch(openTourModal({ isOpen: false, modalInfo: {} }));
       alert(isCreated);
     }
   };

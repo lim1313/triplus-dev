@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Loading from '../common/Loading';
 import CardModal from './CardModal';
 import CardBar from './sideBar/CardBar';
+// import SpinLoading from '../common/SpinLoading';
 
 const SideWrapper = styled.aside`
   position: relative;
@@ -24,6 +25,7 @@ export default function SideBar({ isLoading }) {
   return (
     <SideWrapper>
       {isLoading ? <Loading isMap /> : <CardBar />}
+      {/* {isLoading ? <SpinLoading /> : <CardBar />} */}
       {isOpen && <CardModal modalInfo={modalInfo} />}
     </SideWrapper>
   );
