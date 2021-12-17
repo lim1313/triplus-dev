@@ -81,10 +81,10 @@ export default function CheckModal({ openMsg, closeCheckModal }) {
             <>
               <Content>로그인 후 이용이 가능합니다</Content>
               <BtnWrapper>
-                <SelectBtn onClick={yesClick} width>
+                <SelectBtn onClick={yesClick} width={1}>
                   로그인
                 </SelectBtn>
-                <SelectBtn onClick={closeCheckModal} width>
+                <SelectBtn onClick={closeCheckModal} width={1}>
                   취소
                 </SelectBtn>
               </BtnWrapper>

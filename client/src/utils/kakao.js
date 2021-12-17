@@ -24,46 +24,6 @@ export const deleteMarker = () => {
 
 //* 마커 생성
 export const createMarker = (positions, map, clickMarker) => {
-  // // 마커 이미지 / 이미지 크기 / 마커 이미지 생성
-  // let imageSrc = '/asset/loading/loading4.png';
-  // let imageSize = new kakao.maps.Size(35, 35);
-  // let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-  // // 새로운 마커 생성
-  // for (let i = 0; i < positions.length; i++) {
-  //   let position = positions[i];
-  //   let marker = new kakao.maps.Marker({
-  //     map, // 마커를 표시할 지도
-  //     position: new kakao.maps.LatLng(position.latitude, position.longitude), // 마커를 표시할 위치
-  //     image: markerImage, // 마커 이미지
-  //     clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정
-  //   });
-  //   let overlay = new kakao.maps.CustomOverlay({
-  //     map,
-  //     content: `<div class="infowindow">
-  //     <div class="dday">D - ${getDday(positions[i].guideDate)}</div>
-  //     <div class="wrapper">
-  //       <div class="title">${positions[i].title}</div>
-  //       <div  class="content">${
-  //         positions[i].content.length > 20
-  //           ? positions[i].content.slice(0, 20) + '...'
-  //           : positions[i].content
-  //       }</div>
-  //     </div>
-  //     </div>
-  //     `,
-  //     position: marker.getPosition(),
-  //     xAnchor: 0.5,
-  //     yAnchor: 0.02,
-  //   });
-  //   overlays[position.guideId] = overlay;
-  //   overlay.setMap(null);
-  //   kakao.maps.event.addListener(marker, 'mouseover', () => overlay.setMap(map));
-  //   kakao.maps.event.addListener(marker, 'mouseout', () => overlay.setMap(null));
-  //   kakao.maps.event.addListener(marker, 'click', () => clickMarker(positions[i].guideId));
-  //   markers[position.guideId] = marker;
-  // }
-  //!----------------
-
   // 새로운 마커 생성
   for (let i = 0; i < positions.length; i++) {
     let position = positions[i];
@@ -105,7 +65,8 @@ export const createMarker = (positions, map, clickMarker) => {
     markers[position.guideId] = marker;
 
     let svgMarker = document.querySelector(`._${position.guideId}`);
-    // if (!svgMarker) console.log('nulllll');
+    // if (!svgMarker) console.log('null');
+
     if (svgMarker) {
       svgMarker.addEventListener('mouseenter', () => overlays[position.guideId].setMap(map));
       svgMarker.addEventListener('mouseleave', () => overlays[position.guideId].setMap(null));
@@ -113,4 +74,5 @@ export const createMarker = (positions, map, clickMarker) => {
     }
   }
 };
-//yeji 20211216
+
+//yeji 20211217

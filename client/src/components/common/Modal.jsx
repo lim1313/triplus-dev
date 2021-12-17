@@ -67,6 +67,7 @@ export default function Modal({
 // 2) content : 모달 창 안의 title
 // 3) yesClick, noClick : 확인, 취소 클릭 이벤트
 // 4) width : 모달창의 custom 넓이
+// 4) heigth : 모달창의 custom 높이
 // 5) onlyOne : 확인 버튼만 필요한 경우
 // 5) firstBtn : 첫번째 btn value
 // 5) secondBtn : 두번째 btn value

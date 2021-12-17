@@ -28,7 +28,7 @@ export const ModalBtn = styled(ColorBtn)`
   }
 
   ${({ theme, state, completed, disabled }) =>
-    (completed || state === 'COMPLETED' || disabled) &&
+    (completed || state === 'FULL' || disabled) &&
     css`
       color: #fff;
       background-color: ${theme.color.gray};
@@ -56,7 +56,7 @@ export default function GuideBtn({
   const [isError] = useError();
 
   const clickGuideBtn = (id, state) => {
-    if (state === 'COMPLETED') return;
+    if (state === 'FULL') return;
     if (!isLogin) return cardModalResult('login');
 
     //TODO POST 가이드 신청
@@ -82,7 +82,6 @@ export default function GuideBtn({
       }, 2000);
     });
   };
-  console.log(loginId, userId);
 
   return (
     <ModalBottomBtn>
@@ -97,7 +96,7 @@ export default function GuideBtn({
           state={state}
           disabled={loginId === userId}
         >
-          {state === 'COMPLETED' ? '예약마감' : '신청하기'}
+          {state === 'FULL' ? '예약마감' : '신청하기'}
         </ModalBtn>
       )}
       <Chatting userId={userId} state={state} loginId={loginId} cardModalResult={cardModalResult} />

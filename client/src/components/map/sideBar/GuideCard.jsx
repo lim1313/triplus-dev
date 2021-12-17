@@ -16,7 +16,7 @@ export const CardLi = styled.li`
   border-radius: 8px;
   overflow: hidden;
   background-color: white;
-  filter: ${({ state }) => (state === 'COMPLETED' || state === 'CANCELED') && 'grayscale(100%)'};
+  filter: ${({ state }) => (state === 'FULL' || state === 'CANCELED') && 'grayscale(100%)'};
   position: relative;
   box-shadow: 0px 0px 9px -1px rgba(46, 46, 46, 0.57);
 
@@ -101,19 +101,26 @@ export const TitleWrapper = styled.div`
   & .title {
     position: relative;
     color: #fff;
-    text-align: right;
-    margin: 0;
     text-shadow: 0 0 5px black;
     word-break: keep-all;
+    text-align: right;
+    margin: 0;
   }
 
   @media ${({ theme }) => theme.device.mobile} {
     align-items: unset;
-    justify-content: center;
+    justify-content: start;
 
     & .date,
     & .title {
       margin: unset;
+    }
+
+    & .titleWrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
     }
 
     & .title {
@@ -228,8 +235,10 @@ export default function GuideCard({ cardInfo, ulRef, scroll }) {
     >
       <div className='imageWrapper lazy' ref={cardRef} />
       <TitleWrapper dday={dDay}>
-        <div className='date'>{state === 'COMPLETED' ? '예약마감' : `D - ${dDay}`}</div>
-        <h2 className='title'>{title}</h2>
+        <div className='date'>{state === 'FULL' ? '예약마감' : `D - ${dDay}`}</div>
+        <div className='titleWrapper'>
+          <h2 className='title'>{title}</h2>
+        </div>
       </TitleWrapper>
       <GuideWrapper>
         <GuideInfo>
