@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { ColorBtn } from '../../../styles/common';
 import PwModal from './PwModal';
 
@@ -8,11 +8,17 @@ export const BtnColor = styled(ColorBtn)`
   width: 50%;
   margin-right: ${({ marginRight }) => marginRight && '0.5rem'};
 
-  &:hover {
-    cursor: ${({ disabled }) => disabled && 'not-allowed'};
-    color: #fff;
-    background: ${({ theme }) => theme.color.gray};
-  }
+  ${({ disabled }) => {
+    disabled &&
+      css`
+        &:hover {
+          cursor: ${({ disabled }) => disabled && 'not-allowed'};
+          color: #fff;
+          background: ${({ theme }) => theme.color.gray};
+          border: 1px solid ${({ theme }) => theme.color.gray};
+        }
+      `;
+  }}
 `;
 
 export default function Password({ social }) {

@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars*/
+
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -53,14 +55,16 @@ export default function PwModal({ closeModal }) {
       setIsLoading(true);
       //TODO 새로운 비밀번호 갱신
       putPassword({ oldPassword: currentPw, password: newPw }).then((res) => {
+        console.log(res);
         if (res === 401) return isError();
         else if (res === 201) {
           // 201 성공적으로 수행
-          navigate('/login', {
-            state: { logout: '비밀번호가 변경되어, 로그아웃되었습니다' },
+          setIsLoading(false);
+          navigate('/mypage', {
+            state: { logout: true },
             replace: true,
           });
-          dispatch(exit());
+          return;
         } else if (res === 400) {
           // 현재 비밀번호를 잘못 작성
           setAlertMsg1('*현재 비밀번호가 일치하지 않습니다');

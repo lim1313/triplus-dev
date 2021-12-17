@@ -59,7 +59,9 @@ export default function WithdrawModal({ closeModal, social }) {
   const inputRef = useRef();
 
   useEffect(() => {
-    inputRef.current.focus();
+    if (!social) {
+      inputRef.current.focus();
+    }
   }, []);
 
   const withdrawUser = () => {

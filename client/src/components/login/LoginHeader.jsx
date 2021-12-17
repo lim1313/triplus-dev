@@ -25,7 +25,7 @@ export default function LoginHeader() {
   return (
     <HeaderBlock>
       <img src='/asset/logo/logo.png' alt='로고' />
-      {state && <AlertMsg>{state.logout}</AlertMsg>}
+      {state && <AlertMsg>{state}</AlertMsg>}
     </HeaderBlock>
   );
 }
