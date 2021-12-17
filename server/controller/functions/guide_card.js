@@ -179,8 +179,8 @@ module.exports = {
         .findAll({
           where: {
             state: GLOBAL_VARIABLE.APPROVED,
-          }},
-        )
+          },
+        })
         .then(async (result) => {
           for (let guideCard of result) {
             if (guideCard.dataValues.guideDate < new Date()) {
@@ -349,7 +349,7 @@ module.exports = {
       }
     } catch (error) {
       console.log(`ERROR: ${error}`);
-      resObject['code'] = 401;
+      resObject['code'] = 200;
       resObject['message'] = error;
       return resObject;
     }
@@ -363,7 +363,11 @@ module.exports = {
         order: [['createdAt', 'DESC']],
       });
 
-      if (!guideCard || guideCard.state === GLOBAL_VARIABLE.CANCELED || guideCard.state === GLOBAL_VARIABLE.COMPLETED) {
+      if (
+        !guideCard ||
+        guideCard.state === GLOBAL_VARIABLE.CANCELED ||
+        guideCard.state === GLOBAL_VARIABLE.COMPLETED
+      ) {
         throw '진행 중인 가이드가 없습니다';
       }
 

@@ -18,44 +18,47 @@ const useFetch = (page, isActive, sortBy, isComplete) => {
     if (isActive.approved) {
       try {
         setIsLoading(true);
-        const response = await getExpectedList(page, sortBy).then((res) => res.data.guideList);
-        if (!response) {
-          throw new Error(`서버에 오류가 있습니다.`);
-        }
-        if (page.approved === 1) {
-          setItems(() => [...new Set([...response])]);
-        } else {
-          setItems((prev) => [...new Set([...prev, ...response])]);
-        }
-        setHasMore(response.length === 6);
-        setIsLoading(false);
-      } catch (e) {
-        if (isLogin) {
+        const response = await getExpectedList(page, sortBy).then((res) => res);
+        console.log(response);
+        if (!isLogin && !response.data.guideList) {
+          setItems([]);
+        } else if (isLogin && !response.data.guideList) {
           dispatch(exit());
           alert('로그인이 만료되어 로그인페이지로 이동합니다.');
           navigate('/login');
+        } else {
+          if (page.approved === 1) {
+            setItems(() => [...new Set([...response.data.guideList])]);
+          } else {
+            setItems((prev) => [...new Set([...prev, ...response.data.guideList])]);
+          }
+          setHasMore(response.data.guideList.length === 6);
+          setIsLoading(false);
         }
+      } catch (e) {
+        alert('잠시후에 다시 시도해주세요');
       }
     } else if (isActive.completed) {
       try {
         setIsLoading(true);
-        const response = await getCompletedList(page, sortBy).then((res) => res.data.guideList);
-        if (!response) {
-          throw new Error(`서버에 오류가 있습니다.`);
-        }
-        if (page.completed === 1) {
-          setItems(() => [...response]);
-        } else {
-          setItems((prev) => [...new Set([...prev, ...response])]);
-        }
-        setHasMore(response.length === 6);
-        setIsLoading(false);
-      } catch (e) {
-        if (isLogin) {
+        const response = await getCompletedList(page, sortBy).then((res) => res);
+        if (!isLogin && !response.data.guideList) {
+          setItems([]);
+        } else if (isLogin && !response.data.guideList) {
           dispatch(exit());
           alert('로그인이 만료되어 로그인페이지로 이동합니다.');
           navigate('/login');
+        } else {
+          if (page.completed === 1) {
+            setItems(() => [...new Set([...response.data.guideList])]);
+          } else {
+            setItems((prev) => [...new Set([...prev, ...response.data.guideList])]);
+          }
+          setHasMore(response.data.guideList.length === 6);
+          setIsLoading(false);
         }
+      } catch (e) {
+        alert('잠시후에 다시 시도해주세요');
       }
     }
   }, [page, isActive.approved, isActive.completed, sortBy, dispatch, navigate, isLogin]);
