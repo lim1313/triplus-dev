@@ -151,7 +151,7 @@ const guideList = await guide_user_participate.findAll({
         guidePushData['address'] = guideCard['address'];
         guidePushData['openDate'] = guideCard['openDate'];
         guidePushData['state'] = guideCard['state'];
-        guidePushData['userId'] = guideCardWriter['userId'];
+        guidePushData['userId'] = guideCard['userId'];
         guidePushData['nickName'] = guideCardWriter['nickName'];
         guidePushData['gender'] = guideCardWriter['gender'];
         if (guideCardWriter['image']) {
