@@ -107,34 +107,37 @@ module.exports = {
         throw 'accessToken이 없습니다';
       }
 
-const guideList = await guide_user_participate.findAll({
-        subQuery: false,
-        where: {
-          userId: accessToken.userId,
-        },
-        include: [
-          {
-            model: guide_card,
-            where: {
-              state: {[Op.ne]: GLOBAL_VARIABLE.COMPLETED},
-            },
-            include: [
-              {
-                model: guide_image,
-              }, {
-                model: user,
-                attributes: ['nickName', 'gender', 'image'],
-              },
-            ],
+      const guideList = await guide_user_participate
+        .findAll({
+          subQuery: false,
+          where: {
+            userId: accessToken.userId,
           },
-        ],
-        order: [[guide_card, 'guideDate', req.query.sortBy]],
-        offset: pages * 6 - 6,
-        limit: 6,
-      }).catch(error => {
-        console.log(error);
-        resObject['code'] = 200;
-      });
+          include: [
+            {
+              model: guide_card,
+              where: {
+                state: { [Op.ne]: GLOBAL_VARIABLE.COMPLETED },
+              },
+              include: [
+                {
+                  model: guide_image,
+                },
+                {
+                  model: user,
+                  attributes: ['nickName', 'gender', 'image'],
+                },
+              ],
+            },
+          ],
+          order: [[guide_card, 'guideDate', req.query.sortBy]],
+          offset: pages * 6 - 6,
+          limit: 6,
+        })
+        .catch((error) => {
+          console.log(error);
+          resObject['code'] = 200;
+        });
 
       const guideCardData = [];
       for (let guideItem of guideList) {
@@ -151,7 +154,7 @@ const guideList = await guide_user_participate.findAll({
         guidePushData['address'] = guideCard['address'];
         guidePushData['openDate'] = guideCard['openDate'];
         guidePushData['state'] = guideCard['state'];
-        guidePushData['userId'] = guideCardWriter['userId'];
+        guidePushData['userId'] = guideCard['userId'];
         guidePushData['nickName'] = guideCardWriter['nickName'];
         guidePushData['gender'] = guideCardWriter['gender'];
         if (guideCardWriter['image']) {
@@ -301,24 +304,27 @@ const guideList = await guide_user_participate.findAll({
 
     const guideUser = await guide_user_participate.findAll({
       where: {
-        guideId: req.body.guideId
-      }
+        guideId: req.body.guideId,
+      },
     });
 
     const guideCard = await guide_card.findOne({
       where: {
-        guideId: req.body.guideId
-      }
+        guideId: req.body.guideId,
+      },
     });
 
-    if(guideCard.numPeople > guideUser.length && guideCard.state === GLOBAL_VARIABLE.FULL){
-      await guide_card.update({
-        state: GLOBAL_VARIABLE.APPROVED
-      }, {
-        where: {
-          guideId: req.body.guideId
+    if (guideCard.numPeople > guideUser.length && guideCard.state === GLOBAL_VARIABLE.FULL) {
+      await guide_card.update(
+        {
+          state: GLOBAL_VARIABLE.APPROVED,
+        },
+        {
+          where: {
+            guideId: req.body.guideId,
+          },
         }
-      });
+      );
     }
 
     resObject['code'] = 200;

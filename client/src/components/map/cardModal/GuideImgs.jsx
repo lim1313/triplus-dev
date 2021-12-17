@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import GuideImg from './GuideImg';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { CardModalSubTitle } from '../../../styles/map/card';
+import { v4 as uuid4 } from 'uuid';
 
 const Wrapper = styled.div`
   height: 220px;
@@ -66,7 +67,7 @@ export default function GuideImgs({ tourImage }) {
       <Wrapper>
         <ImgWrapper>
           <ImgUL fromLeft={fromLeft}>
-            {tourImage && tourImage.map((img, i) => <GuideImg key={i} img={img} index={i} />)}
+            {tourImage && tourImage.map((img) => <GuideImg key={uuid4()} img={img} />)}
           </ImgUL>
         </ImgWrapper>
         <MoveBtn left onClick={() => moveImg('l')}>
