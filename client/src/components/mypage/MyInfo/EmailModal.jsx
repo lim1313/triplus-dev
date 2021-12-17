@@ -1,6 +1,6 @@
 /*eslint-disable no-unused-vars*/
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useError } from '../../../hooks/useError';
 import { useInput } from '../../../hooks/useInput';
