@@ -23,6 +23,4 @@ const upload = multer({
   })
 });
 
-router.post('/guide-image', upload.array('file'), controller.fileUploadMulti);
-
 module.exports = router;

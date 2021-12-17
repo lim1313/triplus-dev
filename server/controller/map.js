@@ -14,7 +14,6 @@ module.exports = {
     res.status(resObject.code).json({
       message: resObject.message,
       guideCardList: resObject.guideCardList,
-      // userId: resObject.userId,
     });
   },
 
