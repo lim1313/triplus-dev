@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars*/
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
@@ -192,7 +191,7 @@ export default function ChatRoom({ sendMessageHandler }) {
   const [msg, setMsg] = useState('');
 
   const chatBubble = useSelector((state) => state.chatListReducer.chatList);
-  const { userId, nickname } = useSelector((state) => state.chatUserInfoReducer);
+  const { userId } = useSelector((state) => state.chatUserInfoReducer);
   const chatRooms = useSelector((state) => state.chatUserInfoReducer.chatRooms);
   const currentRoom = useSelector((state) => state.currentRoomReducer.currentRoom);
 

@@ -25,7 +25,7 @@ module.exports = {
         throw '해당 유저가 없습니다';
       }
     } catch (error) {
-      console.log(`ERROR: ${error}`);
+      console.log(error);
       return resObject;
     }
 

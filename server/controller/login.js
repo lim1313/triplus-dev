@@ -29,6 +29,7 @@ module.exports = {
         return res.status(201).json({ success: true, message: '로그인이 완료되었습니다' });
       } catch (err) {
         console.log(err);
+        return res.status(500).send('잠시 후에 다시 시도해주세요');
       }
     } else {
       // const verify = await user_verify.findOne({ where: { user_id: userId } });

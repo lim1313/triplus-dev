@@ -21,6 +21,7 @@ module.exports = {
         process.env.GOOGLE_CLIENT_SECRET,
         `${process.env.REDIRECT_URL}/googlecallback`
       );
+
       const { tokens } = await oauth2Client.getToken(accessCode);
 
       oauth2Client.setCredentials(tokens);
