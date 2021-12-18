@@ -53,12 +53,12 @@ const BtnColor = styled(ColorBtn)`
   padding: 0.1em 0.7em;
   flex-shrink: 0;
   margin-left: 0.5rem;
-  background: ${({ disabled, theme }) => disabled && theme.color.gray};
-  border: 1px solid ${({ theme }) => theme.color.gray};
 
   ${({ disabled }) =>
     disabled &&
     css`
+      background: ${({ theme }) => theme.color.gray};
+      border: 1px solid ${({ theme }) => theme.color.gray};
       &:hover {
         cursor: not-allowed;
         color: #fff;
@@ -111,13 +111,14 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user, social }) =
         return setIsAlert('*3~8자리의 한글, 영문, 숫자만 가능합니다.');
 
       // TODO POST /개인정보 변경
-      postInfo(inputValue, title).then((res) => {
+      postInfo(inputValue.trim(), title).then((res) => {
         if (res === 401) return isError();
         else if (res === 204) {
           setClickBtn(false);
           return setIsAlert(`*이미 존재하는 ${title === 'nickname' ? '닉네임' : title}입니다.`);
         } else if (res === 201) {
-          setFixValue(inputValue);
+          setFixValue(inputValue.trim());
+          setInputValue(inputValue.trim());
         } else {
           setInputValue(fixValue);
           alert('에러가 발생했습니다. 다시 시도해 주세요.');

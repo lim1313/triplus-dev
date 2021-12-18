@@ -1,13 +1,9 @@
-/* eslint-disable no-unused-vars*/
-
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import { useError } from '../../../hooks/useError';
 import { useInput } from '../../../hooks/useInput';
 import { putPassword } from '../../../network/my/http';
-import { exit } from '../../../redux/login/action';
 import { ModalTitle } from '../../../styles/common/modal';
 import { pwValidaton } from '../../../utils/validation';
 import Modal, { BtnWrapper, SelectBtn } from '../../common/Modal';
@@ -38,7 +34,6 @@ export default function PwModal({ closeModal }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const [isError] = useError();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const submitPw = () => {

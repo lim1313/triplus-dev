@@ -1,11 +1,16 @@
 import React from 'react';
+import styled from 'styled-components';
 import { CardModalSubTitle } from '../../../styles/map/card';
+
+const CardModalContent = styled.div`
+  white-space: pre-line;
+`;
 
 export function GuideContentWrapper({ title, content }) {
   return (
     <div>
       <CardModalSubTitle>{title}</CardModalSubTitle>
-      <div>{content}</div>
+      <CardModalContent>{content}</CardModalContent>
     </div>
   );
 }
