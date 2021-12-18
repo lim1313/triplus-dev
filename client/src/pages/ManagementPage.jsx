@@ -151,7 +151,7 @@ export default function ManagementPage() {
       {isAlertOpen && <AlertModal content={'여행 하루전에는 취소가 불가능합니다.'} />}
       {OpenLoginModal && (
         <LoginModal
-          content={'로그인된 여행자님만 이용가능합니다. 로그인하시겠습니까?'}
+          content={'로그인이 필요한 서비스입니다.'}
           noClick={() => {
             setOpenLoginModal(false);
           }}

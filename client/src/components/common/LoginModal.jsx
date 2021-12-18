@@ -24,22 +24,15 @@ export const SelectBtn = styled(ColorBtn)`
 `;
 
 export default function LoginModal({ yesClick, noClick, children, width }) {
-  const spanStyle = {
-    color: '#3386f7',
-    fontWeight: 'bold',
-  };
   return (
     <Background>
       <ModalWrapper width={width}>
         {children || (
           <>
-            <ModalTitle>
-              <span style={spanStyle}>로그인된 여행자님만</span> 이용이 가능합니다.
-              <br /> 로그인 하시겠습니까?
-            </ModalTitle>
+            <ModalTitle>로그인 후 이용이 가능합니다</ModalTitle>
             <BtnWrapper>
-              <SelectBtn onClick={yesClick}>네, 로그인할래요!</SelectBtn>
-              <SelectBtn onClick={noClick}>괜찮아요!</SelectBtn>
+              <SelectBtn onClick={yesClick}>로그인</SelectBtn>
+              <SelectBtn onClick={noClick}>취소</SelectBtn>
             </BtnWrapper>
           </>
         )}

@@ -64,7 +64,7 @@ module.exports = {
       insertValue['state'] = GLOBAL_VARIABLE.APPROVED;
     } catch (error) {
       console.log(`ERROR: ${error}`);
-      resObject['code'] = 401;
+      resObject['code'] = 200;
       resObject['message'] = error;
       return resObject;
     }
