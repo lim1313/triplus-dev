@@ -60,6 +60,7 @@ export default function GuideDate(props) {
         selected={startDate}
         placeholderText='날짜를 선택하세요'
         onChange={handleDateChange}
+        value={startDate}
         dateFormat='yyyy.MM.dd'
         minDate={new Date(new Date().setDate(new Date().getDate() + 1))}
         inline
