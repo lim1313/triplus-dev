@@ -150,16 +150,20 @@ const NoSelectRoom = styled.div`
   justify-content: center;
   align-items: center;
   background-color: #e9ebf6;
-  font-size: 1.5rem;
   color: ${({ theme }) => theme.color.darkGray};
   border: 1px solid #aeb8c2;
   @media ${({ theme }) => theme.device.mobile} {
     height: calc(90vh - ${({ theme }) => theme.size.navHeight});
   }
+  > p {
+    font-size: 1.4rem;
+    color: ${({ theme }) => theme.color.darkGray};
+  }
 `;
 
 const Img = styled.img`
   width: 25rem;
+  border-radius: 15px;
   @media ${({ theme }) => theme.device.mobile} {
     width: 60vw;
   }
@@ -170,10 +174,10 @@ const LeftMessage = styled.p`
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-top: 1rem;
+  margin-top: 2rem;
   padding: 1rem;
-  font-size: 1rem;
-  color: ${({ theme }) => theme.color.darkgray};
+  font-size: 0.9rem;
+  color: ${({ theme }) => theme.color.gray};
 `;
 
 const DayWrapper = styled.div`
