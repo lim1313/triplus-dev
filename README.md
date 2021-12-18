@@ -23,6 +23,8 @@
 
 ## Architecture
 
+<img src="https://cdn.discordapp.com/attachments/878163623376195595/921402388609388554/Web_App_Reference_Architecture.png">
+
 ## Frontend
 
 <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white"/> <img src="https://img.shields.io/badge/-React%20Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white"/> <img src="https://img.shields.io/badge/Styled%20Components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white"/> <img src="https://img.shields.io/badge/redux-8A2BE2?style=for-the-badge&logo=redux&logoColor=white"> <img src="https://img.shields.io/badge/socket.io-000000?style=for-the-badge&logo=socket.io&logoColor=white"> <img src="https://img.shields.io/badge/Axios-5a3ce3?style=for-the-badge&logo=styled-component&logoColor=white"/>
