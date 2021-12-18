@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useInput } from '../../../hooks/useInput';
 import { postInfo } from '../../../network/my/http';
 import EmailModal from './EmailModal';
 import { nickValidation } from '../../../utils/validation';
 import { useError } from '../../../hooks/useError';
-import { BtnColor } from './Password';
+import { ColorBtn } from '../../../styles/common';
 
 export const LiWrapper = styled.li`
   flex-grow: 1;
@@ -49,12 +49,23 @@ const DivInput = styled.div`
   word-break: break-word;
 `;
 
-const InfoColorBtn = styled(BtnColor)`
-  width: unset;
+const BtnColor = styled(ColorBtn)`
   padding: 0.1em 0.7em;
   flex-shrink: 0;
-  margin-right: unset;
   margin-left: 0.5rem;
+  background: ${({ disabled, theme }) => disabled && theme.color.gray};
+  border: 1px solid ${({ theme }) => theme.color.gray};
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      &:hover {
+        cursor: not-allowed;
+        color: #fff;
+        background: ${({ theme }) => theme.color.gray};
+        border: 1px solid ${({ theme }) => theme.color.gray};
+      }
+    `}
 
   @media ${({ theme }) => theme.device.mobile} {
     margin-bottom: ${({ twoBtn }) => twoBtn && '0.5rem'};
@@ -95,7 +106,7 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user, social }) =
   const changeContent = (e) => {
     if (isChange) {
       setClickBtn(true);
-      if (title === 'e-mail' && !inputValue.length) return setIsAlert('*필수 입력 사항');
+      // if (title === 'e-mail' && !inputValue.length) return setIsAlert('*필수 입력 사항');
       if (title === 'nickname' && !nickValidation(inputValue))
         return setIsAlert('*3~8자리의 한글, 영문, 숫자만 가능합니다.');
 
@@ -146,18 +157,23 @@ export const UserInfo = ({ title, content, marginRight, noBtn, user, social }) =
           <DivInput>{fixValue}</DivInput>
         )}
         {noBtn || (
-          <InfoColorBtn
+          <BtnColor
             palette='blue'
             onMouseDown={title === 'e-mail' ? () => setOpenModal(true) : changeContent}
             disabled={social}
             title={social && '이메일을 수정할 수 없습니다'}
           >
             {isChange ? '완료' : '수정'}
-          </InfoColorBtn>
+          </BtnColor>
         )}
         {isAlert && <AlertMsg>{isAlert}</AlertMsg>}
       </NameWrapper>
-      {openModal && <EmailModal clickModal={() => setOpenModal(false)} />}
+      {openModal && (
+        <EmailModal
+          clickModal={() => setOpenModal(false)}
+          emailFixValue={(email) => setFixValue(email)}
+        />
+      )}
     </LiWrapper>
   );
 };
