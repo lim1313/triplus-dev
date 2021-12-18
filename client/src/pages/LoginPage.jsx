@@ -18,7 +18,7 @@ export default function LoginPage() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setMessage());
-  });
+  }, [dispatch]);
   return (
     <>
       <PageContainer>

@@ -64,7 +64,7 @@ module.exports = {
             <a href=${url}><button style="background: #3386f7;
               border: 1px solid #3386f7;
               color: #e9edf3;
-              padding: 10px;
+              padding: 30px;
               cursor: pointer;
               font-size: 28px;
               border-radius: 5px;

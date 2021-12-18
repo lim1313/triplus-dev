@@ -71,6 +71,7 @@ export default function GuidePlace(props) {
         autoComplete='off'
         placeholder='도로명주소'
         onClick={openPostCode}
+        onChange={() => {}}
         value={address}
       />
       <PlaceInput

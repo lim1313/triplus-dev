@@ -12,6 +12,7 @@ export default function LoginPw(props) {
         type='password'
         value={userPw}
         onChange={handlePwChange}
+        autoComplete='off'
       />
     </InputBlock>
   );
