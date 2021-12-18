@@ -19,7 +19,6 @@ const useFetch = (page, isActive, sortBy, isComplete) => {
       try {
         setIsLoading(true);
         const response = await getExpectedList(page, sortBy).then((res) => res);
-        console.log(response);
         if (!isLogin && !response.data.guideList) {
           setItems([]);
         } else if (isLogin && !response.data.guideList) {
