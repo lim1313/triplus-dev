@@ -166,8 +166,7 @@ module.exports = {
         if (guideCardImages.length > 0) {
           const guideImages = [];
           for (let guideCardImage of guideCardImages) {
-            const guideImageData = guideCardImage.dataValues;
-            guideImages.push(guideImageData.image);
+            guideImages.push(guideCardImage.image);
           }
           guidePushData['tourImage'] = guideImages;
         } else {
@@ -231,7 +230,7 @@ module.exports = {
         const guideCard = guideItem.dataValues.guide_card.dataValues;
         const guideCardWriter = guideItem.dataValues.user.dataValues;
         const guideCardImages = await guide_image.findAll({
-          raw:true,
+          raw: true,
           where: {guideId: guideCard.guideId}
         });
         const guidePushData = {};
@@ -256,8 +255,7 @@ module.exports = {
         if (guideCardImages.length > 0) {
           const guideImages = [];
           for (let guideCardImage of guideCardImages) {
-            const guideImageData = guideCardImage.dataValues;
-            guideImages.push(guideImageData.image);
+            guideImages.push(guideCardImage.image);
           }
           guidePushData['tourImage'] = guideImages;
         } else {
