@@ -267,7 +267,7 @@ module.exports = {
       include: [
         {
           model: user,
-          attributes: ['nickName', 'gender'],
+          attributes: ['nickName', 'gender', 'image'],
         },
         {
           model: guide_image,
