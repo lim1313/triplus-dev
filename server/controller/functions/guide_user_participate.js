@@ -121,9 +121,6 @@ module.exports = {
               },
               include: [
                 {
-                  model: guide_image,
-                },
-                {
                   model: user,
                   attributes: ['nickName', 'gender', 'image'],
                 },
@@ -143,7 +140,10 @@ module.exports = {
       for (let guideItem of guideList) {
         const guideCard = guideItem.dataValues.guide_card.dataValues;
         const guideCardWriter = guideCard.user.dataValues;
-        const guideCardImages = guideCard.guide_images;
+        const guideCardImages = await guide_image.findAll({
+          raw: true,
+          where: {guideId: guideCard.guideId}
+        });
         const guidePushData = {};
         guidePushData['guideId'] = guideCard['guideId'];
         guidePushData['title'] = guideCard['title'];
@@ -211,11 +211,6 @@ module.exports = {
               where: {
                 state: GLOBAL_VARIABLE.COMPLETED,
               },
-              include: [
-                {
-                  model: guide_image,
-                },
-              ],
             },
             {
               model: user,
@@ -235,7 +230,10 @@ module.exports = {
       for (let guideItem of guideList) {
         const guideCard = guideItem.dataValues.guide_card.dataValues;
         const guideCardWriter = guideItem.dataValues.user.dataValues;
-        const guideCardImages = guideCard.guide_images;
+        const guideCardImages = await guide_image.findAll({
+          raw:true,
+          where: {guideId: guideCard.guideId}
+        });
         const guidePushData = {};
         guidePushData['guideId'] = guideCard['guideId'];
         guidePushData['title'] = guideCard['title'];
