@@ -221,7 +221,7 @@ export default function GuideCard({ cardInfo, ulRef, scroll }) {
 
         if (node) classes.add('imgload');
       }
-    }, 100);
+    }, 50);
   };
 
   return (
