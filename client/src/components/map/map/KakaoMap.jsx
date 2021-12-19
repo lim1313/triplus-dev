@@ -95,7 +95,7 @@ export default function KakaoMap({ filterInfo, loading }) {
   }, [filterInfo]);
 
   //* 마커 클릭 이벤트 함수
-  //! 리렌더링 발생. 개선 필요
+  // 리렌더링 발생. 개선 필요
   const clickMarker = (id) => {
     //TODO GET /map 모달
     getCardModal(id).then((res) => {

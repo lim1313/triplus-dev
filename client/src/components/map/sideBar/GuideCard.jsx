@@ -60,7 +60,7 @@ export const CardLi = styled.li`
   }
 
   & .imgload {
-    background-color: #fff;
+    background-color: ${({ theme }) => theme.color.gray};
     background-image: url(${({ backImage }) => backImage});
     background-repeat: no-repeat;
     background-position: center;
@@ -221,7 +221,7 @@ export default function GuideCard({ cardInfo, ulRef, scroll }) {
 
         if (node) classes.add('imgload');
       }
-    }, 100);
+    }, 50);
   };
 
   return (
