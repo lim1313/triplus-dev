@@ -7,9 +7,9 @@ const { consumers } = require('nodemailer/lib/xoauth2');
 module.exports = {
   guideCardList: async (req, res) => {
     const verified = isAuthorized(req);
-    if (!verified) return res.status(400).send('다시 로그인해주세요');
+    if (!verified) return res.status(200).send('다시 로그인해주세요');
     else if (verified.role === 'general')
-      return res.status(400).send('관리자 권한이 없습니다. 다시 로그인 해주세요');
+      return res.status(200).send('관리자 권한이 없습니다. 다시 로그인 해주세요');
 
     try {
       const { page, size } = req.query;

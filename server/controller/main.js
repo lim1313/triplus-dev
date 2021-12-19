@@ -3,10 +3,7 @@ const { isAuthorized } = require('./functions/user');
 module.exports = {
   isLogin: (req, res) => {
     const userInfo = isAuthorized(req);
-
-    if (userInfo) {
-      return res.json({ isLogin: true });
-    } else {
+    if (!userInfo || userInfo.role === 'admin') {
       return res
         .clearCookie('accessToken', {
           httpOnly: true,
@@ -14,6 +11,9 @@ module.exports = {
           sameSite: 'None',
         })
         .json({ isLogin: false });
+    } else if (userInfo) {
+      return res.json({ isLogin: true });
+    } else {
     }
   },
 };

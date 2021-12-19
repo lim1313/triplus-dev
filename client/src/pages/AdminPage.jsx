@@ -138,8 +138,10 @@ export default function AdminPage() {
 
   useEffect(() => {
     getGuide(currentPage, size).then((res) => {
-      setGuideList(res.data.data);
-      setCount(res.data.count);
+      if (res.data.data) {
+        setGuideList(res.data.data);
+        setCount(res.data.count);
+      }
     });
   }, [currentPage, isOpen]);
 
@@ -220,7 +222,7 @@ export default function AdminPage() {
           )}
         </>
       ) : (
-        <ModalTemplete />
+        <ModalTemplete></ModalTemplete>
       )}
     </Body>
   );

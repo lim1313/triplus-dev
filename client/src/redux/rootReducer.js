@@ -32,6 +32,7 @@ const persistConfig = {
     'openTourModalReducer',
     'openDeleteModalReducer',
     'completeDeleteReducer',
+    'adminOpenReducer',
   ],
 };
 
