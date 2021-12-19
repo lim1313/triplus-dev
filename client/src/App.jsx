@@ -1,5 +1,7 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps*/
+import React, { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import NavBar from './components/common/NavBar';
 import Footer from './components/common/Footer';
@@ -21,9 +23,31 @@ import TourManagementPage from './pages/TourManagementPage';
 import KakaoCallback from './pages/KakaoCallback';
 
 function App() {
+  const navigate = useNavigate();
   const { pathname } = useLocation();
   const isToggled = useSelector((state) => state.toggleReducer.isToggled);
 
+  useEffect(() => {
+    if (
+      !(
+        pathname === '/admin' ||
+        pathname === '/' ||
+        pathname === '/login' ||
+        pathname === '/signup' ||
+        pathname === '/map' ||
+        pathname === '/admin' ||
+        pathname === '/management' ||
+        pathname === '/management/tourlist' ||
+        pathname === '/chat' ||
+        pathname === '/mypage' ||
+        pathname === '/googlecallback' ||
+        pathname === '/navercallback' ||
+        pathname === '/kakaocallback'
+      )
+    ) {
+      navigate('/');
+    }
+  }, [pathname]);
   return (
     <>
       {pathname === '/admin' ? null : <NavBar />}
