@@ -7,6 +7,7 @@ import { AiOutlineEllipsis } from 'react-icons/ai';
 import usePaginate from '../../hooks/usePaginate';
 
 const Navigation = styled.div`
+  margin-top: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;

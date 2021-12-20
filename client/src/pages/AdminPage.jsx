@@ -92,7 +92,6 @@ const TableHeaderLi = styled.li`
   width: ${({ width }) => width};
   text-align: center;
   word-wrap: break-word;
-  margin: 1rem 0;
   color: ${({ gray, theme }) => theme.color.black};
   height: 1.6rem;
 `;
@@ -107,8 +106,7 @@ const TableGuideList = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 2.5rem;
-  margin-bottom: 1.3rem;
+  height: 4rem;
 `;
 const TableGuideListLi = styled.li`
   width: ${({ width }) => width};
