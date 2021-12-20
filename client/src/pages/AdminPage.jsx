@@ -91,6 +91,8 @@ const TableHeader = styled.ul`
 const TableHeaderLi = styled.li`
   width: ${({ width }) => width};
   text-align: center;
+  word-wrap: break-word;
+  margin: 1rem 0;
   color: ${({ gray, theme }) => theme.color.black};
   height: 1.6rem;
 `;
@@ -106,12 +108,15 @@ const TableGuideList = styled.div`
   justify-content: center;
   align-items: center;
   height: 2.5rem;
+  margin-bottom: 1.3rem;
 `;
 const TableGuideListLi = styled.li`
   width: ${({ width }) => width};
   text-align: center;
   color: ${({ gray, theme }) => (gray ? theme.color.gray : theme.color.black)};
   height: 1.6rem;
+  word-wrap: break-word;
+  margin: 1rem 0;
   ${({ title }) =>
     title &&
     css`
@@ -129,7 +134,7 @@ export default function AdminPage() {
   const [guideList, setGuideList] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedGuide, setSelectedGuide] = useState(null);
-  const size = 5;
+  const size = 4;
 
   const totalPageLength = Math.ceil(count / size);
 
