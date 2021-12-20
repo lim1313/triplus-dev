@@ -71,7 +71,7 @@ export default function ModalTemplete() {
   return (
     <Background>
       <ModalWrapper>
-        <ModalTitle>관리자로그인</ModalTitle>
+        <ModalTitle>관리자 로그인</ModalTitle>
         <AdminId handleIdChange={handleIdChange} adminId={adminId} />
         <AdminPw handlePwChange={handlePwChange} adminPw={adminPw} />
         <AdminBtns handleCancelClick={handleCancelClick} handleLoginClick={handleLoginClick} />

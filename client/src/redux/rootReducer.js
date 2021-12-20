@@ -20,8 +20,10 @@ import {
 const persistConfig = {
   key: 'root',
   storage,
-  whiteList: ['loginReducer', 'adminReducer'],
+  whiteList: ['loginReducer'],
   blacklist: [
+    'scrollReducer',
+    'toggleReducer',
     'cardFilterReducer',
     'guideModalReducer',
     'guideCardsReducer',
@@ -32,6 +34,7 @@ const persistConfig = {
     'openTourModalReducer',
     'openDeleteModalReducer',
     'completeDeleteReducer',
+    'adminReducer',
     'adminOpenReducer',
   ],
 };
