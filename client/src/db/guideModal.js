@@ -1,0 +1,90 @@
+export const db = [
+  {
+    title: '지하벙커 체험',
+    gender: '1',
+    latitude: 37.495218625,
+    longitude: 126.955101761,
+    tourImage: '/asset/main/trip5.png',
+    userImage: '/asset/main/trip5.png',
+    guideDate: '2021.03.05',
+    guideId: 2,
+    state: 'APPROVED', // => (예약 진행중)
+    openDate: '20200203에 오픈합니다',
+    content: '지하벙커 체험을 해보세요',
+    startTime: '14:00',
+    endTime: '16:00',
+    numPeople: 4,
+    address: '대전 중구 00동 00아파트',
+    userParticipate: 0,
+  },
+  {
+    title: '지하벙커 체험2',
+    gender: '0',
+    latitude: 37.495218625,
+    longitude: 126.955101761,
+    tourImage: '/asset/main/trip5.png',
+    userImage: '/asset/main/trip5.png',
+    guideDate: '2021.03.05',
+    guideId: 2,
+    state: 'APPROVED', // => (예약 진행중)
+    openDate: '20200203에 오픈합니다',
+    content: '지하벙커 체험을 해보세요',
+    startTime: '14:00',
+    endTime: '16:00',
+    numPeople: 4,
+    address: '대전 중구 00동 00아파트',
+    userParticipate: 0,
+  },
+  {
+    title: '지하벙커 체험3',
+    gender: '0',
+    latitude: 37.495218625,
+    longitude: 126.955101761,
+    tourImage: '/asset/main/trip5.png',
+    userImage: '/asset/main/trip5.png',
+    guideDate: '2021.12.05',
+    guideId: 2,
+    state: 'APPROVED', // => (예약 진행중)
+    openDate: '20200203에 오픈합니다',
+    content: '지하벙커 체험을 해보세요',
+    startTime: '14:00',
+    endTime: '16:00',
+    numPeople: 4,
+    address: '서울',
+    userParticipate: 1,
+  },
+];
+
+export const dbModal = {
+  title: '지하벙커 체험3',
+  gender: 1,
+  latitude: 37.495218625,
+  longitude: 126.955101761,
+  tourImage: ['/asset/logo/logo.png', '/asset/main/trip5.png', '/asset/main/trip5.png'],
+  userImage: '/asset/main/stamp.png',
+  guideDate: '2021.12.05',
+  guideId: 2,
+  state: 'COMPLETED', // => (예약 진행중)
+  openDate: '20200203에 오픈합니다',
+  content:
+    '지하벙커 체험을 해보세요지하벙커 체험을 해보세요지하벙커 체험을 해보세요지하벙커 체험을 해보세요지하벙커 체험을 해보세요지하벙커 체험을 해보세요지하벙커 체험을 해보세요지하벙커 체험을 해보세요지하벙커 체험을 해보세요',
+  startTime: '14:00',
+  endTime: '16:00',
+  numPeople: 4,
+  address: '서울',
+  userParticipate: 0,
+};
+// REQUESTED,
+// APPROVED,
+// REJECTED,
+// COMPLETED,
+// CANCELED,
+
+export const userInfodb = {
+  userId: 'useruser',
+  email: 'sss2@naver.com',
+  nickName: 'nicnik',
+  region: '서울특별시 강남구 ',
+  image:
+    'https://triplus-deploy.s3-ap-northeast-2.amazonaws.com/asset/profile/a9e03f33-edf2-4d66-92d9-5fbe914cd3e0.png',
+};

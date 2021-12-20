@@ -9,7 +9,7 @@ node_modules
 /coverage
 
 # production
-/build
+build
 
 # misc
 .DS_Store
@@ -20,6 +20,13 @@ yarn-debug.log*
 yarn-error.log*
 
 package-lock.json
-
+  ,
+  
 .npm
+
 mkcerts
+
+cert.pem
+key.pem
+
+config.js

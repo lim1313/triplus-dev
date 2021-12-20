@@ -1,0 +1,2 @@
+export const LOCATION_GUIDE_CARD = 'LOCATION_GUIDE_CARD';
+export const GUIDE_MODAL = 'GUIDE_MODAL';
